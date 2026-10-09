@@ -1689,6 +1689,42 @@ paths:
       tags:
       - Assistant
       x-sdk-params: false
+  /v1/assistant/conversations/{id}/transcript:
+    get:
+      description: "Returns the conversation as it is stored, for debugging and evaluating\
+        \ the assistant: every message the assistant has been shown, including the\
+        \ results of its tool calls and the ids that pair each result with its call,\
+        \ and the summary that replaces the earliest messages once the conversation\
+        \ has been compacted. Returns `404` if the conversation does not exist. Requires\
+        \ the *AI assistant* and *Download AI assistant conversation* permissions."
+      operationId: assistant_get-conversations-transcript
+      parameters:
+      - description: UUID of the conversation to read.
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          description: UUID of the conversation to read.
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AssistantTranscriptBody"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Get a conversation's transcript
+      tags:
+      - Assistant
+      x-sdk-params: false
   /v1/assistant/models:
     get:
       description: "Returns the LLM models the account permits the assistant to use,\
@@ -7754,6 +7790,173 @@ components:
       required:
       - defaultModel
       - models
+    AssistantTranscriptBody:
+      additionalProperties: false
+      example:
+        summary: summary
+        messages:
+        - createdAt: createdAt
+          reason: reason
+          attachments:
+          - size: 0
+            name: name
+            mimeType: mimeType
+            fileId: fileId
+          - size: 0
+            name: name
+            mimeType: mimeType
+            fileId: fileId
+          role: user
+          toolCallId: toolCallId
+          requestId: requestId
+          failed: true
+          id: id
+          text: text
+          toolCalls:
+          - name: name
+            arguments: arguments
+            id: id
+          - name: name
+            arguments: arguments
+            id: id
+        - createdAt: createdAt
+          reason: reason
+          attachments:
+          - size: 0
+            name: name
+            mimeType: mimeType
+            fileId: fileId
+          - size: 0
+            name: name
+            mimeType: mimeType
+            fileId: fileId
+          role: user
+          toolCallId: toolCallId
+          requestId: requestId
+          failed: true
+          id: id
+          text: text
+          toolCalls:
+          - name: name
+            arguments: arguments
+            id: id
+          - name: name
+            arguments: arguments
+            id: id
+        summaryUpTo: 0
+      properties:
+        messages:
+          items:
+            $ref: "#/components/schemas/AssistantTranscriptMessage"
+          type: array
+        summary:
+          description: "What the assistant is told of the messages it no longer replays,\
+            \ once the conversation has been compacted. Empty until then."
+          type: string
+        summaryUpTo:
+          description: How many of the leading messages the summary stands in for.
+          format: int64
+          type: integer
+      required:
+      - messages
+      - summary
+      - summaryUpTo
+    AssistantTranscriptMessage:
+      additionalProperties: false
+      example:
+        createdAt: createdAt
+        reason: reason
+        attachments:
+        - size: 0
+          name: name
+          mimeType: mimeType
+          fileId: fileId
+        - size: 0
+          name: name
+          mimeType: mimeType
+          fileId: fileId
+        role: user
+        toolCallId: toolCallId
+        requestId: requestId
+        failed: true
+        id: id
+        text: text
+        toolCalls:
+        - name: name
+          arguments: arguments
+          id: id
+        - name: name
+          arguments: arguments
+          id: id
+      properties:
+        attachments:
+          description: Files attached to a user message. Empty on every other message.
+          items:
+            $ref: "#/components/schemas/AssistantChatPollAttachment"
+          type: array
+        createdAt:
+          type: string
+        failed:
+          description: "Whether the tool call a tool message answers failed: the tool\
+            \ refused it, returned an error, or was not available."
+          type: boolean
+        id:
+          description: The message's index in the conversation. A poll's message ids
+            start with it.
+          type: string
+        reason:
+          description: "Why a notice was given, as the id a poll shows it with."
+          type: string
+        requestId:
+          type: string
+        role:
+          enum:
+          - user
+          - assistant
+          - tool
+          - notice
+          type: string
+        text:
+          description: "For a tool message, the result the assistant was given."
+          type: string
+        toolCallId:
+          description: The id of the tool call a tool message is the result of.
+          type: string
+        toolCalls:
+          description: The tools an assistant message called. Empty on every other
+            message.
+          items:
+            $ref: "#/components/schemas/AssistantTranscriptToolCall"
+          type: array
+      required:
+      - attachments
+      - createdAt
+      - failed
+      - id
+      - reason
+      - requestId
+      - role
+      - text
+      - toolCallId
+      - toolCalls
+    AssistantTranscriptToolCall:
+      additionalProperties: false
+      example:
+        name: name
+        arguments: arguments
+        id: id
+      properties:
+        arguments:
+          description: The call's JSON arguments.
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+      required:
+      - arguments
+      - id
+      - name
     AuthAPIKeyTokenReqBody:
       additionalProperties: false
       example:

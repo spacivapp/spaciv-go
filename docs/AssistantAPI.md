@@ -7,6 +7,7 @@ Method | HTTP request | Description
 [**CreateChat**](AssistantAPI.md#CreateChat) | **Post** /v1/assistant/chat | Send a chat message
 [**DeleteConversations**](AssistantAPI.md#DeleteConversations) | **Delete** /v1/assistant/conversations/{id} | Delete a conversation
 [**GetConfig**](AssistantAPI.md#GetConfig) | **Get** /v1/assistant/config | Get the assistant configuration
+[**GetConversationsTranscript**](AssistantAPI.md#GetConversationsTranscript) | **Get** /v1/assistant/conversations/{id}/transcript | Get a conversation&#39;s transcript
 [**ListConversations**](AssistantAPI.md#ListConversations) | **Get** /v1/assistant/conversations | List conversations
 [**ListModels**](AssistantAPI.md#ListModels) | **Get** /v1/assistant/models | List available assistant models
 [**PollConversations**](AssistantAPI.md#PollConversations) | **Get** /v1/assistant/conversations/{id}/poll | Poll a conversation
@@ -187,6 +188,73 @@ Other parameters are passed through a pointer to a apiGetConfigRequest struct vi
 ### Return type
 
 [**AssistantConfigBody**](AssistantConfigBody.md)
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## GetConversationsTranscript
+
+> AssistantTranscriptBody GetConversationsTranscript(ctx, id)
+
+Get a conversation's transcript
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+	id :=  // string | UUID of the conversation to read.
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.Assistant.GetConversationsTranscript(context.Background(), id)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `Assistant.GetConversationsTranscript`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `Assistant.GetConversationsTranscript`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**id** | **string** | UUID of the conversation to read. | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetConversationsTranscriptRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+### Return type
+
+[**AssistantTranscriptBody**](AssistantTranscriptBody.md)
 
 ### Authorization
 
