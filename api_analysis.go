@@ -31,7 +31,7 @@ type requestForAnalysisCreateAnalyse struct {
 /*
 CreateAnalyse Run analysis
 
-Runs the scenario through the calculation engine and returns the resulting model. A `400` response with a structured `kind` field indicates a configuration problem such as a missing scenario, property, or unmapped parameter — inspect the `kind` and the accompanying detail object to identify what needs fixing. Requires the *View ideal space* permission.
+Runs the scenario through the calculation engine and returns the resulting model. A `400` response with a structured `kind` field indicates a configuration problem such as a missing scenario, property, or unmapped parameter — inspect the `kind` and the accompanying detail object to identify what needs fixing. A `variableOverrides` value outside the variable's range, step or `options` is rejected with `400` and `kind` `variable_type_mismatch`; `options` sent inside an override are ignored. Requires the *View ideal space* permission.
 */
 func (a *AnalysisService) CreateAnalyse(ctx context.Context, calcBody CalcBody) (*CalcRes, error) {
 	r := requestForAnalysisCreateAnalyse{

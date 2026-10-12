@@ -1332,7 +1332,10 @@ paths:
         \ resulting model. A `400` response with a structured `kind` field indicates\
         \ a configuration problem such as a missing scenario, property, or unmapped\
         \ parameter — inspect the `kind` and the accompanying detail object to identify\
-        \ what needs fixing. Requires the *View ideal space* permission."
+        \ what needs fixing. A `variableOverrides` value outside the variable's range,\
+        \ step or `options` is rejected with `400` and `kind` `variable_type_mismatch`;\
+        \ `options` sent inside an override are ignored. Requires the *View ideal\
+        \ space* permission."
       operationId: analysis_create-analyse
       parameters: []
       requestBody:
@@ -4781,9 +4784,10 @@ paths:
         \ set `keepFilters` to preserve filters when `filters` is sent only for schema\
         \ compatibility. Returns `404` if the project does not exist, and `409` if\
         \ it keeps changing concurrently; retry the request. Variables keyed `account:<id>`\
-        \ override the value of that account variable for this project; their type\
-        \ and range come from the account definition. Other variable IDs must not\
-        \ contain `:`. Requires the *Manage projects* permission."
+        \ override the value of that account variable for this project; their type,\
+        \ range and `options` come from the account definition; such an override must\
+        \ not set `options` itself and must choose one of the listed values. Other\
+        \ variable IDs must not contain `:`. Requires the *Manage projects* permission."
       operationId: projects_update
       parameters: []
       requestBody:
@@ -7024,7 +7028,8 @@ paths:
     post:
       description: Creates an account-level variable and returns its qualified `account:<id>`
         ID. `name` and `data` are required; number variables must satisfy their own
-        range and step. Requires the *Manage my account* permission.
+        range and step. Option variables may restrict their values with `options`;
+        the value must be one of them. Requires the *Manage my account* permission.
       operationId: variables_create
       parameters: []
       requestBody:
@@ -7120,7 +7125,9 @@ paths:
         \ a narrower number `min`/`max` or a different `step`) is also rejected with\
         \ `409`, listing the projects with invalid overrides. In both cases the error\
         \ details list the references when the caller has the *View projects* permission,\
-        \ otherwise only their count. Requires the *Manage my account* permission."
+        \ otherwise only their count. Narrowing `options` so that an existing project\
+        \ override is no longer listed is rejected the same way. Sending `data` replaces\
+        \ the variable's `options` too. Requires the *Manage my account* permission."
       operationId: variables_update
       parameters:
       - description: "Account variable ID, either qualified (account:<id>) or bare."
@@ -8617,7 +8624,9 @@ components:
       example:
         variableOverrides:
           key:
-            calcRule: calcRule
+            options:
+            - options
+            - options
         data:
           categorisationMix:
             date:
@@ -12205,7 +12214,9 @@ components:
         variables:
           key:
             data:
-              calcRule: calcRule
+              options:
+              - options
+              - options
             name: name
         name: name
         description: description
@@ -12364,7 +12375,9 @@ components:
         variables:
           key:
             data:
-              calcRule: calcRule
+              options:
+              - options
+              - options
             name: name
         name: name
         description: description
@@ -12444,7 +12457,9 @@ components:
           variables:
             key:
               data:
-                calcRule: calcRule
+                options:
+                - options
+                - options
               name: name
           name: name
           description: description
@@ -12496,7 +12511,9 @@ components:
           variables:
             key:
               data:
-                calcRule: calcRule
+                options:
+                - options
+                - options
               name: name
           name: name
           description: description
@@ -12516,7 +12533,9 @@ components:
           data:
             key:
               data:
-                calcRule: calcRule
+                options:
+                - options
+                - options
               name: name
         deleteFilter: true
         name: name
@@ -15322,7 +15341,9 @@ components:
       additionalProperties: false
       example:
         data:
-          calcRule: calcRule
+          options:
+          - options
+          - options
         name: name
       properties:
         data:
@@ -15336,7 +15357,9 @@ components:
       additionalProperties: false
       example:
         data:
-          calcRule: calcRule
+          options:
+          - options
+          - options
         name: name
       properties:
         data:
@@ -15347,6 +15370,10 @@ components:
       - data
       - name
     VariableData:
+      example:
+        options:
+        - options
+        - options
       oneOf:
       - $ref: "#/components/schemas/VariableData_oneOf"
       - $ref: "#/components/schemas/VariableData_oneOf_1"
@@ -15357,6 +15384,19 @@ components:
       - $ref: "#/components/schemas/VariableData_oneOf_5"
       - $ref: "#/components/schemas/VariableData_oneOf_6"
       - $ref: "#/components/schemas/VariableData_oneOf_7"
+      properties:
+        options:
+          description: "Restricts the values a dashboard control or a calculation\
+            \ override may choose for this variable, in display order: scenario, property,\
+            \ calcRule or floorplan IDs; node IDs within the variable's property;\
+            \ or object IDs within its object group. The variable's own value must\
+            \ be one of them. Not allowed on number and date variables, nor on a project's\
+            \ override of an account variable. Omit, or send an empty list, for no\
+            \ restriction; responses always include the list, empty when there is\
+            \ none."
+          items:
+            type: string
+          type: array
     VariableDate:
       additionalProperties: false
       properties:
@@ -15383,12 +15423,16 @@ components:
         list:
         - data:
             data:
-              calcRule: calcRule
+              options:
+              - options
+              - options
             name: name
           id: id
         - data:
             data:
-              calcRule: calcRule
+              options:
+              - options
+              - options
             name: name
           id: id
       properties:
@@ -15443,7 +15487,9 @@ components:
       additionalProperties: false
       example:
         data:
-          calcRule: calcRule
+          options:
+          - options
+          - options
         name: name
         delete: true
       properties:
@@ -15471,7 +15517,9 @@ components:
       example:
         data:
           data:
-            calcRule: calcRule
+            options:
+            - options
+            - options
           name: name
         id: id
       properties:
@@ -15501,7 +15549,9 @@ components:
         data:
           key:
             data:
-              calcRule: calcRule
+              options:
+              - options
+              - options
             name: name
       properties:
         data:
@@ -16099,8 +16149,6 @@ components:
       required:
       - floorplan
     VariableData_oneOf:
-      example:
-        calcRule: calcRule
       properties:
         calcRule:
           type: string

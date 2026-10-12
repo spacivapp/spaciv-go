@@ -32,7 +32,7 @@ type requestForVariablesCreate struct {
 /*
 Create Create an account variable
 
-Creates an account-level variable and returns its qualified `account:<id>` ID. `name` and `data` are required; number variables must satisfy their own range and step. Requires the *Manage my account* permission.
+Creates an account-level variable and returns its qualified `account:<id>` ID. `name` and `data` are required; number variables must satisfy their own range and step. Option variables may restrict their values with `options`; the value must be one of them. Requires the *Manage my account* permission.
 */
 func (a *VariablesService) Create(ctx context.Context, variableCreate VariableCreate) (string, error) {
 	r := requestForVariablesCreate{
@@ -551,7 +551,7 @@ type requestForVariablesUpdate struct {
 /*
 Update Update an account variable
 
-Updates the name and/or default value of an account-level variable; the new default applies to every project that does not override it. Setting `delete` behaves like `DELETE /v1/variables/{id}`. Changing the variable's type, or deleting it, is rejected with `409` while it is referenced. Changing its data so that an existing project override no longer validates (for example, a narrower number `min`/`max` or a different `step`) is also rejected with `409`, listing the projects with invalid overrides. In both cases the error details list the references when the caller has the *View projects* permission, otherwise only their count. Requires the *Manage my account* permission.
+Updates the name and/or default value of an account-level variable; the new default applies to every project that does not override it. Setting `delete` behaves like `DELETE /v1/variables/{id}`. Changing the variable's type, or deleting it, is rejected with `409` while it is referenced. Changing its data so that an existing project override no longer validates (for example, a narrower number `min`/`max` or a different `step`) is also rejected with `409`, listing the projects with invalid overrides. In both cases the error details list the references when the caller has the *View projects* permission, otherwise only their count. Narrowing `options` so that an existing project override is no longer listed is rejected the same way. Sending `data` replaces the variable's `options` too. Requires the *Manage my account* permission.
 */
 func (a *VariablesService) Update(ctx context.Context, id string, variablePatch VariablePatch) error {
 	r := requestForVariablesUpdate{

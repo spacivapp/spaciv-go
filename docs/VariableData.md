@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**Options** | Pointer to **[]string** | Restricts the values a dashboard control or a calculation override may choose for this variable, in display order: scenario, property, calcRule or floorplan IDs; node IDs within the variable&#39;s property; or object IDs within its object group. The variable&#39;s own value must be one of them. Not allowed on number and date variables, nor on a project&#39;s override of an account variable. Omit, or send an empty list, for no restriction; responses always include the list, empty when there is none. | [optional] 
 **CalcRule** | **string** |  | 
 **Date** | **int64** |  | 
 **DateRange** | [**VariableDate**](VariableDate.md) |  | 
@@ -32,6 +33,31 @@ will change when the set of required properties is changed
 NewVariableDataWithDefaults instantiates a new VariableData object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetOptions
+
+`func (o *VariableData) GetOptions() []string`
+
+GetOptions returns the Options field if non-nil, zero value otherwise.
+
+### GetOptionsOk
+
+`func (o *VariableData) GetOptionsOk() (*[]string, bool)`
+
+GetOptionsOk returns a tuple with the Options field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetOptions
+
+`func (o *VariableData) SetOptions(v []string)`
+
+SetOptions sets Options field to given value.
+
+### HasOptions
+
+`func (o *VariableData) HasOptions() bool`
+
+HasOptions returns a boolean if a field has been set.
 
 ### GetCalcRule
 

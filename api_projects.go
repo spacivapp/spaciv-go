@@ -699,7 +699,7 @@ type requestForProjectsUpdate struct {
 /*
 Update Update a project
 
-Updates the name, description, default filters, or variables of the current project. Only fields present in the request body are changed; set `keepFilters` to preserve filters when `filters` is sent only for schema compatibility. Returns `404` if the project does not exist, and `409` if it keeps changing concurrently; retry the request. Variables keyed `account:<id>` override the value of that account variable for this project; their type and range come from the account definition. Other variable IDs must not contain `:`. Requires the *Manage projects* permission.
+Updates the name, description, default filters, or variables of the current project. Only fields present in the request body are changed; set `keepFilters` to preserve filters when `filters` is sent only for schema compatibility. Returns `404` if the project does not exist, and `409` if it keeps changing concurrently; retry the request. Variables keyed `account:<id>` override the value of that account variable for this project; their type, range and `options` come from the account definition; such an override must not set `options` itself and must choose one of the listed values. Other variable IDs must not contain `:`. Requires the *Manage projects* permission.
 */
 func (a *ProjectsService) Update(ctx context.Context, projectPatchBody ProjectPatchBody) error {
 	r := requestForProjectsUpdate{
