@@ -230,7 +230,7 @@ type requestForUsersDelete struct {
 /*
 Delete Delete the current user's account
 
-Permanently deletes the authenticated user's own account and all associated data. Requires the *Edit my user profile* permission. This action is irreversible.
+Permanently deletes the authenticated user's own account and all associated data. Requires the *Edit my user profile* permission. This action is irreversible. A script's own API key cannot delete its user.
 */
 func (a *UsersService) Delete(ctx context.Context) error {
 	r := requestForUsersDelete{

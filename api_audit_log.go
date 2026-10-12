@@ -35,7 +35,7 @@ type requestForAuditLogList struct {
 }
 
 type AuditLogListParams struct {
-	// Entity type to query. One of: dashboard, property, scenario, floorplan, space-ruleset, top-down-model, object-group, datacollection, contribution, i18n, user, file, variable, upload-quarantine. Pass \&quot;all\&quot; to retrieve entries across all entity types the caller has permission to see (entityId must be omitted).
+	// Entity type to query. One of: dashboard, property, scenario, floorplan, space-ruleset, top-down-model, object-group, datacollection, contribution, i18n, user, file, variable, script, upload-quarantine. Pass \&quot;all\&quot; to retrieve entries across all entity types the caller has permission to see (entityId must be omitted).
 	Entity *string
 	// Restrict results to changes made to this specific entity. Cannot be used when entity&#x3D;all.
 	EntityId *string

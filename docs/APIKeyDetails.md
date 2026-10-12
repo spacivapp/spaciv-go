@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **Name** | **string** |  | 
 **Prefix** | **string** |  | 
 **ProjectId** | **int64** |  | 
+**ScriptId** | Pointer to **string** | Set when the key is created and rotated by a script; it can&#39;t be revoked here. | [optional] 
 
 ## Methods
 
@@ -196,6 +197,31 @@ and a boolean to check if the value has been set.
 
 SetProjectId sets ProjectId field to given value.
 
+
+### GetScriptId
+
+`func (o *APIKeyDetails) GetScriptId() string`
+
+GetScriptId returns the ScriptId field if non-nil, zero value otherwise.
+
+### GetScriptIdOk
+
+`func (o *APIKeyDetails) GetScriptIdOk() (*string, bool)`
+
+GetScriptIdOk returns a tuple with the ScriptId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetScriptId
+
+`func (o *APIKeyDetails) SetScriptId(v string)`
+
+SetScriptId sets ScriptId field to given value.
+
+### HasScriptId
+
+`func (o *APIKeyDetails) HasScriptId() bool`
+
+HasScriptId returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

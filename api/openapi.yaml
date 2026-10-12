@@ -97,6 +97,9 @@ tags:
   name: Assistant
 - description: Connections to third-party tools such as Slack.
   name: Integrations
+- description: "Your own Python, Go or JavaScript code that Spaciv runs in a sandbox\
+    \ on a schedule or from a webhook, with an API key that rotates automatically."
+  name: Scripts
 - description: "Customer-supplied logo and sign-in page background, and the public\
     \ branding a sign-in page renders for a hostname."
   name: Branding
@@ -139,8 +142,10 @@ paths:
   /v1/account:
     delete:
       description: "Permanently deletes the account the access token was issued for,\
-        \ along with its projects and members. This cannot be undone. Requires the\
-        \ *Manage my account* permission."
+        \ along with its projects, members and scripts. This cannot be undone. Scripts\
+        \ are deleted first, so if the request fails some of them may already be gone;\
+        \ repeat it to finish deleting the account. Requires the *Manage my account*\
+        \ permission. A script's own API key cannot delete the account."
       operationId: accounts_delete
       parameters: []
       responses:
@@ -724,7 +729,7 @@ paths:
       description: |-
         Removes the identity provider of the account the access token was issued for, together with its client secret, and disables the `sso` sign-in method in the same change. Sessions signed in through the provider can no longer refresh an access token scoped to the account.
 
-        Returns `400 last-auth-option-disabled` when single sign-on is the account's only enabled member sign-in method, `404 oidc-provider-not-configured` when the account has no provider, and `409 auth-options-changed` when the account's sign-in methods or its provider changed concurrently, in which case the request may be retried. The change is written to the audit log. Requires the *Manage my account* permission. The account owning the centrally managed shared provider gets `403 shared-sso-provider`.
+        Returns `400 last-auth-option-disabled` when single sign-on is the account's only enabled member sign-in method, `404 oidc-provider-not-configured` when the account has no provider, and `409 auth-options-changed` when the account's sign-in methods or its provider changed concurrently, in which case the request may be retried. The change is written to the audit log. Requires the *Manage my account* permission. The account owning the centrally managed shared provider gets `403 shared-sso-provider`. A script's own API key cannot call it.
       operationId: accounts_delete-oidc-provider
       parameters: []
       responses:
@@ -744,7 +749,7 @@ paths:
       description: |-
         Returns the identity provider members of the account the access token was issued for sign in through with single sign-on. The client secret is never returned; `clientSecretSet` reports whether one is stored.
 
-        Returns `404 oidc-provider-not-configured` when the account has no provider, and `409 sso-multiple-providers` when it has more than one. Requires the *Manage my account* permission. The account owning the centrally managed shared provider gets `403 shared-sso-provider`.
+        Returns `404 oidc-provider-not-configured` when the account has no provider, and `409 sso-multiple-providers` when it has more than one. Requires the *Manage my account* permission. The account owning the centrally managed shared provider gets `403 shared-sso-provider`. A script's own API key cannot call it.
       operationId: accounts_get-oidc-provider
       parameters: []
       responses:
@@ -768,7 +773,7 @@ paths:
       description: |-
         Changes the identity provider members of the account the access token was issued for sign in through with single sign-on. Fields left out keep their current value; the client secret is changed with `PUT /v1/account/oidc-provider/client-secret`.
 
-        When `providerName` or `tenant` changes, the tenant must name a single organisation or the request returns `400 invalid-tenant`, and the provider's OpenID discovery document is fetched before anything is stored; a provider that cannot be reached returns `400 oidc-discovery-failed`. Returns `404 oidc-provider-not-configured` when the account has no provider, and `409 oidc-provider-changed` when it was changed concurrently. The change is written to the audit log. Requires the *Manage my account* permission. The account owning the centrally managed shared provider gets `403 shared-sso-provider`.
+        When `providerName` or `tenant` changes, the tenant must name a single organisation or the request returns `400 invalid-tenant`, and the provider's OpenID discovery document is fetched before anything is stored; a provider that cannot be reached returns `400 oidc-discovery-failed`. Returns `404 oidc-provider-not-configured` when the account has no provider, and `409 oidc-provider-changed` when it was changed concurrently. The change is written to the audit log. Requires the *Manage my account* permission. The account owning the centrally managed shared provider gets `403 shared-sso-provider`. A script's own API key cannot call it.
       operationId: accounts_update-oidc-provider
       parameters: []
       requestBody:
@@ -798,7 +803,7 @@ paths:
       description: |-
         Registers the identity provider members of the account the access token was issued for sign in through with single sign-on. An account has at most one provider; creating a second returns `409 oidc-provider-exists`. Creating a provider does not enable the `sso` sign-in method; enable it with `PATCH /v1/account/auth-options` afterwards.
 
-        The tenant must name a single organisation (Microsoft's `common`, `organizations` and `consumers` are rejected) or the request returns `400 invalid-tenant`. The provider's OpenID discovery document is fetched before anything is stored, and a provider that cannot be reached returns `400 oidc-discovery-failed`. The change is written to the audit log. Requires the *Manage my account* permission. The account owning the centrally managed shared provider gets `403 shared-sso-provider`.
+        The tenant must name a single organisation (Microsoft's `common`, `organizations` and `consumers` are rejected) or the request returns `400 invalid-tenant`. The provider's OpenID discovery document is fetched before anything is stored, and a provider that cannot be reached returns `400 oidc-discovery-failed`. The change is written to the audit log. Requires the *Manage my account* permission. The account owning the centrally managed shared provider gets `403 shared-sso-provider`. A script's own API key cannot call it.
       operationId: accounts_create-oidc-provider
       parameters: []
       requestBody:
@@ -831,7 +836,8 @@ paths:
         \ it. Returns `404 oidc-provider-not-configured` when the account has no provider.\
         \ The change is written to the audit log without the secret. Requires the\
         \ *Manage my account* permission. The account owning the centrally managed\
-        \ shared provider gets `403 shared-sso-provider`."
+        \ shared provider gets `403 shared-sso-provider`. A script's own API key cannot\
+        \ call it."
       operationId: accounts_update-oidc-provider-client-secret
       parameters: []
       requestBody:
@@ -1389,7 +1395,7 @@ paths:
         \ calling user and the given project. The secret is returned in the `key`\
         \ field of this response and never again, since only its hash is stored; a\
         \ client that loses it must create a replacement. Keys expire after `expiresInDays`,\
-        \ between 1 and 90."
+        \ between 1 and 90. A script's own API key cannot create or delete keys."
       operationId: authentication_create-api-keys
       parameters: []
       requestBody:
@@ -1420,7 +1426,8 @@ paths:
       description: "Permanently revokes one of the calling user's keys. Access tokens\
         \ already exchanged for it remain valid until they expire, and the key itself\
         \ may continue to authenticate for up to a minute while cached resolutions\
-        \ age out."
+        \ age out. Keys that belong to a script are rejected with 409; delete or re-authorise\
+        \ the script instead."
       operationId: authentication_delete-api-keys
       parameters:
       - explode: false
@@ -1760,8 +1767,8 @@ paths:
       parameters:
       - description: "Entity type to query. One of: dashboard, property, scenario,\
           \ floorplan, space-ruleset, top-down-model, object-group, datacollection,\
-          \ contribution, i18n, user, file, variable, upload-quarantine. Pass \"all\"\
-          \ to retrieve entries across all entity types the caller has permission\
+          \ contribution, i18n, user, file, variable, script, upload-quarantine. Pass\
+          \ \"all\" to retrieve entries across all entity types the caller has permission\
           \ to see (entityId must be omitted)."
         explode: false
         in: query
@@ -1770,9 +1777,9 @@ paths:
         schema:
           description: "Entity type to query. One of: dashboard, property, scenario,\
             \ floorplan, space-ruleset, top-down-model, object-group, datacollection,\
-            \ contribution, i18n, user, file, variable, upload-quarantine. Pass \"\
-            all\" to retrieve entries across all entity types the caller has permission\
-            \ to see (entityId must be omitted)."
+            \ contribution, i18n, user, file, variable, script, upload-quarantine.\
+            \ Pass \"all\" to retrieve entries across all entity types the caller\
+            \ has permission to see (entityId must be omitted)."
           type: string
         style: form
       - description: Restrict results to changes made to this specific entity. Cannot
@@ -5438,6 +5445,469 @@ paths:
       tags:
       - Scenarios
       x-sdk-params: false
+  /v1/scripts:
+    get:
+      description: "Lists the account's scripts, sorted by name, without their source\
+        \ code. Requires the *Manage my account* permission."
+      operationId: scripts_list
+      parameters: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScriptListResBody"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: List scripts
+      tags:
+      - Scripts
+      x-sdk-params: false
+    post:
+      description: "Creates a script whose Python, Go or JavaScript handler is called\
+        \ on a schedule, from a webhook, or both. The handler's context carries a\
+        \ Spaciv API key acting with the caller's permissions, except the account-administration\
+        \ permissions (*Manage my account*, *Manage users*, *Edit my user profile*,\
+        \ *Edit billing address* and the system permissions), which a script's key\
+        \ never carries, plus the account and, when a project is set, the project;\
+        \ the key is rotated automatically. A non-null return value is written to\
+        \ the run's logs. When `webhook` is true the response's `webhookUrl` is the\
+        \ only time the URL is returned. Rejected with `422` when the source, schedule\
+        \ or secrets are invalid or the project does not exist, and with `409` when\
+        \ the account already has 50 scripts. Requires the *Manage my account* permission;\
+        \ a script's own API key cannot call this or any other script operation."
+      operationId: scripts_create
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ScriptPostReqBody"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScriptDetail"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Create a script
+      tags:
+      - Scripts
+      x-sdk-params: false
+  /v1/scripts/{id}:
+    delete:
+      description: "Stops any active runs, deletes the script with its secrets and\
+        \ run history, and revokes its API keys. Requires the *Manage my account*\
+        \ permission."
+      operationId: scripts_delete
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: No Content
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Delete a script
+      tags:
+      - Scripts
+      x-sdk-params: false
+    get:
+      description: "Returns a script with its source, the names of its secrets (never\
+        \ their values), its API key's status and, when the runner can be reached,\
+        \ its build state, next scheduled run and resource limits. Requires the *Manage\
+        \ my account* permission."
+      operationId: scripts_get
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScriptDetail"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Get a script
+      tags:
+      - Scripts
+      x-sdk-params: false
+    patch:
+      description: "Updates the fields given. Changing the project replaces the script's\
+        \ API key with one scoped to the new project. When someone other than the\
+        \ key's owner changes the language, manifest or files, the key is replaced\
+        \ with one acting as them. Turning the webhook on returns its `webhookUrl`\
+        \ once. Rejected with `409` when `revision` is stale, or when enabling a script\
+        \ whose key needs re-authorising; with `422` when the result is invalid. Requires\
+        \ the *Manage my account* permission."
+      operationId: scripts_update
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ScriptPatchReqBody"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScriptDetail"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Update a script
+      tags:
+      - Scripts
+      x-sdk-params: false
+  /v1/scripts/{id}/audit:
+    get:
+      description: "Lists changes to the script and its API key, newest first. Requires\
+        \ the *Manage my account* permission."
+      operationId: scripts_get-audit
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 25
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: nextCursor from the previous page.
+        explode: false
+        in: query
+        name: cursor
+        required: false
+        schema:
+          description: nextCursor from the previous page.
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScriptAuditResBody"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: List a script's activity
+      tags:
+      - Scripts
+      x-sdk-params: true
+  /v1/scripts/{id}/reauthorise:
+    post:
+      description: "Replaces the script's API key with a new one acting with the caller's\
+        \ permissions, except the account-administration permissions (*Manage my account*,\
+        \ *Manage users*, *Edit my user profile*, *Edit billing address* and the system\
+        \ permissions), which a script's key never carries, and revokes the old one.\
+        \ Use it when the key needs re-authorising because its owner lost access,\
+        \ or to hand the script to another user. Requires the *Manage my account*\
+        \ permission."
+      operationId: scripts_create-reauthorise
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScriptDetail"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Re-authorise a script
+      tags:
+      - Scripts
+      x-sdk-params: false
+  /v1/scripts/{id}/regenerate-webhook:
+    post:
+      description: "Issues a new webhook URL and immediately invalidates the previous\
+        \ one. The URL is returned only in this response. Rejected with `409` when\
+        \ the script's webhook is turned off, or when another request regenerated\
+        \ it at the same time; the URL returned to that request is the valid one.\
+        \ Requires the *Manage my account* permission."
+      operationId: scripts_create-regenerate-webhook
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScriptWebhookResBody"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Regenerate a script's webhook URL
+      tags:
+      - Scripts
+      x-sdk-params: false
+  /v1/scripts/{id}/runs:
+    get:
+      description: "Lists the script's builds and runs, newest first. Requires the\
+        \ *Manage my account* permission."
+      operationId: scripts_list-runs
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 25
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: nextCursor from the previous page.
+        explode: false
+        in: query
+        name: cursor
+        required: false
+        schema:
+          description: nextCursor from the previous page.
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScriptRunsResBody"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: List a script's runs
+      tags:
+      - Scripts
+      x-sdk-params: true
+  /v1/scripts/{id}/runs/{runId}/logs:
+    get:
+      description: Returns the output the run or build wrote to stdout and stderr.
+        Requires the *Manage my account* permission.
+      operationId: scripts_list-runs-logs
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: runId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScriptRunLogsResBody"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Get a script run's logs
+      tags:
+      - Scripts
+      x-sdk-params: false
+  /v1/scripts/{id}/secrets:
+    put:
+      description: "Adds, replaces or removes the script's secrets; secrets not named\
+        \ are left unchanged. Values are write-only and are never returned; the response\
+        \ has the script's new `revision`. When someone other than the key's owner\
+        \ sets secrets, the script's API key is replaced with one acting as them.\
+        \ Names must be upper-case environment variable names and must not start with\
+        \ `SPACIV_`, which is reserved for the values Spaciv provides. Requires the\
+        \ *Manage my account* permission."
+      operationId: scripts_update-secrets
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ScriptSecretsReqBody"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScriptSecretsResBody"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Set script secrets
+      tags:
+      - Scripts
+      x-sdk-params: false
+  /v1/scripts/export:
+    get:
+      description: "Returns every script in the account with its settings, source,\
+        \ dependency manifest and secret names (never their values), and each script's\
+        \ run history: every build and run still kept, with the API path of its logs.\
+        \ A history too long to read within the request keeps its newest runs and\
+        \ sets runsError; page through the script's runs for the rest. Webhook URLs\
+        \ are not included. Requires the *Manage my account* permission."
+      operationId: scripts_get-export
+      parameters: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScriptExportResBody"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Export scripts
+      tags:
+      - Scripts
+      x-sdk-params: false
+  /v1/scripts/schedule-preview:
+    post:
+      description: "Checks a cron expression and time zone and returns the next times\
+        \ it would run, so a schedule can be confirmed before saving. An invalid schedule\
+        \ is reported in `error` with `valid` false rather than as an error response.\
+        \ Requires the *Manage my account* permission."
+      operationId: scripts_create-schedule-preview
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ScriptSchedulePreviewReqBody"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScriptSchedulePreviewResBody"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Preview a script schedule
+      tags:
+      - Scripts
+      x-sdk-params: false
   /v1/space-rulesets:
     get:
       description: "Returns all space rulesets belonging to the current account with\
@@ -6231,7 +6701,7 @@ paths:
     delete:
       description: Permanently deletes the authenticated user's own account and all
         associated data. Requires the *Edit my user profile* permission. This action
-        is irreversible.
+        is irreversible. A script's own API key cannot delete its user.
       operationId: users_delete
       parameters: []
       responses:
@@ -6747,6 +7217,7 @@ components:
       example:
         accountId: 0
         createdAt: 2000-01-23T04:56:07.000+00:00
+        scriptId: scriptId
         lastUsedAt: 2000-01-23T04:56:07.000+00:00
         prefix: prefix
         name: name
@@ -6776,6 +7247,10 @@ components:
         projectId:
           format: int64
           type: integer
+        scriptId:
+          description: Set when the key is created and rotated by a script; it can't
+            be revoked here.
+          type: string
       required:
       - accountId
       - apiKeyId
@@ -7428,6 +7903,7 @@ components:
         apiKey:
           accountId: 0
           createdAt: 2000-01-23T04:56:07.000+00:00
+          scriptId: scriptId
           lastUsedAt: 2000-01-23T04:56:07.000+00:00
           prefix: prefix
           name: name
@@ -12781,6 +13257,1134 @@ components:
           type: string
       required:
       - layers
+    ScriptAuditEntry:
+      additionalProperties: false
+      example:
+        actorType: user
+        kind: kind
+        modifiedAt: 2000-01-23T04:56:07.000+00:00
+        modifiedBy: 0
+        params:
+          key: params
+      properties:
+        actorType:
+          enum:
+          - user
+          - system
+          - anonymous
+          type: string
+        kind:
+          description: "What changed, for example created, updated, api-key-rotated\
+            \ or needs-reauthorisation."
+          type: string
+        modifiedAt:
+          format: date-time
+          type: string
+        modifiedBy:
+          description: "User who made the change, when actorType is user."
+          format: int64
+          type: integer
+        params:
+          additionalProperties:
+            type: string
+      required:
+      - actorType
+      - kind
+      - modifiedAt
+    ScriptAuditResBody:
+      additionalProperties: false
+      example:
+        nextCursor: nextCursor
+        entries:
+        - actorType: user
+          kind: kind
+          modifiedAt: 2000-01-23T04:56:07.000+00:00
+          modifiedBy: 0
+          params:
+            key: params
+        - actorType: user
+          kind: kind
+          modifiedAt: 2000-01-23T04:56:07.000+00:00
+          modifiedBy: 0
+          params:
+            key: params
+      properties:
+        entries:
+          items:
+            $ref: "#/components/schemas/ScriptAuditEntry"
+          type: array
+        nextCursor:
+          type: string
+      required:
+      - entries
+    ScriptDetail:
+      additionalProperties: false
+      example:
+        webhook: true
+        manifest: manifest
+        description: description
+        project: 6
+        runtime:
+          memoryMb: 5
+          buildRunId: buildRunId
+          cpu: 5
+          timeoutSeconds: 2
+          nextRunAt: 2000-01-23T04:56:07.000+00:00
+          buildState: buildState
+        language: python
+        secretNames:
+        - secretNames
+        - secretNames
+        type: integration
+        enabled: true
+        webhookUrl: webhookUrl
+        revision: 1
+        createdAt: 2000-01-23T04:56:07.000+00:00
+        schedule:
+          cron: cron
+          timezone: timezone
+        createdBy: 0
+        name: name
+        files:
+          key: files
+        id: id
+        key:
+          lastError: lastError
+          rotateAt: 2000-01-23T04:56:07.000+00:00
+          ownerUserId: 6
+          expiresAt: 2000-01-23T04:56:07.000+00:00
+          status: active
+        updatedAt: 2000-01-23T04:56:07.000+00:00
+      properties:
+        createdAt:
+          format: date-time
+          type: string
+        createdBy:
+          format: int64
+          type: integer
+        description:
+          type: string
+        enabled:
+          type: boolean
+        files:
+          additionalProperties:
+            type: string
+          description: Source files keyed by path.
+        id:
+          type: string
+        key:
+          $ref: "#/components/schemas/ScriptKey"
+        language:
+          enum:
+          - python
+          - go
+          - javascript
+          type: string
+        manifest:
+          description: "Dependency manifest: requirements.txt for Python, go.mod for\
+            \ Go, package.json for JavaScript."
+          type: string
+        name:
+          type: string
+        project:
+          description: Project the script's API key is scoped to. Absent when it acts
+            across the account.
+          format: int64
+          type: integer
+        revision:
+          description: "Pass back when updating, so a concurrent change is reported\
+            \ rather than overwritten."
+          format: int64
+          type: integer
+        runtime:
+          $ref: "#/components/schemas/ScriptRuntime"
+        schedule:
+          $ref: "#/components/schemas/ScriptSchedule"
+        secretNames:
+          description: Names of the secrets set on the script. Values are never returned.
+          items:
+            type: string
+          type: array
+        type:
+          description: The handler signature the script implements.
+          enum:
+          - integration
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+        webhook:
+          type: boolean
+        webhookUrl:
+          description: Returned only when a webhook URL is first issued; it cannot
+            be retrieved later.
+          type: string
+      required:
+      - createdAt
+      - createdBy
+      - enabled
+      - files
+      - id
+      - key
+      - language
+      - name
+      - revision
+      - schedule
+      - secretNames
+      - type
+      - updatedAt
+      - webhook
+    ScriptExport:
+      additionalProperties: false
+      example:
+        webhook: true
+        manifest: manifest
+        description: description
+        project: 6
+        runtime:
+          memoryMb: 5
+          buildRunId: buildRunId
+          cpu: 5
+          timeoutSeconds: 2
+          nextRunAt: 2000-01-23T04:56:07.000+00:00
+          buildState: buildState
+        language: python
+        secretNames:
+        - secretNames
+        - secretNames
+        type: integration
+        enabled: true
+        webhookUrl: webhookUrl
+        revision: 1
+        runsError: runsError
+        createdAt: 2000-01-23T04:56:07.000+00:00
+        schedule:
+          cron: cron
+          timezone: timezone
+        createdBy: 0
+        name: name
+        files:
+          key: files
+        id: id
+        runs:
+        - queuedAt: 2000-01-23T04:56:07.000+00:00
+          logsPath: logsPath
+          endedAt: 2000-01-23T04:56:07.000+00:00
+          kind: kind
+          exitCode: 5
+          startedAt: 2000-01-23T04:56:07.000+00:00
+          id: id
+          trigger: trigger
+          message: message
+          durationMs: 5
+          status: status
+        - queuedAt: 2000-01-23T04:56:07.000+00:00
+          logsPath: logsPath
+          endedAt: 2000-01-23T04:56:07.000+00:00
+          kind: kind
+          exitCode: 5
+          startedAt: 2000-01-23T04:56:07.000+00:00
+          id: id
+          trigger: trigger
+          message: message
+          durationMs: 5
+          status: status
+        key:
+          lastError: lastError
+          rotateAt: 2000-01-23T04:56:07.000+00:00
+          ownerUserId: 6
+          expiresAt: 2000-01-23T04:56:07.000+00:00
+          status: active
+        updatedAt: 2000-01-23T04:56:07.000+00:00
+      properties:
+        createdAt:
+          format: date-time
+          type: string
+        createdBy:
+          format: int64
+          type: integer
+        description:
+          type: string
+        enabled:
+          type: boolean
+        files:
+          additionalProperties:
+            type: string
+          description: Source files keyed by path.
+        id:
+          type: string
+        key:
+          $ref: "#/components/schemas/ScriptKey"
+        language:
+          enum:
+          - python
+          - go
+          - javascript
+          type: string
+        manifest:
+          description: "Dependency manifest: requirements.txt for Python, go.mod for\
+            \ Go, package.json for JavaScript."
+          type: string
+        name:
+          type: string
+        project:
+          description: Project the script's API key is scoped to. Absent when it acts
+            across the account.
+          format: int64
+          type: integer
+        revision:
+          description: "Pass back when updating, so a concurrent change is reported\
+            \ rather than overwritten."
+          format: int64
+          type: integer
+        runs:
+          description: "Every build and run still kept, newest first."
+          items:
+            $ref: "#/components/schemas/ScriptExportRun"
+          type: array
+        runsError:
+          description: "Set when the run history could not be read in full, in which\
+            \ case runs holds only the newest part that was read. Page through the\
+            \ script's runs endpoint for the rest."
+          type: string
+        runtime:
+          $ref: "#/components/schemas/ScriptRuntime"
+        schedule:
+          $ref: "#/components/schemas/ScriptSchedule"
+        secretNames:
+          description: Names of the secrets set on the script. Values are never returned.
+          items:
+            type: string
+          type: array
+        type:
+          description: The handler signature the script implements.
+          enum:
+          - integration
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+        webhook:
+          type: boolean
+        webhookUrl:
+          description: Returned only when a webhook URL is first issued; it cannot
+            be retrieved later.
+          type: string
+      required:
+      - createdAt
+      - createdBy
+      - enabled
+      - files
+      - id
+      - key
+      - language
+      - name
+      - revision
+      - runs
+      - schedule
+      - secretNames
+      - type
+      - updatedAt
+      - webhook
+    ScriptExportResBody:
+      additionalProperties: false
+      example:
+        exportedAt: 2000-01-23T04:56:07.000+00:00
+        scripts:
+        - webhook: true
+          manifest: manifest
+          description: description
+          project: 6
+          runtime:
+            memoryMb: 5
+            buildRunId: buildRunId
+            cpu: 5
+            timeoutSeconds: 2
+            nextRunAt: 2000-01-23T04:56:07.000+00:00
+            buildState: buildState
+          language: python
+          secretNames:
+          - secretNames
+          - secretNames
+          type: integration
+          enabled: true
+          webhookUrl: webhookUrl
+          revision: 1
+          runsError: runsError
+          createdAt: 2000-01-23T04:56:07.000+00:00
+          schedule:
+            cron: cron
+            timezone: timezone
+          createdBy: 0
+          name: name
+          files:
+            key: files
+          id: id
+          runs:
+          - queuedAt: 2000-01-23T04:56:07.000+00:00
+            logsPath: logsPath
+            endedAt: 2000-01-23T04:56:07.000+00:00
+            kind: kind
+            exitCode: 5
+            startedAt: 2000-01-23T04:56:07.000+00:00
+            id: id
+            trigger: trigger
+            message: message
+            durationMs: 5
+            status: status
+          - queuedAt: 2000-01-23T04:56:07.000+00:00
+            logsPath: logsPath
+            endedAt: 2000-01-23T04:56:07.000+00:00
+            kind: kind
+            exitCode: 5
+            startedAt: 2000-01-23T04:56:07.000+00:00
+            id: id
+            trigger: trigger
+            message: message
+            durationMs: 5
+            status: status
+          key:
+            lastError: lastError
+            rotateAt: 2000-01-23T04:56:07.000+00:00
+            ownerUserId: 6
+            expiresAt: 2000-01-23T04:56:07.000+00:00
+            status: active
+          updatedAt: 2000-01-23T04:56:07.000+00:00
+        - webhook: true
+          manifest: manifest
+          description: description
+          project: 6
+          runtime:
+            memoryMb: 5
+            buildRunId: buildRunId
+            cpu: 5
+            timeoutSeconds: 2
+            nextRunAt: 2000-01-23T04:56:07.000+00:00
+            buildState: buildState
+          language: python
+          secretNames:
+          - secretNames
+          - secretNames
+          type: integration
+          enabled: true
+          webhookUrl: webhookUrl
+          revision: 1
+          runsError: runsError
+          createdAt: 2000-01-23T04:56:07.000+00:00
+          schedule:
+            cron: cron
+            timezone: timezone
+          createdBy: 0
+          name: name
+          files:
+            key: files
+          id: id
+          runs:
+          - queuedAt: 2000-01-23T04:56:07.000+00:00
+            logsPath: logsPath
+            endedAt: 2000-01-23T04:56:07.000+00:00
+            kind: kind
+            exitCode: 5
+            startedAt: 2000-01-23T04:56:07.000+00:00
+            id: id
+            trigger: trigger
+            message: message
+            durationMs: 5
+            status: status
+          - queuedAt: 2000-01-23T04:56:07.000+00:00
+            logsPath: logsPath
+            endedAt: 2000-01-23T04:56:07.000+00:00
+            kind: kind
+            exitCode: 5
+            startedAt: 2000-01-23T04:56:07.000+00:00
+            id: id
+            trigger: trigger
+            message: message
+            durationMs: 5
+            status: status
+          key:
+            lastError: lastError
+            rotateAt: 2000-01-23T04:56:07.000+00:00
+            ownerUserId: 6
+            expiresAt: 2000-01-23T04:56:07.000+00:00
+            status: active
+          updatedAt: 2000-01-23T04:56:07.000+00:00
+      properties:
+        exportedAt:
+          format: date-time
+          type: string
+        scripts:
+          items:
+            $ref: "#/components/schemas/ScriptExport"
+          type: array
+      required:
+      - exportedAt
+      - scripts
+    ScriptExportRun:
+      additionalProperties: false
+      example:
+        queuedAt: 2000-01-23T04:56:07.000+00:00
+        logsPath: logsPath
+        endedAt: 2000-01-23T04:56:07.000+00:00
+        kind: kind
+        exitCode: 5
+        startedAt: 2000-01-23T04:56:07.000+00:00
+        id: id
+        trigger: trigger
+        message: message
+        durationMs: 5
+        status: status
+      properties:
+        durationMs:
+          format: int64
+          type: integer
+        endedAt:
+          format: date-time
+          type: string
+        exitCode:
+          format: int32
+          type: integer
+        id:
+          type: string
+        kind:
+          description: "\"build\" for a dependency build, \"run\" for an execution."
+          type: string
+        logsPath:
+          description: API path that returns the run's logs while the run is kept.
+          type: string
+        message:
+          type: string
+        queuedAt:
+          format: date-time
+          type: string
+        startedAt:
+          format: date-time
+          type: string
+        status:
+          type: string
+        trigger:
+          type: string
+      required:
+      - exitCode
+      - id
+      - kind
+      - logsPath
+      - status
+      - trigger
+    ScriptKey:
+      additionalProperties: false
+      example:
+        lastError: lastError
+        rotateAt: 2000-01-23T04:56:07.000+00:00
+        ownerUserId: 6
+        expiresAt: 2000-01-23T04:56:07.000+00:00
+        status: active
+      properties:
+        expiresAt:
+          format: date-time
+          type: string
+        lastError:
+          description: Why the last automatic rotation failed or why the key needs
+            re-authorising.
+          type: string
+        ownerUserId:
+          description: User whose permissions the key acts with.
+          format: int64
+          type: integer
+        rotateAt:
+          description: When the key is next replaced automatically.
+          format: date-time
+          type: string
+        status:
+          description: "Whether the script's Spaciv API key is usable. While \"needs_reauthorisation\"\
+            , runs are paused until someone with *Manage my account* re-authorises\
+            \ it."
+          enum:
+          - active
+          - needs_reauthorisation
+          type: string
+      required:
+      - status
+    ScriptListResBody:
+      additionalProperties: false
+      example:
+        scripts:
+        - webhook: true
+          description: description
+          project: 1
+          language: python
+          type: integration
+          enabled: true
+          revision: 5
+          createdAt: 2000-01-23T04:56:07.000+00:00
+          schedule:
+            cron: cron
+            timezone: timezone
+          createdBy: 0
+          name: name
+          id: id
+          key:
+            lastError: lastError
+            rotateAt: 2000-01-23T04:56:07.000+00:00
+            ownerUserId: 6
+            expiresAt: 2000-01-23T04:56:07.000+00:00
+            status: active
+          updatedAt: 2000-01-23T04:56:07.000+00:00
+        - webhook: true
+          description: description
+          project: 1
+          language: python
+          type: integration
+          enabled: true
+          revision: 5
+          createdAt: 2000-01-23T04:56:07.000+00:00
+          schedule:
+            cron: cron
+            timezone: timezone
+          createdBy: 0
+          name: name
+          id: id
+          key:
+            lastError: lastError
+            rotateAt: 2000-01-23T04:56:07.000+00:00
+            ownerUserId: 6
+            expiresAt: 2000-01-23T04:56:07.000+00:00
+            status: active
+          updatedAt: 2000-01-23T04:56:07.000+00:00
+      properties:
+        scripts:
+          items:
+            $ref: "#/components/schemas/ScriptSummary"
+          type: array
+      required:
+      - scripts
+    ScriptLogLine:
+      additionalProperties: false
+      example:
+        message: message
+        timestamp: 2000-01-23T04:56:07.000+00:00
+      properties:
+        message:
+          type: string
+        timestamp:
+          format: date-time
+          type: string
+      required:
+      - message
+      - timestamp
+    ScriptPatchReqBody:
+      additionalProperties: false
+      example:
+        schedule:
+          cron: cron
+          timezone: timezone
+        webhook: true
+        manifest: manifest
+        name: name
+        description: description
+        files:
+          key: files
+        project: 0
+        language: python
+        enabled: true
+        revision: 6
+      properties:
+        description:
+          maxLength: 1000
+          type: string
+        enabled:
+          type: boolean
+        files:
+          additionalProperties:
+            type: string
+        language:
+          enum:
+          - python
+          - go
+          - javascript
+          type: string
+        manifest:
+          type: string
+        name:
+          maxLength: 100
+          minLength: 1
+          type: string
+        project:
+          description: 0 removes the project.
+          format: int64
+          minimum: 0
+          type: integer
+        revision:
+          description: The revision last read; a different current revision is rejected
+            with 409.
+          format: int64
+          type: integer
+        schedule:
+          $ref: "#/components/schemas/ScriptSchedule"
+        webhook:
+          type: boolean
+      required:
+      - revision
+    ScriptPostReqBody:
+      additionalProperties: false
+      example:
+        schedule:
+          cron: cron
+          timezone: timezone
+        webhook: true
+        manifest: manifest
+        name: name
+        description: description
+        files:
+          key: files
+        project: 0
+        language: python
+        type: integration
+        secrets:
+          key: secrets
+        enabled: true
+      properties:
+        description:
+          maxLength: 1000
+          type: string
+        enabled:
+          description: Whether schedules and webhooks start runs.
+          type: boolean
+        files:
+          additionalProperties:
+            type: string
+          description: "Source files keyed by path. Python needs script.py defining\
+            \ handle(event, ctx), JavaScript needs script.js exporting handle(event,\
+            \ ctx), and Go needs script.go in a non-main package exporting Handle(ctx\
+            \ context.Context, event handler.Event, hc handler.Context) (any, error)\
+            \ from spaciv/handler."
+        language:
+          enum:
+          - python
+          - go
+          - javascript
+          type: string
+        manifest:
+          description: "Dependency manifest: requirements.txt for Python, go.mod for\
+            \ Go, package.json for JavaScript."
+          type: string
+        name:
+          maxLength: 100
+          minLength: 1
+          type: string
+        project:
+          description: "Optional project to scope the script's API key to, for example\
+            \ to update its dashboards. Omit for account-wide access."
+          format: int64
+          minimum: 0
+          type: integer
+        schedule:
+          $ref: "#/components/schemas/ScriptSchedule"
+        secrets:
+          additionalProperties:
+            type: string
+          description: Secrets exposed to the script as environment variables. Names
+            must be upper case and must not start with SPACIV_.
+        type:
+          description: "The handler signature the script implements; defaults to integration\
+            \ and cannot be changed. An integration handles each run as handle(event,\
+            \ ctx), where event has the trigger and, for webhook runs, the request,\
+            \ and ctx has the account, project, API key and secrets."
+          enum:
+          - integration
+          type: string
+        webhook:
+          description: Whether the script can be triggered by an HTTP POST to its
+            webhook URL.
+          type: boolean
+      required:
+      - files
+      - language
+      - name
+    ScriptRun:
+      additionalProperties: false
+      example:
+        queuedAt: 2000-01-23T04:56:07.000+00:00
+        endedAt: 2000-01-23T04:56:07.000+00:00
+        kind: kind
+        exitCode: 6
+        startedAt: 2000-01-23T04:56:07.000+00:00
+        id: id
+        trigger: trigger
+        message: message
+        durationMs: 0
+        status: status
+      properties:
+        durationMs:
+          format: int64
+          type: integer
+        endedAt:
+          format: date-time
+          type: string
+        exitCode:
+          format: int32
+          type: integer
+        id:
+          type: string
+        kind:
+          description: "\"build\" for a dependency build, \"run\" for an execution."
+          type: string
+        message:
+          type: string
+        queuedAt:
+          format: date-time
+          type: string
+        startedAt:
+          format: date-time
+          type: string
+        status:
+          type: string
+        trigger:
+          type: string
+      required:
+      - exitCode
+      - id
+      - kind
+      - status
+      - trigger
+    ScriptRunLogsResBody:
+      additionalProperties: false
+      example:
+        truncated: true
+        lines:
+        - message: message
+          timestamp: 2000-01-23T04:56:07.000+00:00
+        - message: message
+          timestamp: 2000-01-23T04:56:07.000+00:00
+      properties:
+        lines:
+          items:
+            $ref: "#/components/schemas/ScriptLogLine"
+          type: array
+        truncated:
+          description: "Set when the run wrote more output than is kept, so some of\
+            \ it is missing."
+          type: boolean
+      required:
+      - lines
+      - truncated
+    ScriptRunsResBody:
+      additionalProperties: false
+      example:
+        nextCursor: nextCursor
+        runs:
+        - queuedAt: 2000-01-23T04:56:07.000+00:00
+          endedAt: 2000-01-23T04:56:07.000+00:00
+          kind: kind
+          exitCode: 6
+          startedAt: 2000-01-23T04:56:07.000+00:00
+          id: id
+          trigger: trigger
+          message: message
+          durationMs: 0
+          status: status
+        - queuedAt: 2000-01-23T04:56:07.000+00:00
+          endedAt: 2000-01-23T04:56:07.000+00:00
+          kind: kind
+          exitCode: 6
+          startedAt: 2000-01-23T04:56:07.000+00:00
+          id: id
+          trigger: trigger
+          message: message
+          durationMs: 0
+          status: status
+      properties:
+        nextCursor:
+          type: string
+        runs:
+          items:
+            $ref: "#/components/schemas/ScriptRun"
+          type: array
+      required:
+      - runs
+    ScriptRuntime:
+      additionalProperties: false
+      example:
+        memoryMb: 5
+        buildRunId: buildRunId
+        cpu: 5
+        timeoutSeconds: 2
+        nextRunAt: 2000-01-23T04:56:07.000+00:00
+        buildState: buildState
+      properties:
+        buildRunId:
+          type: string
+        buildState:
+          description: State of the latest dependency build.
+          type: string
+        cpu:
+          description: vCPU units per run (1024 = 1 vCPU).
+          format: int32
+          type: integer
+        memoryMb:
+          format: int32
+          type: integer
+        nextRunAt:
+          format: date-time
+          type: string
+        timeoutSeconds:
+          format: int32
+          type: integer
+    ScriptSchedule:
+      additionalProperties: false
+      example:
+        cron: cron
+        timezone: timezone
+      properties:
+        cron:
+          description: "Five-field cron expression (minute, hour, day of month, month,\
+            \ day of week). Empty means the script only runs from its webhook."
+          type: string
+        timezone:
+          description: IANA time zone the cron expression is evaluated in. Defaults
+            to UTC.
+          type: string
+    ScriptSchedulePreviewReqBody:
+      additionalProperties: false
+      example:
+        cron: cron
+        timezone: timezone
+        count: 8
+      properties:
+        count:
+          default: 5
+          format: int64
+          maximum: 100
+          minimum: 1
+          type: integer
+        cron:
+          description: "Five-field cron expression (minute, hour, day of month, month,\
+            \ day of week). Empty means the script only runs from its webhook."
+          type: string
+        timezone:
+          description: IANA time zone the cron expression is evaluated in. Defaults
+            to UTC.
+          type: string
+    ScriptSchedulePreviewResBody:
+      additionalProperties: false
+      example:
+        valid: true
+        error: error
+        nextRuns:
+        - 2000-01-23T04:56:07.000+00:00
+        - 2000-01-23T04:56:07.000+00:00
+      properties:
+        error:
+          type: string
+        nextRuns:
+          items:
+            format: date-time
+            type: string
+          type: array
+        valid:
+          type: boolean
+      required:
+      - nextRuns
+      - valid
+    ScriptSecretsReqBody:
+      additionalProperties: false
+      example:
+        set:
+          key: set
+        remove:
+        - remove
+        - remove
+      properties:
+        remove:
+          description: Names of secrets to delete.
+          items:
+            type: string
+          type: array
+        set:
+          additionalProperties:
+            type: string
+          description: "Secrets to add or replace, keyed by environment variable name."
+    ScriptSecretsResBody:
+      additionalProperties: false
+      example:
+        webhook: true
+        description: description
+        project: 6
+        language: python
+        secretNames:
+        - secretNames
+        - secretNames
+        type: integration
+        enabled: true
+        revision: 1
+        createdAt: 2000-01-23T04:56:07.000+00:00
+        schedule:
+          cron: cron
+          timezone: timezone
+        createdBy: 0
+        name: name
+        id: id
+        key:
+          lastError: lastError
+          rotateAt: 2000-01-23T04:56:07.000+00:00
+          ownerUserId: 6
+          expiresAt: 2000-01-23T04:56:07.000+00:00
+          status: active
+        updatedAt: 2000-01-23T04:56:07.000+00:00
+      properties:
+        createdAt:
+          format: date-time
+          type: string
+        createdBy:
+          format: int64
+          type: integer
+        description:
+          type: string
+        enabled:
+          type: boolean
+        id:
+          type: string
+        key:
+          $ref: "#/components/schemas/ScriptKey"
+        language:
+          enum:
+          - python
+          - go
+          - javascript
+          type: string
+        name:
+          type: string
+        project:
+          description: Project the script's API key is scoped to. Absent when it acts
+            across the account.
+          format: int64
+          type: integer
+        revision:
+          description: "Pass back when updating, so a concurrent change is reported\
+            \ rather than overwritten."
+          format: int64
+          type: integer
+        schedule:
+          $ref: "#/components/schemas/ScriptSchedule"
+        secretNames:
+          items:
+            type: string
+          type: array
+        type:
+          description: The handler signature the script implements.
+          enum:
+          - integration
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+        webhook:
+          type: boolean
+      required:
+      - createdAt
+      - createdBy
+      - enabled
+      - id
+      - key
+      - language
+      - name
+      - revision
+      - schedule
+      - secretNames
+      - type
+      - updatedAt
+      - webhook
+    ScriptSummary:
+      additionalProperties: false
+      example:
+        webhook: true
+        description: description
+        project: 1
+        language: python
+        type: integration
+        enabled: true
+        revision: 5
+        createdAt: 2000-01-23T04:56:07.000+00:00
+        schedule:
+          cron: cron
+          timezone: timezone
+        createdBy: 0
+        name: name
+        id: id
+        key:
+          lastError: lastError
+          rotateAt: 2000-01-23T04:56:07.000+00:00
+          ownerUserId: 6
+          expiresAt: 2000-01-23T04:56:07.000+00:00
+          status: active
+        updatedAt: 2000-01-23T04:56:07.000+00:00
+      properties:
+        createdAt:
+          format: date-time
+          type: string
+        createdBy:
+          format: int64
+          type: integer
+        description:
+          type: string
+        enabled:
+          type: boolean
+        id:
+          type: string
+        key:
+          $ref: "#/components/schemas/ScriptKey"
+        language:
+          enum:
+          - python
+          - go
+          - javascript
+          type: string
+        name:
+          type: string
+        project:
+          description: Project the script's API key is scoped to. Absent when it acts
+            across the account.
+          format: int64
+          type: integer
+        revision:
+          description: "Pass back when updating, so a concurrent change is reported\
+            \ rather than overwritten."
+          format: int64
+          type: integer
+        schedule:
+          $ref: "#/components/schemas/ScriptSchedule"
+        type:
+          description: The handler signature the script implements.
+          enum:
+          - integration
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+        webhook:
+          type: boolean
+      required:
+      - createdAt
+      - createdBy
+      - enabled
+      - id
+      - key
+      - language
+      - name
+      - revision
+      - schedule
+      - type
+      - updatedAt
+      - webhook
+    ScriptWebhookResBody:
+      additionalProperties: false
+      example:
+        webhookUrl: webhookUrl
+      properties:
+        webhookUrl:
+          type: string
+      required:
+      - webhookUrl
     SendPasswordPutReqBody:
       additionalProperties: false
       example:

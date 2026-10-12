@@ -94,6 +94,8 @@ type APIClient struct {
 
 	Scenarios *ScenariosService
 
+	Scripts *ScriptsService
+
 	Service *ServiceService
 
 	SpaceRulesets *SpaceRulesetsService
@@ -145,6 +147,7 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.Properties = (*PropertiesService)(&c.common)
 	c.Reports = (*ReportsService)(&c.common)
 	c.Scenarios = (*ScenariosService)(&c.common)
+	c.Scripts = (*ScriptsService)(&c.common)
 	c.Service = (*ServiceService)(&c.common)
 	c.SpaceRulesets = (*SpaceRulesetsService)(&c.common)
 	c.TemplateProjects = (*TemplateProjectsService)(&c.common)

@@ -51,7 +51,7 @@ Other parameters are passed through a pointer to a apiListRequest struct via the
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **entity** | **string** | Entity type to query. One of: dashboard, property, scenario, floorplan, space-ruleset, top-down-model, object-group, datacollection, contribution, i18n, user, file, variable, upload-quarantine. Pass \&quot;all\&quot; to retrieve entries across all entity types the caller has permission to see (entityId must be omitted). | 
+ **entity** | **string** | Entity type to query. One of: dashboard, property, scenario, floorplan, space-ruleset, top-down-model, object-group, datacollection, contribution, i18n, user, file, variable, script, upload-quarantine. Pass \&quot;all\&quot; to retrieve entries across all entity types the caller has permission to see (entityId must be omitted). | 
  **entityId** | **string** | Restrict results to changes made to this specific entity. Cannot be used when entity&#x3D;all. | 
  **from** | **time.Time** | Return only entries at or after this timestamp (RFC 3339). Omit for no lower bound. | 
  **to** | **time.Time** | Return only entries at or before this timestamp (RFC 3339). Omit for no upper bound. | 

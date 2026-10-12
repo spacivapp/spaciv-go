@@ -32,7 +32,7 @@ type requestForAuthenticationCreateApiKeys struct {
 /*
 CreateApiKeys Create an API key
 
-Issues a long-lived key for programmatic access, scoped to the calling user and the given project. The secret is returned in the `key` field of this response and never again, since only its hash is stored; a client that loses it must create a replacement. Keys expire after `expiresInDays`, between 1 and 90.
+Issues a long-lived key for programmatic access, scoped to the calling user and the given project. The secret is returned in the `key` field of this response and never again, since only its hash is stored; a client that loses it must create a replacement. Keys expire after `expiresInDays`, between 1 and 90. A script's own API key cannot create or delete keys.
 */
 func (a *AuthenticationService) CreateApiKeys(ctx context.Context, apiKeyPostReqBody ApiKeyPostReqBody) (*ApiKeyPostResBody, error) {
 	r := requestForAuthenticationCreateApiKeys{
@@ -993,7 +993,7 @@ type requestForAuthenticationDeleteApiKeys struct {
 /*
 DeleteApiKeys Revoke an API key
 
-Permanently revokes one of the calling user's keys. Access tokens already exchanged for it remain valid until they expire, and the key itself may continue to authenticate for up to a minute while cached resolutions age out.
+Permanently revokes one of the calling user's keys. Access tokens already exchanged for it remain valid until they expire, and the key itself may continue to authenticate for up to a minute while cached resolutions age out. Keys that belong to a script are rejected with 409; delete or re-authorise the script instead.
 */
 func (a *AuthenticationService) DeleteApiKeys(ctx context.Context, id int64) error {
 	r := requestForAuthenticationDeleteApiKeys{

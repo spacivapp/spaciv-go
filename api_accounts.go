@@ -148,7 +148,7 @@ CreateOidcProvider Create the current account's OIDC provider
 
 Registers the identity provider members of the account the access token was issued for sign in through with single sign-on. An account has at most one provider; creating a second returns `409 oidc-provider-exists`. Creating a provider does not enable the `sso` sign-in method; enable it with `PATCH /v1/account/auth-options` afterwards.
 
-The tenant must name a single organisation (Microsoft's `common`, `organizations` and `consumers` are rejected) or the request returns `400 invalid-tenant`. The provider's OpenID discovery document is fetched before anything is stored, and a provider that cannot be reached returns `400 oidc-discovery-failed`. The change is written to the audit log. Requires the *Manage my account* permission. The account owning the centrally managed shared provider gets `403 shared-sso-provider`.
+The tenant must name a single organisation (Microsoft's `common`, `organizations` and `consumers` are rejected) or the request returns `400 invalid-tenant`. The provider's OpenID discovery document is fetched before anything is stored, and a provider that cannot be reached returns `400 oidc-discovery-failed`. The change is written to the audit log. Requires the *Manage my account* permission. The account owning the centrally managed shared provider gets `403 shared-sso-provider`. A script's own API key cannot call it.
 */
 func (a *AccountsService) CreateOidcProvider(ctx context.Context, accountPostOIDCProviderReqBody AccountPostOIDCProviderReqBody) (*AccountOIDCProvider, error) {
 	r := requestForAccountsCreateOidcProvider{
@@ -257,7 +257,7 @@ type requestForAccountsDelete struct {
 /*
 Delete Delete the current account
 
-Permanently deletes the account the access token was issued for, along with its projects and members. This cannot be undone. Requires the *Manage my account* permission.
+Permanently deletes the account the access token was issued for, along with its projects, members and scripts. This cannot be undone. Scripts are deleted first, so if the request fails some of them may already be gone; repeat it to finish deleting the account. Requires the *Manage my account* permission. A script's own API key cannot delete the account.
 */
 func (a *AccountsService) Delete(ctx context.Context) error {
 	r := requestForAccountsDelete{
@@ -352,7 +352,7 @@ DeleteOidcProvider Delete the current account's OIDC provider
 
 Removes the identity provider of the account the access token was issued for, together with its client secret, and disables the `sso` sign-in method in the same change. Sessions signed in through the provider can no longer refresh an access token scoped to the account.
 
-Returns `400 last-auth-option-disabled` when single sign-on is the account's only enabled member sign-in method, `404 oidc-provider-not-configured` when the account has no provider, and `409 auth-options-changed` when the account's sign-in methods or its provider changed concurrently, in which case the request may be retried. The change is written to the audit log. Requires the *Manage my account* permission. The account owning the centrally managed shared provider gets `403 shared-sso-provider`.
+Returns `400 last-auth-option-disabled` when single sign-on is the account's only enabled member sign-in method, `404 oidc-provider-not-configured` when the account has no provider, and `409 auth-options-changed` when the account's sign-in methods or its provider changed concurrently, in which case the request may be retried. The change is written to the audit log. Requires the *Manage my account* permission. The account owning the centrally managed shared provider gets `403 shared-sso-provider`. A script's own API key cannot call it.
 */
 func (a *AccountsService) DeleteOidcProvider(ctx context.Context) error {
 	r := requestForAccountsDeleteOidcProvider{
@@ -756,7 +756,7 @@ GetOidcProvider Get the current account's OIDC provider
 
 Returns the identity provider members of the account the access token was issued for sign in through with single sign-on. The client secret is never returned; `clientSecretSet` reports whether one is stored.
 
-Returns `404 oidc-provider-not-configured` when the account has no provider, and `409 sso-multiple-providers` when it has more than one. Requires the *Manage my account* permission. The account owning the centrally managed shared provider gets `403 shared-sso-provider`.
+Returns `404 oidc-provider-not-configured` when the account has no provider, and `409 sso-multiple-providers` when it has more than one. Requires the *Manage my account* permission. The account owning the centrally managed shared provider gets `403 shared-sso-provider`. A script's own API key cannot call it.
 */
 func (a *AccountsService) GetOidcProvider(ctx context.Context) (*AccountOIDCProvider, error) {
 	r := requestForAccountsGetOidcProvider{
@@ -1704,7 +1704,7 @@ UpdateOidcProvider Update the current account's OIDC provider
 
 Changes the identity provider members of the account the access token was issued for sign in through with single sign-on. Fields left out keep their current value; the client secret is changed with `PUT /v1/account/oidc-provider/client-secret`.
 
-When `providerName` or `tenant` changes, the tenant must name a single organisation or the request returns `400 invalid-tenant`, and the provider's OpenID discovery document is fetched before anything is stored; a provider that cannot be reached returns `400 oidc-discovery-failed`. Returns `404 oidc-provider-not-configured` when the account has no provider, and `409 oidc-provider-changed` when it was changed concurrently. The change is written to the audit log. Requires the *Manage my account* permission. The account owning the centrally managed shared provider gets `403 shared-sso-provider`.
+When `providerName` or `tenant` changes, the tenant must name a single organisation or the request returns `400 invalid-tenant`, and the provider's OpenID discovery document is fetched before anything is stored; a provider that cannot be reached returns `400 oidc-discovery-failed`. Returns `404 oidc-provider-not-configured` when the account has no provider, and `409 oidc-provider-changed` when it was changed concurrently. The change is written to the audit log. Requires the *Manage my account* permission. The account owning the centrally managed shared provider gets `403 shared-sso-provider`. A script's own API key cannot call it.
 */
 func (a *AccountsService) UpdateOidcProvider(ctx context.Context, accountOIDCProviderPatch AccountOIDCProviderPatch) (*AccountOIDCProvider, error) {
 	r := requestForAccountsUpdateOidcProvider{
@@ -1814,7 +1814,7 @@ type requestForAccountsUpdateOidcProviderClientSecret struct {
 /*
 UpdateOidcProviderClientSecret Replace the current account's OIDC client secret
 
-Stores a new client secret for the identity provider of the account the access token was issued for. The secret is write-only: no endpoint returns it. Returns `404 oidc-provider-not-configured` when the account has no provider. The change is written to the audit log without the secret. Requires the *Manage my account* permission. The account owning the centrally managed shared provider gets `403 shared-sso-provider`.
+Stores a new client secret for the identity provider of the account the access token was issued for. The secret is write-only: no endpoint returns it. Returns `404 oidc-provider-not-configured` when the account has no provider. The change is written to the audit log without the secret. Requires the *Manage my account* permission. The account owning the centrally managed shared provider gets `403 shared-sso-provider`. A script's own API key cannot call it.
 */
 func (a *AccountsService) UpdateOidcProviderClientSecret(ctx context.Context, accountPutOIDCClientSecretReqBody AccountPutOIDCClientSecretReqBody) error {
 	r := requestForAccountsUpdateOidcProviderClientSecret{
