@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Actions** | [**[]AssistantChatPollAction**](AssistantChatPollAction.md) |  | 
 **Failure** | Pointer to [**AssistantConversationFailureBody**](AssistantConversationFailureBody.md) |  | [optional] 
+**FinishedToolCallIds** | **[]string** | Tool calls whose results, failed or not, were recorded after the since cursor, by the toolCallId of their action message. A call that succeeded has no message of its own, so this is how a client tells a finished action from one still running. A later poll can list a call again. | 
 **Messages** | [**[]AssistantChatPollMessage**](AssistantChatPollMessage.md) |  | 
 **Status** | **string** |  | 
 
@@ -13,7 +14,7 @@ Name | Type | Description | Notes
 
 ### NewAssistantChatPollBody
 
-`func NewAssistantChatPollBody(actions []AssistantChatPollAction, messages []AssistantChatPollMessage, status string, ) *AssistantChatPollBody`
+`func NewAssistantChatPollBody(actions []AssistantChatPollAction, finishedToolCallIds []string, messages []AssistantChatPollMessage, status string, ) *AssistantChatPollBody`
 
 NewAssistantChatPollBody instantiates a new AssistantChatPollBody object
 This constructor will assign default values to properties that have it defined,
@@ -72,6 +73,26 @@ SetFailure sets Failure field to given value.
 `func (o *AssistantChatPollBody) HasFailure() bool`
 
 HasFailure returns a boolean if a field has been set.
+
+### GetFinishedToolCallIds
+
+`func (o *AssistantChatPollBody) GetFinishedToolCallIds() []string`
+
+GetFinishedToolCallIds returns the FinishedToolCallIds field if non-nil, zero value otherwise.
+
+### GetFinishedToolCallIdsOk
+
+`func (o *AssistantChatPollBody) GetFinishedToolCallIdsOk() (*[]string, bool)`
+
+GetFinishedToolCallIdsOk returns a tuple with the FinishedToolCallIds field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetFinishedToolCallIds
+
+`func (o *AssistantChatPollBody) SetFinishedToolCallIds(v []string)`
+
+SetFinishedToolCallIds sets FinishedToolCallIds field to given value.
+
 
 ### GetMessages
 

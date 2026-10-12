@@ -24,6 +24,8 @@ var _ MappedNullable = &AssistantChatPollBody{}
 type AssistantChatPollBody struct {
 	Actions []AssistantChatPollAction `json:"actions"`
 	Failure *AssistantConversationFailureBody `json:"failure,omitempty"`
+	// Tool calls whose results, failed or not, were recorded after the since cursor, by the toolCallId of their action message. A call that succeeded has no message of its own, so this is how a client tells a finished action from one still running. A later poll can list a call again.
+	FinishedToolCallIds []string `json:"finishedToolCallIds"`
 	Messages []AssistantChatPollMessage `json:"messages"`
 	Status string `json:"status"`
 }
@@ -34,9 +36,10 @@ type _AssistantChatPollBody AssistantChatPollBody
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAssistantChatPollBody(actions []AssistantChatPollAction, messages []AssistantChatPollMessage, status string) *AssistantChatPollBody {
+func NewAssistantChatPollBody(actions []AssistantChatPollAction, finishedToolCallIds []string, messages []AssistantChatPollMessage, status string) *AssistantChatPollBody {
 	this := AssistantChatPollBody{}
 	this.Actions = actions
+	this.FinishedToolCallIds = finishedToolCallIds
 	this.Messages = messages
 	this.Status = status
 	return &this
@@ -106,6 +109,30 @@ func (o *AssistantChatPollBody) SetFailure(v AssistantConversationFailureBody) {
 	o.Failure = &v
 }
 
+// GetFinishedToolCallIds returns the FinishedToolCallIds field value
+func (o *AssistantChatPollBody) GetFinishedToolCallIds() []string {
+	if o == nil {
+		var ret []string
+		return ret
+	}
+
+	return o.FinishedToolCallIds
+}
+
+// GetFinishedToolCallIdsOk returns a tuple with the FinishedToolCallIds field value
+// and a boolean to check if the value has been set.
+func (o *AssistantChatPollBody) GetFinishedToolCallIdsOk() ([]string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.FinishedToolCallIds, true
+}
+
+// SetFinishedToolCallIds sets field value
+func (o *AssistantChatPollBody) SetFinishedToolCallIds(v []string) {
+	o.FinishedToolCallIds = v
+}
+
 // GetMessages returns the Messages field value
 func (o *AssistantChatPollBody) GetMessages() []AssistantChatPollMessage {
 	if o == nil {
@@ -168,6 +195,7 @@ func (o AssistantChatPollBody) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Failure) {
 		toSerialize["failure"] = o.Failure
 	}
+	toSerialize["finishedToolCallIds"] = o.FinishedToolCallIds
 	toSerialize["messages"] = o.Messages
 	toSerialize["status"] = o.Status
 	return toSerialize, nil
@@ -179,6 +207,7 @@ func (o *AssistantChatPollBody) UnmarshalJSON(data []byte) (err error) {
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"actions",
+		"finishedToolCallIds",
 		"messages",
 		"status",
 	}

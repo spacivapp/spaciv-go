@@ -12,12 +12,13 @@ Name | Type | Description | Notes
 **RequestId** | **string** |  | 
 **Role** | **string** |  | 
 **Text** | **string** |  | 
+**ToolCallId** | **string** | Id of the tool call an action message (kind 2) stands for. Empty on every other message. | 
 
 ## Methods
 
 ### NewAssistantChatPollMessage
 
-`func NewAssistantChatPollMessage(attachments []AssistantChatPollAttachment, createdAt string, id string, kind int64, payload string, requestId string, role string, text string, ) *AssistantChatPollMessage`
+`func NewAssistantChatPollMessage(attachments []AssistantChatPollAttachment, createdAt string, id string, kind int64, payload string, requestId string, role string, text string, toolCallId string, ) *AssistantChatPollMessage`
 
 NewAssistantChatPollMessage instantiates a new AssistantChatPollMessage object
 This constructor will assign default values to properties that have it defined,
@@ -190,6 +191,26 @@ and a boolean to check if the value has been set.
 `func (o *AssistantChatPollMessage) SetText(v string)`
 
 SetText sets Text field to given value.
+
+
+### GetToolCallId
+
+`func (o *AssistantChatPollMessage) GetToolCallId() string`
+
+GetToolCallId returns the ToolCallId field if non-nil, zero value otherwise.
+
+### GetToolCallIdOk
+
+`func (o *AssistantChatPollMessage) GetToolCallIdOk() (*string, bool)`
+
+GetToolCallIdOk returns a tuple with the ToolCallId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetToolCallId
+
+`func (o *AssistantChatPollMessage) SetToolCallId(v string)`
+
+SetToolCallId sets ToolCallId field to given value.
 
 
 

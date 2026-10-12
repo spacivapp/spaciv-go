@@ -31,6 +31,8 @@ type AssistantChatPollMessage struct {
 	RequestId string `json:"requestId"`
 	Role string `json:"role"`
 	Text string `json:"text"`
+	// Id of the tool call an action message (kind 2) stands for. Empty on every other message.
+	ToolCallId string `json:"toolCallId"`
 }
 
 type _AssistantChatPollMessage AssistantChatPollMessage
@@ -39,7 +41,7 @@ type _AssistantChatPollMessage AssistantChatPollMessage
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAssistantChatPollMessage(attachments []AssistantChatPollAttachment, createdAt string, id string, kind int64, payload string, requestId string, role string, text string) *AssistantChatPollMessage {
+func NewAssistantChatPollMessage(attachments []AssistantChatPollAttachment, createdAt string, id string, kind int64, payload string, requestId string, role string, text string, toolCallId string) *AssistantChatPollMessage {
 	this := AssistantChatPollMessage{}
 	this.Attachments = attachments
 	this.CreatedAt = createdAt
@@ -49,6 +51,7 @@ func NewAssistantChatPollMessage(attachments []AssistantChatPollAttachment, crea
 	this.RequestId = requestId
 	this.Role = role
 	this.Text = text
+	this.ToolCallId = toolCallId
 	return &this
 }
 
@@ -252,6 +255,30 @@ func (o *AssistantChatPollMessage) SetText(v string) {
 	o.Text = v
 }
 
+// GetToolCallId returns the ToolCallId field value
+func (o *AssistantChatPollMessage) GetToolCallId() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.ToolCallId
+}
+
+// GetToolCallIdOk returns a tuple with the ToolCallId field value
+// and a boolean to check if the value has been set.
+func (o *AssistantChatPollMessage) GetToolCallIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.ToolCallId, true
+}
+
+// SetToolCallId sets field value
+func (o *AssistantChatPollMessage) SetToolCallId(v string) {
+	o.ToolCallId = v
+}
+
 func (o AssistantChatPollMessage) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -270,6 +297,7 @@ func (o AssistantChatPollMessage) ToMap() (map[string]interface{}, error) {
 	toSerialize["requestId"] = o.RequestId
 	toSerialize["role"] = o.Role
 	toSerialize["text"] = o.Text
+	toSerialize["toolCallId"] = o.ToolCallId
 	return toSerialize, nil
 }
 
@@ -286,6 +314,7 @@ func (o *AssistantChatPollMessage) UnmarshalJSON(data []byte) (err error) {
 		"requestId",
 		"role",
 		"text",
+		"toolCallId",
 	}
 
 	allProperties := make(map[string]interface{})

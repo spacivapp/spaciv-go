@@ -7982,6 +7982,9 @@ components:
     AssistantChatPollBody:
       additionalProperties: false
       example:
+        finishedToolCallIds:
+        - finishedToolCallIds
+        - finishedToolCallIds
         failure:
           code: code
           stage: stage
@@ -7997,6 +8000,7 @@ components:
             mimeType: mimeType
             fileId: fileId
           role: role
+          toolCallId: toolCallId
           payload: payload
           kind: 6
           requestId: requestId
@@ -8013,6 +8017,7 @@ components:
             mimeType: mimeType
             fileId: fileId
           role: role
+          toolCallId: toolCallId
           payload: payload
           kind: 6
           requestId: requestId
@@ -8031,6 +8036,15 @@ components:
           type: array
         failure:
           $ref: "#/components/schemas/AssistantConversationFailureBody"
+        finishedToolCallIds:
+          description: "Tool calls whose results, failed or not, were recorded after\
+            \ the since cursor, by the toolCallId of their action message. A call\
+            \ that succeeded has no message of its own, so this is how a client tells\
+            \ a finished action from one still running. A later poll can list a call\
+            \ again."
+          items:
+            type: string
+          type: array
         messages:
           items:
             $ref: "#/components/schemas/AssistantChatPollMessage"
@@ -8039,6 +8053,7 @@ components:
           type: string
       required:
       - actions
+      - finishedToolCallIds
       - messages
       - status
     AssistantChatPollMessage:
@@ -8055,6 +8070,7 @@ components:
           mimeType: mimeType
           fileId: fileId
         role: role
+        toolCallId: toolCallId
         payload: payload
         kind: 6
         requestId: requestId
@@ -8082,6 +8098,10 @@ components:
           type: string
         text:
           type: string
+        toolCallId:
+          description: Id of the tool call an action message (kind 2) stands for.
+            Empty on every other message.
+          type: string
       required:
       - attachments
       - createdAt
@@ -8091,6 +8111,7 @@ components:
       - requestId
       - role
       - text
+      - toolCallId
     AssistantChatReq:
       additionalProperties: false
       example:
