@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Property** | **string** |  | 
+**Object** | [**VariableObject**](VariableObject.md) |  | 
 
 ## Methods
 
 ### NewVariableDataOneOf5
 
-`func NewVariableDataOneOf5(property string, ) *VariableDataOneOf5`
+`func NewVariableDataOneOf5(object VariableObject, ) *VariableDataOneOf5`
 
 NewVariableDataOneOf5 instantiates a new VariableDataOneOf5 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewVariableDataOneOf5WithDefaults instantiates a new VariableDataOneOf5 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetProperty
+### GetObject
 
-`func (o *VariableDataOneOf5) GetProperty() string`
+`func (o *VariableDataOneOf5) GetObject() VariableObject`
 
-GetProperty returns the Property field if non-nil, zero value otherwise.
+GetObject returns the Object field if non-nil, zero value otherwise.
 
-### GetPropertyOk
+### GetObjectOk
 
-`func (o *VariableDataOneOf5) GetPropertyOk() (*string, bool)`
+`func (o *VariableDataOneOf5) GetObjectOk() (*VariableObject, bool)`
 
-GetPropertyOk returns a tuple with the Property field if it's non-nil, zero value otherwise
+GetObjectOk returns a tuple with the Object field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetProperty
+### SetObject
 
-`func (o *VariableDataOneOf5) SetProperty(v string)`
+`func (o *VariableDataOneOf5) SetObject(v VariableObject)`
 
-SetProperty sets Property field to given value.
+SetObject sets Object field to given value.
 
 
 

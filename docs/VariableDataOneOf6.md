@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Scenario** | **string** |  | 
+**Property** | **string** |  | 
 
 ## Methods
 
 ### NewVariableDataOneOf6
 
-`func NewVariableDataOneOf6(scenario string, ) *VariableDataOneOf6`
+`func NewVariableDataOneOf6(property string, ) *VariableDataOneOf6`
 
 NewVariableDataOneOf6 instantiates a new VariableDataOneOf6 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewVariableDataOneOf6WithDefaults instantiates a new VariableDataOneOf6 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetScenario
+### GetProperty
 
-`func (o *VariableDataOneOf6) GetScenario() string`
+`func (o *VariableDataOneOf6) GetProperty() string`
 
-GetScenario returns the Scenario field if non-nil, zero value otherwise.
+GetProperty returns the Property field if non-nil, zero value otherwise.
 
-### GetScenarioOk
+### GetPropertyOk
 
-`func (o *VariableDataOneOf6) GetScenarioOk() (*string, bool)`
+`func (o *VariableDataOneOf6) GetPropertyOk() (*string, bool)`
 
-GetScenarioOk returns a tuple with the Scenario field if it's non-nil, zero value otherwise
+GetPropertyOk returns a tuple with the Property field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetScenario
+### SetProperty
 
-`func (o *VariableDataOneOf6) SetScenario(v string)`
+`func (o *VariableDataOneOf6) SetProperty(v string)`
 
-SetScenario sets Scenario field to given value.
+SetProperty sets Property field to given value.
 
 
 

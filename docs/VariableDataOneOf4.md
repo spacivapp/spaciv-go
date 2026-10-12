@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Object** | [**VariableObject**](VariableObject.md) |  | 
+**Number** | [**VariableNumber**](VariableNumber.md) |  | 
 
 ## Methods
 
 ### NewVariableDataOneOf4
 
-`func NewVariableDataOneOf4(object VariableObject, ) *VariableDataOneOf4`
+`func NewVariableDataOneOf4(number VariableNumber, ) *VariableDataOneOf4`
 
 NewVariableDataOneOf4 instantiates a new VariableDataOneOf4 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewVariableDataOneOf4WithDefaults instantiates a new VariableDataOneOf4 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetObject
+### GetNumber
 
-`func (o *VariableDataOneOf4) GetObject() VariableObject`
+`func (o *VariableDataOneOf4) GetNumber() VariableNumber`
 
-GetObject returns the Object field if non-nil, zero value otherwise.
+GetNumber returns the Number field if non-nil, zero value otherwise.
 
-### GetObjectOk
+### GetNumberOk
 
-`func (o *VariableDataOneOf4) GetObjectOk() (*VariableObject, bool)`
+`func (o *VariableDataOneOf4) GetNumberOk() (*VariableNumber, bool)`
 
-GetObjectOk returns a tuple with the Object field if it's non-nil, zero value otherwise
+GetNumberOk returns a tuple with the Number field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetObject
+### SetNumber
 
-`func (o *VariableDataOneOf4) SetObject(v VariableObject)`
+`func (o *VariableDataOneOf4) SetNumber(v VariableNumber)`
 
-SetObject sets Object field to given value.
+SetNumber sets Number field to given value.
 
 
 

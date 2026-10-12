@@ -15350,12 +15350,33 @@ components:
       oneOf:
       - $ref: "#/components/schemas/VariableData_oneOf"
       - $ref: "#/components/schemas/VariableData_oneOf_1"
-      - $ref: "#/components/schemas/PropertySource_oneOf"
       - $ref: "#/components/schemas/VariableData_oneOf_2"
+      - $ref: "#/components/schemas/PropertySource_oneOf"
       - $ref: "#/components/schemas/VariableData_oneOf_3"
       - $ref: "#/components/schemas/VariableData_oneOf_4"
       - $ref: "#/components/schemas/VariableData_oneOf_5"
       - $ref: "#/components/schemas/VariableData_oneOf_6"
+      - $ref: "#/components/schemas/VariableData_oneOf_7"
+    VariableDate:
+      additionalProperties: false
+      properties:
+        max:
+          format: int32
+          type: integer
+        min:
+          format: int32
+          type: integer
+        step:
+          format: int32
+          type: integer
+        value:
+          format: int32
+          type: integer
+      required:
+      - max
+      - min
+      - step
+      - value
     VariableListRes:
       additionalProperties: false
       example:
@@ -16094,29 +16115,35 @@ components:
       - date
     VariableData_oneOf_2:
       properties:
+        dateRange:
+          $ref: "#/components/schemas/VariableDate"
+      required:
+      - dateRange
+    VariableData_oneOf_3:
+      properties:
         node:
           $ref: "#/components/schemas/VariableProperty"
       required:
       - node
-    VariableData_oneOf_3:
+    VariableData_oneOf_4:
       properties:
         number:
           $ref: "#/components/schemas/VariableNumber"
       required:
       - number
-    VariableData_oneOf_4:
+    VariableData_oneOf_5:
       properties:
         object:
           $ref: "#/components/schemas/VariableObject"
       required:
       - object
-    VariableData_oneOf_5:
+    VariableData_oneOf_6:
       properties:
         property:
           type: string
       required:
       - property
-    VariableData_oneOf_6:
+    VariableData_oneOf_7:
       properties:
         scenario:
           type: string

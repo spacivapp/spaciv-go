@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **CalcRule** | **string** |  | 
 **Date** | **int64** |  | 
+**DateRange** | [**VariableDate**](VariableDate.md) |  | 
 **Floorplan** | **string** |  | 
 **Node** | [**VariableProperty**](VariableProperty.md) |  | 
 **Number** | [**VariableNumber**](VariableNumber.md) |  | 
@@ -17,7 +18,7 @@ Name | Type | Description | Notes
 
 ### NewVariableData
 
-`func NewVariableData(calcRule string, date int64, floorplan string, node VariableProperty, number VariableNumber, object VariableObject, property string, scenario string, ) *VariableData`
+`func NewVariableData(calcRule string, date int64, dateRange VariableDate, floorplan string, node VariableProperty, number VariableNumber, object VariableObject, property string, scenario string, ) *VariableData`
 
 NewVariableData instantiates a new VariableData object
 This constructor will assign default values to properties that have it defined,
@@ -70,6 +71,26 @@ and a boolean to check if the value has been set.
 `func (o *VariableData) SetDate(v int64)`
 
 SetDate sets Date field to given value.
+
+
+### GetDateRange
+
+`func (o *VariableData) GetDateRange() VariableDate`
+
+GetDateRange returns the DateRange field if non-nil, zero value otherwise.
+
+### GetDateRangeOk
+
+`func (o *VariableData) GetDateRangeOk() (*VariableDate, bool)`
+
+GetDateRangeOk returns a tuple with the DateRange field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDateRange
+
+`func (o *VariableData) SetDateRange(v VariableDate)`
+
+SetDateRange sets DateRange field to given value.
 
 
 ### GetFloorplan

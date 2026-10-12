@@ -22,7 +22,7 @@ var _ MappedNullable = &VariableDataOneOf3{}
 
 // VariableDataOneOf3 struct for VariableDataOneOf3
 type VariableDataOneOf3 struct {
-	Number VariableNumber `json:"number"`
+	Node VariableProperty `json:"node"`
 }
 
 type _VariableDataOneOf3 VariableDataOneOf3
@@ -31,9 +31,9 @@ type _VariableDataOneOf3 VariableDataOneOf3
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewVariableDataOneOf3(number VariableNumber) *VariableDataOneOf3 {
+func NewVariableDataOneOf3(node VariableProperty) *VariableDataOneOf3 {
 	this := VariableDataOneOf3{}
-	this.Number = number
+	this.Node = node
 	return &this
 }
 
@@ -45,28 +45,28 @@ func NewVariableDataOneOf3WithDefaults() *VariableDataOneOf3 {
 	return &this
 }
 
-// GetNumber returns the Number field value
-func (o *VariableDataOneOf3) GetNumber() VariableNumber {
+// GetNode returns the Node field value
+func (o *VariableDataOneOf3) GetNode() VariableProperty {
 	if o == nil {
-		var ret VariableNumber
+		var ret VariableProperty
 		return ret
 	}
 
-	return o.Number
+	return o.Node
 }
 
-// GetNumberOk returns a tuple with the Number field value
+// GetNodeOk returns a tuple with the Node field value
 // and a boolean to check if the value has been set.
-func (o *VariableDataOneOf3) GetNumberOk() (*VariableNumber, bool) {
+func (o *VariableDataOneOf3) GetNodeOk() (*VariableProperty, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Number, true
+	return &o.Node, true
 }
 
-// SetNumber sets field value
-func (o *VariableDataOneOf3) SetNumber(v VariableNumber) {
-	o.Number = v
+// SetNode sets field value
+func (o *VariableDataOneOf3) SetNode(v VariableProperty) {
+	o.Node = v
 }
 
 func (o VariableDataOneOf3) MarshalJSON() ([]byte, error) {
@@ -79,7 +79,7 @@ func (o VariableDataOneOf3) MarshalJSON() ([]byte, error) {
 
 func (o VariableDataOneOf3) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["number"] = o.Number
+	toSerialize["node"] = o.Node
 	return toSerialize, nil
 }
 
@@ -88,7 +88,7 @@ func (o *VariableDataOneOf3) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"number",
+		"node",
 	}
 
 	allProperties := make(map[string]interface{})

@@ -27,6 +27,7 @@ type VariableData struct {
 	VariableDataOneOf4 *VariableDataOneOf4
 	VariableDataOneOf5 *VariableDataOneOf5
 	VariableDataOneOf6 *VariableDataOneOf6
+	VariableDataOneOf7 *VariableDataOneOf7
 }
 
 // PropertySourceOneOfAsVariableData is a convenience function that returns PropertySourceOneOf wrapped in VariableData
@@ -82,6 +83,13 @@ func VariableDataOneOf5AsVariableData(v *VariableDataOneOf5) VariableData {
 func VariableDataOneOf6AsVariableData(v *VariableDataOneOf6) VariableData {
 	return VariableData{
 		VariableDataOneOf6: v,
+	}
+}
+
+// VariableDataOneOf7AsVariableData is a convenience function that returns VariableDataOneOf7 wrapped in VariableData
+func VariableDataOneOf7AsVariableData(v *VariableDataOneOf7) VariableData {
+	return VariableData{
+		VariableDataOneOf7: v,
 	}
 }
 
@@ -226,6 +234,23 @@ func (dst *VariableData) UnmarshalJSON(data []byte) error {
 		dst.VariableDataOneOf6 = nil
 	}
 
+	// try to unmarshal data into VariableDataOneOf7
+	err = newStrictDecoder(data).Decode(&dst.VariableDataOneOf7)
+	if err == nil {
+		jsonVariableDataOneOf7, _ := json.Marshal(dst.VariableDataOneOf7)
+		if string(jsonVariableDataOneOf7) == "{}" { // empty struct
+			dst.VariableDataOneOf7 = nil
+		} else {
+			if err = validator.Validate(dst.VariableDataOneOf7); err != nil {
+				dst.VariableDataOneOf7 = nil
+			} else {
+				match++
+			}
+		}
+	} else {
+		dst.VariableDataOneOf7 = nil
+	}
+
 	if match > 1 { // more than 1 match
 		// reset to nil
 		dst.PropertySourceOneOf = nil
@@ -236,6 +261,7 @@ func (dst *VariableData) UnmarshalJSON(data []byte) error {
 		dst.VariableDataOneOf4 = nil
 		dst.VariableDataOneOf5 = nil
 		dst.VariableDataOneOf6 = nil
+		dst.VariableDataOneOf7 = nil
 
 		return fmt.Errorf("data matches more than one schema in oneOf(VariableData)")
 	} else if match == 1 {
@@ -279,6 +305,10 @@ func (src VariableData) MarshalJSON() ([]byte, error) {
 		return json.Marshal(&src.VariableDataOneOf6)
 	}
 
+	if src.VariableDataOneOf7 != nil {
+		return json.Marshal(&src.VariableDataOneOf7)
+	}
+
 	return nil, nil // no data in oneOf schemas
 }
 
@@ -319,6 +349,10 @@ func (obj *VariableData) GetActualInstance() (interface{}) {
 		return obj.VariableDataOneOf6
 	}
 
+	if obj.VariableDataOneOf7 != nil {
+		return obj.VariableDataOneOf7
+	}
+
 	// all schemas are nil
 	return nil
 }
@@ -355,6 +389,10 @@ func (obj VariableData) GetActualInstanceValue() (interface{}) {
 
 	if obj.VariableDataOneOf6 != nil {
 		return *obj.VariableDataOneOf6
+	}
+
+	if obj.VariableDataOneOf7 != nil {
+		return *obj.VariableDataOneOf7
 	}
 
 	// all schemas are nil

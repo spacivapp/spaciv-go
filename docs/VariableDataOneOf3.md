@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Number** | [**VariableNumber**](VariableNumber.md) |  | 
+**Node** | [**VariableProperty**](VariableProperty.md) |  | 
 
 ## Methods
 
 ### NewVariableDataOneOf3
 
-`func NewVariableDataOneOf3(number VariableNumber, ) *VariableDataOneOf3`
+`func NewVariableDataOneOf3(node VariableProperty, ) *VariableDataOneOf3`
 
 NewVariableDataOneOf3 instantiates a new VariableDataOneOf3 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewVariableDataOneOf3WithDefaults instantiates a new VariableDataOneOf3 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetNumber
+### GetNode
 
-`func (o *VariableDataOneOf3) GetNumber() VariableNumber`
+`func (o *VariableDataOneOf3) GetNode() VariableProperty`
 
-GetNumber returns the Number field if non-nil, zero value otherwise.
+GetNode returns the Node field if non-nil, zero value otherwise.
 
-### GetNumberOk
+### GetNodeOk
 
-`func (o *VariableDataOneOf3) GetNumberOk() (*VariableNumber, bool)`
+`func (o *VariableDataOneOf3) GetNodeOk() (*VariableProperty, bool)`
 
-GetNumberOk returns a tuple with the Number field if it's non-nil, zero value otherwise
+GetNodeOk returns a tuple with the Node field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetNumber
+### SetNode
 
-`func (o *VariableDataOneOf3) SetNumber(v VariableNumber)`
+`func (o *VariableDataOneOf3) SetNode(v VariableProperty)`
 
-SetNumber sets Number field to given value.
+SetNode sets Node field to given value.
 
 
 

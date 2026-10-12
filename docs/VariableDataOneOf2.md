@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Node** | [**VariableProperty**](VariableProperty.md) |  | 
+**DateRange** | [**VariableDate**](VariableDate.md) |  | 
 
 ## Methods
 
 ### NewVariableDataOneOf2
 
-`func NewVariableDataOneOf2(node VariableProperty, ) *VariableDataOneOf2`
+`func NewVariableDataOneOf2(dateRange VariableDate, ) *VariableDataOneOf2`
 
 NewVariableDataOneOf2 instantiates a new VariableDataOneOf2 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewVariableDataOneOf2WithDefaults instantiates a new VariableDataOneOf2 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetNode
+### GetDateRange
 
-`func (o *VariableDataOneOf2) GetNode() VariableProperty`
+`func (o *VariableDataOneOf2) GetDateRange() VariableDate`
 
-GetNode returns the Node field if non-nil, zero value otherwise.
+GetDateRange returns the DateRange field if non-nil, zero value otherwise.
 
-### GetNodeOk
+### GetDateRangeOk
 
-`func (o *VariableDataOneOf2) GetNodeOk() (*VariableProperty, bool)`
+`func (o *VariableDataOneOf2) GetDateRangeOk() (*VariableDate, bool)`
 
-GetNodeOk returns a tuple with the Node field if it's non-nil, zero value otherwise
+GetDateRangeOk returns a tuple with the DateRange field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetNode
+### SetDateRange
 
-`func (o *VariableDataOneOf2) SetNode(v VariableProperty)`
+`func (o *VariableDataOneOf2) SetDateRange(v VariableDate)`
 
-SetNode sets Node field to given value.
+SetDateRange sets DateRange field to given value.
 
 
 

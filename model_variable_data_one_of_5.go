@@ -22,7 +22,7 @@ var _ MappedNullable = &VariableDataOneOf5{}
 
 // VariableDataOneOf5 struct for VariableDataOneOf5
 type VariableDataOneOf5 struct {
-	Property string `json:"property"`
+	Object VariableObject `json:"object"`
 }
 
 type _VariableDataOneOf5 VariableDataOneOf5
@@ -31,9 +31,9 @@ type _VariableDataOneOf5 VariableDataOneOf5
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewVariableDataOneOf5(property string) *VariableDataOneOf5 {
+func NewVariableDataOneOf5(object VariableObject) *VariableDataOneOf5 {
 	this := VariableDataOneOf5{}
-	this.Property = property
+	this.Object = object
 	return &this
 }
 
@@ -45,28 +45,28 @@ func NewVariableDataOneOf5WithDefaults() *VariableDataOneOf5 {
 	return &this
 }
 
-// GetProperty returns the Property field value
-func (o *VariableDataOneOf5) GetProperty() string {
+// GetObject returns the Object field value
+func (o *VariableDataOneOf5) GetObject() VariableObject {
 	if o == nil {
-		var ret string
+		var ret VariableObject
 		return ret
 	}
 
-	return o.Property
+	return o.Object
 }
 
-// GetPropertyOk returns a tuple with the Property field value
+// GetObjectOk returns a tuple with the Object field value
 // and a boolean to check if the value has been set.
-func (o *VariableDataOneOf5) GetPropertyOk() (*string, bool) {
+func (o *VariableDataOneOf5) GetObjectOk() (*VariableObject, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Property, true
+	return &o.Object, true
 }
 
-// SetProperty sets field value
-func (o *VariableDataOneOf5) SetProperty(v string) {
-	o.Property = v
+// SetObject sets field value
+func (o *VariableDataOneOf5) SetObject(v VariableObject) {
+	o.Object = v
 }
 
 func (o VariableDataOneOf5) MarshalJSON() ([]byte, error) {
@@ -79,7 +79,7 @@ func (o VariableDataOneOf5) MarshalJSON() ([]byte, error) {
 
 func (o VariableDataOneOf5) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["property"] = o.Property
+	toSerialize["object"] = o.Object
 	return toSerialize, nil
 }
 
@@ -88,7 +88,7 @@ func (o *VariableDataOneOf5) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"property",
+		"object",
 	}
 
 	allProperties := make(map[string]interface{})

@@ -416,6 +416,8 @@ docs/VariableDataOneOf3.md
 docs/VariableDataOneOf4.md
 docs/VariableDataOneOf5.md
 docs/VariableDataOneOf6.md
+docs/VariableDataOneOf7.md
+docs/VariableDate.md
 docs/VariableListRes.md
 docs/VariableNotFoundDetail.md
 docs/VariableNumber.md
@@ -783,6 +785,8 @@ model_variable_data_one_of_3.go
 model_variable_data_one_of_4.go
 model_variable_data_one_of_5.go
 model_variable_data_one_of_6.go
+model_variable_data_one_of_7.go
+model_variable_date.go
 model_variable_list_res.go
 model_variable_not_found_detail.go
 model_variable_number.go

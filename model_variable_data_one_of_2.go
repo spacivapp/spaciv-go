@@ -22,7 +22,7 @@ var _ MappedNullable = &VariableDataOneOf2{}
 
 // VariableDataOneOf2 struct for VariableDataOneOf2
 type VariableDataOneOf2 struct {
-	Node VariableProperty `json:"node"`
+	DateRange VariableDate `json:"dateRange"`
 }
 
 type _VariableDataOneOf2 VariableDataOneOf2
@@ -31,9 +31,9 @@ type _VariableDataOneOf2 VariableDataOneOf2
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewVariableDataOneOf2(node VariableProperty) *VariableDataOneOf2 {
+func NewVariableDataOneOf2(dateRange VariableDate) *VariableDataOneOf2 {
 	this := VariableDataOneOf2{}
-	this.Node = node
+	this.DateRange = dateRange
 	return &this
 }
 
@@ -45,28 +45,28 @@ func NewVariableDataOneOf2WithDefaults() *VariableDataOneOf2 {
 	return &this
 }
 
-// GetNode returns the Node field value
-func (o *VariableDataOneOf2) GetNode() VariableProperty {
+// GetDateRange returns the DateRange field value
+func (o *VariableDataOneOf2) GetDateRange() VariableDate {
 	if o == nil {
-		var ret VariableProperty
+		var ret VariableDate
 		return ret
 	}
 
-	return o.Node
+	return o.DateRange
 }
 
-// GetNodeOk returns a tuple with the Node field value
+// GetDateRangeOk returns a tuple with the DateRange field value
 // and a boolean to check if the value has been set.
-func (o *VariableDataOneOf2) GetNodeOk() (*VariableProperty, bool) {
+func (o *VariableDataOneOf2) GetDateRangeOk() (*VariableDate, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Node, true
+	return &o.DateRange, true
 }
 
-// SetNode sets field value
-func (o *VariableDataOneOf2) SetNode(v VariableProperty) {
-	o.Node = v
+// SetDateRange sets field value
+func (o *VariableDataOneOf2) SetDateRange(v VariableDate) {
+	o.DateRange = v
 }
 
 func (o VariableDataOneOf2) MarshalJSON() ([]byte, error) {
@@ -79,7 +79,7 @@ func (o VariableDataOneOf2) MarshalJSON() ([]byte, error) {
 
 func (o VariableDataOneOf2) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["node"] = o.Node
+	toSerialize["dateRange"] = o.DateRange
 	return toSerialize, nil
 }
 
@@ -88,7 +88,7 @@ func (o *VariableDataOneOf2) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"node",
+		"dateRange",
 	}
 
 	allProperties := make(map[string]interface{})
