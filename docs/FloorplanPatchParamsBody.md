@@ -4,7 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**BackgroundFile** | Pointer to **string** |  | [optional] 
 **CreatedAt** | Pointer to **int64** |  | [optional] 
+**ForegroundFile** | Pointer to **string** |  | [optional] 
 **Name** | Pointer to **string** |  | [optional] 
 **OverlayOffset** | Pointer to [**FloorplanChangelogOverlayOffset**](FloorplanChangelogOverlayOffset.md) |  | [optional] 
 **Property** | Pointer to **string** |  | [optional] 
@@ -30,6 +32,31 @@ NewFloorplanPatchParamsBodyWithDefaults instantiates a new FloorplanPatchParamsB
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
+### GetBackgroundFile
+
+`func (o *FloorplanPatchParamsBody) GetBackgroundFile() string`
+
+GetBackgroundFile returns the BackgroundFile field if non-nil, zero value otherwise.
+
+### GetBackgroundFileOk
+
+`func (o *FloorplanPatchParamsBody) GetBackgroundFileOk() (*string, bool)`
+
+GetBackgroundFileOk returns a tuple with the BackgroundFile field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetBackgroundFile
+
+`func (o *FloorplanPatchParamsBody) SetBackgroundFile(v string)`
+
+SetBackgroundFile sets BackgroundFile field to given value.
+
+### HasBackgroundFile
+
+`func (o *FloorplanPatchParamsBody) HasBackgroundFile() bool`
+
+HasBackgroundFile returns a boolean if a field has been set.
+
 ### GetCreatedAt
 
 `func (o *FloorplanPatchParamsBody) GetCreatedAt() int64`
@@ -54,6 +81,31 @@ SetCreatedAt sets CreatedAt field to given value.
 `func (o *FloorplanPatchParamsBody) HasCreatedAt() bool`
 
 HasCreatedAt returns a boolean if a field has been set.
+
+### GetForegroundFile
+
+`func (o *FloorplanPatchParamsBody) GetForegroundFile() string`
+
+GetForegroundFile returns the ForegroundFile field if non-nil, zero value otherwise.
+
+### GetForegroundFileOk
+
+`func (o *FloorplanPatchParamsBody) GetForegroundFileOk() (*string, bool)`
+
+GetForegroundFileOk returns a tuple with the ForegroundFile field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetForegroundFile
+
+`func (o *FloorplanPatchParamsBody) SetForegroundFile(v string)`
+
+SetForegroundFile sets ForegroundFile field to given value.
+
+### HasForegroundFile
+
+`func (o *FloorplanPatchParamsBody) HasForegroundFile() bool`
+
+HasForegroundFile returns a boolean if a field has been set.
 
 ### GetName
 

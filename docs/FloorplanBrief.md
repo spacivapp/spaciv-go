@@ -4,7 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**BackgroundFile** | Pointer to **string** | ID of the account file used as the background image, if one is set. | [optional] 
 **CreatedAt** | **int64** |  | 
+**ForegroundFile** | Pointer to **string** | ID of the account file used as the foreground image, if one is set. | [optional] 
 **Id** | **string** |  | 
 **Name** | **string** |  | 
 **Property** | **string** |  | 
@@ -29,6 +31,31 @@ NewFloorplanBriefWithDefaults instantiates a new FloorplanBrief object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
+### GetBackgroundFile
+
+`func (o *FloorplanBrief) GetBackgroundFile() string`
+
+GetBackgroundFile returns the BackgroundFile field if non-nil, zero value otherwise.
+
+### GetBackgroundFileOk
+
+`func (o *FloorplanBrief) GetBackgroundFileOk() (*string, bool)`
+
+GetBackgroundFileOk returns a tuple with the BackgroundFile field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetBackgroundFile
+
+`func (o *FloorplanBrief) SetBackgroundFile(v string)`
+
+SetBackgroundFile sets BackgroundFile field to given value.
+
+### HasBackgroundFile
+
+`func (o *FloorplanBrief) HasBackgroundFile() bool`
+
+HasBackgroundFile returns a boolean if a field has been set.
+
 ### GetCreatedAt
 
 `func (o *FloorplanBrief) GetCreatedAt() int64`
@@ -48,6 +75,31 @@ and a boolean to check if the value has been set.
 
 SetCreatedAt sets CreatedAt field to given value.
 
+
+### GetForegroundFile
+
+`func (o *FloorplanBrief) GetForegroundFile() string`
+
+GetForegroundFile returns the ForegroundFile field if non-nil, zero value otherwise.
+
+### GetForegroundFileOk
+
+`func (o *FloorplanBrief) GetForegroundFileOk() (*string, bool)`
+
+GetForegroundFileOk returns a tuple with the ForegroundFile field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetForegroundFile
+
+`func (o *FloorplanBrief) SetForegroundFile(v string)`
+
+SetForegroundFile sets ForegroundFile field to given value.
+
+### HasForegroundFile
+
+`func (o *FloorplanBrief) HasForegroundFile() bool`
+
+HasForegroundFile returns a boolean if a field has been set.
 
 ### GetId
 

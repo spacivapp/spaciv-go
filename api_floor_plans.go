@@ -355,14 +355,14 @@ type requestForFloorPlansGetImages struct {
 }
 
 type FloorPlansGetImagesParams struct {
-	// When true, returns 404 instead of a generated placeholder if no image has been uploaded.
+	// When true, returns 404 instead of a generated placeholder if the layer has no image.
 	NoFallback *bool
 }
 
 /*
 GetImages Get a floor plan image
 
-Returns the raw image bytes for the specified layer (`image` for the base drawing, `foreground` for the overlay). When no image has been uploaded a generated placeholder is returned unless `noFallback=true` is set. Requires the *View floorplans* permission. Returns `403` (`file quarantined: it matched a virus signature`) when a rescan found the stored image matches a virus signature; the bytes are kept for investigation.
+Returns the raw image bytes for the specified layer (`image` for the base drawing, `foreground` for the overlay): the account file set as the layer's `backgroundFile` or `foregroundFile`, or, when there is none or it has been deleted from file storage, an image uploaded to the layer through `PUT`. When the layer has neither, a generated placeholder is returned unless `noFallback=true` is set. Requires the *View floorplans* permission; the *View file storage* permission is not needed to read the layer's account file. Returns `403` (`file quarantined: it matched a virus signature`) when a rescan found the image matches a virus signature; the bytes are kept for investigation.
 */
 func (a *FloorPlansService) GetImages(ctx context.Context, id string, imageType string, params *FloorPlansGetImagesParams) (string, error) {
 	r := requestForFloorPlansGetImages{
@@ -580,7 +580,9 @@ type requestForFloorPlansUpdate struct {
 /*
 Update Update a floor plan
 
-Partially updates the floor plan's name, linked property and node, creation timestamp, image overlay offset, and space geometry. Only fields present in the request body are changed. When `spaces` is provided the entire space overlay is replaced. Requires the *Edit floorplans* permission.
+Partially updates the floor plan's name, linked property and node, creation timestamp, image overlay offset, background and foreground images, and space geometry. Only fields present in the request body are changed, and the request fails with `409` if the floor plan keeps changing while they are. When `spaces` is provided the entire space overlay is replaced. Requires the *Edit floorplans* permission.
+
+`backgroundFile` and `foregroundFile` take the ID of an image in the account's file storage (see `/v1/account/files`), or an empty string to remove the layer's image; choosing a file also requires the *View file storage* permission. The file must be a PNG, JPEG, GIF, WebP or SVG image of at most 4 MB that is not quarantined, otherwise the request fails with `422` (`403` when quarantined) and nothing is changed. Setting or removing a layer's file also deletes any image previously uploaded to that layer through `PUT /v1/floorplans/{id}/images/{imageType}`.
 */
 func (a *FloorPlansService) Update(ctx context.Context, id string, floorplanPatchParamsBody FloorplanPatchParamsBody) (map[string]interface{}, error) {
 	r := requestForFloorPlansUpdate{
@@ -699,7 +701,7 @@ type FloorPlansUpdateImagesParams struct {
 /*
 UpdateImages Upload a floor plan image
 
-Uploads an image file for the specified layer of a floor plan. Submit a `multipart/form-data` request with the file under the `file` key; the maximum file size is 4 MB. Accepted MIME types: `image/png`, `image/jpeg`, `image/gif`, `image/webp`, `image/svg+xml` (detected from file bytes). Omitting the file part deletes any existing image for that layer. Requires the *Edit floorplans* permission.
+Uploads an image file for the specified layer of a floor plan. Submit a `multipart/form-data` request with the file under the `file` key; the maximum file size is 4 MB. Accepted MIME types: `image/png`, `image/jpeg`, `image/gif`, `image/webp`, `image/svg+xml` (detected from file bytes). Omitting the file part deletes any existing image for that layer. Either way, the layer stops showing any account file set for it through `PATCH /v1/floorplans/{id}`; prefer setting `backgroundFile` or `foregroundFile` there instead. Requires the *Edit floorplans* permission.
 */
 func (a *FloorPlansService) UpdateImages(ctx context.Context, id string, imageType string, params *FloorPlansUpdateImagesParams) (map[string]interface{}, error) {
 	r := requestForFloorPlansUpdateImages{

@@ -3532,10 +3532,10 @@ paths:
       - Floor plans
       x-sdk-params: false
     patch:
-      description: "Partially updates the floor plan's name, linked property and node,\
-        \ creation timestamp, image overlay offset, and space geometry. Only fields\
-        \ present in the request body are changed. When `spaces` is provided the entire\
-        \ space overlay is replaced. Requires the *Edit floorplans* permission."
+      description: |-
+        Partially updates the floor plan's name, linked property and node, creation timestamp, image overlay offset, background and foreground images, and space geometry. Only fields present in the request body are changed, and the request fails with `409` if the floor plan keeps changing while they are. When `spaces` is provided the entire space overlay is replaced. Requires the *Edit floorplans* permission.
+
+        `backgroundFile` and `foregroundFile` take the ID of an image in the account's file storage (see `/v1/account/files`), or an empty string to remove the layer's image; choosing a file also requires the *View file storage* permission. The file must be a PNG, JPEG, GIF, WebP or SVG image of at most 4 MB that is not quarantined, otherwise the request fails with `422` (`403` when quarantined) and nothing is changed. Setting or removing a layer's file also deletes any image previously uploaded to that layer through `PUT /v1/floorplans/{id}/images/{imageType}`.
       operationId: floor-plans_update
       parameters:
       - explode: false
@@ -3570,11 +3570,15 @@ paths:
   /v1/floorplans/{id}/images/{imageType}:
     get:
       description: "Returns the raw image bytes for the specified layer (`image` for\
-        \ the base drawing, `foreground` for the overlay). When no image has been\
-        \ uploaded a generated placeholder is returned unless `noFallback=true` is\
-        \ set. Requires the *View floorplans* permission. Returns `403` (`file quarantined:\
-        \ it matched a virus signature`) when a rescan found the stored image matches\
-        \ a virus signature; the bytes are kept for investigation."
+        \ the base drawing, `foreground` for the overlay): the account file set as\
+        \ the layer's `backgroundFile` or `foregroundFile`, or, when there is none\
+        \ or it has been deleted from file storage, an image uploaded to the layer\
+        \ through `PUT`. When the layer has neither, a generated placeholder is returned\
+        \ unless `noFallback=true` is set. Requires the *View floorplans* permission;\
+        \ the *View file storage* permission is not needed to read the layer's account\
+        \ file. Returns `403` (`file quarantined: it matched a virus signature`) when\
+        \ a rescan found the image matches a virus signature; the bytes are kept for\
+        \ investigation."
       operationId: floor-plans_get-images
       parameters:
       - explode: false
@@ -3599,14 +3603,14 @@ paths:
           type: string
         style: simple
       - description: "When true, returns 404 instead of a generated placeholder if\
-          \ no image has been uploaded."
+          \ the layer has no image."
         explode: false
         in: query
         name: noFallback
         required: false
         schema:
           description: "When true, returns 404 instead of a generated placeholder\
-            \ if no image has been uploaded."
+            \ if the layer has no image."
           type: boolean
         style: form
       responses:
@@ -3657,8 +3661,10 @@ paths:
         \ Submit a `multipart/form-data` request with the file under the `file` key;\
         \ the maximum file size is 4 MB. Accepted MIME types: `image/png`, `image/jpeg`,\
         \ `image/gif`, `image/webp`, `image/svg+xml` (detected from file bytes). Omitting\
-        \ the file part deletes any existing image for that layer. Requires the *Edit\
-        \ floorplans* permission."
+        \ the file part deletes any existing image for that layer. Either way, the\
+        \ layer stops showing any account file set for it through `PATCH /v1/floorplans/{id}`;\
+        \ prefer setting `backgroundFile` or `foregroundFile` there instead. Requires\
+        \ the *Edit floorplans* permission."
       operationId: floor-plans_update-images
       parameters:
       - explode: false
@@ -10519,13 +10525,23 @@ components:
       example:
         createdAt: 0
         propertyNode: propertyNode
+        foregroundFile: foregroundFile
+        backgroundFile: backgroundFile
         name: name
         property: property
         id: id
       properties:
+        backgroundFile:
+          description: "ID of the account file used as the background image, if one\
+            \ is set."
+          type: string
         createdAt:
           format: int64
           type: integer
+        foregroundFile:
+          description: "ID of the account file used as the foreground image, if one\
+            \ is set."
+          type: string
         id:
           type: string
         name:
@@ -10643,10 +10659,12 @@ components:
       example:
         createdAt: 0
         propertyNode: propertyNode
+        foregroundFile: foregroundFile
         overlayOffset:
           x: 1.4658129805029452
           scale: 6.027456183070403
           "y": 5.962133916683182
+        backgroundFile: backgroundFile
         name: name
         property: property
         spaces:
@@ -10671,9 +10689,17 @@ components:
               "y": 2.3021358869347655
           location: location
       properties:
+        backgroundFile:
+          description: "ID of the account file used as the background image, if one\
+            \ is set."
+          type: string
         createdAt:
           format: int64
           type: integer
+        foregroundFile:
+          description: "ID of the account file used as the foreground image, if one\
+            \ is set."
+          type: string
         name:
           type: string
         overlayOffset:
@@ -10764,10 +10790,12 @@ components:
       example:
         createdAt: 0
         propertyNode: propertyNode
+        foregroundFile: foregroundFile
         overlayOffset:
           x: 1.4658129805029452
           scale: 6.027456183070403
           "y": 5.962133916683182
+        backgroundFile: backgroundFile
         name: name
         property: property
         spaces:
@@ -10797,9 +10825,13 @@ components:
                 "y": 2.3021358869347655
             location: location
       properties:
+        backgroundFile:
+          type: string
         createdAt:
           format: int64
           type: integer
+        foregroundFile:
+          type: string
         name:
           type: string
         overlayOffset:

@@ -262,7 +262,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
 
- **noFallback** | **bool** | When true, returns 404 instead of a generated placeholder if no image has been uploaded. | 
+ **noFallback** | **bool** | When true, returns 404 instead of a generated placeholder if the layer has no image. | 
 
 ### Return type
 

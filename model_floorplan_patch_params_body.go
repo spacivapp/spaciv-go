@@ -20,7 +20,9 @@ var _ MappedNullable = &FloorplanPatchParamsBody{}
 
 // FloorplanPatchParamsBody struct for FloorplanPatchParamsBody
 type FloorplanPatchParamsBody struct {
+	BackgroundFile *string `json:"backgroundFile,omitempty"`
 	CreatedAt *int64 `json:"createdAt,omitempty"`
+	ForegroundFile *string `json:"foregroundFile,omitempty"`
 	Name *string `json:"name,omitempty"`
 	OverlayOffset *FloorplanChangelogOverlayOffset `json:"overlayOffset,omitempty"`
 	Property *string `json:"property,omitempty"`
@@ -43,6 +45,38 @@ func NewFloorplanPatchParamsBody() *FloorplanPatchParamsBody {
 func NewFloorplanPatchParamsBodyWithDefaults() *FloorplanPatchParamsBody {
 	this := FloorplanPatchParamsBody{}
 	return &this
+}
+
+// GetBackgroundFile returns the BackgroundFile field value if set, zero value otherwise.
+func (o *FloorplanPatchParamsBody) GetBackgroundFile() string {
+	if o == nil || IsNil(o.BackgroundFile) {
+		var ret string
+		return ret
+	}
+	return *o.BackgroundFile
+}
+
+// GetBackgroundFileOk returns a tuple with the BackgroundFile field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *FloorplanPatchParamsBody) GetBackgroundFileOk() (*string, bool) {
+	if o == nil || IsNil(o.BackgroundFile) {
+		return nil, false
+	}
+	return o.BackgroundFile, true
+}
+
+// HasBackgroundFile returns a boolean if a field has been set.
+func (o *FloorplanPatchParamsBody) HasBackgroundFile() bool {
+	if o != nil && !IsNil(o.BackgroundFile) {
+		return true
+	}
+
+	return false
+}
+
+// SetBackgroundFile gets a reference to the given string and assigns it to the BackgroundFile field.
+func (o *FloorplanPatchParamsBody) SetBackgroundFile(v string) {
+	o.BackgroundFile = &v
 }
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
@@ -75,6 +109,38 @@ func (o *FloorplanPatchParamsBody) HasCreatedAt() bool {
 // SetCreatedAt gets a reference to the given int64 and assigns it to the CreatedAt field.
 func (o *FloorplanPatchParamsBody) SetCreatedAt(v int64) {
 	o.CreatedAt = &v
+}
+
+// GetForegroundFile returns the ForegroundFile field value if set, zero value otherwise.
+func (o *FloorplanPatchParamsBody) GetForegroundFile() string {
+	if o == nil || IsNil(o.ForegroundFile) {
+		var ret string
+		return ret
+	}
+	return *o.ForegroundFile
+}
+
+// GetForegroundFileOk returns a tuple with the ForegroundFile field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *FloorplanPatchParamsBody) GetForegroundFileOk() (*string, bool) {
+	if o == nil || IsNil(o.ForegroundFile) {
+		return nil, false
+	}
+	return o.ForegroundFile, true
+}
+
+// HasForegroundFile returns a boolean if a field has been set.
+func (o *FloorplanPatchParamsBody) HasForegroundFile() bool {
+	if o != nil && !IsNil(o.ForegroundFile) {
+		return true
+	}
+
+	return false
+}
+
+// SetForegroundFile gets a reference to the given string and assigns it to the ForegroundFile field.
+func (o *FloorplanPatchParamsBody) SetForegroundFile(v string) {
+	o.ForegroundFile = &v
 }
 
 // GetName returns the Name field value if set, zero value otherwise.
@@ -247,8 +313,14 @@ func (o FloorplanPatchParamsBody) MarshalJSON() ([]byte, error) {
 
 func (o FloorplanPatchParamsBody) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	if !IsNil(o.BackgroundFile) {
+		toSerialize["backgroundFile"] = o.BackgroundFile
+	}
 	if !IsNil(o.CreatedAt) {
 		toSerialize["createdAt"] = o.CreatedAt
+	}
+	if !IsNil(o.ForegroundFile) {
+		toSerialize["foregroundFile"] = o.ForegroundFile
 	}
 	if !IsNil(o.Name) {
 		toSerialize["name"] = o.Name

@@ -4,7 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**BackgroundFile** | Pointer to **string** | ID of the account file used as the background image, if one is set. | [optional] 
 **CreatedAt** | **int64** |  | 
+**ForegroundFile** | Pointer to **string** | ID of the account file used as the foreground image, if one is set. | [optional] 
 **Name** | **string** |  | 
 **OverlayOffset** | [**FloorplanGetBodyOverlayOffset**](FloorplanGetBodyOverlayOffset.md) |  | 
 **Property** | **string** |  | 
@@ -30,6 +32,31 @@ NewFloorplanGetBodyWithDefaults instantiates a new FloorplanGetBody object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
+### GetBackgroundFile
+
+`func (o *FloorplanGetBody) GetBackgroundFile() string`
+
+GetBackgroundFile returns the BackgroundFile field if non-nil, zero value otherwise.
+
+### GetBackgroundFileOk
+
+`func (o *FloorplanGetBody) GetBackgroundFileOk() (*string, bool)`
+
+GetBackgroundFileOk returns a tuple with the BackgroundFile field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetBackgroundFile
+
+`func (o *FloorplanGetBody) SetBackgroundFile(v string)`
+
+SetBackgroundFile sets BackgroundFile field to given value.
+
+### HasBackgroundFile
+
+`func (o *FloorplanGetBody) HasBackgroundFile() bool`
+
+HasBackgroundFile returns a boolean if a field has been set.
+
 ### GetCreatedAt
 
 `func (o *FloorplanGetBody) GetCreatedAt() int64`
@@ -49,6 +76,31 @@ and a boolean to check if the value has been set.
 
 SetCreatedAt sets CreatedAt field to given value.
 
+
+### GetForegroundFile
+
+`func (o *FloorplanGetBody) GetForegroundFile() string`
+
+GetForegroundFile returns the ForegroundFile field if non-nil, zero value otherwise.
+
+### GetForegroundFileOk
+
+`func (o *FloorplanGetBody) GetForegroundFileOk() (*string, bool)`
+
+GetForegroundFileOk returns a tuple with the ForegroundFile field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetForegroundFile
+
+`func (o *FloorplanGetBody) SetForegroundFile(v string)`
+
+SetForegroundFile sets ForegroundFile field to given value.
+
+### HasForegroundFile
+
+`func (o *FloorplanGetBody) HasForegroundFile() bool`
+
+HasForegroundFile returns a boolean if a field has been set.
 
 ### GetName
 
