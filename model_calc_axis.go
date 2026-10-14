@@ -17,137 +17,86 @@ import (
 	"fmt"
 )
 
-// checks if the CalcNode type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &CalcNode{}
+// checks if the CalcAxis type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &CalcAxis{}
 
-// CalcNode struct for CalcNode
-type CalcNode struct {
-	Children []CalcNode `json:"children"`
-	Data []float64 `json:"data"`
-	Id string `json:"id"`
-	Name string `json:"name"`
+// CalcAxis struct for CalcAxis
+type CalcAxis struct {
+	// `1` is day, `2` tree node, `3` series, `4` scenario and `5` group.
+	Dimension int32 `json:"dimension"`
+	Members []CalcAxisMember `json:"members"`
 }
 
-type _CalcNode CalcNode
+type _CalcAxis CalcAxis
 
-// NewCalcNode instantiates a new CalcNode object
+// NewCalcAxis instantiates a new CalcAxis object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCalcNode(children []CalcNode, data []float64, id string, name string) *CalcNode {
-	this := CalcNode{}
-	this.Children = children
-	this.Data = data
-	this.Id = id
-	this.Name = name
+func NewCalcAxis(dimension int32, members []CalcAxisMember) *CalcAxis {
+	this := CalcAxis{}
+	this.Dimension = dimension
+	this.Members = members
 	return &this
 }
 
-// NewCalcNodeWithDefaults instantiates a new CalcNode object
+// NewCalcAxisWithDefaults instantiates a new CalcAxis object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewCalcNodeWithDefaults() *CalcNode {
-	this := CalcNode{}
+func NewCalcAxisWithDefaults() *CalcAxis {
+	this := CalcAxis{}
 	return &this
 }
 
-// GetChildren returns the Children field value
-func (o *CalcNode) GetChildren() []CalcNode {
+// GetDimension returns the Dimension field value
+func (o *CalcAxis) GetDimension() int32 {
 	if o == nil {
-		var ret []CalcNode
+		var ret int32
 		return ret
 	}
 
-	return o.Children
+	return o.Dimension
 }
 
-// GetChildrenOk returns a tuple with the Children field value
+// GetDimensionOk returns a tuple with the Dimension field value
 // and a boolean to check if the value has been set.
-func (o *CalcNode) GetChildrenOk() ([]CalcNode, bool) {
+func (o *CalcAxis) GetDimensionOk() (*int32, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return o.Children, true
+	return &o.Dimension, true
 }
 
-// SetChildren sets field value
-func (o *CalcNode) SetChildren(v []CalcNode) {
-	o.Children = v
+// SetDimension sets field value
+func (o *CalcAxis) SetDimension(v int32) {
+	o.Dimension = v
 }
 
-// GetData returns the Data field value
-func (o *CalcNode) GetData() []float64 {
+// GetMembers returns the Members field value
+func (o *CalcAxis) GetMembers() []CalcAxisMember {
 	if o == nil {
-		var ret []float64
+		var ret []CalcAxisMember
 		return ret
 	}
 
-	return o.Data
+	return o.Members
 }
 
-// GetDataOk returns a tuple with the Data field value
+// GetMembersOk returns a tuple with the Members field value
 // and a boolean to check if the value has been set.
-func (o *CalcNode) GetDataOk() ([]float64, bool) {
+func (o *CalcAxis) GetMembersOk() ([]CalcAxisMember, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return o.Data, true
+	return o.Members, true
 }
 
-// SetData sets field value
-func (o *CalcNode) SetData(v []float64) {
-	o.Data = v
+// SetMembers sets field value
+func (o *CalcAxis) SetMembers(v []CalcAxisMember) {
+	o.Members = v
 }
 
-// GetId returns the Id field value
-func (o *CalcNode) GetId() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.Id
-}
-
-// GetIdOk returns a tuple with the Id field value
-// and a boolean to check if the value has been set.
-func (o *CalcNode) GetIdOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Id, true
-}
-
-// SetId sets field value
-func (o *CalcNode) SetId(v string) {
-	o.Id = v
-}
-
-// GetName returns the Name field value
-func (o *CalcNode) GetName() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.Name
-}
-
-// GetNameOk returns a tuple with the Name field value
-// and a boolean to check if the value has been set.
-func (o *CalcNode) GetNameOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Name, true
-}
-
-// SetName sets field value
-func (o *CalcNode) SetName(v string) {
-	o.Name = v
-}
-
-func (o CalcNode) MarshalJSON() ([]byte, error) {
+func (o CalcAxis) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -155,24 +104,20 @@ func (o CalcNode) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o CalcNode) ToMap() (map[string]interface{}, error) {
+func (o CalcAxis) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["children"] = o.Children
-	toSerialize["data"] = o.Data
-	toSerialize["id"] = o.Id
-	toSerialize["name"] = o.Name
+	toSerialize["dimension"] = o.Dimension
+	toSerialize["members"] = o.Members
 	return toSerialize, nil
 }
 
-func (o *CalcNode) UnmarshalJSON(data []byte) (err error) {
+func (o *CalcAxis) UnmarshalJSON(data []byte) (err error) {
 	// This validates that all required properties are included in the JSON object
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"children",
-		"data",
-		"id",
-		"name",
+		"dimension",
+		"members",
 	}
 
 	allProperties := make(map[string]interface{})
@@ -189,53 +134,53 @@ func (o *CalcNode) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varCalcNode := _CalcNode{}
+	varCalcAxis := _CalcAxis{}
 
 	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCalcNode)
+	err = decoder.Decode(&varCalcAxis)
 
 	if err != nil {
 		return err
 	}
 
-	*o = CalcNode(varCalcNode)
+	*o = CalcAxis(varCalcAxis)
 
 	return err
 }
 
-type NullableCalcNode struct {
-	value *CalcNode
+type NullableCalcAxis struct {
+	value *CalcAxis
 	isSet bool
 }
 
-func (v NullableCalcNode) Get() *CalcNode {
+func (v NullableCalcAxis) Get() *CalcAxis {
 	return v.value
 }
 
-func (v *NullableCalcNode) Set(val *CalcNode) {
+func (v *NullableCalcAxis) Set(val *CalcAxis) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableCalcNode) IsSet() bool {
+func (v NullableCalcAxis) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableCalcNode) Unset() {
+func (v *NullableCalcAxis) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableCalcNode(val *CalcNode) *NullableCalcNode {
-	return &NullableCalcNode{value: val, isSet: true}
+func NewNullableCalcAxis(val *CalcAxis) *NullableCalcAxis {
+	return &NullableCalcAxis{value: val, isSet: true}
 }
 
-func (v NullableCalcNode) MarshalJSON() ([]byte, error) {
+func (v NullableCalcAxis) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableCalcNode) UnmarshalJSON(src []byte) error {
+func (v *NullableCalcAxis) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

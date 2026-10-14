@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Data** | [**DataShapes**](DataShapes.md) |  | 
+**Dimensions** | Pointer to **[]int32** | The order to lay the result&#39;s values out in, outermost first. &#x60;1&#x60; is day, &#x60;2&#x60; tree node, &#x60;3&#x60; series, &#x60;4&#x60; scenario and &#x60;5&#x60; group. Every result has day and tree node; a card adds series (single values, categorisation mixes, lists and tree lists), scenario (scenario comparisons and tree lists over scenarios) or, for a 2D list, group for its rows and series or scenario for its columns. List each of the card&#39;s dimensions exactly once, in any order; leave this out for day, tree node, then the card&#39;s own dimensions. Any other list is rejected with &#x60;400&#x60; and &#x60;kind&#x60; &#x60;invalid_dimensions&#x60;. | [optional] 
 **Filters** | [**[]FilterGroup**](FilterGroup.md) |  | 
 **IncludeObjects** | Pointer to **bool** |  | [optional] 
 **Limit** | Pointer to **int64** |  | [optional] 
@@ -48,6 +49,31 @@ and a boolean to check if the value has been set.
 
 SetData sets Data field to given value.
 
+
+### GetDimensions
+
+`func (o *CalcBody) GetDimensions() []int32`
+
+GetDimensions returns the Dimensions field if non-nil, zero value otherwise.
+
+### GetDimensionsOk
+
+`func (o *CalcBody) GetDimensionsOk() (*[]int32, bool)`
+
+GetDimensionsOk returns a tuple with the Dimensions field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDimensions
+
+`func (o *CalcBody) SetDimensions(v []int32)`
+
+SetDimensions sets Dimensions field to given value.
+
+### HasDimensions
+
+`func (o *CalcBody) HasDimensions() bool`
+
+HasDimensions returns a boolean if a field has been set.
 
 ### GetFilters
 

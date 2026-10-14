@@ -23,6 +23,8 @@ var _ MappedNullable = &CalcBody{}
 // CalcBody struct for CalcBody
 type CalcBody struct {
 	Data DataShapes `json:"data"`
+	// The order to lay the result's values out in, outermost first. `1` is day, `2` tree node, `3` series, `4` scenario and `5` group. Every result has day and tree node; a card adds series (single values, categorisation mixes, lists and tree lists), scenario (scenario comparisons and tree lists over scenarios) or, for a 2D list, group for its rows and series or scenario for its columns. List each of the card's dimensions exactly once, in any order; leave this out for day, tree node, then the card's own dimensions. Any other list is rejected with `400` and `kind` `invalid_dimensions`.
+	Dimensions []int32 `json:"dimensions,omitempty"`
 	Filters []FilterGroup `json:"filters"`
 	IncludeObjects *bool `json:"includeObjects,omitempty"`
 	Limit *int64 `json:"limit,omitempty"`
@@ -72,6 +74,38 @@ func (o *CalcBody) GetDataOk() (*DataShapes, bool) {
 // SetData sets field value
 func (o *CalcBody) SetData(v DataShapes) {
 	o.Data = v
+}
+
+// GetDimensions returns the Dimensions field value if set, zero value otherwise.
+func (o *CalcBody) GetDimensions() []int32 {
+	if o == nil || IsNil(o.Dimensions) {
+		var ret []int32
+		return ret
+	}
+	return o.Dimensions
+}
+
+// GetDimensionsOk returns a tuple with the Dimensions field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CalcBody) GetDimensionsOk() ([]int32, bool) {
+	if o == nil || IsNil(o.Dimensions) {
+		return nil, false
+	}
+	return o.Dimensions, true
+}
+
+// HasDimensions returns a boolean if a field has been set.
+func (o *CalcBody) HasDimensions() bool {
+	if o != nil && !IsNil(o.Dimensions) {
+		return true
+	}
+
+	return false
+}
+
+// SetDimensions gets a reference to the given []int32 and assigns it to the Dimensions field.
+func (o *CalcBody) SetDimensions(v []int32) {
+	o.Dimensions = v
 }
 
 // GetFilters returns the Filters field value
@@ -205,6 +239,9 @@ func (o CalcBody) MarshalJSON() ([]byte, error) {
 func (o CalcBody) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["data"] = o.Data
+	if !IsNil(o.Dimensions) {
+		toSerialize["dimensions"] = o.Dimensions
+	}
 	toSerialize["filters"] = o.Filters
 	if !IsNil(o.IncludeObjects) {
 		toSerialize["includeObjects"] = o.IncludeObjects

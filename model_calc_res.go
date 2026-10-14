@@ -22,8 +22,8 @@ var _ MappedNullable = &CalcRes{}
 
 // CalcRes struct for CalcRes
 type CalcRes struct {
-	Legend Legend `json:"legend"`
-	Timeline []NodeOffset `json:"timeline"`
+	Axes []CalcAxis `json:"axes"`
+	Values []float64 `json:"values"`
 }
 
 type _CalcRes CalcRes
@@ -32,10 +32,10 @@ type _CalcRes CalcRes
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCalcRes(legend Legend, timeline []NodeOffset) *CalcRes {
+func NewCalcRes(axes []CalcAxis, values []float64) *CalcRes {
 	this := CalcRes{}
-	this.Legend = legend
-	this.Timeline = timeline
+	this.Axes = axes
+	this.Values = values
 	return &this
 }
 
@@ -47,52 +47,52 @@ func NewCalcResWithDefaults() *CalcRes {
 	return &this
 }
 
-// GetLegend returns the Legend field value
-func (o *CalcRes) GetLegend() Legend {
+// GetAxes returns the Axes field value
+func (o *CalcRes) GetAxes() []CalcAxis {
 	if o == nil {
-		var ret Legend
+		var ret []CalcAxis
 		return ret
 	}
 
-	return o.Legend
+	return o.Axes
 }
 
-// GetLegendOk returns a tuple with the Legend field value
+// GetAxesOk returns a tuple with the Axes field value
 // and a boolean to check if the value has been set.
-func (o *CalcRes) GetLegendOk() (*Legend, bool) {
+func (o *CalcRes) GetAxesOk() ([]CalcAxis, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Legend, true
+	return o.Axes, true
 }
 
-// SetLegend sets field value
-func (o *CalcRes) SetLegend(v Legend) {
-	o.Legend = v
+// SetAxes sets field value
+func (o *CalcRes) SetAxes(v []CalcAxis) {
+	o.Axes = v
 }
 
-// GetTimeline returns the Timeline field value
-func (o *CalcRes) GetTimeline() []NodeOffset {
+// GetValues returns the Values field value
+func (o *CalcRes) GetValues() []float64 {
 	if o == nil {
-		var ret []NodeOffset
+		var ret []float64
 		return ret
 	}
 
-	return o.Timeline
+	return o.Values
 }
 
-// GetTimelineOk returns a tuple with the Timeline field value
+// GetValuesOk returns a tuple with the Values field value
 // and a boolean to check if the value has been set.
-func (o *CalcRes) GetTimelineOk() ([]NodeOffset, bool) {
+func (o *CalcRes) GetValuesOk() ([]float64, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return o.Timeline, true
+	return o.Values, true
 }
 
-// SetTimeline sets field value
-func (o *CalcRes) SetTimeline(v []NodeOffset) {
-	o.Timeline = v
+// SetValues sets field value
+func (o *CalcRes) SetValues(v []float64) {
+	o.Values = v
 }
 
 func (o CalcRes) MarshalJSON() ([]byte, error) {
@@ -105,8 +105,8 @@ func (o CalcRes) MarshalJSON() ([]byte, error) {
 
 func (o CalcRes) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["legend"] = o.Legend
-	toSerialize["timeline"] = o.Timeline
+	toSerialize["axes"] = o.Axes
+	toSerialize["values"] = o.Values
 	return toSerialize, nil
 }
 
@@ -115,8 +115,8 @@ func (o *CalcRes) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"legend",
-		"timeline",
+		"axes",
+		"values",
 	}
 
 	allProperties := make(map[string]interface{})

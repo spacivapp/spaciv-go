@@ -96,13 +96,14 @@ docs/AuthenticationPreferredChanel.md
 docs/AuthenticationPublic.md
 docs/Branding.md
 docs/BrandingAPI.md
+docs/CalcAxis.md
+docs/CalcAxisMember.md
 docs/CalcBody.md
 docs/CalcChildren.md
 docs/CalcErrorBody.md
 docs/CalcList.md
 docs/CalcListEntry.md
 docs/CalcListTwoD.md
-docs/CalcNode.md
 docs/CalcRes.md
 docs/CalcRuleFloat.md
 docs/CalcRuleRef.md
@@ -264,10 +265,6 @@ docs/LayerOneOf3.md
 docs/LayerOneOf4.md
 docs/LayerTypeNeed.md
 docs/LayerVariablesRes.md
-docs/Legend.md
-docs/LegendList.md
-docs/LegendOneOf.md
-docs/LegendOneOf1.md
 docs/ListAccountsForUserRow.md
 docs/ListPage.md
 docs/ListUserDetailsWithEmailRow.md
@@ -292,7 +289,6 @@ docs/MultiSelectChangelogData.md
 docs/MultiSelectContributionData.md
 docs/MultiSelectData.md
 docs/NeedsAPI.md
-docs/NodeOffset.md
 docs/ObjectGroupChangelogBody.md
 docs/ObjectGroupEntriesRes.md
 docs/ObjectGroupEntry.md
@@ -405,8 +401,6 @@ docs/TopDownModelEntryPropertyNodes.md
 docs/TopDownModelEntryUpdate.md
 docs/TopDownModelProperties.md
 docs/TopDownModelsAPI.md
-docs/TwoDLegendEntry.md
-docs/TwoDLegendList.md
 docs/UnmappedParameterDetail.md
 docs/UserV2GetResBody.md
 docs/UserV2PatchReqBody.md
@@ -493,13 +487,14 @@ model_authentication_email.go
 model_authentication_preferred_chanel.go
 model_authentication_public.go
 model_branding.go
+model_calc_axis.go
+model_calc_axis_member.go
 model_calc_body.go
 model_calc_children.go
 model_calc_error_body.go
 model_calc_list.go
 model_calc_list_entry.go
 model_calc_list_two_d.go
-model_calc_node.go
 model_calc_res.go
 model_calc_rule_float.go
 model_calc_rule_ref.go
@@ -653,10 +648,6 @@ model_layer_one_of_3.go
 model_layer_one_of_4.go
 model_layer_type_need.go
 model_layer_variables_res.go
-model_legend.go
-model_legend_list.go
-model_legend_one_of.go
-model_legend_one_of_1.go
 model_list_accounts_for_user_row.go
 model_list_page.go
 model_list_user_details_with_email_row.go
@@ -678,7 +669,6 @@ model_missing_object_detail.go
 model_multi_select_changelog_data.go
 model_multi_select_contribution_data.go
 model_multi_select_data.go
-model_node_offset.go
 model_object_group_changelog_body.go
 model_object_group_entries_res.go
 model_object_group_entry.go
@@ -781,8 +771,6 @@ model_top_down_model_entry_list.go
 model_top_down_model_entry_property_nodes.go
 model_top_down_model_entry_update.go
 model_top_down_model_properties.go
-model_two_d_legend_entry.go
-model_two_d_legend_list.go
 model_unmapped_parameter_detail.go
 model_user_v2_get_res_body.go
 model_user_v2_patch_req_body.go

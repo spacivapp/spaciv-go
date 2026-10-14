@@ -1403,13 +1403,14 @@ paths:
   /v1/analyse:
     post:
       description: "Runs the scenario through the calculation engine and returns the\
-        \ resulting model. A `400` response with a structured `kind` field indicates\
-        \ a configuration problem such as a missing scenario, property, or unmapped\
-        \ parameter — inspect the `kind` and the accompanying detail object to identify\
-        \ what needs fixing. A `variableOverrides` value outside the variable's range,\
-        \ step or `options` is rejected with `400` and `kind` `variable_type_mismatch`;\
-        \ `options` sent inside an override are ignored. Requires the *View ideal\
-        \ space* permission."
+        \ result as labelled `axes` and a flat `values` array. The axes come in the\
+        \ order given by `dimensions`, and `values` runs fastest along the last axis.\
+        \ A `400` response with a structured `kind` field indicates a configuration\
+        \ problem such as a missing scenario, property, or unmapped parameter — inspect\
+        \ the `kind` and the accompanying detail object to identify what needs fixing.\
+        \ A `variableOverrides` value outside the variable's range, step or `options`\
+        \ is rejected with `400` and `kind` `variable_type_mismatch`; `options` sent\
+        \ inside an override are ignored. Requires the *View ideal space* permission."
       operationId: analysis_create-analyse
       parameters: []
       requestBody:
@@ -8761,6 +8762,66 @@ components:
       - hasBackground
       - hasLogo
       - logoVersion
+    CalcAxis:
+      additionalProperties: false
+      example:
+        members:
+        - parent: 6
+          scenario: scenario
+          name: name
+          id: id
+          day: day
+        - parent: 6
+          scenario: scenario
+          name: name
+          id: id
+          day: day
+        dimension: 0
+      properties:
+        dimension:
+          description: "`1` is day, `2` tree node, `3` series, `4` scenario and `5`\
+            \ group."
+          enum:
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+          format: int32
+          type: integer
+        members:
+          items:
+            $ref: "#/components/schemas/CalcAxisMember"
+          type: array
+      required:
+      - dimension
+      - members
+    CalcAxisMember:
+      additionalProperties: false
+      example:
+        parent: 6
+        scenario: scenario
+        name: name
+        id: id
+        day: day
+      properties:
+        day:
+          format: int64
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+        parent:
+          format: int32
+          type: integer
+        scenario:
+          type: string
+      required:
+      - day
+      - id
+      - name
+      - scenario
     CalcBody:
       additionalProperties: false
       example:
@@ -8828,7 +8889,7 @@ components:
             params:
               key:
                 property: null
-        limit: 1
+        limit: 5
         filters:
         - ands:
           - propertyNode:
@@ -8873,9 +8934,25 @@ components:
             - object
             - object
         includeObjects: true
+        dimensions:
+        - 1
+        - 1
       properties:
         data:
           $ref: "#/components/schemas/DataShapes"
+        dimensions:
+          description: "The order to lay the result's values out in, outermost first.\
+            \ `1` is day, `2` tree node, `3` series, `4` scenario and `5` group. Every\
+            \ result has day and tree node; a card adds series (single values, categorisation\
+            \ mixes, lists and tree lists), scenario (scenario comparisons and tree\
+            \ lists over scenarios) or, for a 2D list, group for its rows and series\
+            \ or scenario for its columns. List each of the card's dimensions exactly\
+            \ once, in any order; leave this out for day, tree node, then the card's\
+            \ own dimensions. Any other list is rejected with `400` and `kind` `invalid_dimensions`."
+          items:
+            format: int32
+            type: integer
+          type: array
         filters:
           items:
             $ref: "#/components/schemas/FilterGroup"
@@ -9011,7 +9088,7 @@ components:
           value: ""
         missingObject:
           object: object
-        status: 6
+        status: 5
       properties:
         detail:
           description: A human-readable explanation specific to this occurrence of
@@ -9046,6 +9123,7 @@ components:
           - missing_space_rule
           - missing_top_down_model
           - invalid_modifier_formula
+          - invalid_dimensions
           type: string
         missingAttribute:
           $ref: "#/components/schemas/MissingAttributeDetail"
@@ -9130,75 +9208,50 @@ components:
       - axis2
       - date
       - filters
-    CalcNode:
+    CalcRes:
       additionalProperties: false
       example:
-        data:
-        - 0.8008281904610115
-        - 0.8008281904610115
-        children:
-        - null
-        - null
-        name: name
-        id: id
+        values:
+        - 1.4658129805029452
+        - 1.4658129805029452
+        axes:
+        - members:
+          - parent: 6
+            scenario: scenario
+            name: name
+            id: id
+            day: day
+          - parent: 6
+            scenario: scenario
+            name: name
+            id: id
+            day: day
+          dimension: 0
+        - members:
+          - parent: 6
+            scenario: scenario
+            name: name
+            id: id
+            day: day
+          - parent: 6
+            scenario: scenario
+            name: name
+            id: id
+            day: day
+          dimension: 0
       properties:
-        children:
+        axes:
           items:
-            $ref: "#/components/schemas/CalcNode"
+            $ref: "#/components/schemas/CalcAxis"
           type: array
-        data:
+        values:
           items:
             format: double
             type: number
           type: array
-        id:
-          type: string
-        name:
-          type: string
       required:
-      - children
-      - data
-      - id
-      - name
-    CalcRes:
-      additionalProperties: false
-      example:
-        legend:
-          list:
-            list:
-            - list
-            - list
-        timeline:
-        - root:
-            data:
-            - 0.8008281904610115
-            - 0.8008281904610115
-            children:
-            - null
-            - null
-            name: name
-            id: id
-          day: day
-        - root:
-            data:
-            - 0.8008281904610115
-            - 0.8008281904610115
-            children:
-            - null
-            - null
-            name: name
-            id: id
-          day: day
-      properties:
-        legend:
-          $ref: "#/components/schemas/Legend"
-        timeline:
-          items:
-            $ref: "#/components/schemas/NodeOffset"
-          type: array
-      required:
-      - legend
-      - timeline
+      - axes
+      - values
     CalcRuleFloat:
       additionalProperties: false
       properties:
@@ -10320,7 +10373,7 @@ components:
         - location: location
           message: message
           value: ""
-        status: 1
+        status: 5
       properties:
         detail:
           description: A human-readable explanation specific to this occurrence of
@@ -11655,23 +11708,6 @@ components:
             \ layers of stacked scenarios."
       required:
       - scenarios
-    Legend:
-      oneOf:
-      - $ref: "#/components/schemas/Legend_oneOf"
-      - $ref: "#/components/schemas/Legend_oneOf_1"
-    LegendList:
-      additionalProperties: false
-      example:
-        list:
-        - list
-        - list
-      properties:
-        list:
-          items:
-            type: string
-          type: array
-      required:
-      - list
     ListAccountsForUserRow:
       additionalProperties: false
       example:
@@ -12003,28 +12039,6 @@ components:
       - maxSelections
       - minSelections
       - options
-    NodeOffset:
-      additionalProperties: false
-      example:
-        root:
-          data:
-          - 0.8008281904610115
-          - 0.8008281904610115
-          children:
-          - null
-          - null
-          name: name
-          id: id
-        day: day
-      properties:
-        day:
-          format: int64
-          type: string
-        root:
-          $ref: "#/components/schemas/CalcNode"
-      required:
-      - day
-      - root
     ObjectGroupChangelogBody:
       additionalProperties: false
       example:
@@ -15610,27 +15624,6 @@ components:
           type: array
       required:
       - map
-    TwoDLegendEntry:
-      additionalProperties: false
-      properties:
-        list:
-          items:
-            type: string
-          type: array
-        name:
-          type: string
-      required:
-      - list
-      - name
-    TwoDLegendList:
-      additionalProperties: false
-      properties:
-        list:
-          items:
-            $ref: "#/components/schemas/TwoDLegendEntry"
-          type: array
-      required:
-      - list
     UnmappedParameterDetail:
       additionalProperties: false
       example:
@@ -16505,23 +16498,6 @@ components:
           type: object
       required:
       - stack
-    Legend_oneOf:
-      example:
-        list:
-          list:
-          - list
-          - list
-      properties:
-        list:
-          $ref: "#/components/schemas/LegendList"
-      required:
-      - list
-    Legend_oneOf_1:
-      properties:
-        twoDList:
-          $ref: "#/components/schemas/TwoDLegendList"
-      required:
-      - twoDList
     MaybeVarInt_oneOf:
       example:
         static: 0

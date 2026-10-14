@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Legend** | [**Legend**](Legend.md) |  | 
-**Timeline** | [**[]NodeOffset**](NodeOffset.md) |  | 
+**Axes** | [**[]CalcAxis**](CalcAxis.md) |  | 
+**Values** | **[]float64** |  | 
 
 ## Methods
 
 ### NewCalcRes
 
-`func NewCalcRes(legend Legend, timeline []NodeOffset, ) *CalcRes`
+`func NewCalcRes(axes []CalcAxis, values []float64, ) *CalcRes`
 
 NewCalcRes instantiates a new CalcRes object
 This constructor will assign default values to properties that have it defined,
@@ -26,44 +26,44 @@ NewCalcResWithDefaults instantiates a new CalcRes object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetLegend
+### GetAxes
 
-`func (o *CalcRes) GetLegend() Legend`
+`func (o *CalcRes) GetAxes() []CalcAxis`
 
-GetLegend returns the Legend field if non-nil, zero value otherwise.
+GetAxes returns the Axes field if non-nil, zero value otherwise.
 
-### GetLegendOk
+### GetAxesOk
 
-`func (o *CalcRes) GetLegendOk() (*Legend, bool)`
+`func (o *CalcRes) GetAxesOk() (*[]CalcAxis, bool)`
 
-GetLegendOk returns a tuple with the Legend field if it's non-nil, zero value otherwise
+GetAxesOk returns a tuple with the Axes field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetLegend
+### SetAxes
 
-`func (o *CalcRes) SetLegend(v Legend)`
+`func (o *CalcRes) SetAxes(v []CalcAxis)`
 
-SetLegend sets Legend field to given value.
+SetAxes sets Axes field to given value.
 
 
-### GetTimeline
+### GetValues
 
-`func (o *CalcRes) GetTimeline() []NodeOffset`
+`func (o *CalcRes) GetValues() []float64`
 
-GetTimeline returns the Timeline field if non-nil, zero value otherwise.
+GetValues returns the Values field if non-nil, zero value otherwise.
 
-### GetTimelineOk
+### GetValuesOk
 
-`func (o *CalcRes) GetTimelineOk() (*[]NodeOffset, bool)`
+`func (o *CalcRes) GetValuesOk() (*[]float64, bool)`
 
-GetTimelineOk returns a tuple with the Timeline field if it's non-nil, zero value otherwise
+GetValuesOk returns a tuple with the Values field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetTimeline
+### SetValues
 
-`func (o *CalcRes) SetTimeline(v []NodeOffset)`
+`func (o *CalcRes) SetValues(v []float64)`
 
-SetTimeline sets Timeline field to given value.
+SetValues sets Values field to given value.
 
 
 
