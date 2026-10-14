@@ -30,6 +30,8 @@ type AccountCalculationUsageDay struct {
 	Build int64 `json:"build"`
 	// UTC day the usage was recorded on.
 	Date string `json:"date"`
+	// Credits used running scripts: one per started minute of each run.
+	Scripts int64 `json:"scripts"`
 }
 
 type _AccountCalculationUsageDay AccountCalculationUsageDay
@@ -38,12 +40,13 @@ type _AccountCalculationUsageDay AccountCalculationUsageDay
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAccountCalculationUsageDay(aggregation int64, ai int64, build int64, date string) *AccountCalculationUsageDay {
+func NewAccountCalculationUsageDay(aggregation int64, ai int64, build int64, date string, scripts int64) *AccountCalculationUsageDay {
 	this := AccountCalculationUsageDay{}
 	this.Aggregation = aggregation
 	this.Ai = ai
 	this.Build = build
 	this.Date = date
+	this.Scripts = scripts
 	return &this
 }
 
@@ -151,6 +154,30 @@ func (o *AccountCalculationUsageDay) SetDate(v string) {
 	o.Date = v
 }
 
+// GetScripts returns the Scripts field value
+func (o *AccountCalculationUsageDay) GetScripts() int64 {
+	if o == nil {
+		var ret int64
+		return ret
+	}
+
+	return o.Scripts
+}
+
+// GetScriptsOk returns a tuple with the Scripts field value
+// and a boolean to check if the value has been set.
+func (o *AccountCalculationUsageDay) GetScriptsOk() (*int64, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Scripts, true
+}
+
+// SetScripts sets field value
+func (o *AccountCalculationUsageDay) SetScripts(v int64) {
+	o.Scripts = v
+}
+
 func (o AccountCalculationUsageDay) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -165,6 +192,7 @@ func (o AccountCalculationUsageDay) ToMap() (map[string]interface{}, error) {
 	toSerialize["ai"] = o.Ai
 	toSerialize["build"] = o.Build
 	toSerialize["date"] = o.Date
+	toSerialize["scripts"] = o.Scripts
 	return toSerialize, nil
 }
 
@@ -177,6 +205,7 @@ func (o *AccountCalculationUsageDay) UnmarshalJSON(data []byte) (err error) {
 		"ai",
 		"build",
 		"date",
+		"scripts",
 	}
 
 	allProperties := make(map[string]interface{})

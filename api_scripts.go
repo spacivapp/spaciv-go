@@ -32,7 +32,7 @@ type requestForScriptsCreate struct {
 /*
 Create Create a script
 
-Creates a script whose Python, Go or JavaScript handler is called on a schedule, from a webhook, or both. The handler's context carries a Spaciv API key acting with the caller's permissions, except the account-administration permissions (*Manage my account*, *Manage users*, *Edit my user profile*, *Edit billing address* and the system permissions), which a script's key never carries, plus the account and, when a project is set, the project; the key is rotated automatically. A non-null return value is written to the run's logs. When `webhook` is true the response's `webhookUrl` is the only time the URL is returned. Rejected with `422` when the source, schedule or secrets are invalid or the project does not exist, and with `409` when the account already has 50 scripts. Requires the *Manage my account* permission; a script's own API key cannot call this or any other script operation.
+Creates a script whose Python, Go or JavaScript handler is called on a schedule, from a webhook, or both. The handler's context carries a Spaciv API key acting with the caller's permissions, except the account-administration permissions (*Manage my account*, *Manage users*, *Edit my user profile*, *Edit billing address* and the system permissions), which a script's key never carries, plus the account and, when a project is set, the project; the key is rotated automatically. A non-null return value is written to the run's logs. When `webhook` is true the response's `webhookUrl` is the only time the URL is returned. Rejected with `422` when the source, schedule or secrets are invalid or the project does not exist, and with `409` when the account already has 50 scripts, or when the script is enabled and the account already has its limit of enabled scripts. Requires the *Manage my account* permission; a script's own API key cannot call this or any other script operation.
 */
 func (a *ScriptsService) Create(ctx context.Context, scriptPostReqBody ScriptPostReqBody) (*ScriptDetail, error) {
 	r := requestForScriptsCreate{
@@ -887,6 +887,109 @@ func (a *ScriptsService) executeGetExport(r requestForScriptsGetExport) (*Script
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type requestForScriptsGetUsage struct {
+	ctx context.Context
+	ApiService *ScriptsService
+}
+
+/*
+GetUsage Get script usage
+
+Returns the credits the account's script runs were charged this calendar month (UTC), against the account's monthly script credit limit and its other script limits, with how many runs each script made, failed and had refused. creditState is near from 80% of the monthly limit and reached once it is used, after which runs are recorded as quota_exceeded until the month ends. creditsUsed is the scripts figure of `GET /v1/account/usage/calculation-credits`. Run counts are added when runs end. Requires the *Manage my account* permission.
+*/
+func (a *ScriptsService) GetUsage(ctx context.Context) (*ScriptUsageResBody, error) {
+	r := requestForScriptsGetUsage{
+		ApiService: a,
+		ctx: ctx,
+	}
+	result, _, err := a.executeGetUsage(r)
+	return result, err
+}
+
+func (a *ScriptsService) executeGetUsage(r requestForScriptsGetUsage) (*ScriptUsageResBody, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ScriptUsageResBody
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ScriptsAPIService.GetUsage")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/scripts/usage"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ctx != nil {
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "ScriptsAPIService.GetUsage")
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type requestForScriptsList struct {
 	ctx context.Context
 	ApiService *ScriptsService
@@ -1236,7 +1339,7 @@ type requestForScriptsUpdate struct {
 /*
 Update Update a script
 
-Updates the fields given. Changing the project replaces the script's API key with one scoped to the new project. When someone other than the key's owner changes the language, manifest or files, the key is replaced with one acting as them. Turning the webhook on returns its `webhookUrl` once. Rejected with `409` when `revision` is stale, or when enabling a script whose key needs re-authorising; with `422` when the result is invalid. Requires the *Manage my account* permission.
+Updates the fields given. Changing the project replaces the script's API key with one scoped to the new project. When someone other than the key's owner changes the language, manifest or files, the key is replaced with one acting as them. Turning the webhook on returns its `webhookUrl` once. Rejected with `409` when `revision` is stale, when enabling a script whose key needs re-authorising, or when enabling it would exceed the account's limit of enabled scripts; with `422` when the result is invalid, including a changed schedule that runs more often than the account's minimum interval. Requires the *Manage my account* permission.
 */
 func (a *ScriptsService) Update(ctx context.Context, id string, scriptPatchReqBody ScriptPatchReqBody) (*ScriptDetail, error) {
 	r := requestForScriptsUpdate{

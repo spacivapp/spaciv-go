@@ -17,6 +17,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 
@@ -1077,6 +1078,115 @@ func (a *InternalService) executeCreateTranslationsImport(r requestForInternalCr
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type requestForInternalListAdminAccountsScriptLimits struct {
+	ctx context.Context
+	ApiService *InternalService
+	account int64
+}
+
+/*
+ListAdminAccountsScriptLimits Get an account's script limits
+
+Returns the code defaults for scripts, the account's overrides and the limits that apply to it. Requires the *Project admin controls* and *Sys admin* permissions.
+*/
+func (a *InternalService) ListAdminAccountsScriptLimits(ctx context.Context, account int64) (*ScriptLimitsResBody, error) {
+	r := requestForInternalListAdminAccountsScriptLimits{
+		ApiService: a,
+		ctx: ctx,
+		account: account,
+	}
+	result, _, err := a.executeListAdminAccountsScriptLimits(r)
+	return result, err
+}
+
+func (a *InternalService) executeListAdminAccountsScriptLimits(r requestForInternalListAdminAccountsScriptLimits) (*ScriptLimitsResBody, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ScriptLimitsResBody
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "InternalAPIService.ListAdminAccountsScriptLimits")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/admin/accounts/{account}/script-limits"
+	localVarPath = strings.Replace(localVarPath, "{"+"account"+"}", url.PathEscape(parameterValueToString(r.account, "account")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.account < 1 {
+		return localVarReturnValue, nil, reportError("account must be greater than 1")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ctx != nil {
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "InternalAPIService.ListAdminAccountsScriptLimits")
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type requestForInternalListAdminRegeneratePresets struct {
 	ctx context.Context
 	ApiService *InternalService
@@ -1168,4 +1278,120 @@ func (a *InternalService) executeListAdminRegeneratePresets(r requestForInternal
 	}
 
 	return localVarHTTPResponse, nil
+}
+
+type requestForInternalUpdateAdminAccountsScriptLimits struct {
+	ctx context.Context
+	ApiService *InternalService
+	account int64
+	scriptLimitOverrides *ScriptLimitOverrides
+}
+
+/*
+UpdateAdminAccountsScriptLimits Set an account's script limits
+
+Replaces all of the account's script limit overrides with the body; an absent field uses the default, so an empty body returns the account to the defaults. Rejected with 422 when a value is not positive, or when maxCreditsPerMonth is above 9223372036854. Requires the *Project admin controls* and *Sys admin* permissions.
+*/
+func (a *InternalService) UpdateAdminAccountsScriptLimits(ctx context.Context, account int64, scriptLimitOverrides ScriptLimitOverrides) (*ScriptLimitsResBody, error) {
+	r := requestForInternalUpdateAdminAccountsScriptLimits{
+		ApiService: a,
+		ctx: ctx,
+		account: account,
+		scriptLimitOverrides: &scriptLimitOverrides,
+	}
+	result, _, err := a.executeUpdateAdminAccountsScriptLimits(r)
+	return result, err
+}
+
+func (a *InternalService) executeUpdateAdminAccountsScriptLimits(r requestForInternalUpdateAdminAccountsScriptLimits) (*ScriptLimitsResBody, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPut
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ScriptLimitsResBody
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "InternalAPIService.UpdateAdminAccountsScriptLimits")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/admin/accounts/{account}/script-limits"
+	localVarPath = strings.Replace(localVarPath, "{"+"account"+"}", url.PathEscape(parameterValueToString(r.account, "account")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.account < 1 {
+		return localVarReturnValue, nil, reportError("account must be greater than 1")
+	}
+	if r.scriptLimitOverrides == nil {
+		return localVarReturnValue, nil, reportError("scriptLimitOverrides is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.scriptLimitOverrides
+	if r.ctx != nil {
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "InternalAPIService.UpdateAdminAccountsScriptLimits")
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
 }

@@ -1377,7 +1377,7 @@ type AccountsListUsageCalculationCreditsParams struct {
 /*
 ListUsageCalculationCredits Get the account's credit usage
 
-Returns the credits the account used on each of the last `days` days, split into building layer data, aggregating it and the AI assistant. A piece of calculation work is charged once however many times it is computed, and a result already cached costs nothing. Credits are the same unit the rest of the account's usage is counted in. Requires the *Manage my account* permission. Returns `500` if the usage cannot be read.
+Returns the credits the account used on each of the last `days` days, split into building layer data, aggregating it, the AI assistant and running scripts. A piece of calculation work is charged once however many times it is computed, and a result already cached costs nothing. A script run is charged once, when it ends. Credits are the same unit the rest of the account's usage is counted in. Requires the *Manage my account* permission. Returns `500` if the usage cannot be read.
 */
 func (a *AccountsService) ListUsageCalculationCredits(ctx context.Context, params *AccountsListUsageCalculationCreditsParams) (*AccountCalculationUsageBody, error) {
 	r := requestForAccountsListUsageCalculationCredits{

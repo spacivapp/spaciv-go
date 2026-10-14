@@ -14,7 +14,9 @@ Method | HTTP request | Description
 [**CreateAdminUpdateFeatureGroups**](InternalAPI.md#CreateAdminUpdateFeatureGroups) | **Post** /v1/admin/update-feature-groups | Update a feature flag group assignment
 [**CreateTranslationsExport**](InternalAPI.md#CreateTranslationsExport) | **Post** /v1/translations/export | Export translations as CSV
 [**CreateTranslationsImport**](InternalAPI.md#CreateTranslationsImport) | **Post** /v1/translations/import | Import translations from CSV
+[**ListAdminAccountsScriptLimits**](InternalAPI.md#ListAdminAccountsScriptLimits) | **Get** /v1/admin/accounts/{account}/script-limits | Get an account&#39;s script limits
 [**ListAdminRegeneratePresets**](InternalAPI.md#ListAdminRegeneratePresets) | **Get** /v1/admin/regenerate-presets | Regenerate customer preset assets
+[**UpdateAdminAccountsScriptLimits**](InternalAPI.md#UpdateAdminAccountsScriptLimits) | **Put** /v1/admin/accounts/{account}/script-limits | Set an account&#39;s script limits
 
 
 
@@ -620,6 +622,73 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
+## ListAdminAccountsScriptLimits
+
+> ScriptLimitsResBody ListAdminAccountsScriptLimits(ctx, account)
+
+Get an account's script limits
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+	account :=  // int64 | 
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.Internal.ListAdminAccountsScriptLimits(context.Background(), account)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `Internal.ListAdminAccountsScriptLimits`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `Internal.ListAdminAccountsScriptLimits`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**account** | **int64** |  | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiListAdminAccountsScriptLimitsRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+### Return type
+
+[**ScriptLimitsResBody**](ScriptLimitsResBody.md)
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## ListAdminRegeneratePresets
 
 > ListAdminRegeneratePresets(ctx)
@@ -671,6 +740,75 @@ Other parameters are passed through a pointer to a apiListAdminRegeneratePresets
 
 - **Content-Type**: Not defined
 - **Accept**: application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## UpdateAdminAccountsScriptLimits
+
+> ScriptLimitsResBody UpdateAdminAccountsScriptLimits(ctx, account, scriptLimitOverrides)
+
+Set an account's script limits
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+	account :=  // int64 | 
+	scriptLimitOverrides :=  // ScriptLimitOverrides | 
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.Internal.UpdateAdminAccountsScriptLimits(context.Background(), account, scriptLimitOverrides)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `Internal.UpdateAdminAccountsScriptLimits`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `Internal.UpdateAdminAccountsScriptLimits`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**account** | **int64** |  | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiUpdateAdminAccountsScriptLimitsRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+ **scriptLimitOverrides** | [**ScriptLimitOverrides**](ScriptLimitOverrides.md) |  | 
+
+### Return type
+
+[**ScriptLimitsResBody**](ScriptLimitsResBody.md)
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json, application/problem+json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)

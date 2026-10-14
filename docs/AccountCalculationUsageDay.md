@@ -8,12 +8,13 @@ Name | Type | Description | Notes
 **Ai** | **int64** | Credits used by the AI assistant. | 
 **Build** | **int64** | Credits used building layer data: one per 1,000 objects written. | 
 **Date** | **string** | UTC day the usage was recorded on. | 
+**Scripts** | **int64** | Credits used running scripts: one per started minute of each run. | 
 
 ## Methods
 
 ### NewAccountCalculationUsageDay
 
-`func NewAccountCalculationUsageDay(aggregation int64, ai int64, build int64, date string, ) *AccountCalculationUsageDay`
+`func NewAccountCalculationUsageDay(aggregation int64, ai int64, build int64, date string, scripts int64, ) *AccountCalculationUsageDay`
 
 NewAccountCalculationUsageDay instantiates a new AccountCalculationUsageDay object
 This constructor will assign default values to properties that have it defined,
@@ -106,6 +107,26 @@ and a boolean to check if the value has been set.
 `func (o *AccountCalculationUsageDay) SetDate(v string)`
 
 SetDate sets Date field to given value.
+
+
+### GetScripts
+
+`func (o *AccountCalculationUsageDay) GetScripts() int64`
+
+GetScripts returns the Scripts field if non-nil, zero value otherwise.
+
+### GetScriptsOk
+
+`func (o *AccountCalculationUsageDay) GetScriptsOk() (*int64, bool)`
+
+GetScriptsOk returns a tuple with the Scripts field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetScripts
+
+`func (o *AccountCalculationUsageDay) SetScripts(v int64)`
+
+SetScripts sets Scripts field to given value.
 
 
 

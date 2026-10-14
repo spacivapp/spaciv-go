@@ -357,6 +357,10 @@ docs/ScriptExport.md
 docs/ScriptExportResBody.md
 docs/ScriptExportRun.md
 docs/ScriptKey.md
+docs/ScriptLimitOverrides.md
+docs/ScriptLimitValues.md
+docs/ScriptLimits.md
+docs/ScriptLimitsResBody.md
 docs/ScriptListResBody.md
 docs/ScriptLogLine.md
 docs/ScriptPatchReqBody.md
@@ -371,6 +375,8 @@ docs/ScriptSchedulePreviewResBody.md
 docs/ScriptSecretsReqBody.md
 docs/ScriptSecretsResBody.md
 docs/ScriptSummary.md
+docs/ScriptUsage.md
+docs/ScriptUsageResBody.md
 docs/ScriptWebhookResBody.md
 docs/ScriptsAPI.md
 docs/SendPasswordPutReqBody.md
@@ -732,6 +738,10 @@ model_script_export.go
 model_script_export_res_body.go
 model_script_export_run.go
 model_script_key.go
+model_script_limit_overrides.go
+model_script_limit_values.go
+model_script_limits.go
+model_script_limits_res_body.go
 model_script_list_res_body.go
 model_script_log_line.go
 model_script_patch_req_body.go
@@ -746,6 +756,8 @@ model_script_schedule_preview_res_body.go
 model_script_secrets_req_body.go
 model_script_secrets_res_body.go
 model_script_summary.go
+model_script_usage.go
+model_script_usage_res_body.go
 model_script_webhook_res_body.go
 model_send_password_put_req_body.go
 model_serialized_event.go

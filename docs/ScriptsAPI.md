@@ -12,6 +12,7 @@ Method | HTTP request | Description
 [**Get**](ScriptsAPI.md#Get) | **Get** /v1/scripts/{id} | Get a script
 [**GetAudit**](ScriptsAPI.md#GetAudit) | **Get** /v1/scripts/{id}/audit | List a script&#39;s activity
 [**GetExport**](ScriptsAPI.md#GetExport) | **Get** /v1/scripts/export | Export scripts
+[**GetUsage**](ScriptsAPI.md#GetUsage) | **Get** /v1/scripts/usage | Get script usage
 [**List**](ScriptsAPI.md#List) | **Get** /v1/scripts | List scripts
 [**ListRuns**](ScriptsAPI.md#ListRuns) | **Get** /v1/scripts/{id}/runs | List a script&#39;s runs
 [**ListRunsLogs**](ScriptsAPI.md#ListRunsLogs) | **Get** /v1/scripts/{id}/runs/{runId}/logs | Get a script run&#39;s logs
@@ -525,6 +526,64 @@ Other parameters are passed through a pointer to a apiGetExportRequest struct vi
 ### Return type
 
 [**ScriptExportResBody**](ScriptExportResBody.md)
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## GetUsage
+
+> ScriptUsageResBody GetUsage(ctx)
+
+Get script usage
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.Scripts.GetUsage(context.Background())
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `Scripts.GetUsage`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `Scripts.GetUsage`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+This endpoint does not need any parameter.
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetUsageRequest struct via the builder pattern
+
+
+### Return type
+
+[**ScriptUsageResBody**](ScriptUsageResBody.md)
 
 ### Authorization
 
