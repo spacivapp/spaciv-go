@@ -39,7 +39,7 @@ type ContributionsCreateDataCollectionsContributionParams struct {
 /*
 CreateDataCollectionsContribution Save a contribution
 
-Saves the contributor's answers and state for a survey contribution. The body carries the current node, answer data, and completion status; for identified surveys, the server records the contributor's anonymisation membership when the contribution is completed and returns `404` if the contribution ID is unknown. Requires the *Edit contribution* permission.
+Saves the contributor's answers and state for a survey contribution. The body carries the current node, answer data, and completion status; for identified surveys, the server records the contributor's anonymisation nodes when the contribution is completed, from the survey's contributor list or, if none was ever uploaded, from the object group named by its authentication mode, and returns `404` if the contribution ID is unknown. Requires the *Edit contribution* permission.
 */
 func (a *ContributionsService) CreateDataCollectionsContribution(ctx context.Context, id string, contributionPost ContributionPost, params *ContributionsCreateDataCollectionsContributionParams) (map[string]interface{}, error) {
 	r := requestForContributionsCreateDataCollectionsContribution{

@@ -25,6 +25,7 @@ type GetDatacollectionRes struct {
 	Completed int32 `json:"completed"`
 	Datacollection DatacollectionChangelogBody `json:"datacollection"`
 	Id string `json:"id"`
+	LegacyContributors *int32 `json:"legacyContributors,omitempty"`
 	Started int32 `json:"started"`
 	Total int32 `json:"total"`
 }
@@ -125,6 +126,38 @@ func (o *GetDatacollectionRes) SetId(v string) {
 	o.Id = v
 }
 
+// GetLegacyContributors returns the LegacyContributors field value if set, zero value otherwise.
+func (o *GetDatacollectionRes) GetLegacyContributors() int32 {
+	if o == nil || IsNil(o.LegacyContributors) {
+		var ret int32
+		return ret
+	}
+	return *o.LegacyContributors
+}
+
+// GetLegacyContributorsOk returns a tuple with the LegacyContributors field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *GetDatacollectionRes) GetLegacyContributorsOk() (*int32, bool) {
+	if o == nil || IsNil(o.LegacyContributors) {
+		return nil, false
+	}
+	return o.LegacyContributors, true
+}
+
+// HasLegacyContributors returns a boolean if a field has been set.
+func (o *GetDatacollectionRes) HasLegacyContributors() bool {
+	if o != nil && !IsNil(o.LegacyContributors) {
+		return true
+	}
+
+	return false
+}
+
+// SetLegacyContributors gets a reference to the given int32 and assigns it to the LegacyContributors field.
+func (o *GetDatacollectionRes) SetLegacyContributors(v int32) {
+	o.LegacyContributors = &v
+}
+
 // GetStarted returns the Started field value
 func (o *GetDatacollectionRes) GetStarted() int32 {
 	if o == nil {
@@ -186,6 +219,9 @@ func (o GetDatacollectionRes) ToMap() (map[string]interface{}, error) {
 	toSerialize["completed"] = o.Completed
 	toSerialize["datacollection"] = o.Datacollection
 	toSerialize["id"] = o.Id
+	if !IsNil(o.LegacyContributors) {
+		toSerialize["legacyContributors"] = o.LegacyContributors
+	}
 	toSerialize["started"] = o.Started
 	toSerialize["total"] = o.Total
 	return toSerialize, nil

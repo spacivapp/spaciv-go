@@ -7,6 +7,8 @@ Name | Type | Description | Notes
 **AnonymisationProperty** | **string** |  | 
 **AuthenticationMode** | [**DatacollectionAuthentication**](DatacollectionAuthentication.md) |  | 
 **CompleteMessage** | **string** |  | 
+**Contributors** | [**[]DatacollectionContributor**](DatacollectionContributor.md) |  | 
+**ContributorsUploaded** | **bool** |  | 
 **Description** | **string** |  | 
 **End** | **string** |  | 
 **InviteMessage** | **string** |  | 
@@ -22,7 +24,7 @@ Name | Type | Description | Notes
 
 ### NewDatacollectionChangelogBody
 
-`func NewDatacollectionChangelogBody(anonymisationProperty string, authenticationMode DatacollectionAuthentication, completeMessage string, description string, end string, inviteMessage string, name string, resendInviteMessage string, start string, status int32, steps []Step, thankYouMessage string, welcomeMessage string, ) *DatacollectionChangelogBody`
+`func NewDatacollectionChangelogBody(anonymisationProperty string, authenticationMode DatacollectionAuthentication, completeMessage string, contributors []DatacollectionContributor, contributorsUploaded bool, description string, end string, inviteMessage string, name string, resendInviteMessage string, start string, status int32, steps []Step, thankYouMessage string, welcomeMessage string, ) *DatacollectionChangelogBody`
 
 NewDatacollectionChangelogBody instantiates a new DatacollectionChangelogBody object
 This constructor will assign default values to properties that have it defined,
@@ -95,6 +97,46 @@ and a boolean to check if the value has been set.
 `func (o *DatacollectionChangelogBody) SetCompleteMessage(v string)`
 
 SetCompleteMessage sets CompleteMessage field to given value.
+
+
+### GetContributors
+
+`func (o *DatacollectionChangelogBody) GetContributors() []DatacollectionContributor`
+
+GetContributors returns the Contributors field if non-nil, zero value otherwise.
+
+### GetContributorsOk
+
+`func (o *DatacollectionChangelogBody) GetContributorsOk() (*[]DatacollectionContributor, bool)`
+
+GetContributorsOk returns a tuple with the Contributors field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetContributors
+
+`func (o *DatacollectionChangelogBody) SetContributors(v []DatacollectionContributor)`
+
+SetContributors sets Contributors field to given value.
+
+
+### GetContributorsUploaded
+
+`func (o *DatacollectionChangelogBody) GetContributorsUploaded() bool`
+
+GetContributorsUploaded returns the ContributorsUploaded field if non-nil, zero value otherwise.
+
+### GetContributorsUploadedOk
+
+`func (o *DatacollectionChangelogBody) GetContributorsUploadedOk() (*bool, bool)`
+
+GetContributorsUploadedOk returns a tuple with the ContributorsUploaded field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetContributorsUploaded
+
+`func (o *DatacollectionChangelogBody) SetContributorsUploaded(v bool)`
+
+SetContributorsUploaded sets ContributorsUploaded field to given value.
 
 
 ### GetDescription

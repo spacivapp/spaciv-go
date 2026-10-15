@@ -6,8 +6,10 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **AnonymisationProperty** | Pointer to **string** |  | [optional] 
 **AuthenticationMode** | Pointer to [**DatacollectionAuthentication**](DatacollectionAuthentication.md) |  | [optional] 
+**ClearContributors** | Pointer to **bool** |  | [optional] 
 **ClearSteps** | **bool** |  | 
 **CompleteMessage** | Pointer to **string** |  | [optional] 
+**Contributors** | Pointer to [**[]DatacollectionContributor**](DatacollectionContributor.md) |  | [optional] 
 **Delete** | **bool** |  | 
 **Description** | Pointer to **string** |  | [optional] 
 **End** | Pointer to **string** |  | [optional] 
@@ -90,6 +92,31 @@ SetAuthenticationMode sets AuthenticationMode field to given value.
 
 HasAuthenticationMode returns a boolean if a field has been set.
 
+### GetClearContributors
+
+`func (o *DatacollectionBody) GetClearContributors() bool`
+
+GetClearContributors returns the ClearContributors field if non-nil, zero value otherwise.
+
+### GetClearContributorsOk
+
+`func (o *DatacollectionBody) GetClearContributorsOk() (*bool, bool)`
+
+GetClearContributorsOk returns a tuple with the ClearContributors field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetClearContributors
+
+`func (o *DatacollectionBody) SetClearContributors(v bool)`
+
+SetClearContributors sets ClearContributors field to given value.
+
+### HasClearContributors
+
+`func (o *DatacollectionBody) HasClearContributors() bool`
+
+HasClearContributors returns a boolean if a field has been set.
+
 ### GetClearSteps
 
 `func (o *DatacollectionBody) GetClearSteps() bool`
@@ -134,6 +161,31 @@ SetCompleteMessage sets CompleteMessage field to given value.
 `func (o *DatacollectionBody) HasCompleteMessage() bool`
 
 HasCompleteMessage returns a boolean if a field has been set.
+
+### GetContributors
+
+`func (o *DatacollectionBody) GetContributors() []DatacollectionContributor`
+
+GetContributors returns the Contributors field if non-nil, zero value otherwise.
+
+### GetContributorsOk
+
+`func (o *DatacollectionBody) GetContributorsOk() (*[]DatacollectionContributor, bool)`
+
+GetContributorsOk returns a tuple with the Contributors field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetContributors
+
+`func (o *DatacollectionBody) SetContributors(v []DatacollectionContributor)`
+
+SetContributors sets Contributors field to given value.
+
+### HasContributors
+
+`func (o *DatacollectionBody) HasContributors() bool`
+
+HasContributors returns a boolean if a field has been set.
 
 ### GetDelete
 

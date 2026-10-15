@@ -241,7 +241,7 @@ type requestForDataCollectionGet struct {
 /*
 Get Get a data collection survey
 
-Returns the survey and a summary of contribution progress: how many contributors have started, completed, and the total invited. Requires the *View crowd modelling* permission.
+Returns the survey and a summary of contribution progress: how many contributors have started, completed, and the total invited. Requires the *View crowd modelling*, *View data collection preview* or *View public data collection* permission; drafts need one of the first two. Callers without *View crowd modelling* receive the survey without its `contributors` list or progress counts. For an email or preferred-channel survey whose contributors were never uploaded, `legacyContributors` counts the contributors it takes from the object group named by its authentication mode.
 */
 func (a *DataCollectionService) Get(ctx context.Context, id string) (*GetDatacollectionRes, error) {
 	r := requestForDataCollectionGet{
@@ -662,7 +662,7 @@ type requestForDataCollectionListContributors struct {
 /*
 ListContributors List contributors for a survey
 
-Returns every invited contributor for the survey, each with their current contribution state and contact details. For email-authenticated surveys the list is derived from the configured audience (object group or dataset); for anonymous and public surveys it reflects submitted contributions. Requires the *View crowd modelling* permission.
+Returns every contributor of an email or preferred-channel survey, each with their current contribution state and contact details: the survey's uploaded contributors or, if none were ever uploaded, the users in the object group named by its authentication mode. Anonymous and public surveys have no contributor list and return an empty list. Requires the *View crowd modelling* permission.
 */
 func (a *DataCollectionService) ListContributors(ctx context.Context, id string) (*GetContributionListRes, error) {
 	r := requestForDataCollectionListContributors{
@@ -769,7 +769,7 @@ type requestForDataCollectionUpdate struct {
 /*
 Update Update a data collection survey
 
-Partially updates the survey's name, steps, authentication mode, status, and other configurable fields. Only fields present in the request body are changed. Requires the *Configure crowd modelling* permission. Returns 400 if `anonymisationProperty` names a property that does not exist, or that is not a tree property for email or preferred-channel authentication. Also returns 400 if an already-set anonymisation property or authentication mode is changed, or status is moved back to draft, once the survey has left draft; an empty property or mode may still be set.
+Partially updates the survey's name, steps, authentication mode, status, and other configurable fields. Only fields present in the request body are changed. Requires the *Configure crowd modelling* permission. Returns 400 if `anonymisationProperty` names a property that does not exist, or that is not a tree property for email or preferred-channel authentication. Also returns 400 if an already-set anonymisation property or authentication mode is changed, or status is moved back to draft, once the survey has left draft; an empty property or mode may still be set. The object group ID in an email or preferred-channel authentication mode is only locked until contributors have been uploaded. For email or preferred-channel authentication, `contributors` lists each contributor's user ID and their nodes on the anonymisation property; a non-empty list replaces the stored one and `clearContributors` empties it. Sending either requires the *Upload data collection contributors* permission as well, and sending both returns 400. Switching a draft to anonymous or public authentication clears its contributors. Returns 400 if contributors are uploaded for anonymous or public authentication, if a contributor is listed twice, is not a user of the account, or names a node that is not on the anonymisation property, if the contributors change or are cleared once the survey has left draft, or if the survey leaves draft without contributors. Also returns 400 if the stored survey, contributors included, would exceed 300 KiB; at one node ID per contributor that is roughly 5,000 contributors. A survey that leaves draft without ever having had contributors uploaded takes them from the object group named by its authentication mode, if any.
 */
 func (a *DataCollectionService) Update(ctx context.Context, id string, datacollectionBody DatacollectionBody) (map[string]interface{}, error) {
 	r := requestForDataCollectionUpdate{

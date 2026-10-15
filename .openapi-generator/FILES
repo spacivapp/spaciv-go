@@ -191,6 +191,7 @@ docs/DatacollectionAuthenticationOneOf2.md
 docs/DatacollectionAuthenticationOneOf3.md
 docs/DatacollectionBody.md
 docs/DatacollectionChangelogBody.md
+docs/DatacollectionContributor.md
 docs/DatasetAddResponseBody.md
 docs/DatasetChangelogBody.md
 docs/DatasetChangelogData.md
@@ -579,6 +580,7 @@ model_datacollection_authentication_one_of_2.go
 model_datacollection_authentication_one_of_3.go
 model_datacollection_body.go
 model_datacollection_changelog_body.go
+model_datacollection_contributor.go
 model_dataset_add_response_body.go
 model_dataset_changelog_body.go
 model_dataset_changelog_data.go

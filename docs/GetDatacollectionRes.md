@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **Completed** | **int32** |  | 
 **Datacollection** | [**DatacollectionChangelogBody**](DatacollectionChangelogBody.md) |  | 
 **Id** | **string** |  | 
+**LegacyContributors** | Pointer to **int32** |  | [optional] 
 **Started** | **int32** |  | 
 **Total** | **int32** |  | 
 
@@ -88,6 +89,31 @@ and a boolean to check if the value has been set.
 
 SetId sets Id field to given value.
 
+
+### GetLegacyContributors
+
+`func (o *GetDatacollectionRes) GetLegacyContributors() int32`
+
+GetLegacyContributors returns the LegacyContributors field if non-nil, zero value otherwise.
+
+### GetLegacyContributorsOk
+
+`func (o *GetDatacollectionRes) GetLegacyContributorsOk() (*int32, bool)`
+
+GetLegacyContributorsOk returns a tuple with the LegacyContributors field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetLegacyContributors
+
+`func (o *GetDatacollectionRes) SetLegacyContributors(v int32)`
+
+SetLegacyContributors sets LegacyContributors field to given value.
+
+### HasLegacyContributors
+
+`func (o *GetDatacollectionRes) HasLegacyContributors() bool`
+
+HasLegacyContributors returns a boolean if a field has been set.
 
 ### GetStarted
 

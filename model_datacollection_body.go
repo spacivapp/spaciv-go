@@ -24,8 +24,10 @@ var _ MappedNullable = &DatacollectionBody{}
 type DatacollectionBody struct {
 	AnonymisationProperty *string `json:"anonymisationProperty,omitempty"`
 	AuthenticationMode *DatacollectionAuthentication `json:"authenticationMode,omitempty"`
+	ClearContributors *bool `json:"clearContributors,omitempty"`
 	ClearSteps bool `json:"clearSteps"`
 	CompleteMessage *string `json:"completeMessage,omitempty"`
+	Contributors []DatacollectionContributor `json:"contributors,omitempty"`
 	Delete bool `json:"delete"`
 	Description *string `json:"description,omitempty"`
 	End *string `json:"end,omitempty"`
@@ -127,6 +129,38 @@ func (o *DatacollectionBody) SetAuthenticationMode(v DatacollectionAuthenticatio
 	o.AuthenticationMode = &v
 }
 
+// GetClearContributors returns the ClearContributors field value if set, zero value otherwise.
+func (o *DatacollectionBody) GetClearContributors() bool {
+	if o == nil || IsNil(o.ClearContributors) {
+		var ret bool
+		return ret
+	}
+	return *o.ClearContributors
+}
+
+// GetClearContributorsOk returns a tuple with the ClearContributors field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DatacollectionBody) GetClearContributorsOk() (*bool, bool) {
+	if o == nil || IsNil(o.ClearContributors) {
+		return nil, false
+	}
+	return o.ClearContributors, true
+}
+
+// HasClearContributors returns a boolean if a field has been set.
+func (o *DatacollectionBody) HasClearContributors() bool {
+	if o != nil && !IsNil(o.ClearContributors) {
+		return true
+	}
+
+	return false
+}
+
+// SetClearContributors gets a reference to the given bool and assigns it to the ClearContributors field.
+func (o *DatacollectionBody) SetClearContributors(v bool) {
+	o.ClearContributors = &v
+}
+
 // GetClearSteps returns the ClearSteps field value
 func (o *DatacollectionBody) GetClearSteps() bool {
 	if o == nil {
@@ -181,6 +215,38 @@ func (o *DatacollectionBody) HasCompleteMessage() bool {
 // SetCompleteMessage gets a reference to the given string and assigns it to the CompleteMessage field.
 func (o *DatacollectionBody) SetCompleteMessage(v string) {
 	o.CompleteMessage = &v
+}
+
+// GetContributors returns the Contributors field value if set, zero value otherwise.
+func (o *DatacollectionBody) GetContributors() []DatacollectionContributor {
+	if o == nil || IsNil(o.Contributors) {
+		var ret []DatacollectionContributor
+		return ret
+	}
+	return o.Contributors
+}
+
+// GetContributorsOk returns a tuple with the Contributors field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DatacollectionBody) GetContributorsOk() ([]DatacollectionContributor, bool) {
+	if o == nil || IsNil(o.Contributors) {
+		return nil, false
+	}
+	return o.Contributors, true
+}
+
+// HasContributors returns a boolean if a field has been set.
+func (o *DatacollectionBody) HasContributors() bool {
+	if o != nil && !IsNil(o.Contributors) {
+		return true
+	}
+
+	return false
+}
+
+// SetContributors gets a reference to the given []DatacollectionContributor and assigns it to the Contributors field.
+func (o *DatacollectionBody) SetContributors(v []DatacollectionContributor) {
+	o.Contributors = v
 }
 
 // GetDelete returns the Delete field value
@@ -559,9 +625,15 @@ func (o DatacollectionBody) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.AuthenticationMode) {
 		toSerialize["authenticationMode"] = o.AuthenticationMode
 	}
+	if !IsNil(o.ClearContributors) {
+		toSerialize["clearContributors"] = o.ClearContributors
+	}
 	toSerialize["clearSteps"] = o.ClearSteps
 	if !IsNil(o.CompleteMessage) {
 		toSerialize["completeMessage"] = o.CompleteMessage
+	}
+	if !IsNil(o.Contributors) {
+		toSerialize["contributors"] = o.Contributors
 	}
 	toSerialize["delete"] = o.Delete
 	if !IsNil(o.Description) {

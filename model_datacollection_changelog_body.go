@@ -25,6 +25,8 @@ type DatacollectionChangelogBody struct {
 	AnonymisationProperty string `json:"anonymisationProperty"`
 	AuthenticationMode DatacollectionAuthentication `json:"authenticationMode"`
 	CompleteMessage string `json:"completeMessage"`
+	Contributors []DatacollectionContributor `json:"contributors"`
+	ContributorsUploaded bool `json:"contributorsUploaded"`
 	Description string `json:"description"`
 	End string `json:"end"`
 	InviteMessage string `json:"inviteMessage"`
@@ -43,11 +45,13 @@ type _DatacollectionChangelogBody DatacollectionChangelogBody
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDatacollectionChangelogBody(anonymisationProperty string, authenticationMode DatacollectionAuthentication, completeMessage string, description string, end string, inviteMessage string, name string, resendInviteMessage string, start string, status int32, steps []Step, thankYouMessage string, welcomeMessage string) *DatacollectionChangelogBody {
+func NewDatacollectionChangelogBody(anonymisationProperty string, authenticationMode DatacollectionAuthentication, completeMessage string, contributors []DatacollectionContributor, contributorsUploaded bool, description string, end string, inviteMessage string, name string, resendInviteMessage string, start string, status int32, steps []Step, thankYouMessage string, welcomeMessage string) *DatacollectionChangelogBody {
 	this := DatacollectionChangelogBody{}
 	this.AnonymisationProperty = anonymisationProperty
 	this.AuthenticationMode = authenticationMode
 	this.CompleteMessage = completeMessage
+	this.Contributors = contributors
+	this.ContributorsUploaded = contributorsUploaded
 	this.Description = description
 	this.End = end
 	this.InviteMessage = inviteMessage
@@ -139,6 +143,54 @@ func (o *DatacollectionChangelogBody) GetCompleteMessageOk() (*string, bool) {
 // SetCompleteMessage sets field value
 func (o *DatacollectionChangelogBody) SetCompleteMessage(v string) {
 	o.CompleteMessage = v
+}
+
+// GetContributors returns the Contributors field value
+func (o *DatacollectionChangelogBody) GetContributors() []DatacollectionContributor {
+	if o == nil {
+		var ret []DatacollectionContributor
+		return ret
+	}
+
+	return o.Contributors
+}
+
+// GetContributorsOk returns a tuple with the Contributors field value
+// and a boolean to check if the value has been set.
+func (o *DatacollectionChangelogBody) GetContributorsOk() ([]DatacollectionContributor, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Contributors, true
+}
+
+// SetContributors sets field value
+func (o *DatacollectionChangelogBody) SetContributors(v []DatacollectionContributor) {
+	o.Contributors = v
+}
+
+// GetContributorsUploaded returns the ContributorsUploaded field value
+func (o *DatacollectionChangelogBody) GetContributorsUploaded() bool {
+	if o == nil {
+		var ret bool
+		return ret
+	}
+
+	return o.ContributorsUploaded
+}
+
+// GetContributorsUploadedOk returns a tuple with the ContributorsUploaded field value
+// and a boolean to check if the value has been set.
+func (o *DatacollectionChangelogBody) GetContributorsUploadedOk() (*bool, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.ContributorsUploaded, true
+}
+
+// SetContributorsUploaded sets field value
+func (o *DatacollectionChangelogBody) SetContributorsUploaded(v bool) {
+	o.ContributorsUploaded = v
 }
 
 // GetDescription returns the Description field value
@@ -394,6 +446,8 @@ func (o DatacollectionChangelogBody) ToMap() (map[string]interface{}, error) {
 	toSerialize["anonymisationProperty"] = o.AnonymisationProperty
 	toSerialize["authenticationMode"] = o.AuthenticationMode
 	toSerialize["completeMessage"] = o.CompleteMessage
+	toSerialize["contributors"] = o.Contributors
+	toSerialize["contributorsUploaded"] = o.ContributorsUploaded
 	toSerialize["description"] = o.Description
 	toSerialize["end"] = o.End
 	toSerialize["inviteMessage"] = o.InviteMessage
@@ -415,6 +469,8 @@ func (o *DatacollectionChangelogBody) UnmarshalJSON(data []byte) (err error) {
 		"anonymisationProperty",
 		"authenticationMode",
 		"completeMessage",
+		"contributors",
+		"contributorsUploaded",
 		"description",
 		"end",
 		"inviteMessage",
