@@ -241,7 +241,7 @@ type requestForDataCollectionGet struct {
 /*
 Get Get a data collection survey
 
-Returns the survey and a summary of contribution progress: how many contributors have started, completed, and the total invited. Requires the *View crowd modelling*, *View data collection preview* or *View public data collection* permission; drafts need one of the first two. Callers without *View crowd modelling* receive the survey without its `contributors` list or progress counts. For an email or preferred-channel survey whose contributors were never uploaded, `legacyContributors` counts the contributors it takes from the object group named by its authentication mode.
+Returns the survey and a summary of contribution progress: how many contributors have started, completed, and the total invited. Requires the *View crowd modelling*, *View data collection preview* or *View public data collection* permission; drafts need one of the first two. Callers without *View crowd modelling* receive the survey without its `contributors` list or progress counts. `contributorCount` is the number of uploaded contributors for callers with *View crowd modelling* or *Configure crowd modelling*, and 0 otherwise.
 */
 func (a *DataCollectionService) Get(ctx context.Context, id string) (*GetDatacollectionRes, error) {
 	r := requestForDataCollectionGet{

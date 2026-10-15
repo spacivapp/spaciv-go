@@ -2966,9 +2966,9 @@ paths:
         \ the *View crowd modelling*, *View data collection preview* or *View public\
         \ data collection* permission; drafts need one of the first two. Callers without\
         \ *View crowd modelling* receive the survey without its `contributors` list\
-        \ or progress counts. For an email or preferred-channel survey whose contributors\
-        \ were never uploaded, `legacyContributors` counts the contributors it takes\
-        \ from the object group named by its authentication mode."
+        \ or progress counts. `contributorCount` is the number of uploaded contributors\
+        \ for callers with *View crowd modelling* or *Configure crowd modelling*,\
+        \ and 0 otherwise."
       operationId: data-collection_get
       parameters:
       - explode: false
@@ -10113,7 +10113,7 @@ components:
         authenticationMode:
           anonymous:
             id: id
-        status: 6
+        status: 1
       properties:
         anonymisationProperty:
           type: string
@@ -11136,7 +11136,7 @@ components:
       example:
         list:
         - total: 5
-          legacyContributors: 1
+          contributorCount: 6
           started: 5
           completed: 0
           id: id
@@ -11171,9 +11171,9 @@ components:
             authenticationMode:
               anonymous:
                 id: id
-            status: 6
+            status: 1
         - total: 5
-          legacyContributors: 1
+          contributorCount: 6
           started: 5
           completed: 0
           id: id
@@ -11208,7 +11208,7 @@ components:
             authenticationMode:
               anonymous:
                 id: id
-            status: 6
+            status: 1
       properties:
         list:
           items:
@@ -11220,7 +11220,7 @@ components:
       additionalProperties: false
       example:
         total: 5
-        legacyContributors: 1
+        contributorCount: 6
         started: 5
         completed: 0
         id: id
@@ -11255,18 +11255,18 @@ components:
           authenticationMode:
             anonymous:
               id: id
-          status: 6
+          status: 1
       properties:
         completed:
+          format: int32
+          type: integer
+        contributorCount:
           format: int32
           type: integer
         datacollection:
           $ref: "#/components/schemas/DatacollectionChangelogBody"
         id:
           type: string
-        legacyContributors:
-          format: int32
-          type: integer
         started:
           format: int32
           type: integer
@@ -11275,6 +11275,7 @@ components:
           type: integer
       required:
       - completed
+      - contributorCount
       - datacollection
       - id
       - started

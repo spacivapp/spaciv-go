@@ -5,9 +5,9 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Completed** | **int32** |  | 
+**ContributorCount** | **int32** |  | 
 **Datacollection** | [**DatacollectionChangelogBody**](DatacollectionChangelogBody.md) |  | 
 **Id** | **string** |  | 
-**LegacyContributors** | Pointer to **int32** |  | [optional] 
 **Started** | **int32** |  | 
 **Total** | **int32** |  | 
 
@@ -15,7 +15,7 @@ Name | Type | Description | Notes
 
 ### NewGetDatacollectionRes
 
-`func NewGetDatacollectionRes(completed int32, datacollection DatacollectionChangelogBody, id string, started int32, total int32, ) *GetDatacollectionRes`
+`func NewGetDatacollectionRes(completed int32, contributorCount int32, datacollection DatacollectionChangelogBody, id string, started int32, total int32, ) *GetDatacollectionRes`
 
 NewGetDatacollectionRes instantiates a new GetDatacollectionRes object
 This constructor will assign default values to properties that have it defined,
@@ -48,6 +48,26 @@ and a boolean to check if the value has been set.
 `func (o *GetDatacollectionRes) SetCompleted(v int32)`
 
 SetCompleted sets Completed field to given value.
+
+
+### GetContributorCount
+
+`func (o *GetDatacollectionRes) GetContributorCount() int32`
+
+GetContributorCount returns the ContributorCount field if non-nil, zero value otherwise.
+
+### GetContributorCountOk
+
+`func (o *GetDatacollectionRes) GetContributorCountOk() (*int32, bool)`
+
+GetContributorCountOk returns a tuple with the ContributorCount field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetContributorCount
+
+`func (o *GetDatacollectionRes) SetContributorCount(v int32)`
+
+SetContributorCount sets ContributorCount field to given value.
 
 
 ### GetDatacollection
@@ -89,31 +109,6 @@ and a boolean to check if the value has been set.
 
 SetId sets Id field to given value.
 
-
-### GetLegacyContributors
-
-`func (o *GetDatacollectionRes) GetLegacyContributors() int32`
-
-GetLegacyContributors returns the LegacyContributors field if non-nil, zero value otherwise.
-
-### GetLegacyContributorsOk
-
-`func (o *GetDatacollectionRes) GetLegacyContributorsOk() (*int32, bool)`
-
-GetLegacyContributorsOk returns a tuple with the LegacyContributors field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetLegacyContributors
-
-`func (o *GetDatacollectionRes) SetLegacyContributors(v int32)`
-
-SetLegacyContributors sets LegacyContributors field to given value.
-
-### HasLegacyContributors
-
-`func (o *GetDatacollectionRes) HasLegacyContributors() bool`
-
-HasLegacyContributors returns a boolean if a field has been set.
 
 ### GetStarted
 

@@ -23,9 +23,9 @@ var _ MappedNullable = &GetDatacollectionRes{}
 // GetDatacollectionRes struct for GetDatacollectionRes
 type GetDatacollectionRes struct {
 	Completed int32 `json:"completed"`
+	ContributorCount int32 `json:"contributorCount"`
 	Datacollection DatacollectionChangelogBody `json:"datacollection"`
 	Id string `json:"id"`
-	LegacyContributors *int32 `json:"legacyContributors,omitempty"`
 	Started int32 `json:"started"`
 	Total int32 `json:"total"`
 }
@@ -36,9 +36,10 @@ type _GetDatacollectionRes GetDatacollectionRes
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGetDatacollectionRes(completed int32, datacollection DatacollectionChangelogBody, id string, started int32, total int32) *GetDatacollectionRes {
+func NewGetDatacollectionRes(completed int32, contributorCount int32, datacollection DatacollectionChangelogBody, id string, started int32, total int32) *GetDatacollectionRes {
 	this := GetDatacollectionRes{}
 	this.Completed = completed
+	this.ContributorCount = contributorCount
 	this.Datacollection = datacollection
 	this.Id = id
 	this.Started = started
@@ -76,6 +77,30 @@ func (o *GetDatacollectionRes) GetCompletedOk() (*int32, bool) {
 // SetCompleted sets field value
 func (o *GetDatacollectionRes) SetCompleted(v int32) {
 	o.Completed = v
+}
+
+// GetContributorCount returns the ContributorCount field value
+func (o *GetDatacollectionRes) GetContributorCount() int32 {
+	if o == nil {
+		var ret int32
+		return ret
+	}
+
+	return o.ContributorCount
+}
+
+// GetContributorCountOk returns a tuple with the ContributorCount field value
+// and a boolean to check if the value has been set.
+func (o *GetDatacollectionRes) GetContributorCountOk() (*int32, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.ContributorCount, true
+}
+
+// SetContributorCount sets field value
+func (o *GetDatacollectionRes) SetContributorCount(v int32) {
+	o.ContributorCount = v
 }
 
 // GetDatacollection returns the Datacollection field value
@@ -124,38 +149,6 @@ func (o *GetDatacollectionRes) GetIdOk() (*string, bool) {
 // SetId sets field value
 func (o *GetDatacollectionRes) SetId(v string) {
 	o.Id = v
-}
-
-// GetLegacyContributors returns the LegacyContributors field value if set, zero value otherwise.
-func (o *GetDatacollectionRes) GetLegacyContributors() int32 {
-	if o == nil || IsNil(o.LegacyContributors) {
-		var ret int32
-		return ret
-	}
-	return *o.LegacyContributors
-}
-
-// GetLegacyContributorsOk returns a tuple with the LegacyContributors field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *GetDatacollectionRes) GetLegacyContributorsOk() (*int32, bool) {
-	if o == nil || IsNil(o.LegacyContributors) {
-		return nil, false
-	}
-	return o.LegacyContributors, true
-}
-
-// HasLegacyContributors returns a boolean if a field has been set.
-func (o *GetDatacollectionRes) HasLegacyContributors() bool {
-	if o != nil && !IsNil(o.LegacyContributors) {
-		return true
-	}
-
-	return false
-}
-
-// SetLegacyContributors gets a reference to the given int32 and assigns it to the LegacyContributors field.
-func (o *GetDatacollectionRes) SetLegacyContributors(v int32) {
-	o.LegacyContributors = &v
 }
 
 // GetStarted returns the Started field value
@@ -217,11 +210,9 @@ func (o GetDatacollectionRes) MarshalJSON() ([]byte, error) {
 func (o GetDatacollectionRes) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["completed"] = o.Completed
+	toSerialize["contributorCount"] = o.ContributorCount
 	toSerialize["datacollection"] = o.Datacollection
 	toSerialize["id"] = o.Id
-	if !IsNil(o.LegacyContributors) {
-		toSerialize["legacyContributors"] = o.LegacyContributors
-	}
 	toSerialize["started"] = o.Started
 	toSerialize["total"] = o.Total
 	return toSerialize, nil
@@ -233,6 +224,7 @@ func (o *GetDatacollectionRes) UnmarshalJSON(data []byte) (err error) {
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"completed",
+		"contributorCount",
 		"datacollection",
 		"id",
 		"started",
