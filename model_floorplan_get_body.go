@@ -32,6 +32,8 @@ type FloorplanGetBody struct {
 	Property string `json:"property"`
 	PropertyNode string `json:"propertyNode"`
 	Spaces []FloorplanGetBodySpace `json:"spaces"`
+	// Whether the floor plan can be shown in 2D, in 3D, or both. Defaults to 2d-and-3d.
+	ViewMode string `json:"viewMode"`
 }
 
 type _FloorplanGetBody FloorplanGetBody
@@ -40,7 +42,7 @@ type _FloorplanGetBody FloorplanGetBody
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewFloorplanGetBody(createdAt int64, name string, overlayOffset FloorplanGetBodyOverlayOffset, property string, propertyNode string, spaces []FloorplanGetBodySpace) *FloorplanGetBody {
+func NewFloorplanGetBody(createdAt int64, name string, overlayOffset FloorplanGetBodyOverlayOffset, property string, propertyNode string, spaces []FloorplanGetBodySpace, viewMode string) *FloorplanGetBody {
 	this := FloorplanGetBody{}
 	this.CreatedAt = createdAt
 	this.Name = name
@@ -48,6 +50,7 @@ func NewFloorplanGetBody(createdAt int64, name string, overlayOffset FloorplanGe
 	this.Property = property
 	this.PropertyNode = propertyNode
 	this.Spaces = spaces
+	this.ViewMode = viewMode
 	return &this
 }
 
@@ -267,6 +270,30 @@ func (o *FloorplanGetBody) SetSpaces(v []FloorplanGetBodySpace) {
 	o.Spaces = v
 }
 
+// GetViewMode returns the ViewMode field value
+func (o *FloorplanGetBody) GetViewMode() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.ViewMode
+}
+
+// GetViewModeOk returns a tuple with the ViewMode field value
+// and a boolean to check if the value has been set.
+func (o *FloorplanGetBody) GetViewModeOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.ViewMode, true
+}
+
+// SetViewMode sets field value
+func (o *FloorplanGetBody) SetViewMode(v string) {
+	o.ViewMode = v
+}
+
 func (o FloorplanGetBody) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -289,6 +316,7 @@ func (o FloorplanGetBody) ToMap() (map[string]interface{}, error) {
 	toSerialize["property"] = o.Property
 	toSerialize["propertyNode"] = o.PropertyNode
 	toSerialize["spaces"] = o.Spaces
+	toSerialize["viewMode"] = o.ViewMode
 	return toSerialize, nil
 }
 
@@ -303,6 +331,7 @@ func (o *FloorplanGetBody) UnmarshalJSON(data []byte) (err error) {
 		"property",
 		"propertyNode",
 		"spaces",
+		"viewMode",
 	}
 
 	allProperties := make(map[string]interface{})

@@ -22,8 +22,10 @@ var _ MappedNullable = &FloorplanCreateSpace{}
 
 // FloorplanCreateSpace struct for FloorplanCreateSpace
 type FloorplanCreateSpace struct {
+	EndHeight *float64 `json:"endHeight,omitempty"`
 	Location string `json:"location"`
 	Paths []FloorplanSpaceChangelogPath `json:"paths"`
+	StartHeight *float64 `json:"startHeight,omitempty"`
 }
 
 type _FloorplanCreateSpace FloorplanCreateSpace
@@ -45,6 +47,38 @@ func NewFloorplanCreateSpace(location string, paths []FloorplanSpaceChangelogPat
 func NewFloorplanCreateSpaceWithDefaults() *FloorplanCreateSpace {
 	this := FloorplanCreateSpace{}
 	return &this
+}
+
+// GetEndHeight returns the EndHeight field value if set, zero value otherwise.
+func (o *FloorplanCreateSpace) GetEndHeight() float64 {
+	if o == nil || IsNil(o.EndHeight) {
+		var ret float64
+		return ret
+	}
+	return *o.EndHeight
+}
+
+// GetEndHeightOk returns a tuple with the EndHeight field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *FloorplanCreateSpace) GetEndHeightOk() (*float64, bool) {
+	if o == nil || IsNil(o.EndHeight) {
+		return nil, false
+	}
+	return o.EndHeight, true
+}
+
+// HasEndHeight returns a boolean if a field has been set.
+func (o *FloorplanCreateSpace) HasEndHeight() bool {
+	if o != nil && !IsNil(o.EndHeight) {
+		return true
+	}
+
+	return false
+}
+
+// SetEndHeight gets a reference to the given float64 and assigns it to the EndHeight field.
+func (o *FloorplanCreateSpace) SetEndHeight(v float64) {
+	o.EndHeight = &v
 }
 
 // GetLocation returns the Location field value
@@ -95,6 +129,38 @@ func (o *FloorplanCreateSpace) SetPaths(v []FloorplanSpaceChangelogPath) {
 	o.Paths = v
 }
 
+// GetStartHeight returns the StartHeight field value if set, zero value otherwise.
+func (o *FloorplanCreateSpace) GetStartHeight() float64 {
+	if o == nil || IsNil(o.StartHeight) {
+		var ret float64
+		return ret
+	}
+	return *o.StartHeight
+}
+
+// GetStartHeightOk returns a tuple with the StartHeight field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *FloorplanCreateSpace) GetStartHeightOk() (*float64, bool) {
+	if o == nil || IsNil(o.StartHeight) {
+		return nil, false
+	}
+	return o.StartHeight, true
+}
+
+// HasStartHeight returns a boolean if a field has been set.
+func (o *FloorplanCreateSpace) HasStartHeight() bool {
+	if o != nil && !IsNil(o.StartHeight) {
+		return true
+	}
+
+	return false
+}
+
+// SetStartHeight gets a reference to the given float64 and assigns it to the StartHeight field.
+func (o *FloorplanCreateSpace) SetStartHeight(v float64) {
+	o.StartHeight = &v
+}
+
 func (o FloorplanCreateSpace) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -105,8 +171,14 @@ func (o FloorplanCreateSpace) MarshalJSON() ([]byte, error) {
 
 func (o FloorplanCreateSpace) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	if !IsNil(o.EndHeight) {
+		toSerialize["endHeight"] = o.EndHeight
+	}
 	toSerialize["location"] = o.Location
 	toSerialize["paths"] = o.Paths
+	if !IsNil(o.StartHeight) {
+		toSerialize["startHeight"] = o.StartHeight
+	}
 	return toSerialize, nil
 }
 

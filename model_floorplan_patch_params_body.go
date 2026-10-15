@@ -28,6 +28,7 @@ type FloorplanPatchParamsBody struct {
 	Property *string `json:"property,omitempty"`
 	PropertyNode *string `json:"propertyNode,omitempty"`
 	Spaces *FloorplanCreateSpaceRepeated `json:"spaces,omitempty"`
+	ViewMode *string `json:"viewMode,omitempty"`
 }
 
 // NewFloorplanPatchParamsBody instantiates a new FloorplanPatchParamsBody object
@@ -303,6 +304,38 @@ func (o *FloorplanPatchParamsBody) SetSpaces(v FloorplanCreateSpaceRepeated) {
 	o.Spaces = &v
 }
 
+// GetViewMode returns the ViewMode field value if set, zero value otherwise.
+func (o *FloorplanPatchParamsBody) GetViewMode() string {
+	if o == nil || IsNil(o.ViewMode) {
+		var ret string
+		return ret
+	}
+	return *o.ViewMode
+}
+
+// GetViewModeOk returns a tuple with the ViewMode field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *FloorplanPatchParamsBody) GetViewModeOk() (*string, bool) {
+	if o == nil || IsNil(o.ViewMode) {
+		return nil, false
+	}
+	return o.ViewMode, true
+}
+
+// HasViewMode returns a boolean if a field has been set.
+func (o *FloorplanPatchParamsBody) HasViewMode() bool {
+	if o != nil && !IsNil(o.ViewMode) {
+		return true
+	}
+
+	return false
+}
+
+// SetViewMode gets a reference to the given string and assigns it to the ViewMode field.
+func (o *FloorplanPatchParamsBody) SetViewMode(v string) {
+	o.ViewMode = &v
+}
+
 func (o FloorplanPatchParamsBody) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -336,6 +369,9 @@ func (o FloorplanPatchParamsBody) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.Spaces) {
 		toSerialize["spaces"] = o.Spaces
+	}
+	if !IsNil(o.ViewMode) {
+		toSerialize["viewMode"] = o.ViewMode
 	}
 	return toSerialize, nil
 }

@@ -12,12 +12,13 @@ Name | Type | Description | Notes
 **Property** | **string** |  | 
 **PropertyNode** | **string** |  | 
 **Spaces** | [**[]FloorplanGetBodySpace**](FloorplanGetBodySpace.md) |  | 
+**ViewMode** | **string** | Whether the floor plan can be shown in 2D, in 3D, or both. Defaults to 2d-and-3d. | 
 
 ## Methods
 
 ### NewFloorplanGetBody
 
-`func NewFloorplanGetBody(createdAt int64, name string, overlayOffset FloorplanGetBodyOverlayOffset, property string, propertyNode string, spaces []FloorplanGetBodySpace, ) *FloorplanGetBody`
+`func NewFloorplanGetBody(createdAt int64, name string, overlayOffset FloorplanGetBodyOverlayOffset, property string, propertyNode string, spaces []FloorplanGetBodySpace, viewMode string, ) *FloorplanGetBody`
 
 NewFloorplanGetBody instantiates a new FloorplanGetBody object
 This constructor will assign default values to properties that have it defined,
@@ -200,6 +201,26 @@ and a boolean to check if the value has been set.
 `func (o *FloorplanGetBody) SetSpaces(v []FloorplanGetBodySpace)`
 
 SetSpaces sets Spaces field to given value.
+
+
+### GetViewMode
+
+`func (o *FloorplanGetBody) GetViewMode() string`
+
+GetViewMode returns the ViewMode field if non-nil, zero value otherwise.
+
+### GetViewModeOk
+
+`func (o *FloorplanGetBody) GetViewModeOk() (*string, bool)`
+
+GetViewModeOk returns a tuple with the ViewMode field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetViewMode
+
+`func (o *FloorplanGetBody) SetViewMode(v string)`
+
+SetViewMode sets ViewMode field to given value.
 
 
 

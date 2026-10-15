@@ -4,8 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**EndHeight** | Pointer to **float64** | Height the space ends at in 3D, in the same units as its paths. Absent when the space uses the default heights. | [optional] 
 **Location** | **string** |  | 
 **Paths** | [**[][]FloorplanGetBodySpacePoint**]([]FloorplanGetBodySpacePoint.md) |  | 
+**StartHeight** | Pointer to **float64** | Height the space starts at in 3D, in the same units as its paths. Absent when the space uses the default heights. | [optional] 
 
 ## Methods
 
@@ -25,6 +27,31 @@ will change when the set of required properties is changed
 NewFloorplanGetBodySpaceWithDefaults instantiates a new FloorplanGetBodySpace object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetEndHeight
+
+`func (o *FloorplanGetBodySpace) GetEndHeight() float64`
+
+GetEndHeight returns the EndHeight field if non-nil, zero value otherwise.
+
+### GetEndHeightOk
+
+`func (o *FloorplanGetBodySpace) GetEndHeightOk() (*float64, bool)`
+
+GetEndHeightOk returns a tuple with the EndHeight field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetEndHeight
+
+`func (o *FloorplanGetBodySpace) SetEndHeight(v float64)`
+
+SetEndHeight sets EndHeight field to given value.
+
+### HasEndHeight
+
+`func (o *FloorplanGetBodySpace) HasEndHeight() bool`
+
+HasEndHeight returns a boolean if a field has been set.
 
 ### GetLocation
 
@@ -65,6 +92,31 @@ and a boolean to check if the value has been set.
 
 SetPaths sets Paths field to given value.
 
+
+### GetStartHeight
+
+`func (o *FloorplanGetBodySpace) GetStartHeight() float64`
+
+GetStartHeight returns the StartHeight field if non-nil, zero value otherwise.
+
+### GetStartHeightOk
+
+`func (o *FloorplanGetBodySpace) GetStartHeightOk() (*float64, bool)`
+
+GetStartHeightOk returns a tuple with the StartHeight field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetStartHeight
+
+`func (o *FloorplanGetBodySpace) SetStartHeight(v float64)`
+
+SetStartHeight sets StartHeight field to given value.
+
+### HasStartHeight
+
+`func (o *FloorplanGetBodySpace) HasStartHeight() bool`
+
+HasStartHeight returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

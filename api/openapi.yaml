@@ -3502,10 +3502,10 @@ paths:
       - Floor plans
       x-sdk-params: false
     get:
-      description: "Returns the floor plan's metadata, space overlay geometry, and\
-        \ image offset. Returns an empty body (not 404) when the floor plan does not\
-        \ exist. Use `GET /v1/floorplans/{id}/images/{imageType}` to retrieve the\
-        \ drawing image. Requires the *View floorplans* permission."
+      description: "Returns the floor plan's metadata, view mode, space overlay geometry\
+        \ with each space's 3D heights, and image offset. Returns an empty body (not\
+        \ 404) when the floor plan does not exist. Use `GET /v1/floorplans/{id}/images/{imageType}`\
+        \ to retrieve the drawing image. Requires the *View floorplans* permission."
       operationId: floor-plans_get
       parameters:
       - explode: false
@@ -3534,7 +3534,7 @@ paths:
       x-sdk-params: false
     patch:
       description: |-
-        Partially updates the floor plan's name, linked property and node, creation timestamp, image overlay offset, background and foreground images, and space geometry. Only fields present in the request body are changed, and the request fails with `409` if the floor plan keeps changing while they are. When `spaces` is provided the entire space overlay is replaced. Requires the *Edit floorplans* permission.
+        Partially updates the floor plan's name, linked property and node, creation timestamp, image overlay offset, background and foreground images, view mode, and space geometry. Only fields present in the request body are changed, and the request fails with `409` if the floor plan keeps changing while they are. When `spaces` is provided the entire space overlay is replaced. `viewMode` is one of `2d-and-3d`, `3d-only` or `2d-only`. A space's `startHeight` and `endHeight` are in the same units as its paths, must be set together and the end must be above the start; a space without them is drawn at a default height scaled to the floor plan. Requires the *Edit floorplans* permission.
 
         `backgroundFile` and `foregroundFile` take the ID of an image in the account's file storage (see `/v1/account/files`), or an empty string to remove the layer's image; choosing a file also requires the *View file storage* permission. The file must be a PNG, JPEG, GIF, WebP or SVG image of at most 4 MB that is not quarantined, otherwise the request fails with `422` (`403` when quarantined) and nothing is changed. Setting or removing a layer's file also deletes any image previously uploaded to that layer through `PUT /v1/floorplans/{id}/images/{imageType}`.
       operationId: floor-plans_update
@@ -10632,8 +10632,8 @@ components:
     FloorplanChangelogSpacePoint:
       additionalProperties: false
       example:
-        x: 5.637376656633329
-        "y": 2.3021358869347655
+        x: 2.3021358869347655
+        "y": 7.061401241503109
       properties:
         x:
           format: double
@@ -10649,23 +10649,31 @@ components:
       example:
         paths:
         - points:
-          - x: 5.637376656633329
-            "y": 2.3021358869347655
-          - x: 5.637376656633329
-            "y": 2.3021358869347655
+          - x: 2.3021358869347655
+            "y": 7.061401241503109
+          - x: 2.3021358869347655
+            "y": 7.061401241503109
         - points:
-          - x: 5.637376656633329
-            "y": 2.3021358869347655
-          - x: 5.637376656633329
-            "y": 2.3021358869347655
+          - x: 2.3021358869347655
+            "y": 7.061401241503109
+          - x: 2.3021358869347655
+            "y": 7.061401241503109
         location: location
+        startHeight: 2.3021358869347655
+        endHeight: 5.637376656633329
       properties:
+        endHeight:
+          format: double
+          type: number
         location:
           type: string
         paths:
           items:
             $ref: "#/components/schemas/FloorplanSpaceChangelogPath"
           type: array
+        startHeight:
+          format: double
+          type: number
       required:
       - location
       - paths
@@ -10675,28 +10683,32 @@ components:
         spaces:
         - paths:
           - points:
-            - x: 5.637376656633329
-              "y": 2.3021358869347655
-            - x: 5.637376656633329
-              "y": 2.3021358869347655
+            - x: 2.3021358869347655
+              "y": 7.061401241503109
+            - x: 2.3021358869347655
+              "y": 7.061401241503109
           - points:
-            - x: 5.637376656633329
-              "y": 2.3021358869347655
-            - x: 5.637376656633329
-              "y": 2.3021358869347655
+            - x: 2.3021358869347655
+              "y": 7.061401241503109
+            - x: 2.3021358869347655
+              "y": 7.061401241503109
           location: location
+          startHeight: 2.3021358869347655
+          endHeight: 5.637376656633329
         - paths:
           - points:
-            - x: 5.637376656633329
-              "y": 2.3021358869347655
-            - x: 5.637376656633329
-              "y": 2.3021358869347655
+            - x: 2.3021358869347655
+              "y": 7.061401241503109
+            - x: 2.3021358869347655
+              "y": 7.061401241503109
           - points:
-            - x: 5.637376656633329
-              "y": 2.3021358869347655
-            - x: 5.637376656633329
-              "y": 2.3021358869347655
+            - x: 2.3021358869347655
+              "y": 7.061401241503109
+            - x: 2.3021358869347655
+              "y": 7.061401241503109
           location: location
+          startHeight: 2.3021358869347655
+          endHeight: 5.637376656633329
       properties:
         spaces:
           items:
@@ -10722,25 +10734,30 @@ components:
         property: property
         spaces:
         - paths:
-          - - x: 5.637376656633329
-              "y": 2.3021358869347655
-            - x: 5.637376656633329
-              "y": 2.3021358869347655
-          - - x: 5.637376656633329
-              "y": 2.3021358869347655
-            - x: 5.637376656633329
-              "y": 2.3021358869347655
+          - - x: 2.3021358869347655
+              "y": 7.061401241503109
+            - x: 2.3021358869347655
+              "y": 7.061401241503109
+          - - x: 2.3021358869347655
+              "y": 7.061401241503109
+            - x: 2.3021358869347655
+              "y": 7.061401241503109
           location: location
+          startHeight: 9.301444243932576
+          endHeight: 5.637376656633329
         - paths:
-          - - x: 5.637376656633329
-              "y": 2.3021358869347655
-            - x: 5.637376656633329
-              "y": 2.3021358869347655
-          - - x: 5.637376656633329
-              "y": 2.3021358869347655
-            - x: 5.637376656633329
-              "y": 2.3021358869347655
+          - - x: 2.3021358869347655
+              "y": 7.061401241503109
+            - x: 2.3021358869347655
+              "y": 7.061401241503109
+          - - x: 2.3021358869347655
+              "y": 7.061401241503109
+            - x: 2.3021358869347655
+              "y": 7.061401241503109
           location: location
+          startHeight: 9.301444243932576
+          endHeight: 5.637376656633329
+        viewMode: 2d-and-3d
       properties:
         backgroundFile:
           description: "ID of the account file used as the background image, if one\
@@ -10765,6 +10782,14 @@ components:
           items:
             $ref: "#/components/schemas/FloorplanGetBodySpace"
           type: array
+        viewMode:
+          description: "Whether the floor plan can be shown in 2D, in 3D, or both.\
+            \ Defaults to 2d-and-3d."
+          enum:
+          - 2d-and-3d
+          - 3d-only
+          - 2d-only
+          type: string
       required:
       - createdAt
       - name
@@ -10772,6 +10797,7 @@ components:
       - property
       - propertyNode
       - spaces
+      - viewMode
     FloorplanGetBodyOverlayOffset:
       additionalProperties: false
       example:
@@ -10799,16 +10825,23 @@ components:
       additionalProperties: false
       example:
         paths:
-        - - x: 5.637376656633329
-            "y": 2.3021358869347655
-          - x: 5.637376656633329
-            "y": 2.3021358869347655
-        - - x: 5.637376656633329
-            "y": 2.3021358869347655
-          - x: 5.637376656633329
-            "y": 2.3021358869347655
+        - - x: 2.3021358869347655
+            "y": 7.061401241503109
+          - x: 2.3021358869347655
+            "y": 7.061401241503109
+        - - x: 2.3021358869347655
+            "y": 7.061401241503109
+          - x: 2.3021358869347655
+            "y": 7.061401241503109
         location: location
+        startHeight: 9.301444243932576
+        endHeight: 5.637376656633329
       properties:
+        endHeight:
+          description: "Height the space ends at in 3D, in the same units as its paths.\
+            \ Absent when the space uses the default heights."
+          format: double
+          type: number
         location:
           type: string
         paths:
@@ -10817,14 +10850,19 @@ components:
               $ref: "#/components/schemas/FloorplanGetBodySpacePoint"
             type: array
           type: array
+        startHeight:
+          description: "Height the space starts at in 3D, in the same units as its\
+            \ paths. Absent when the space uses the default heights."
+          format: double
+          type: number
       required:
       - location
       - paths
     FloorplanGetBodySpacePoint:
       additionalProperties: false
       example:
-        x: 5.637376656633329
-        "y": 2.3021358869347655
+        x: 2.3021358869347655
+        "y": 7.061401241503109
       properties:
         x:
           format: double
@@ -10855,28 +10893,33 @@ components:
           spaces:
           - paths:
             - points:
-              - x: 5.637376656633329
-                "y": 2.3021358869347655
-              - x: 5.637376656633329
-                "y": 2.3021358869347655
+              - x: 2.3021358869347655
+                "y": 7.061401241503109
+              - x: 2.3021358869347655
+                "y": 7.061401241503109
             - points:
-              - x: 5.637376656633329
-                "y": 2.3021358869347655
-              - x: 5.637376656633329
-                "y": 2.3021358869347655
+              - x: 2.3021358869347655
+                "y": 7.061401241503109
+              - x: 2.3021358869347655
+                "y": 7.061401241503109
             location: location
+            startHeight: 2.3021358869347655
+            endHeight: 5.637376656633329
           - paths:
             - points:
-              - x: 5.637376656633329
-                "y": 2.3021358869347655
-              - x: 5.637376656633329
-                "y": 2.3021358869347655
+              - x: 2.3021358869347655
+                "y": 7.061401241503109
+              - x: 2.3021358869347655
+                "y": 7.061401241503109
             - points:
-              - x: 5.637376656633329
-                "y": 2.3021358869347655
-              - x: 5.637376656633329
-                "y": 2.3021358869347655
+              - x: 2.3021358869347655
+                "y": 7.061401241503109
+              - x: 2.3021358869347655
+                "y": 7.061401241503109
             location: location
+            startHeight: 2.3021358869347655
+            endHeight: 5.637376656633329
+        viewMode: viewMode
       properties:
         backgroundFile:
           type: string
@@ -10895,6 +10938,8 @@ components:
           type: string
         spaces:
           $ref: "#/components/schemas/FloorplanCreateSpaceRepeated"
+        viewMode:
+          type: string
     FloorplanPatchResponseWrapperBody:
       additionalProperties: false
       type: object
@@ -10911,10 +10956,10 @@ components:
       additionalProperties: false
       example:
         points:
-        - x: 5.637376656633329
-          "y": 2.3021358869347655
-        - x: 5.637376656633329
-          "y": 2.3021358869347655
+        - x: 2.3021358869347655
+          "y": 7.061401241503109
+        - x: 2.3021358869347655
+          "y": 7.061401241503109
       properties:
         points:
           items:

@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **Property** | Pointer to **string** |  | [optional] 
 **PropertyNode** | Pointer to **string** |  | [optional] 
 **Spaces** | Pointer to [**FloorplanCreateSpaceRepeated**](FloorplanCreateSpaceRepeated.md) |  | [optional] 
+**ViewMode** | Pointer to **string** |  | [optional] 
 
 ## Methods
 
@@ -231,6 +232,31 @@ SetSpaces sets Spaces field to given value.
 `func (o *FloorplanPatchParamsBody) HasSpaces() bool`
 
 HasSpaces returns a boolean if a field has been set.
+
+### GetViewMode
+
+`func (o *FloorplanPatchParamsBody) GetViewMode() string`
+
+GetViewMode returns the ViewMode field if non-nil, zero value otherwise.
+
+### GetViewModeOk
+
+`func (o *FloorplanPatchParamsBody) GetViewModeOk() (*string, bool)`
+
+GetViewModeOk returns a tuple with the ViewMode field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetViewMode
+
+`func (o *FloorplanPatchParamsBody) SetViewMode(v string)`
+
+SetViewMode sets ViewMode field to given value.
+
+### HasViewMode
+
+`func (o *FloorplanPatchParamsBody) HasViewMode() bool`
+
+HasViewMode returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
