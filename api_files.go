@@ -282,9 +282,9 @@ type requestForFilesGetAccountFilesContent struct {
 /*
 GetAccountFilesContent Download an account file
 
-Returns the stored bytes of a file held against the account, with the `mimeType` recorded at upload as the `Content-Type`. Files belonging to other accounts are never returned.
+Returns the stored bytes of a file held against the account, with the `mimeType` recorded when the content was last stored as the `Content-Type`. Files belonging to other accounts are never returned.
 
-Served only from the user content host, so that a stored file is isolated from the application's own origin; any other host returns 404. The response always carries `Content-Disposition: attachment` and `Content-Security-Policy: default-src 'none'`, so a file is downloaded rather than rendered even when the browser could display it.
+Served only from the user content host, so that a stored file is isolated from the application's own origin; any other host returns 404. The response always carries `Content-Disposition: attachment` and `Content-Security-Policy: default-src 'none'`, so a file is downloaded rather than rendered even when the browser could display it. The response's `ETag` identifies this version of the content: send it back as `If-Match` when replacing the content, so that a change made by someone else in the meantime is not overwritten.
 
 The identifier must be one returned by the upload or list operations; a malformed identifier is rejected with 400 and an unknown one with 404. Requires the *View file storage* permission. Returns `403` (`file quarantined: it matched a virus signature`) when a rescan found the stored file matches a virus signature; the bytes are kept for investigation.
 */
@@ -581,6 +581,158 @@ func (a *FilesService) executeUpdateAccountFiles(r requestForFilesUpdateAccountF
 	localVarPostBody = r.accountFilePatchBody
 	if r.ctx != nil {
 		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "FilesAPIService.UpdateAccountFiles")
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type requestForFilesUpdateAccountFilesContent struct {
+	ctx context.Context
+	ApiService *FilesService
+	id string
+	ifMatch *string
+	filename *os.File
+	name *string
+}
+
+type FilesUpdateAccountFilesContentParams struct {
+	// The ETag returned when the file&#39;s content was read. The content is replaced only if it has not changed since.
+	IfMatch *string
+	// filename of the file being uploaded
+	Filename *os.File
+	// general purpose name for multipart form value
+	Name *string
+}
+
+/*
+UpdateAccountFilesContent Replace an account file's content
+
+Replaces the stored bytes of a file held against the account and returns the updated record, with the new version of the content as the `ETag`. Send the request as `multipart/form-data` with a single file field named `file`. The uploaded file's name is ignored: the file keeps its name and identifier, so anything already referencing it keeps working. `mimeType` is detected again from the new contents. Maximum file size is 25 MiB, and the content is rejected if a virus scan fails.
+
+Send the `ETag` returned when the content was read as `If-Match`. If the file has been replaced since then, the request is rejected with 412 and nothing changes; read the content again before deciding what to save. A missing `If-Match` is rejected with 422, and `*` with 400.
+
+The difference in size counts towards the account's 1 GiB storage quota, and content that would take the account past it is rejected with 413. A 409 means concurrent changes to the account's files kept changing its usage while the content was being replaced. The new content may already be stored, so read the content and its `ETag` again before deciding what to save: retrying with the same `If-Match` is rejected with 412 if it was. The identifier must be one returned by the upload or list operations; a malformed identifier is rejected with 400 and an unknown one with 404. A quarantined file cannot be replaced (403). Requires the *Edit file storage* permission.
+*/
+func (a *FilesService) UpdateAccountFilesContent(ctx context.Context, id string, params *FilesUpdateAccountFilesContentParams) (*Record, error) {
+	r := requestForFilesUpdateAccountFilesContent{
+		ApiService: a,
+		ctx: ctx,
+		id: id,
+	}
+	if params != nil {
+		r.ifMatch = params.IfMatch
+		r.filename = params.Filename
+		r.name = params.Name
+	}
+	result, _, err := a.executeUpdateAccountFilesContent(r)
+	return result, err
+}
+
+func (a *FilesService) executeUpdateAccountFilesContent(r requestForFilesUpdateAccountFilesContent) (*Record, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPut
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Record
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FilesAPIService.UpdateAccountFilesContent")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/account/files/{id}/content"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.ifMatch == nil {
+		return localVarReturnValue, nil, reportError("ifMatch is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"multipart/form-data"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	parameterAddToHeaderOrQuery(localVarHeaderParams, "If-Match", r.ifMatch, "simple", "")
+	var filenameLocalVarFormFileName string
+	var filenameLocalVarFileName     string
+	var filenameLocalVarFileBytes    []byte
+
+	filenameLocalVarFormFileName = "filename"
+	filenameLocalVarFile := r.filename
+
+	if filenameLocalVarFile != nil {
+		fbs, err := io.ReadAll(filenameLocalVarFile)
+		filenameLocalVarFile.Close()
+		if err != nil {
+			return localVarReturnValue, nil, err
+		}
+
+		filenameLocalVarFileBytes = fbs
+		filenameLocalVarFileName = filenameLocalVarFile.Name()
+		formFiles = append(formFiles, formFile{fileBytes: filenameLocalVarFileBytes, fileName: filenameLocalVarFileName, formFileName: filenameLocalVarFormFileName})
+	}
+	if r.name != nil {
+		parameterAddToHeaderOrQuery(localVarFormParams, "name", r.name, "", "")
+	}
+	if r.ctx != nil {
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "FilesAPIService.UpdateAccountFilesContent")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {

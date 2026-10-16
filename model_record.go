@@ -27,7 +27,7 @@ type Record struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Opaque identifier of the file, used to rename or delete it.
 	Id string `json:"id"`
-	// Media type detected from the file's contents at upload time, rather than from its name or the type the client declared.
+	// Media type detected from the file's contents when they were last stored, rather than from its name or the type the client declared.
 	MimeType string `json:"mimeType"`
 	// Display name of the file, taken from the uploaded file name and changeable afterwards.
 	Name string `json:"name"`

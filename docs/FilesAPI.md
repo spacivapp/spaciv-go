@@ -9,6 +9,7 @@ Method | HTTP request | Description
 [**GetAccountFilesContent**](FilesAPI.md#GetAccountFilesContent) | **Get** /v1/account/files/{id}/content | Download an account file
 [**ListAccountFiles**](FilesAPI.md#ListAccountFiles) | **Get** /v1/account/files | List the account&#39;s files
 [**UpdateAccountFiles**](FilesAPI.md#UpdateAccountFiles) | **Patch** /v1/account/files/{id} | Rename an account file
+[**UpdateAccountFilesContent**](FilesAPI.md#UpdateAccountFilesContent) | **Put** /v1/account/files/{id}/content | Replace an account file&#39;s content
 
 
 
@@ -334,6 +335,76 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## UpdateAccountFilesContent
+
+> Record UpdateAccountFilesContent(ctx, id, params)
+
+Replace an account file's content
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+	id :=  // string | 
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.Files.UpdateAccountFilesContent(context.Background(), id, nil)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `Files.UpdateAccountFilesContent`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `Files.UpdateAccountFilesContent`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**id** | **string** |  | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiUpdateAccountFilesContentRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+ **ifMatch** | **string** | The ETag returned when the file&#39;s content was read. The content is replaced only if it has not changed since. | 
+ **filename** | ***os.File** | filename of the file being uploaded | 
+ **name** | **string** | general purpose name for multipart form value | 
+
+### Return type
+
+[**Record**](Record.md)
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: multipart/form-data
 - **Accept**: application/json, application/problem+json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)

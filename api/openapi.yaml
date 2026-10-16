@@ -421,9 +421,9 @@ paths:
   /v1/account/files/{id}/content:
     get:
       description: |-
-        Returns the stored bytes of a file held against the account, with the `mimeType` recorded at upload as the `Content-Type`. Files belonging to other accounts are never returned.
+        Returns the stored bytes of a file held against the account, with the `mimeType` recorded when the content was last stored as the `Content-Type`. Files belonging to other accounts are never returned.
 
-        Served only from the user content host, so that a stored file is isolated from the application's own origin; any other host returns 404. The response always carries `Content-Disposition: attachment` and `Content-Security-Policy: default-src 'none'`, so a file is downloaded rather than rendered even when the browser could display it.
+        Served only from the user content host, so that a stored file is isolated from the application's own origin; any other host returns 404. The response always carries `Content-Disposition: attachment` and `Content-Security-Policy: default-src 'none'`, so a file is downloaded rather than rendered even when the browser could display it. The response's `ETag` identifies this version of the content: send it back as `If-Match` when replacing the content, so that a change made by someone else in the meantime is not overwritten.
 
         The identifier must be one returned by the upload or list operations; a malformed identifier is rejected with 400 and an unknown one with 404. Requires the *View file storage* permission. Returns `403` (`file quarantined: it matched a virus signature`) when a rescan found the stored file matches a virus signature; the bytes are kept for investigation.
       operationId: files_get-account-files-content
@@ -458,6 +458,11 @@ paths:
               schema:
                 type: string
               style: simple
+            ETag:
+              explode: false
+              schema:
+                type: string
+              style: simple
             X-Content-Type-Options:
               explode: false
               schema:
@@ -478,6 +483,62 @@ paths:
       tags:
       - Files
       x-sdk-params: false
+    put:
+      description: |-
+        Replaces the stored bytes of a file held against the account and returns the updated record, with the new version of the content as the `ETag`. Send the request as `multipart/form-data` with a single file field named `file`. The uploaded file's name is ignored: the file keeps its name and identifier, so anything already referencing it keeps working. `mimeType` is detected again from the new contents. Maximum file size is 25 MiB, and the content is rejected if a virus scan fails.
+
+        Send the `ETag` returned when the content was read as `If-Match`. If the file has been replaced since then, the request is rejected with 412 and nothing changes; read the content again before deciding what to save. A missing `If-Match` is rejected with 422, and `*` with 400.
+
+        The difference in size counts towards the account's 1 GiB storage quota, and content that would take the account past it is rejected with 413. A 409 means concurrent changes to the account's files kept changing its usage while the content was being replaced. The new content may already be stored, so read the content and its `ETag` again before deciding what to save: retrying with the same `If-Match` is rejected with 412 if it was. The identifier must be one returned by the upload or list operations; a malformed identifier is rejected with 400 and an unknown one with 404. A quarantined file cannot be replaced (403). Requires the *Edit file storage* permission.
+      operationId: files_update-account-files-content
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The ETag returned when the file's content was read. The content
+          is replaced only if it has not changed since.
+        explode: false
+        in: header
+        name: If-Match
+        required: true
+        schema:
+          description: The ETag returned when the file's content was read. The content
+            is replaced only if it has not changed since.
+          type: string
+        style: simple
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/files_create_account_files_request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Record"
+          description: OK
+          headers:
+            ETag:
+              explode: false
+              schema:
+                type: string
+              style: simple
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Replace an account file's content
+      tags:
+      - Files
+      x-sdk-params: true
   /v1/account/login-background:
     delete:
       description: "Removes the account's sign-in page background, so the sign-in\
@@ -13219,8 +13280,8 @@ components:
           description: "Opaque identifier of the file, used to rename or delete it."
           type: string
         mimeType:
-          description: "Media type detected from the file's contents at upload time,\
-            \ rather than from its name or the type the client declared."
+          description: "Media type detected from the file's contents when they were\
+            \ last stored, rather than from its name or the type the client declared."
           type: string
         name:
           description: "Display name of the file, taken from the uploaded file name\

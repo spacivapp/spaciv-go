@@ -6,7 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **CreatedAt** | **time.Time** | When the file was uploaded (RFC 3339). | 
 **Id** | **string** | Opaque identifier of the file, used to rename or delete it. | 
-**MimeType** | **string** | Media type detected from the file&#39;s contents at upload time, rather than from its name or the type the client declared. | 
+**MimeType** | **string** | Media type detected from the file&#39;s contents when they were last stored, rather than from its name or the type the client declared. | 
 **Name** | **string** | Display name of the file, taken from the uploaded file name and changeable afterwards. | 
 **QuarantineSignature** | Pointer to **string** | Name of the virus signature the file matched when it was quarantined. | [optional] 
 **QuarantinedAt** | Pointer to **time.Time** | When a rescan found the file matching a virus signature (RFC 3339). A quarantined file cannot be downloaded, but it can still be renamed or deleted. | [optional] 
