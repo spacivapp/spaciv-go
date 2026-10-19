@@ -3587,9 +3587,9 @@ paths:
       - Floor plans
       x-sdk-params: false
     get:
-      description: "Returns the floor plan's metadata, view mode, space overlay geometry\
-        \ with each space's 3D heights, and image offset. Returns an empty body (not\
-        \ 404) when the floor plan does not exist. Use `GET /v1/floorplans/{id}/images/{imageType}`\
+      description: "Returns the floor plan's metadata, view mode, scale, space overlay\
+        \ geometry with each space's 3D heights in metres, and image offset. Returns\
+        \ an empty body (not 404) when the floor plan does not exist. Use `GET /v1/floorplans/{id}/images/{imageType}`\
         \ to retrieve the drawing image. Requires the *View floorplans* permission."
       operationId: floor-plans_get
       parameters:
@@ -3619,7 +3619,7 @@ paths:
       x-sdk-params: false
     patch:
       description: |-
-        Partially updates the floor plan's name, linked property and node, creation timestamp, image overlay offset, background and foreground images, view mode, and space geometry. Only fields present in the request body are changed, and the request fails with `409` if the floor plan keeps changing while they are. When `spaces` is provided the entire space overlay is replaced. `viewMode` is one of `2d-and-3d`, `3d-only` or `2d-only`. A space's `startHeight` and `endHeight` are in the same units as its paths, must be set together and the end must be above the start; a space without them is drawn at a default height scaled to the floor plan. Requires the *Edit floorplans* permission.
+        Partially updates the floor plan's name, linked property and node, creation timestamp, image overlay offset, background and foreground images, view mode, scale, and space geometry. Only fields present in the request body are changed, and the request fails with `409` if the floor plan keeps changing while they are. When `spaces` is provided the entire space overlay is replaced. `viewMode` is one of `2d-and-3d`, `3d-only` or `2d-only`. `unitsPerMetre` is how many of the spaces' path units make one metre; `0` clears the scale. A space's `startHeightMetres` and `endHeightMetres` must be set together and the end must be above the start; a space without them is drawn at a default height. `startHeight` and `endHeight` are the same in the spaces' path units, from editors that predate metres, and follow the same rules. Requires the *Edit floorplans* permission.
 
         `backgroundFile` and `foregroundFile` take the ID of an image in the account's file storage (see `/v1/account/files`), or an empty string to remove the layer's image; choosing a file also requires the *View file storage* permission. The file must be a PNG, JPEG, GIF, WebP or SVG image of at most 4 MB that is not quarantined, otherwise the request fails with `422` (`403` when quarantined) and nothing is changed. Setting or removing a layer's file also deletes any image previously uploaded to that layer through `PUT /v1/floorplans/{id}/images/{imageType}`.
       operationId: floor-plans_update
@@ -10859,8 +10859,8 @@ components:
     FloorplanChangelogSpacePoint:
       additionalProperties: false
       example:
-        x: 2.3021358869347655
-        "y": 7.061401241503109
+        x: 7.061401241503109
+        "y": 9.301444243932576
       properties:
         x:
           format: double
@@ -10874,22 +10874,27 @@ components:
     FloorplanCreateSpace:
       additionalProperties: false
       example:
+        startHeightMetres: 9.301444243932576
         paths:
         - points:
-          - x: 2.3021358869347655
-            "y": 7.061401241503109
-          - x: 2.3021358869347655
-            "y": 7.061401241503109
+          - x: 7.061401241503109
+            "y": 9.301444243932576
+          - x: 7.061401241503109
+            "y": 9.301444243932576
         - points:
-          - x: 2.3021358869347655
-            "y": 7.061401241503109
-          - x: 2.3021358869347655
-            "y": 7.061401241503109
+          - x: 7.061401241503109
+            "y": 9.301444243932576
+          - x: 7.061401241503109
+            "y": 9.301444243932576
         location: location
-        startHeight: 2.3021358869347655
+        endHeightMetres: 2.3021358869347655
+        startHeight: 7.061401241503109
         endHeight: 5.637376656633329
       properties:
         endHeight:
+          format: double
+          type: number
+        endHeightMetres:
           format: double
           type: number
         location:
@@ -10901,6 +10906,9 @@ components:
         startHeight:
           format: double
           type: number
+        startHeightMetres:
+          format: double
+          type: number
       required:
       - location
       - paths
@@ -10908,33 +10916,37 @@ components:
       additionalProperties: false
       example:
         spaces:
-        - paths:
+        - startHeightMetres: 9.301444243932576
+          paths:
           - points:
-            - x: 2.3021358869347655
-              "y": 7.061401241503109
-            - x: 2.3021358869347655
-              "y": 7.061401241503109
+            - x: 7.061401241503109
+              "y": 9.301444243932576
+            - x: 7.061401241503109
+              "y": 9.301444243932576
           - points:
-            - x: 2.3021358869347655
-              "y": 7.061401241503109
-            - x: 2.3021358869347655
-              "y": 7.061401241503109
+            - x: 7.061401241503109
+              "y": 9.301444243932576
+            - x: 7.061401241503109
+              "y": 9.301444243932576
           location: location
-          startHeight: 2.3021358869347655
+          endHeightMetres: 2.3021358869347655
+          startHeight: 7.061401241503109
           endHeight: 5.637376656633329
-        - paths:
+        - startHeightMetres: 9.301444243932576
+          paths:
           - points:
-            - x: 2.3021358869347655
-              "y": 7.061401241503109
-            - x: 2.3021358869347655
-              "y": 7.061401241503109
+            - x: 7.061401241503109
+              "y": 9.301444243932576
+            - x: 7.061401241503109
+              "y": 9.301444243932576
           - points:
-            - x: 2.3021358869347655
-              "y": 7.061401241503109
-            - x: 2.3021358869347655
-              "y": 7.061401241503109
+            - x: 7.061401241503109
+              "y": 9.301444243932576
+            - x: 7.061401241503109
+              "y": 9.301444243932576
           location: location
-          startHeight: 2.3021358869347655
+          endHeightMetres: 2.3021358869347655
+          startHeight: 7.061401241503109
           endHeight: 5.637376656633329
       properties:
         spaces:
@@ -10956,33 +10968,38 @@ components:
           x: 1.4658129805029452
           scale: 6.027456183070403
           "y": 5.962133916683182
+        unitsPerMetre: 4.145608029883936
         backgroundFile: backgroundFile
         name: name
         property: property
         spaces:
-        - paths:
-          - - x: 2.3021358869347655
-              "y": 7.061401241503109
-            - x: 2.3021358869347655
-              "y": 7.061401241503109
-          - - x: 2.3021358869347655
-              "y": 7.061401241503109
-            - x: 2.3021358869347655
-              "y": 7.061401241503109
+        - startHeightMetres: 2.027123023002322
+          paths:
+          - - x: 7.061401241503109
+              "y": 9.301444243932576
+            - x: 7.061401241503109
+              "y": 9.301444243932576
+          - - x: 7.061401241503109
+              "y": 9.301444243932576
+            - x: 7.061401241503109
+              "y": 9.301444243932576
           location: location
-          startHeight: 9.301444243932576
+          endHeightMetres: 2.3021358869347655
+          startHeight: 3.616076749251911
           endHeight: 5.637376656633329
-        - paths:
-          - - x: 2.3021358869347655
-              "y": 7.061401241503109
-            - x: 2.3021358869347655
-              "y": 7.061401241503109
-          - - x: 2.3021358869347655
-              "y": 7.061401241503109
-            - x: 2.3021358869347655
-              "y": 7.061401241503109
+        - startHeightMetres: 2.027123023002322
+          paths:
+          - - x: 7.061401241503109
+              "y": 9.301444243932576
+            - x: 7.061401241503109
+              "y": 9.301444243932576
+          - - x: 7.061401241503109
+              "y": 9.301444243932576
+            - x: 7.061401241503109
+              "y": 9.301444243932576
           location: location
-          startHeight: 9.301444243932576
+          endHeightMetres: 2.3021358869347655
+          startHeight: 3.616076749251911
           endHeight: 5.637376656633329
         viewMode: 2d-and-3d
       properties:
@@ -11009,6 +11026,11 @@ components:
           items:
             $ref: "#/components/schemas/FloorplanGetBodySpace"
           type: array
+        unitsPerMetre:
+          description: "How many of the spaces' path units make one metre, which scales\
+            \ space heights in 3D. Absent until the floor plan's scale has been set."
+          format: double
+          type: number
         viewMode:
           description: "Whether the floor plan can be shown in 2D, in 3D, or both.\
             \ Defaults to 2d-and-3d."
@@ -11051,22 +11073,30 @@ components:
     FloorplanGetBodySpace:
       additionalProperties: false
       example:
+        startHeightMetres: 2.027123023002322
         paths:
-        - - x: 2.3021358869347655
-            "y": 7.061401241503109
-          - x: 2.3021358869347655
-            "y": 7.061401241503109
-        - - x: 2.3021358869347655
-            "y": 7.061401241503109
-          - x: 2.3021358869347655
-            "y": 7.061401241503109
+        - - x: 7.061401241503109
+            "y": 9.301444243932576
+          - x: 7.061401241503109
+            "y": 9.301444243932576
+        - - x: 7.061401241503109
+            "y": 9.301444243932576
+          - x: 7.061401241503109
+            "y": 9.301444243932576
         location: location
-        startHeight: 9.301444243932576
+        endHeightMetres: 2.3021358869347655
+        startHeight: 3.616076749251911
         endHeight: 5.637376656633329
       properties:
         endHeight:
-          description: "Height the space ends at in 3D, in the same units as its paths.\
-            \ Absent when the space uses the default heights."
+          description: "Height the space ends at in 3D, in the spaces' path units,\
+            \ as written by editors that predate metres. Absent once converted to\
+            \ metres."
+          format: double
+          type: number
+        endHeightMetres:
+          description: "Height the space ends at in 3D, in metres. Absent when the\
+            \ space uses the default heights."
           format: double
           type: number
         location:
@@ -11078,8 +11108,14 @@ components:
             type: array
           type: array
         startHeight:
-          description: "Height the space starts at in 3D, in the same units as its\
-            \ paths. Absent when the space uses the default heights."
+          description: "Height the space starts at in 3D, in the spaces' path units,\
+            \ as written by editors that predate metres. Absent once converted to\
+            \ metres."
+          format: double
+          type: number
+        startHeightMetres:
+          description: "Height the space starts at in 3D, in metres. Absent when the\
+            \ space uses the default heights."
           format: double
           type: number
       required:
@@ -11088,8 +11124,8 @@ components:
     FloorplanGetBodySpacePoint:
       additionalProperties: false
       example:
-        x: 2.3021358869347655
-        "y": 7.061401241503109
+        x: 7.061401241503109
+        "y": 9.301444243932576
       properties:
         x:
           format: double
@@ -11113,38 +11149,43 @@ components:
           x: 1.4658129805029452
           scale: 6.027456183070403
           "y": 5.962133916683182
+        unitsPerMetre: 3.616076749251911
         backgroundFile: backgroundFile
         name: name
         property: property
         spaces:
           spaces:
-          - paths:
+          - startHeightMetres: 9.301444243932576
+            paths:
             - points:
-              - x: 2.3021358869347655
-                "y": 7.061401241503109
-              - x: 2.3021358869347655
-                "y": 7.061401241503109
+              - x: 7.061401241503109
+                "y": 9.301444243932576
+              - x: 7.061401241503109
+                "y": 9.301444243932576
             - points:
-              - x: 2.3021358869347655
-                "y": 7.061401241503109
-              - x: 2.3021358869347655
-                "y": 7.061401241503109
+              - x: 7.061401241503109
+                "y": 9.301444243932576
+              - x: 7.061401241503109
+                "y": 9.301444243932576
             location: location
-            startHeight: 2.3021358869347655
+            endHeightMetres: 2.3021358869347655
+            startHeight: 7.061401241503109
             endHeight: 5.637376656633329
-          - paths:
+          - startHeightMetres: 9.301444243932576
+            paths:
             - points:
-              - x: 2.3021358869347655
-                "y": 7.061401241503109
-              - x: 2.3021358869347655
-                "y": 7.061401241503109
+              - x: 7.061401241503109
+                "y": 9.301444243932576
+              - x: 7.061401241503109
+                "y": 9.301444243932576
             - points:
-              - x: 2.3021358869347655
-                "y": 7.061401241503109
-              - x: 2.3021358869347655
-                "y": 7.061401241503109
+              - x: 7.061401241503109
+                "y": 9.301444243932576
+              - x: 7.061401241503109
+                "y": 9.301444243932576
             location: location
-            startHeight: 2.3021358869347655
+            endHeightMetres: 2.3021358869347655
+            startHeight: 7.061401241503109
             endHeight: 5.637376656633329
         viewMode: viewMode
       properties:
@@ -11165,6 +11206,9 @@ components:
           type: string
         spaces:
           $ref: "#/components/schemas/FloorplanCreateSpaceRepeated"
+        unitsPerMetre:
+          format: double
+          type: number
         viewMode:
           type: string
     FloorplanPatchResponseWrapperBody:
@@ -11183,10 +11227,10 @@ components:
       additionalProperties: false
       example:
         points:
-        - x: 2.3021358869347655
-          "y": 7.061401241503109
-        - x: 2.3021358869347655
-          "y": 7.061401241503109
+        - x: 7.061401241503109
+          "y": 9.301444243932576
+        - x: 7.061401241503109
+          "y": 9.301444243932576
       properties:
         points:
           items:

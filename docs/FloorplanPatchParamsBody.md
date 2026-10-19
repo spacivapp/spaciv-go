@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **Property** | Pointer to **string** |  | [optional] 
 **PropertyNode** | Pointer to **string** |  | [optional] 
 **Spaces** | Pointer to [**FloorplanCreateSpaceRepeated**](FloorplanCreateSpaceRepeated.md) |  | [optional] 
+**UnitsPerMetre** | Pointer to **float64** |  | [optional] 
 **ViewMode** | Pointer to **string** |  | [optional] 
 
 ## Methods
@@ -232,6 +233,31 @@ SetSpaces sets Spaces field to given value.
 `func (o *FloorplanPatchParamsBody) HasSpaces() bool`
 
 HasSpaces returns a boolean if a field has been set.
+
+### GetUnitsPerMetre
+
+`func (o *FloorplanPatchParamsBody) GetUnitsPerMetre() float64`
+
+GetUnitsPerMetre returns the UnitsPerMetre field if non-nil, zero value otherwise.
+
+### GetUnitsPerMetreOk
+
+`func (o *FloorplanPatchParamsBody) GetUnitsPerMetreOk() (*float64, bool)`
+
+GetUnitsPerMetreOk returns a tuple with the UnitsPerMetre field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetUnitsPerMetre
+
+`func (o *FloorplanPatchParamsBody) SetUnitsPerMetre(v float64)`
+
+SetUnitsPerMetre sets UnitsPerMetre field to given value.
+
+### HasUnitsPerMetre
+
+`func (o *FloorplanPatchParamsBody) HasUnitsPerMetre() bool`
+
+HasUnitsPerMetre returns a boolean if a field has been set.
 
 ### GetViewMode
 

@@ -32,6 +32,8 @@ type FloorplanGetBody struct {
 	Property string `json:"property"`
 	PropertyNode string `json:"propertyNode"`
 	Spaces []FloorplanGetBodySpace `json:"spaces"`
+	// How many of the spaces' path units make one metre, which scales space heights in 3D. Absent until the floor plan's scale has been set.
+	UnitsPerMetre *float64 `json:"unitsPerMetre,omitempty"`
 	// Whether the floor plan can be shown in 2D, in 3D, or both. Defaults to 2d-and-3d.
 	ViewMode string `json:"viewMode"`
 }
@@ -270,6 +272,38 @@ func (o *FloorplanGetBody) SetSpaces(v []FloorplanGetBodySpace) {
 	o.Spaces = v
 }
 
+// GetUnitsPerMetre returns the UnitsPerMetre field value if set, zero value otherwise.
+func (o *FloorplanGetBody) GetUnitsPerMetre() float64 {
+	if o == nil || IsNil(o.UnitsPerMetre) {
+		var ret float64
+		return ret
+	}
+	return *o.UnitsPerMetre
+}
+
+// GetUnitsPerMetreOk returns a tuple with the UnitsPerMetre field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *FloorplanGetBody) GetUnitsPerMetreOk() (*float64, bool) {
+	if o == nil || IsNil(o.UnitsPerMetre) {
+		return nil, false
+	}
+	return o.UnitsPerMetre, true
+}
+
+// HasUnitsPerMetre returns a boolean if a field has been set.
+func (o *FloorplanGetBody) HasUnitsPerMetre() bool {
+	if o != nil && !IsNil(o.UnitsPerMetre) {
+		return true
+	}
+
+	return false
+}
+
+// SetUnitsPerMetre gets a reference to the given float64 and assigns it to the UnitsPerMetre field.
+func (o *FloorplanGetBody) SetUnitsPerMetre(v float64) {
+	o.UnitsPerMetre = &v
+}
+
 // GetViewMode returns the ViewMode field value
 func (o *FloorplanGetBody) GetViewMode() string {
 	if o == nil {
@@ -316,6 +350,9 @@ func (o FloorplanGetBody) ToMap() (map[string]interface{}, error) {
 	toSerialize["property"] = o.Property
 	toSerialize["propertyNode"] = o.PropertyNode
 	toSerialize["spaces"] = o.Spaces
+	if !IsNil(o.UnitsPerMetre) {
+		toSerialize["unitsPerMetre"] = o.UnitsPerMetre
+	}
 	toSerialize["viewMode"] = o.ViewMode
 	return toSerialize, nil
 }

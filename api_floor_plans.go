@@ -249,7 +249,7 @@ type requestForFloorPlansGet struct {
 /*
 Get Get a floor plan
 
-Returns the floor plan's metadata, view mode, space overlay geometry with each space's 3D heights, and image offset. Returns an empty body (not 404) when the floor plan does not exist. Use `GET /v1/floorplans/{id}/images/{imageType}` to retrieve the drawing image. Requires the *View floorplans* permission.
+Returns the floor plan's metadata, view mode, scale, space overlay geometry with each space's 3D heights in metres, and image offset. Returns an empty body (not 404) when the floor plan does not exist. Use `GET /v1/floorplans/{id}/images/{imageType}` to retrieve the drawing image. Requires the *View floorplans* permission.
 */
 func (a *FloorPlansService) Get(ctx context.Context, id string) (*FloorplanGetBody, error) {
 	r := requestForFloorPlansGet{
@@ -580,7 +580,7 @@ type requestForFloorPlansUpdate struct {
 /*
 Update Update a floor plan
 
-Partially updates the floor plan's name, linked property and node, creation timestamp, image overlay offset, background and foreground images, view mode, and space geometry. Only fields present in the request body are changed, and the request fails with `409` if the floor plan keeps changing while they are. When `spaces` is provided the entire space overlay is replaced. `viewMode` is one of `2d-and-3d`, `3d-only` or `2d-only`. A space's `startHeight` and `endHeight` are in the same units as its paths, must be set together and the end must be above the start; a space without them is drawn at a default height scaled to the floor plan. Requires the *Edit floorplans* permission.
+Partially updates the floor plan's name, linked property and node, creation timestamp, image overlay offset, background and foreground images, view mode, scale, and space geometry. Only fields present in the request body are changed, and the request fails with `409` if the floor plan keeps changing while they are. When `spaces` is provided the entire space overlay is replaced. `viewMode` is one of `2d-and-3d`, `3d-only` or `2d-only`. `unitsPerMetre` is how many of the spaces' path units make one metre; `0` clears the scale. A space's `startHeightMetres` and `endHeightMetres` must be set together and the end must be above the start; a space without them is drawn at a default height. `startHeight` and `endHeight` are the same in the spaces' path units, from editors that predate metres, and follow the same rules. Requires the *Edit floorplans* permission.
 
 `backgroundFile` and `foregroundFile` take the ID of an image in the account's file storage (see `/v1/account/files`), or an empty string to remove the layer's image; choosing a file also requires the *View file storage* permission. The file must be a PNG, JPEG, GIF, WebP or SVG image of at most 4 MB that is not quarantined, otherwise the request fails with `422` (`403` when quarantined) and nothing is changed. Setting or removing a layer's file also deletes any image previously uploaded to that layer through `PUT /v1/floorplans/{id}/images/{imageType}`.
 */

@@ -28,6 +28,7 @@ type FloorplanPatchParamsBody struct {
 	Property *string `json:"property,omitempty"`
 	PropertyNode *string `json:"propertyNode,omitempty"`
 	Spaces *FloorplanCreateSpaceRepeated `json:"spaces,omitempty"`
+	UnitsPerMetre *float64 `json:"unitsPerMetre,omitempty"`
 	ViewMode *string `json:"viewMode,omitempty"`
 }
 
@@ -304,6 +305,38 @@ func (o *FloorplanPatchParamsBody) SetSpaces(v FloorplanCreateSpaceRepeated) {
 	o.Spaces = &v
 }
 
+// GetUnitsPerMetre returns the UnitsPerMetre field value if set, zero value otherwise.
+func (o *FloorplanPatchParamsBody) GetUnitsPerMetre() float64 {
+	if o == nil || IsNil(o.UnitsPerMetre) {
+		var ret float64
+		return ret
+	}
+	return *o.UnitsPerMetre
+}
+
+// GetUnitsPerMetreOk returns a tuple with the UnitsPerMetre field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *FloorplanPatchParamsBody) GetUnitsPerMetreOk() (*float64, bool) {
+	if o == nil || IsNil(o.UnitsPerMetre) {
+		return nil, false
+	}
+	return o.UnitsPerMetre, true
+}
+
+// HasUnitsPerMetre returns a boolean if a field has been set.
+func (o *FloorplanPatchParamsBody) HasUnitsPerMetre() bool {
+	if o != nil && !IsNil(o.UnitsPerMetre) {
+		return true
+	}
+
+	return false
+}
+
+// SetUnitsPerMetre gets a reference to the given float64 and assigns it to the UnitsPerMetre field.
+func (o *FloorplanPatchParamsBody) SetUnitsPerMetre(v float64) {
+	o.UnitsPerMetre = &v
+}
+
 // GetViewMode returns the ViewMode field value if set, zero value otherwise.
 func (o *FloorplanPatchParamsBody) GetViewMode() string {
 	if o == nil || IsNil(o.ViewMode) {
@@ -369,6 +402,9 @@ func (o FloorplanPatchParamsBody) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.Spaces) {
 		toSerialize["spaces"] = o.Spaces
+	}
+	if !IsNil(o.UnitsPerMetre) {
+		toSerialize["unitsPerMetre"] = o.UnitsPerMetre
 	}
 	if !IsNil(o.ViewMode) {
 		toSerialize["viewMode"] = o.ViewMode

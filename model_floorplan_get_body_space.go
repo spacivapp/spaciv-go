@@ -22,12 +22,16 @@ var _ MappedNullable = &FloorplanGetBodySpace{}
 
 // FloorplanGetBodySpace struct for FloorplanGetBodySpace
 type FloorplanGetBodySpace struct {
-	// Height the space ends at in 3D, in the same units as its paths. Absent when the space uses the default heights.
+	// Height the space ends at in 3D, in the spaces' path units, as written by editors that predate metres. Absent once converted to metres.
 	EndHeight *float64 `json:"endHeight,omitempty"`
+	// Height the space ends at in 3D, in metres. Absent when the space uses the default heights.
+	EndHeightMetres *float64 `json:"endHeightMetres,omitempty"`
 	Location string `json:"location"`
 	Paths [][]FloorplanGetBodySpacePoint `json:"paths"`
-	// Height the space starts at in 3D, in the same units as its paths. Absent when the space uses the default heights.
+	// Height the space starts at in 3D, in the spaces' path units, as written by editors that predate metres. Absent once converted to metres.
 	StartHeight *float64 `json:"startHeight,omitempty"`
+	// Height the space starts at in 3D, in metres. Absent when the space uses the default heights.
+	StartHeightMetres *float64 `json:"startHeightMetres,omitempty"`
 }
 
 type _FloorplanGetBodySpace FloorplanGetBodySpace
@@ -81,6 +85,38 @@ func (o *FloorplanGetBodySpace) HasEndHeight() bool {
 // SetEndHeight gets a reference to the given float64 and assigns it to the EndHeight field.
 func (o *FloorplanGetBodySpace) SetEndHeight(v float64) {
 	o.EndHeight = &v
+}
+
+// GetEndHeightMetres returns the EndHeightMetres field value if set, zero value otherwise.
+func (o *FloorplanGetBodySpace) GetEndHeightMetres() float64 {
+	if o == nil || IsNil(o.EndHeightMetres) {
+		var ret float64
+		return ret
+	}
+	return *o.EndHeightMetres
+}
+
+// GetEndHeightMetresOk returns a tuple with the EndHeightMetres field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *FloorplanGetBodySpace) GetEndHeightMetresOk() (*float64, bool) {
+	if o == nil || IsNil(o.EndHeightMetres) {
+		return nil, false
+	}
+	return o.EndHeightMetres, true
+}
+
+// HasEndHeightMetres returns a boolean if a field has been set.
+func (o *FloorplanGetBodySpace) HasEndHeightMetres() bool {
+	if o != nil && !IsNil(o.EndHeightMetres) {
+		return true
+	}
+
+	return false
+}
+
+// SetEndHeightMetres gets a reference to the given float64 and assigns it to the EndHeightMetres field.
+func (o *FloorplanGetBodySpace) SetEndHeightMetres(v float64) {
+	o.EndHeightMetres = &v
 }
 
 // GetLocation returns the Location field value
@@ -163,6 +199,38 @@ func (o *FloorplanGetBodySpace) SetStartHeight(v float64) {
 	o.StartHeight = &v
 }
 
+// GetStartHeightMetres returns the StartHeightMetres field value if set, zero value otherwise.
+func (o *FloorplanGetBodySpace) GetStartHeightMetres() float64 {
+	if o == nil || IsNil(o.StartHeightMetres) {
+		var ret float64
+		return ret
+	}
+	return *o.StartHeightMetres
+}
+
+// GetStartHeightMetresOk returns a tuple with the StartHeightMetres field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *FloorplanGetBodySpace) GetStartHeightMetresOk() (*float64, bool) {
+	if o == nil || IsNil(o.StartHeightMetres) {
+		return nil, false
+	}
+	return o.StartHeightMetres, true
+}
+
+// HasStartHeightMetres returns a boolean if a field has been set.
+func (o *FloorplanGetBodySpace) HasStartHeightMetres() bool {
+	if o != nil && !IsNil(o.StartHeightMetres) {
+		return true
+	}
+
+	return false
+}
+
+// SetStartHeightMetres gets a reference to the given float64 and assigns it to the StartHeightMetres field.
+func (o *FloorplanGetBodySpace) SetStartHeightMetres(v float64) {
+	o.StartHeightMetres = &v
+}
+
 func (o FloorplanGetBodySpace) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -176,10 +244,16 @@ func (o FloorplanGetBodySpace) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.EndHeight) {
 		toSerialize["endHeight"] = o.EndHeight
 	}
+	if !IsNil(o.EndHeightMetres) {
+		toSerialize["endHeightMetres"] = o.EndHeightMetres
+	}
 	toSerialize["location"] = o.Location
 	toSerialize["paths"] = o.Paths
 	if !IsNil(o.StartHeight) {
 		toSerialize["startHeight"] = o.StartHeight
+	}
+	if !IsNil(o.StartHeightMetres) {
+		toSerialize["startHeightMetres"] = o.StartHeightMetres
 	}
 	return toSerialize, nil
 }

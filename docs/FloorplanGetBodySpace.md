@@ -4,10 +4,12 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**EndHeight** | Pointer to **float64** | Height the space ends at in 3D, in the same units as its paths. Absent when the space uses the default heights. | [optional] 
+**EndHeight** | Pointer to **float64** | Height the space ends at in 3D, in the spaces&#39; path units, as written by editors that predate metres. Absent once converted to metres. | [optional] 
+**EndHeightMetres** | Pointer to **float64** | Height the space ends at in 3D, in metres. Absent when the space uses the default heights. | [optional] 
 **Location** | **string** |  | 
 **Paths** | [**[][]FloorplanGetBodySpacePoint**]([]FloorplanGetBodySpacePoint.md) |  | 
-**StartHeight** | Pointer to **float64** | Height the space starts at in 3D, in the same units as its paths. Absent when the space uses the default heights. | [optional] 
+**StartHeight** | Pointer to **float64** | Height the space starts at in 3D, in the spaces&#39; path units, as written by editors that predate metres. Absent once converted to metres. | [optional] 
+**StartHeightMetres** | Pointer to **float64** | Height the space starts at in 3D, in metres. Absent when the space uses the default heights. | [optional] 
 
 ## Methods
 
@@ -52,6 +54,31 @@ SetEndHeight sets EndHeight field to given value.
 `func (o *FloorplanGetBodySpace) HasEndHeight() bool`
 
 HasEndHeight returns a boolean if a field has been set.
+
+### GetEndHeightMetres
+
+`func (o *FloorplanGetBodySpace) GetEndHeightMetres() float64`
+
+GetEndHeightMetres returns the EndHeightMetres field if non-nil, zero value otherwise.
+
+### GetEndHeightMetresOk
+
+`func (o *FloorplanGetBodySpace) GetEndHeightMetresOk() (*float64, bool)`
+
+GetEndHeightMetresOk returns a tuple with the EndHeightMetres field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetEndHeightMetres
+
+`func (o *FloorplanGetBodySpace) SetEndHeightMetres(v float64)`
+
+SetEndHeightMetres sets EndHeightMetres field to given value.
+
+### HasEndHeightMetres
+
+`func (o *FloorplanGetBodySpace) HasEndHeightMetres() bool`
+
+HasEndHeightMetres returns a boolean if a field has been set.
 
 ### GetLocation
 
@@ -117,6 +144,31 @@ SetStartHeight sets StartHeight field to given value.
 `func (o *FloorplanGetBodySpace) HasStartHeight() bool`
 
 HasStartHeight returns a boolean if a field has been set.
+
+### GetStartHeightMetres
+
+`func (o *FloorplanGetBodySpace) GetStartHeightMetres() float64`
+
+GetStartHeightMetres returns the StartHeightMetres field if non-nil, zero value otherwise.
+
+### GetStartHeightMetresOk
+
+`func (o *FloorplanGetBodySpace) GetStartHeightMetresOk() (*float64, bool)`
+
+GetStartHeightMetresOk returns a tuple with the StartHeightMetres field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetStartHeightMetres
+
+`func (o *FloorplanGetBodySpace) SetStartHeightMetres(v float64)`
+
+SetStartHeightMetres sets StartHeightMetres field to given value.
+
+### HasStartHeightMetres
+
+`func (o *FloorplanGetBodySpace) HasStartHeightMetres() bool`
+
+HasStartHeightMetres returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

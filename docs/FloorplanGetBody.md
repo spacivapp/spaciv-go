@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **Property** | **string** |  | 
 **PropertyNode** | **string** |  | 
 **Spaces** | [**[]FloorplanGetBodySpace**](FloorplanGetBodySpace.md) |  | 
+**UnitsPerMetre** | Pointer to **float64** | How many of the spaces&#39; path units make one metre, which scales space heights in 3D. Absent until the floor plan&#39;s scale has been set. | [optional] 
 **ViewMode** | **string** | Whether the floor plan can be shown in 2D, in 3D, or both. Defaults to 2d-and-3d. | 
 
 ## Methods
@@ -202,6 +203,31 @@ and a boolean to check if the value has been set.
 
 SetSpaces sets Spaces field to given value.
 
+
+### GetUnitsPerMetre
+
+`func (o *FloorplanGetBody) GetUnitsPerMetre() float64`
+
+GetUnitsPerMetre returns the UnitsPerMetre field if non-nil, zero value otherwise.
+
+### GetUnitsPerMetreOk
+
+`func (o *FloorplanGetBody) GetUnitsPerMetreOk() (*float64, bool)`
+
+GetUnitsPerMetreOk returns a tuple with the UnitsPerMetre field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetUnitsPerMetre
+
+`func (o *FloorplanGetBody) SetUnitsPerMetre(v float64)`
+
+SetUnitsPerMetre sets UnitsPerMetre field to given value.
+
+### HasUnitsPerMetre
+
+`func (o *FloorplanGetBody) HasUnitsPerMetre() bool`
+
+HasUnitsPerMetre returns a boolean if a field has been set.
 
 ### GetViewMode
 
