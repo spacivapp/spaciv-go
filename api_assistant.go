@@ -32,7 +32,7 @@ type requestForAssistantCreateChat struct {
 /*
 CreateChat Send a chat message
 
-Submits a message to the assistant and dispatches it for asynchronous processing. Returns a `conversationId` and a `requestId` immediately; the reply arrives out-of-band, through `GET /v1/assistant/conversations/{id}/poll`. If `conversationId` is omitted a new conversation is started. `attachmentFileIds` attaches up to 10 distinct files from account file storage and requires View file storage permission. Files cannot be attached while the account has turned the assistant's tools off. Requires the *AI assistant* permission.
+Submits a message to the assistant and dispatches it for asynchronous processing. Returns a `conversationId` and a `requestId` immediately; the reply arrives out-of-band, through `GET /v1/assistant/conversations/{id}/poll`. If `conversationId` is omitted a new conversation is started. `attachmentFileIds` attaches up to 10 distinct files from account file storage and requires View file storage permission. Files cannot be attached while the account has turned the assistant's tools off. Returns `409` if `conversationId` names a conversation that cannot take messages: a subsession the assistant started for a tool call, which only ever answers the task it was given, or a deleted conversation. Requires the *AI assistant* permission.
 */
 func (a *AssistantService) CreateChat(ctx context.Context, assistantChatReq AssistantChatReq) (*AssistantChatRes, error) {
 	r := requestForAssistantCreateChat{
@@ -139,7 +139,7 @@ type requestForAssistantDeleteConversations struct {
 /*
 DeleteConversations Delete a conversation
 
-Permanently removes a conversation and all its messages. Returns `404` if the conversation does not exist. Requires the *AI assistant* permission.
+Permanently removes a conversation, all its messages, and every subsession it started. Returns `404` if the conversation does not exist, and `409` if it is a subsession, which is deleted only with the conversation that started it. Requires the *AI assistant* permission.
 */
 func (a *AssistantService) DeleteConversations(ctx context.Context, id string) error {
 	r := requestForAssistantDeleteConversations{
@@ -338,7 +338,7 @@ type requestForAssistantGetConversationsTranscript struct {
 /*
 GetConversationsTranscript Get a conversation's transcript
 
-Returns the conversation as it is stored, for debugging and evaluating the assistant: every message the assistant has been shown, including the results of its tool calls and the ids that pair each result with its call, and the summary that replaces the earliest messages once the conversation has been compacted. Returns `404` if the conversation does not exist. Requires the *AI assistant* and *Download AI assistant conversation* permissions.
+Returns the conversation as it is stored, for debugging and evaluating the assistant: every message the assistant has been shown, including the results of its tool calls and the ids that pair each result with its call, the summary that replaces the earliest messages once the conversation has been compacted, and the stored conversation of every subsession the assistant handed a task to. Returns `404` if the conversation does not exist. Requires the *AI assistant* and *Download AI assistant conversation* permissions.
 */
 func (a *AssistantService) GetConversationsTranscript(ctx context.Context, id string) (*AssistantTranscriptBody, error) {
 	r := requestForAssistantGetConversationsTranscript{
@@ -768,7 +768,7 @@ type requestForAssistantStopConversations struct {
 /*
 StopConversations Stop the running turn
 
-Asks the assistant to stop the turn it is working on. The turn ends at its next step - a tool call already sent finishes and is recorded - so the conversation stays usable and keeps everything the turn did before it was stopped. Succeeds with nothing to do if no turn is running. Returns `404` if the conversation does not exist. Requires the *AI assistant* permission.
+Asks the assistant to stop the turn it is working on. The turn ends at its next step - a tool call already sent finishes and is recorded - so the conversation stays usable and keeps everything the turn did before it was stopped. Succeeds with nothing to do if no turn is running. Stopping a conversation also stops a subsession it is running. Returns `404` if the conversation does not exist, and `409` if it is a subsession, which is stopped only by stopping the conversation that started it. Requires the *AI assistant* permission.
 */
 func (a *AssistantService) StopConversations(ctx context.Context, id string) error {
 	r := requestForAssistantStopConversations{

@@ -28,6 +28,10 @@ type AssistantChatPollBody struct {
 	FinishedToolCallIds []string `json:"finishedToolCallIds"`
 	Messages []AssistantChatPollMessage `json:"messages"`
 	Status string `json:"status"`
+	// While a subsession is running, how many messages it has recorded so far, which grows with each of its steps even when it calls the same tool again. Zero when no subsession is running, including once it has ended and before the turn has recorded its result.
+	SubsessionSteps int64 `json:"subsessionSteps"`
+	// While a subsession is running, the tool it is running now. Empty while it is thinking, and when no subsession is running. The running subsession is the run_subsession action whose toolCallId is not yet among the finished tool calls.
+	SubsessionTool string `json:"subsessionTool"`
 }
 
 type _AssistantChatPollBody AssistantChatPollBody
@@ -36,12 +40,14 @@ type _AssistantChatPollBody AssistantChatPollBody
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAssistantChatPollBody(actions []AssistantChatPollAction, finishedToolCallIds []string, messages []AssistantChatPollMessage, status string) *AssistantChatPollBody {
+func NewAssistantChatPollBody(actions []AssistantChatPollAction, finishedToolCallIds []string, messages []AssistantChatPollMessage, status string, subsessionSteps int64, subsessionTool string) *AssistantChatPollBody {
 	this := AssistantChatPollBody{}
 	this.Actions = actions
 	this.FinishedToolCallIds = finishedToolCallIds
 	this.Messages = messages
 	this.Status = status
+	this.SubsessionSteps = subsessionSteps
+	this.SubsessionTool = subsessionTool
 	return &this
 }
 
@@ -181,6 +187,54 @@ func (o *AssistantChatPollBody) SetStatus(v string) {
 	o.Status = v
 }
 
+// GetSubsessionSteps returns the SubsessionSteps field value
+func (o *AssistantChatPollBody) GetSubsessionSteps() int64 {
+	if o == nil {
+		var ret int64
+		return ret
+	}
+
+	return o.SubsessionSteps
+}
+
+// GetSubsessionStepsOk returns a tuple with the SubsessionSteps field value
+// and a boolean to check if the value has been set.
+func (o *AssistantChatPollBody) GetSubsessionStepsOk() (*int64, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.SubsessionSteps, true
+}
+
+// SetSubsessionSteps sets field value
+func (o *AssistantChatPollBody) SetSubsessionSteps(v int64) {
+	o.SubsessionSteps = v
+}
+
+// GetSubsessionTool returns the SubsessionTool field value
+func (o *AssistantChatPollBody) GetSubsessionTool() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.SubsessionTool
+}
+
+// GetSubsessionToolOk returns a tuple with the SubsessionTool field value
+// and a boolean to check if the value has been set.
+func (o *AssistantChatPollBody) GetSubsessionToolOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.SubsessionTool, true
+}
+
+// SetSubsessionTool sets field value
+func (o *AssistantChatPollBody) SetSubsessionTool(v string) {
+	o.SubsessionTool = v
+}
+
 func (o AssistantChatPollBody) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -198,6 +252,8 @@ func (o AssistantChatPollBody) ToMap() (map[string]interface{}, error) {
 	toSerialize["finishedToolCallIds"] = o.FinishedToolCallIds
 	toSerialize["messages"] = o.Messages
 	toSerialize["status"] = o.Status
+	toSerialize["subsessionSteps"] = o.SubsessionSteps
+	toSerialize["subsessionTool"] = o.SubsessionTool
 	return toSerialize, nil
 }
 
@@ -210,6 +266,8 @@ func (o *AssistantChatPollBody) UnmarshalJSON(data []byte) (err error) {
 		"finishedToolCallIds",
 		"messages",
 		"status",
+		"subsessionSteps",
+		"subsessionTool",
 	}
 
 	allProperties := make(map[string]interface{})

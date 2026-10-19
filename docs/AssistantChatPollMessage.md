@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **Payload** | **string** |  | 
 **RequestId** | **string** |  | 
 **Role** | **string** |  | 
+**SubsessionId** | **string** | Id of the conversation a run_subsession action message (kind 2) started, which is polled like any other conversation to follow the subsession&#39;s own steps. It is not found until the subsession has started. Empty on every other message. | 
 **Text** | **string** |  | 
 **ToolCallId** | **string** | Id of the tool call an action message (kind 2) stands for. Empty on every other message. | 
 
@@ -18,7 +19,7 @@ Name | Type | Description | Notes
 
 ### NewAssistantChatPollMessage
 
-`func NewAssistantChatPollMessage(attachments []AssistantChatPollAttachment, createdAt string, id string, kind int64, payload string, requestId string, role string, text string, toolCallId string, ) *AssistantChatPollMessage`
+`func NewAssistantChatPollMessage(attachments []AssistantChatPollAttachment, createdAt string, id string, kind int64, payload string, requestId string, role string, subsessionId string, text string, toolCallId string, ) *AssistantChatPollMessage`
 
 NewAssistantChatPollMessage instantiates a new AssistantChatPollMessage object
 This constructor will assign default values to properties that have it defined,
@@ -171,6 +172,26 @@ and a boolean to check if the value has been set.
 `func (o *AssistantChatPollMessage) SetRole(v string)`
 
 SetRole sets Role field to given value.
+
+
+### GetSubsessionId
+
+`func (o *AssistantChatPollMessage) GetSubsessionId() string`
+
+GetSubsessionId returns the SubsessionId field if non-nil, zero value otherwise.
+
+### GetSubsessionIdOk
+
+`func (o *AssistantChatPollMessage) GetSubsessionIdOk() (*string, bool)`
+
+GetSubsessionIdOk returns a tuple with the SubsessionId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetSubsessionId
+
+`func (o *AssistantChatPollMessage) SetSubsessionId(v string)`
+
+SetSubsessionId sets SubsessionId field to given value.
 
 
 ### GetText

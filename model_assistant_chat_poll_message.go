@@ -30,6 +30,8 @@ type AssistantChatPollMessage struct {
 	Payload string `json:"payload"`
 	RequestId string `json:"requestId"`
 	Role string `json:"role"`
+	// Id of the conversation a run_subsession action message (kind 2) started, which is polled like any other conversation to follow the subsession's own steps. It is not found until the subsession has started. Empty on every other message.
+	SubsessionId string `json:"subsessionId"`
 	Text string `json:"text"`
 	// Id of the tool call an action message (kind 2) stands for. Empty on every other message.
 	ToolCallId string `json:"toolCallId"`
@@ -41,7 +43,7 @@ type _AssistantChatPollMessage AssistantChatPollMessage
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAssistantChatPollMessage(attachments []AssistantChatPollAttachment, createdAt string, id string, kind int64, payload string, requestId string, role string, text string, toolCallId string) *AssistantChatPollMessage {
+func NewAssistantChatPollMessage(attachments []AssistantChatPollAttachment, createdAt string, id string, kind int64, payload string, requestId string, role string, subsessionId string, text string, toolCallId string) *AssistantChatPollMessage {
 	this := AssistantChatPollMessage{}
 	this.Attachments = attachments
 	this.CreatedAt = createdAt
@@ -50,6 +52,7 @@ func NewAssistantChatPollMessage(attachments []AssistantChatPollAttachment, crea
 	this.Payload = payload
 	this.RequestId = requestId
 	this.Role = role
+	this.SubsessionId = subsessionId
 	this.Text = text
 	this.ToolCallId = toolCallId
 	return &this
@@ -231,6 +234,30 @@ func (o *AssistantChatPollMessage) SetRole(v string) {
 	o.Role = v
 }
 
+// GetSubsessionId returns the SubsessionId field value
+func (o *AssistantChatPollMessage) GetSubsessionId() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.SubsessionId
+}
+
+// GetSubsessionIdOk returns a tuple with the SubsessionId field value
+// and a boolean to check if the value has been set.
+func (o *AssistantChatPollMessage) GetSubsessionIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.SubsessionId, true
+}
+
+// SetSubsessionId sets field value
+func (o *AssistantChatPollMessage) SetSubsessionId(v string) {
+	o.SubsessionId = v
+}
+
 // GetText returns the Text field value
 func (o *AssistantChatPollMessage) GetText() string {
 	if o == nil {
@@ -296,6 +323,7 @@ func (o AssistantChatPollMessage) ToMap() (map[string]interface{}, error) {
 	toSerialize["payload"] = o.Payload
 	toSerialize["requestId"] = o.RequestId
 	toSerialize["role"] = o.Role
+	toSerialize["subsessionId"] = o.SubsessionId
 	toSerialize["text"] = o.Text
 	toSerialize["toolCallId"] = o.ToolCallId
 	return toSerialize, nil
@@ -313,6 +341,7 @@ func (o *AssistantChatPollMessage) UnmarshalJSON(data []byte) (err error) {
 		"payload",
 		"requestId",
 		"role",
+		"subsessionId",
 		"text",
 		"toolCallId",
 	}

@@ -1598,7 +1598,10 @@ paths:
         \ If `conversationId` is omitted a new conversation is started. `attachmentFileIds`\
         \ attaches up to 10 distinct files from account file storage and requires\
         \ View file storage permission. Files cannot be attached while the account\
-        \ has turned the assistant's tools off. Requires the *AI assistant* permission."
+        \ has turned the assistant's tools off. Returns `409` if `conversationId`\
+        \ names a conversation that cannot take messages: a subsession the assistant\
+        \ started for a tool call, which only ever answers the task it was given,\
+        \ or a deleted conversation. Requires the *AI assistant* permission."
       operationId: assistant_create-chat
       parameters: []
       requestBody:
@@ -1731,8 +1734,10 @@ paths:
       x-sdk-params: false
   /v1/assistant/conversations/{id}:
     delete:
-      description: Permanently removes a conversation and all its messages. Returns
-        `404` if the conversation does not exist. Requires the *AI assistant* permission.
+      description: "Permanently removes a conversation, all its messages, and every\
+        \ subsession it started. Returns `404` if the conversation does not exist,\
+        \ and `409` if it is a subsession, which is deleted only with the conversation\
+        \ that started it. Requires the *AI assistant* permission."
       operationId: assistant_delete-conversations
       parameters:
       - description: UUID of the conversation to delete.
@@ -1806,11 +1811,14 @@ paths:
       x-sdk-params: true
   /v1/assistant/conversations/{id}/stop:
     post:
-      description: Asks the assistant to stop the turn it is working on. The turn
-        ends at its next step - a tool call already sent finishes and is recorded
-        - so the conversation stays usable and keeps everything the turn did before
-        it was stopped. Succeeds with nothing to do if no turn is running. Returns
-        `404` if the conversation does not exist. Requires the *AI assistant* permission.
+      description: "Asks the assistant to stop the turn it is working on. The turn\
+        \ ends at its next step - a tool call already sent finishes and is recorded\
+        \ - so the conversation stays usable and keeps everything the turn did before\
+        \ it was stopped. Succeeds with nothing to do if no turn is running. Stopping\
+        \ a conversation also stops a subsession it is running. Returns `404` if the\
+        \ conversation does not exist, and `409` if it is a subsession, which is stopped\
+        \ only by stopping the conversation that started it. Requires the *AI assistant*\
+        \ permission."
       operationId: assistant_stop-conversations
       parameters:
       - description: UUID of the conversation whose turn to stop.
@@ -1840,8 +1848,9 @@ paths:
       description: "Returns the conversation as it is stored, for debugging and evaluating\
         \ the assistant: every message the assistant has been shown, including the\
         \ results of its tool calls and the ids that pair each result with its call,\
-        \ and the summary that replaces the earliest messages once the conversation\
-        \ has been compacted. Returns `404` if the conversation does not exist. Requires\
+        \ the summary that replaces the earliest messages once the conversation has\
+        \ been compacted, and the stored conversation of every subsession the assistant\
+        \ handed a task to. Returns `404` if the conversation does not exist. Requires\
         \ the *AI assistant* and *Download AI assistant conversation* permissions."
       operationId: assistant_get-conversations-transcript
       parameters:
@@ -5556,7 +5565,8 @@ paths:
         \ `layers` replaces the stored layers and `clearLayers` removes them all;\
         \ sending both returns `400`. Returns `400` if the colour is not a valid hex\
         \ code or a newly referenced layer points at an entity that does not exist.\
-        \ Requires the *Edit scenario planning* permission."
+        \ Returns `409` if the scenario keeps changing concurrently while the update\
+        \ is retried. Requires the *Edit scenario planning* permission."
       operationId: scenarios_update
       parameters:
       - explode: false
@@ -8195,9 +8205,11 @@ components:
     AssistantChatPollBody:
       additionalProperties: false
       example:
+        subsessionTool: subsessionTool
         finishedToolCallIds:
         - finishedToolCallIds
         - finishedToolCallIds
+        subsessionSteps: 1
         failure:
           code: code
           stage: stage
@@ -8218,6 +8230,7 @@ components:
           kind: 6
           requestId: requestId
           id: id
+          subsessionId: subsessionId
           text: text
         - createdAt: createdAt
           attachments:
@@ -8235,6 +8248,7 @@ components:
           kind: 6
           requestId: requestId
           id: id
+          subsessionId: subsessionId
           text: text
         actions:
         - payload: payload
@@ -8264,11 +8278,26 @@ components:
           type: array
         status:
           type: string
+        subsessionSteps:
+          description: "While a subsession is running, how many messages it has recorded\
+            \ so far, which grows with each of its steps even when it calls the same\
+            \ tool again. Zero when no subsession is running, including once it has\
+            \ ended and before the turn has recorded its result."
+          format: int64
+          type: integer
+        subsessionTool:
+          description: "While a subsession is running, the tool it is running now.\
+            \ Empty while it is thinking, and when no subsession is running. The running\
+            \ subsession is the run_subsession action whose toolCallId is not yet\
+            \ among the finished tool calls."
+          type: string
       required:
       - actions
       - finishedToolCallIds
       - messages
       - status
+      - subsessionSteps
+      - subsessionTool
     AssistantChatPollMessage:
       additionalProperties: false
       example:
@@ -8288,6 +8317,7 @@ components:
         kind: 6
         requestId: requestId
         id: id
+        subsessionId: subsessionId
         text: text
       properties:
         attachments:
@@ -8309,6 +8339,12 @@ components:
           type: string
         role:
           type: string
+        subsessionId:
+          description: "Id of the conversation a run_subsession action message (kind\
+            \ 2) started, which is polled like any other conversation to follow the\
+            \ subsession's own steps. It is not found until the subsession has started.\
+            \ Empty on every other message."
+          type: string
         text:
           type: string
         toolCallId:
@@ -8323,6 +8359,7 @@ components:
       - payload
       - requestId
       - role
+      - subsessionId
       - text
       - toolCallId
     AssistantChatReq:
@@ -8511,6 +8548,10 @@ components:
       additionalProperties: false
       example:
         summary: summary
+        subsessions:
+        - null
+        - null
+        conversationId: conversationId
         messages:
         - createdAt: createdAt
           reason: reason
@@ -8561,10 +8602,26 @@ components:
             arguments: arguments
             id: id
         summaryUpTo: 0
+        parentToolCallId: parentToolCallId
       properties:
+        conversationId:
+          type: string
         messages:
           items:
             $ref: "#/components/schemas/AssistantTranscriptMessage"
+          type: array
+        parentToolCallId:
+          description: "For a subsession, the id of the run_subsession tool call that\
+            \ started it. Empty for a conversation the user started."
+          type: string
+        subsessions:
+          description: "The transcript of each subsession the assistant started, in\
+            \ the order it started them. A subsession's messages are not part of messages:\
+            \ the tool message answering its run_subsession call holds only its reply.\
+            \ A subsession is never compacted and starts none of its own, so its summary\
+            \ fields and its own subsessions are empty."
+          items:
+            $ref: "#/components/schemas/AssistantTranscriptBody"
           type: array
         summary:
           description: "What the assistant is told of the messages it no longer replays,\
@@ -8575,7 +8632,10 @@ components:
           format: int64
           type: integer
       required:
+      - conversationId
       - messages
+      - parentToolCallId
+      - subsessions
       - summary
       - summaryUpTo
     AssistantTranscriptMessage:

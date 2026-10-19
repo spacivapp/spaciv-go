@@ -22,7 +22,12 @@ var _ MappedNullable = &AssistantTranscriptBody{}
 
 // AssistantTranscriptBody struct for AssistantTranscriptBody
 type AssistantTranscriptBody struct {
+	ConversationId string `json:"conversationId"`
 	Messages []AssistantTranscriptMessage `json:"messages"`
+	// For a subsession, the id of the run_subsession tool call that started it. Empty for a conversation the user started.
+	ParentToolCallId string `json:"parentToolCallId"`
+	// The transcript of each subsession the assistant started, in the order it started them. A subsession's messages are not part of messages: the tool message answering its run_subsession call holds only its reply. A subsession is never compacted and starts none of its own, so its summary fields and its own subsessions are empty.
+	Subsessions []AssistantTranscriptBody `json:"subsessions"`
 	// What the assistant is told of the messages it no longer replays, once the conversation has been compacted. Empty until then.
 	Summary string `json:"summary"`
 	// How many of the leading messages the summary stands in for.
@@ -35,9 +40,12 @@ type _AssistantTranscriptBody AssistantTranscriptBody
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAssistantTranscriptBody(messages []AssistantTranscriptMessage, summary string, summaryUpTo int64) *AssistantTranscriptBody {
+func NewAssistantTranscriptBody(conversationId string, messages []AssistantTranscriptMessage, parentToolCallId string, subsessions []AssistantTranscriptBody, summary string, summaryUpTo int64) *AssistantTranscriptBody {
 	this := AssistantTranscriptBody{}
+	this.ConversationId = conversationId
 	this.Messages = messages
+	this.ParentToolCallId = parentToolCallId
+	this.Subsessions = subsessions
 	this.Summary = summary
 	this.SummaryUpTo = summaryUpTo
 	return &this
@@ -49,6 +57,30 @@ func NewAssistantTranscriptBody(messages []AssistantTranscriptMessage, summary s
 func NewAssistantTranscriptBodyWithDefaults() *AssistantTranscriptBody {
 	this := AssistantTranscriptBody{}
 	return &this
+}
+
+// GetConversationId returns the ConversationId field value
+func (o *AssistantTranscriptBody) GetConversationId() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.ConversationId
+}
+
+// GetConversationIdOk returns a tuple with the ConversationId field value
+// and a boolean to check if the value has been set.
+func (o *AssistantTranscriptBody) GetConversationIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.ConversationId, true
+}
+
+// SetConversationId sets field value
+func (o *AssistantTranscriptBody) SetConversationId(v string) {
+	o.ConversationId = v
 }
 
 // GetMessages returns the Messages field value
@@ -73,6 +105,54 @@ func (o *AssistantTranscriptBody) GetMessagesOk() ([]AssistantTranscriptMessage,
 // SetMessages sets field value
 func (o *AssistantTranscriptBody) SetMessages(v []AssistantTranscriptMessage) {
 	o.Messages = v
+}
+
+// GetParentToolCallId returns the ParentToolCallId field value
+func (o *AssistantTranscriptBody) GetParentToolCallId() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.ParentToolCallId
+}
+
+// GetParentToolCallIdOk returns a tuple with the ParentToolCallId field value
+// and a boolean to check if the value has been set.
+func (o *AssistantTranscriptBody) GetParentToolCallIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.ParentToolCallId, true
+}
+
+// SetParentToolCallId sets field value
+func (o *AssistantTranscriptBody) SetParentToolCallId(v string) {
+	o.ParentToolCallId = v
+}
+
+// GetSubsessions returns the Subsessions field value
+func (o *AssistantTranscriptBody) GetSubsessions() []AssistantTranscriptBody {
+	if o == nil {
+		var ret []AssistantTranscriptBody
+		return ret
+	}
+
+	return o.Subsessions
+}
+
+// GetSubsessionsOk returns a tuple with the Subsessions field value
+// and a boolean to check if the value has been set.
+func (o *AssistantTranscriptBody) GetSubsessionsOk() ([]AssistantTranscriptBody, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Subsessions, true
+}
+
+// SetSubsessions sets field value
+func (o *AssistantTranscriptBody) SetSubsessions(v []AssistantTranscriptBody) {
+	o.Subsessions = v
 }
 
 // GetSummary returns the Summary field value
@@ -133,7 +213,10 @@ func (o AssistantTranscriptBody) MarshalJSON() ([]byte, error) {
 
 func (o AssistantTranscriptBody) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	toSerialize["conversationId"] = o.ConversationId
 	toSerialize["messages"] = o.Messages
+	toSerialize["parentToolCallId"] = o.ParentToolCallId
+	toSerialize["subsessions"] = o.Subsessions
 	toSerialize["summary"] = o.Summary
 	toSerialize["summaryUpTo"] = o.SummaryUpTo
 	return toSerialize, nil
@@ -144,7 +227,10 @@ func (o *AssistantTranscriptBody) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
+		"conversationId",
 		"messages",
+		"parentToolCallId",
+		"subsessions",
 		"summary",
 		"summaryUpTo",
 	}
