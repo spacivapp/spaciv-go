@@ -688,7 +688,7 @@ Returns `401` when no access token could be minted: an invalid refresh token, a 
 
 Returns `503` when, for a refresh scoped to an `account`, the OIDC provider could not be reached or reported a transient failure. The session is still valid, so retry the refresh later rather than signing the user out.
 
-Returns `403` when the session is valid but is not authorised for the requested `account`, which typically means the account mandates a sign-in method the session did not use. The session stays usable for other accounts, so keep it and cancel only the account-scoped action.
+Returns `403` when the session is valid but is not authorised for the requested `account`, which typically means the account mandates a sign-in method the session did not use, or when a refresh without an `account` comes from a session that signed in through an account's own OIDC provider: such a session only gets tokens for an account. The session stays usable for the accounts it is authorised for, so keep it and cancel only the action that needed the token.
 */
 func (a *AuthenticationService) CreateAuthRefreshToken(ctx context.Context, authRefreshTokenReqBody AuthRefreshTokenReqBody, params *AuthenticationCreateAuthRefreshTokenParams) (*AuthRefreshTokenResBody, error) {
 	r := requestForAuthenticationCreateAuthRefreshToken{
