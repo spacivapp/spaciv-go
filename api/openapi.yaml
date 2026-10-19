@@ -9468,6 +9468,31 @@ components:
       - id
       - name
       - value
+    ClientMessage:
+      additionalProperties: {}
+      properties:
+        token:
+          type: string
+        topics:
+          description: "Between 1 and 100 topics for subscribe and unsubscribe. A\
+            \ message must fit within 128 KiB as sent, so topics whose JSON encoding\
+            \ is long go in several messages."
+          items:
+            type: string
+          maxItems: 100
+          minItems: 1
+        type:
+          enum:
+          - auth
+          - subscribe
+          - unsubscribe
+        v:
+          enum:
+          - 1
+          format: int64
+      required:
+      - type
+      - v
     ConfidentialityData:
       additionalProperties: false
       properties:
@@ -10452,6 +10477,56 @@ components:
     DefaultDatasetData:
       additionalProperties: false
       type: object
+    EntityChangeActor:
+      additionalProperties: {}
+      properties:
+        clientId:
+          type: string
+        session:
+          type: string
+        type:
+          enum:
+          - user
+          - system
+          - anonymous
+          - unknown
+        user:
+          format: int64
+          type: integer
+      required:
+      - session
+      - type
+      - user
+    EntityChangedEvent:
+      additionalProperties: {}
+      properties:
+        account:
+          format: int64
+          type: integer
+        actor:
+          $ref: "#/components/schemas/EntityChangeActor"
+        at:
+          type: string
+        id:
+          type: string
+        op:
+          enum:
+          - upsert
+          - delete
+        project:
+          format: int64
+          type: integer
+        type:
+          type: string
+        version:
+          type: string
+      required:
+      - account
+      - actor
+      - at
+      - id
+      - op
+      - type
     EntryPatch:
       additionalProperties: false
       example:
@@ -15091,6 +15166,36 @@ components:
       required:
       - id
       - topic
+    ServerMessage:
+      additionalProperties: {}
+      properties:
+        code:
+          enum:
+          - invalid_topic
+          - forbidden
+          - not_found
+          - too_many_subscriptions
+          - unavailable
+        events:
+          items:
+            $ref: "#/components/schemas/EntityChangedEvent"
+        message:
+          type: string
+        topic:
+          type: string
+        type:
+          enum:
+          - changed
+          - subscribed
+          - resync
+          - error
+        v:
+          enum:
+          - 1
+          format: int64
+      required:
+      - type
+      - v
     SingleSelectChangelogData:
       additionalProperties: false
       properties:
@@ -16823,3 +16928,9 @@ components:
         \ Bearer <token>`."
       scheme: bearer
       type: http
+x-realtime-messages:
+  client:
+    $ref: "#/components/schemas/ClientMessage"
+  path: /v1/realtime
+  server:
+    $ref: "#/components/schemas/ServerMessage"

@@ -123,6 +123,7 @@ docs/CalcTreeValue.md
 docs/CalcTypeSingleValue.md
 docs/ChangelogOption.md
 docs/ChangelogValueOption.md
+docs/ClientMessage.md
 docs/ConfidentialityData.md
 docs/Contribution.md
 docs/ContributionChangelogBody.md
@@ -212,6 +213,8 @@ docs/DatasetModify.md
 docs/DatasetRes.md
 docs/DatasetsAPI.md
 docs/DaysOffData.md
+docs/EntityChangeActor.md
+docs/EntityChangedEvent.md
 docs/EntryPatch.md
 docs/EntryPatchPropertiesValue.md
 docs/ErrorDetail.md
@@ -378,6 +381,7 @@ docs/ScriptWebhookResBody.md
 docs/ScriptsAPI.md
 docs/SendPasswordPutReqBody.md
 docs/SerializedEvent.md
+docs/ServerMessage.md
 docs/ServiceAPI.md
 docs/SingleSelectChangelogData.md
 docs/SingleSelectContributionData.md
@@ -515,6 +519,7 @@ model_calc_tree_value.go
 model_calc_type_single_value.go
 model_changelog_option.go
 model_changelog_value_option.go
+model_client_message.go
 model_confidentiality_data.go
 model_contribution.go
 model_contribution_changelog_body.go
@@ -600,6 +605,8 @@ model_dataset_data_one_of_2.go
 model_dataset_modify.go
 model_dataset_res.go
 model_days_off_data.go
+model_entity_change_actor.go
+model_entity_changed_event.go
 model_entry_patch.go
 model_entry_patch_properties_value.go
 model_error_detail.go
@@ -753,6 +760,7 @@ model_script_usage_res_body.go
 model_script_webhook_res_body.go
 model_send_password_put_req_body.go
 model_serialized_event.go
+model_server_message.go
 model_single_select_changelog_data.go
 model_single_select_contribution_data.go
 model_single_select_data.go
