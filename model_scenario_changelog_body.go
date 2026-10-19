@@ -24,6 +24,7 @@ var _ MappedNullable = &ScenarioChangelogBody{}
 type ScenarioChangelogBody struct {
 	CreatedAt string `json:"createdAt"`
 	Description string `json:"description"`
+	HexCode *string `json:"hexCode,omitempty"`
 	Layers []Layer `json:"layers"`
 	ModifiedAt string `json:"modifiedAt"`
 	Name string `json:"name"`
@@ -99,6 +100,38 @@ func (o *ScenarioChangelogBody) GetDescriptionOk() (*string, bool) {
 // SetDescription sets field value
 func (o *ScenarioChangelogBody) SetDescription(v string) {
 	o.Description = v
+}
+
+// GetHexCode returns the HexCode field value if set, zero value otherwise.
+func (o *ScenarioChangelogBody) GetHexCode() string {
+	if o == nil || IsNil(o.HexCode) {
+		var ret string
+		return ret
+	}
+	return *o.HexCode
+}
+
+// GetHexCodeOk returns a tuple with the HexCode field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScenarioChangelogBody) GetHexCodeOk() (*string, bool) {
+	if o == nil || IsNil(o.HexCode) {
+		return nil, false
+	}
+	return o.HexCode, true
+}
+
+// HasHexCode returns a boolean if a field has been set.
+func (o *ScenarioChangelogBody) HasHexCode() bool {
+	if o != nil && !IsNil(o.HexCode) {
+		return true
+	}
+
+	return false
+}
+
+// SetHexCode gets a reference to the given string and assigns it to the HexCode field.
+func (o *ScenarioChangelogBody) SetHexCode(v string) {
+	o.HexCode = &v
 }
 
 // GetLayers returns the Layers field value
@@ -185,6 +218,9 @@ func (o ScenarioChangelogBody) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["createdAt"] = o.CreatedAt
 	toSerialize["description"] = o.Description
+	if !IsNil(o.HexCode) {
+		toSerialize["hexCode"] = o.HexCode
+	}
 	toSerialize["layers"] = o.Layers
 	toSerialize["modifiedAt"] = o.ModifiedAt
 	toSerialize["name"] = o.Name

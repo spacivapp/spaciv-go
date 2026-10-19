@@ -22,6 +22,7 @@ var _ MappedNullable = &TopDownModelEntryUpdate{}
 
 // TopDownModelEntryUpdate struct for TopDownModelEntryUpdate
 type TopDownModelEntryUpdate struct {
+	ClearObjects *bool `json:"clearObjects,omitempty"`
 	Id string `json:"id"`
 	Objects []FilterGroup `json:"objects"`
 	Properties *TopDownModelProperties `json:"properties,omitempty"`
@@ -46,6 +47,38 @@ func NewTopDownModelEntryUpdate(id string, objects []FilterGroup) *TopDownModelE
 func NewTopDownModelEntryUpdateWithDefaults() *TopDownModelEntryUpdate {
 	this := TopDownModelEntryUpdate{}
 	return &this
+}
+
+// GetClearObjects returns the ClearObjects field value if set, zero value otherwise.
+func (o *TopDownModelEntryUpdate) GetClearObjects() bool {
+	if o == nil || IsNil(o.ClearObjects) {
+		var ret bool
+		return ret
+	}
+	return *o.ClearObjects
+}
+
+// GetClearObjectsOk returns a tuple with the ClearObjects field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *TopDownModelEntryUpdate) GetClearObjectsOk() (*bool, bool) {
+	if o == nil || IsNil(o.ClearObjects) {
+		return nil, false
+	}
+	return o.ClearObjects, true
+}
+
+// HasClearObjects returns a boolean if a field has been set.
+func (o *TopDownModelEntryUpdate) HasClearObjects() bool {
+	if o != nil && !IsNil(o.ClearObjects) {
+		return true
+	}
+
+	return false
+}
+
+// SetClearObjects gets a reference to the given bool and assigns it to the ClearObjects field.
+func (o *TopDownModelEntryUpdate) SetClearObjects(v bool) {
+	o.ClearObjects = &v
 }
 
 // GetId returns the Id field value
@@ -138,6 +171,9 @@ func (o TopDownModelEntryUpdate) MarshalJSON() ([]byte, error) {
 
 func (o TopDownModelEntryUpdate) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	if !IsNil(o.ClearObjects) {
+		toSerialize["clearObjects"] = o.ClearObjects
+	}
 	toSerialize["id"] = o.Id
 	toSerialize["objects"] = o.Objects
 	if !IsNil(o.Properties) {

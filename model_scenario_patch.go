@@ -22,7 +22,9 @@ var _ MappedNullable = &ScenarioPatch{}
 
 // ScenarioPatch struct for ScenarioPatch
 type ScenarioPatch struct {
+	ClearLayers *bool `json:"clearLayers,omitempty"`
 	Description *string `json:"description,omitempty"`
+	HexCode *string `json:"hexCode,omitempty"`
 	Layers []Layer `json:"layers"`
 	Name *string `json:"name,omitempty"`
 }
@@ -45,6 +47,38 @@ func NewScenarioPatch(layers []Layer) *ScenarioPatch {
 func NewScenarioPatchWithDefaults() *ScenarioPatch {
 	this := ScenarioPatch{}
 	return &this
+}
+
+// GetClearLayers returns the ClearLayers field value if set, zero value otherwise.
+func (o *ScenarioPatch) GetClearLayers() bool {
+	if o == nil || IsNil(o.ClearLayers) {
+		var ret bool
+		return ret
+	}
+	return *o.ClearLayers
+}
+
+// GetClearLayersOk returns a tuple with the ClearLayers field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScenarioPatch) GetClearLayersOk() (*bool, bool) {
+	if o == nil || IsNil(o.ClearLayers) {
+		return nil, false
+	}
+	return o.ClearLayers, true
+}
+
+// HasClearLayers returns a boolean if a field has been set.
+func (o *ScenarioPatch) HasClearLayers() bool {
+	if o != nil && !IsNil(o.ClearLayers) {
+		return true
+	}
+
+	return false
+}
+
+// SetClearLayers gets a reference to the given bool and assigns it to the ClearLayers field.
+func (o *ScenarioPatch) SetClearLayers(v bool) {
+	o.ClearLayers = &v
 }
 
 // GetDescription returns the Description field value if set, zero value otherwise.
@@ -77,6 +111,38 @@ func (o *ScenarioPatch) HasDescription() bool {
 // SetDescription gets a reference to the given string and assigns it to the Description field.
 func (o *ScenarioPatch) SetDescription(v string) {
 	o.Description = &v
+}
+
+// GetHexCode returns the HexCode field value if set, zero value otherwise.
+func (o *ScenarioPatch) GetHexCode() string {
+	if o == nil || IsNil(o.HexCode) {
+		var ret string
+		return ret
+	}
+	return *o.HexCode
+}
+
+// GetHexCodeOk returns a tuple with the HexCode field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScenarioPatch) GetHexCodeOk() (*string, bool) {
+	if o == nil || IsNil(o.HexCode) {
+		return nil, false
+	}
+	return o.HexCode, true
+}
+
+// HasHexCode returns a boolean if a field has been set.
+func (o *ScenarioPatch) HasHexCode() bool {
+	if o != nil && !IsNil(o.HexCode) {
+		return true
+	}
+
+	return false
+}
+
+// SetHexCode gets a reference to the given string and assigns it to the HexCode field.
+func (o *ScenarioPatch) SetHexCode(v string) {
+	o.HexCode = &v
 }
 
 // GetLayers returns the Layers field value
@@ -145,8 +211,14 @@ func (o ScenarioPatch) MarshalJSON() ([]byte, error) {
 
 func (o ScenarioPatch) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	if !IsNil(o.ClearLayers) {
+		toSerialize["clearLayers"] = o.ClearLayers
+	}
 	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
+	}
+	if !IsNil(o.HexCode) {
+		toSerialize["hexCode"] = o.HexCode
 	}
 	toSerialize["layers"] = o.Layers
 	if !IsNil(o.Name) {

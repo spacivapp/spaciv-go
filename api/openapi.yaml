@@ -2684,7 +2684,7 @@ paths:
       description: |-
         Creates a new dashboard for the current project and returns its UUID.
 
-        If a dashboard with the supplied `id` already exists, the call is idempotent: it ensures the dashboard is indexed under the project and returns the existing ID without overwriting its content. The `account` ID is reserved for the account-level dashboard; project-scoped requests supplying it are rejected with 400. Returns `400` when a row-break card has items or a control is missing a variable or duplicates another control on the same card. Requires the *Edit org model* permission, and the *Variable controls* permission when any card has controls.
+        If a dashboard with the supplied `id` already exists, the call is idempotent: it ensures the dashboard is indexed under the project and returns the existing ID without overwriting its content. The `account` ID is reserved for the account-level dashboard; project-scoped requests supplying it are rejected with 400. Returns `400` when a row-break card has items, a control is missing a variable or duplicates another control on the same card, or a list entry's `hexCode` is not a colour such as `#1f77b4` or `#abc`. Requires the *Edit org model* permission, and the *Variable controls* permission when any card has controls.
       operationId: dashboards_create
       parameters: []
       requestBody:
@@ -2836,11 +2836,12 @@ paths:
         \ card at `oldIndex` to `newIndex` (zero-based) while shifting the cards in\
         \ between, or `updateCard` to replace the content of a card at a given index,\
         \ including the order of its visualisation and control items. Out-of-range\
-        \ indices are silently ignored. Returns `400` when a row-break card has items\
-        \ or a control is missing a variable or duplicates another control on the\
-        \ same card. Returns `404` if the dashboard does not exist. Requires the *Edit\
-        \ org model* permission, and the *Variable controls* permission when the update\
-        \ adds, removes, reorders or changes a card's controls."
+        \ indices are silently ignored. Returns `400` when a row-break card has items,\
+        \ a control is missing a variable or duplicates another control on the same\
+        \ card, or a list entry's `hexCode` is not a colour such as `#1f77b4` or `#abc`.\
+        \ Returns `404` if the dashboard does not exist. Requires the *Edit org model*\
+        \ permission, and the *Variable controls* permission when the update adds,\
+        \ removes, reorders or changes a card's controls."
       operationId: dashboards_update-cards
       parameters:
       - explode: false
@@ -2872,9 +2873,10 @@ paths:
       description: "Inserts a new card at the given zero-based `index` position in\
         \ the dashboard's card list. Cards already at that position and beyond are\
         \ shifted down. If `index` is out of range it is clamped to the nearest valid\
-        \ position. Returns `400` when a row-break card has items or a control is\
-        \ missing a variable or duplicates another control on the same card. Returns\
-        \ `404` if the dashboard does not exist. Requires the *Edit org model* permission,\
+        \ position. Returns `400` when a row-break card has items, a control is missing\
+        \ a variable or duplicates another control on the same card, or a list entry's\
+        \ `hexCode` is not a colour such as `#1f77b4` or `#abc`. Returns `404` if\
+        \ the dashboard does not exist. Requires the *Edit org model* permission,\
         \ and the *Variable controls* permission when the card has controls."
       operationId: dashboards_create-cards
       parameters:
@@ -5441,9 +5443,10 @@ paths:
       - Scenarios
       x-sdk-params: true
     post:
-      description: Creates a new scenario for the account and returns its UUID. Returns
-        `400` if a layer references an entity that does not exist. Requires the *Edit
-        scenario planning* permission.
+      description: Creates a new scenario for the account and returns its UUID. The
+        optional `hexCode` is a colour such as `#1f77b4` or `#abc`. Returns `400`
+        if the colour is not a valid hex code or a layer references an entity that
+        does not exist. Requires the *Edit scenario planning* permission.
       operationId: scenarios_create
       parameters: []
       requestBody:
@@ -5547,10 +5550,13 @@ paths:
       - Scenarios
       x-sdk-params: false
     patch:
-      description: "Updates the name, description, and/or layers of the specified\
-        \ scenario. Only non-nil fields in the request body are applied. Returns `400`\
-        \ if a newly referenced layer points at an entity that does not exist. Requires\
-        \ the *Edit scenario planning* permission."
+      description: "Updates the name, description, colour, and/or layers of the specified\
+        \ scenario. Only non-nil fields in the request body are applied. `hexCode`\
+        \ is a colour such as `#1f77b4` or `#abc`; an empty string clears it. A non-empty\
+        \ `layers` replaces the stored layers and `clearLayers` removes them all;\
+        \ sending both returns `400`. Returns `400` if the colour is not a valid hex\
+        \ code or a newly referenced layer points at an entity that does not exist.\
+        \ Requires the *Edit scenario planning* permission."
       operationId: scenarios_update
       parameters:
       - explode: false
@@ -6760,10 +6766,12 @@ paths:
     put:
       description: "Upserts an entry on the specified top-down model. If an entry\
         \ with the given ID already exists it is updated; otherwise a new entry is\
-        \ created. Supply the entry's ID in the request body (`id` field). Each `properties.map[].formula`\
-        \ must be a per-object expression: numbers, static property references and\
-        \ the add, subtract, multiply and divide operators. With `variable_controls`\
-        \ enabled, formulas may also reference numeric account variables by `account:<id>`;\
+        \ created. Supply the entry's ID in the request body (`id` field). A non-empty\
+        \ `objects` replaces the entry's stored objects and `clearObjects` removes\
+        \ them all; sending both returns `400`. Each `properties.map[].formula` must\
+        \ be a per-object expression: numbers, static property references and the\
+        \ add, subtract, multiply and divide operators. With `variable_controls` enabled,\
+        \ formulas may also reference numeric account variables by `account:<id>`;\
         \ other variable references are rejected. `sumOf`, `select`, unknown operators\
         \ and references to unknown properties or nodes are rejected with `400` naming\
         \ the offending field. Returns `404` if the model does not exist. Requires\
@@ -9261,6 +9269,8 @@ components:
       properties:
         function:
           $ref: "#/components/schemas/MaybeVarFunc"
+        hexCode:
+          type: string
         name:
           type: string
         params:
@@ -9322,10 +9332,17 @@ components:
             id: id
             day: day
           dimension: 0
+        columnHexCodes:
+        - columnHexCodes
+        - columnHexCodes
       properties:
         axes:
           items:
             $ref: "#/components/schemas/CalcAxis"
+          type: array
+        columnHexCodes:
+          items:
+            type: string
           type: array
         values:
           items:
@@ -9334,6 +9351,7 @@ components:
           type: array
       required:
       - axes
+      - columnHexCodes
       - values
     CalcRuleFloat:
       additionalProperties: false
@@ -13553,6 +13571,7 @@ components:
       additionalProperties: false
       example:
         createdAt: createdAt
+        hexCode: hexCode
         modifiedAt: modifiedAt
         layers:
         - startDay: 6
@@ -13568,6 +13587,8 @@ components:
           format: int64
           type: string
         description:
+          type: string
+        hexCode:
           type: string
         layers:
           items:
@@ -13617,6 +13638,7 @@ components:
     ScenarioCreate:
       additionalProperties: false
       example:
+        hexCode: hexCode
         layers:
         - startDay: 6
           endDay: 0
@@ -13628,6 +13650,8 @@ components:
         description: description
       properties:
         description:
+          type: string
+        hexCode:
           type: string
         layers:
           items:
@@ -13661,6 +13685,7 @@ components:
       example:
         scenario:
           createdAt: createdAt
+          hexCode: hexCode
           modifiedAt: modifiedAt
           layers:
           - startDay: 6
@@ -13686,6 +13711,7 @@ components:
         scenarios:
         - scenario:
             createdAt: createdAt
+            hexCode: hexCode
             modifiedAt: modifiedAt
             layers:
             - startDay: 6
@@ -13699,6 +13725,7 @@ components:
           id: id
         - scenario:
             createdAt: createdAt
+            hexCode: hexCode
             modifiedAt: modifiedAt
             layers:
             - startDay: 6
@@ -13729,6 +13756,7 @@ components:
     ScenarioPatch:
       additionalProperties: false
       example:
+        hexCode: hexCode
         layers:
         - startDay: 6
           endDay: 0
@@ -13738,8 +13766,13 @@ components:
           id: id
         name: name
         description: description
+        clearLayers: true
       properties:
+        clearLayers:
+          type: boolean
         description:
+          type: string
+        hexCode:
           type: string
         layers:
           items:
@@ -15906,7 +15939,10 @@ components:
                   property: property
             end: 0
             nodeId: nodeId
+        clearObjects: true
       properties:
+        clearObjects:
+          type: boolean
         id:
           type: string
         objects:

@@ -23,6 +23,7 @@ var _ MappedNullable = &ScenarioCreate{}
 // ScenarioCreate struct for ScenarioCreate
 type ScenarioCreate struct {
 	Description string `json:"description"`
+	HexCode *string `json:"hexCode,omitempty"`
 	Layers []Layer `json:"layers"`
 	Name string `json:"name"`
 }
@@ -71,6 +72,38 @@ func (o *ScenarioCreate) GetDescriptionOk() (*string, bool) {
 // SetDescription sets field value
 func (o *ScenarioCreate) SetDescription(v string) {
 	o.Description = v
+}
+
+// GetHexCode returns the HexCode field value if set, zero value otherwise.
+func (o *ScenarioCreate) GetHexCode() string {
+	if o == nil || IsNil(o.HexCode) {
+		var ret string
+		return ret
+	}
+	return *o.HexCode
+}
+
+// GetHexCodeOk returns a tuple with the HexCode field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScenarioCreate) GetHexCodeOk() (*string, bool) {
+	if o == nil || IsNil(o.HexCode) {
+		return nil, false
+	}
+	return o.HexCode, true
+}
+
+// HasHexCode returns a boolean if a field has been set.
+func (o *ScenarioCreate) HasHexCode() bool {
+	if o != nil && !IsNil(o.HexCode) {
+		return true
+	}
+
+	return false
+}
+
+// SetHexCode gets a reference to the given string and assigns it to the HexCode field.
+func (o *ScenarioCreate) SetHexCode(v string) {
+	o.HexCode = &v
 }
 
 // GetLayers returns the Layers field value
@@ -132,6 +165,9 @@ func (o ScenarioCreate) MarshalJSON() ([]byte, error) {
 func (o ScenarioCreate) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["description"] = o.Description
+	if !IsNil(o.HexCode) {
+		toSerialize["hexCode"] = o.HexCode
+	}
 	toSerialize["layers"] = o.Layers
 	toSerialize["name"] = o.Name
 	return toSerialize, nil

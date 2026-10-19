@@ -4,7 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**ClearLayers** | Pointer to **bool** |  | [optional] 
 **Description** | Pointer to **string** |  | [optional] 
+**HexCode** | Pointer to **string** |  | [optional] 
 **Layers** | [**[]Layer**](Layer.md) |  | 
 **Name** | Pointer to **string** |  | [optional] 
 
@@ -26,6 +28,31 @@ will change when the set of required properties is changed
 NewScenarioPatchWithDefaults instantiates a new ScenarioPatch object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetClearLayers
+
+`func (o *ScenarioPatch) GetClearLayers() bool`
+
+GetClearLayers returns the ClearLayers field if non-nil, zero value otherwise.
+
+### GetClearLayersOk
+
+`func (o *ScenarioPatch) GetClearLayersOk() (*bool, bool)`
+
+GetClearLayersOk returns a tuple with the ClearLayers field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetClearLayers
+
+`func (o *ScenarioPatch) SetClearLayers(v bool)`
+
+SetClearLayers sets ClearLayers field to given value.
+
+### HasClearLayers
+
+`func (o *ScenarioPatch) HasClearLayers() bool`
+
+HasClearLayers returns a boolean if a field has been set.
 
 ### GetDescription
 
@@ -51,6 +78,31 @@ SetDescription sets Description field to given value.
 `func (o *ScenarioPatch) HasDescription() bool`
 
 HasDescription returns a boolean if a field has been set.
+
+### GetHexCode
+
+`func (o *ScenarioPatch) GetHexCode() string`
+
+GetHexCode returns the HexCode field if non-nil, zero value otherwise.
+
+### GetHexCodeOk
+
+`func (o *ScenarioPatch) GetHexCodeOk() (*string, bool)`
+
+GetHexCodeOk returns a tuple with the HexCode field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetHexCode
+
+`func (o *ScenarioPatch) SetHexCode(v string)`
+
+SetHexCode sets HexCode field to given value.
+
+### HasHexCode
+
+`func (o *ScenarioPatch) HasHexCode() bool`
+
+HasHexCode returns a boolean if a field has been set.
 
 ### GetLayers
 

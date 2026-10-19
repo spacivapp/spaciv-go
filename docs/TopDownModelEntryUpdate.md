@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**ClearObjects** | Pointer to **bool** |  | [optional] 
 **Id** | **string** |  | 
 **Objects** | [**[]FilterGroup**](FilterGroup.md) |  | 
 **Properties** | Pointer to [**TopDownModelProperties**](TopDownModelProperties.md) |  | [optional] 
@@ -26,6 +27,31 @@ will change when the set of required properties is changed
 NewTopDownModelEntryUpdateWithDefaults instantiates a new TopDownModelEntryUpdate object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetClearObjects
+
+`func (o *TopDownModelEntryUpdate) GetClearObjects() bool`
+
+GetClearObjects returns the ClearObjects field if non-nil, zero value otherwise.
+
+### GetClearObjectsOk
+
+`func (o *TopDownModelEntryUpdate) GetClearObjectsOk() (*bool, bool)`
+
+GetClearObjectsOk returns a tuple with the ClearObjects field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetClearObjects
+
+`func (o *TopDownModelEntryUpdate) SetClearObjects(v bool)`
+
+SetClearObjects sets ClearObjects field to given value.
+
+### HasClearObjects
+
+`func (o *TopDownModelEntryUpdate) HasClearObjects() bool`
+
+HasClearObjects returns a boolean if a field has been set.
 
 ### GetId
 

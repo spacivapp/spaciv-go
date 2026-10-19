@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Function** | [**MaybeVarFunc**](MaybeVarFunc.md) |  | 
+**HexCode** | Pointer to **string** |  | [optional] 
 **Name** | **string** |  | 
 **Params** | [**map[string]ParameterType**](ParameterType.md) |  | 
 **Scenario** | [**MaybeVarStr**](MaybeVarStr.md) |  | 
@@ -47,6 +48,31 @@ and a boolean to check if the value has been set.
 
 SetFunction sets Function field to given value.
 
+
+### GetHexCode
+
+`func (o *CalcListEntry) GetHexCode() string`
+
+GetHexCode returns the HexCode field if non-nil, zero value otherwise.
+
+### GetHexCodeOk
+
+`func (o *CalcListEntry) GetHexCodeOk() (*string, bool)`
+
+GetHexCodeOk returns a tuple with the HexCode field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetHexCode
+
+`func (o *CalcListEntry) SetHexCode(v string)`
+
+SetHexCode sets HexCode field to given value.
+
+### HasHexCode
+
+`func (o *CalcListEntry) HasHexCode() bool`
+
+HasHexCode returns a boolean if a field has been set.
 
 ### GetName
 

@@ -23,6 +23,7 @@ var _ MappedNullable = &CalcListEntry{}
 // CalcListEntry struct for CalcListEntry
 type CalcListEntry struct {
 	Function MaybeVarFunc `json:"function"`
+	HexCode *string `json:"hexCode,omitempty"`
 	Name string `json:"name"`
 	Params map[string]ParameterType `json:"params"`
 	Scenario MaybeVarStr `json:"scenario"`
@@ -73,6 +74,38 @@ func (o *CalcListEntry) GetFunctionOk() (*MaybeVarFunc, bool) {
 // SetFunction sets field value
 func (o *CalcListEntry) SetFunction(v MaybeVarFunc) {
 	o.Function = v
+}
+
+// GetHexCode returns the HexCode field value if set, zero value otherwise.
+func (o *CalcListEntry) GetHexCode() string {
+	if o == nil || IsNil(o.HexCode) {
+		var ret string
+		return ret
+	}
+	return *o.HexCode
+}
+
+// GetHexCodeOk returns a tuple with the HexCode field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CalcListEntry) GetHexCodeOk() (*string, bool) {
+	if o == nil || IsNil(o.HexCode) {
+		return nil, false
+	}
+	return o.HexCode, true
+}
+
+// HasHexCode returns a boolean if a field has been set.
+func (o *CalcListEntry) HasHexCode() bool {
+	if o != nil && !IsNil(o.HexCode) {
+		return true
+	}
+
+	return false
+}
+
+// SetHexCode gets a reference to the given string and assigns it to the HexCode field.
+func (o *CalcListEntry) SetHexCode(v string) {
+	o.HexCode = &v
 }
 
 // GetName returns the Name field value
@@ -158,6 +191,9 @@ func (o CalcListEntry) MarshalJSON() ([]byte, error) {
 func (o CalcListEntry) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["function"] = o.Function
+	if !IsNil(o.HexCode) {
+		toSerialize["hexCode"] = o.HexCode
+	}
 	toSerialize["name"] = o.Name
 	toSerialize["params"] = o.Params
 	toSerialize["scenario"] = o.Scenario

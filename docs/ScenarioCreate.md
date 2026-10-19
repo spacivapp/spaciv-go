@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Description** | **string** |  | 
+**HexCode** | Pointer to **string** |  | [optional] 
 **Layers** | [**[]Layer**](Layer.md) |  | 
 **Name** | **string** |  | 
 
@@ -46,6 +47,31 @@ and a boolean to check if the value has been set.
 
 SetDescription sets Description field to given value.
 
+
+### GetHexCode
+
+`func (o *ScenarioCreate) GetHexCode() string`
+
+GetHexCode returns the HexCode field if non-nil, zero value otherwise.
+
+### GetHexCodeOk
+
+`func (o *ScenarioCreate) GetHexCodeOk() (*string, bool)`
+
+GetHexCodeOk returns a tuple with the HexCode field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetHexCode
+
+`func (o *ScenarioCreate) SetHexCode(v string)`
+
+SetHexCode sets HexCode field to given value.
+
+### HasHexCode
+
+`func (o *ScenarioCreate) HasHexCode() bool`
+
+HasHexCode returns a boolean if a field has been set.
 
 ### GetLayers
 

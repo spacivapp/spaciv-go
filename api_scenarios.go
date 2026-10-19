@@ -32,7 +32,7 @@ type requestForScenariosCreate struct {
 /*
 Create Create a scenario
 
-Creates a new scenario for the account and returns its UUID. Returns `400` if a layer references an entity that does not exist. Requires the *Edit scenario planning* permission.
+Creates a new scenario for the account and returns its UUID. The optional `hexCode` is a colour such as `#1f77b4` or `#abc`. Returns `400` if the colour is not a valid hex code or a layer references an entity that does not exist. Requires the *Edit scenario planning* permission.
 */
 func (a *ScenariosService) Create(ctx context.Context, scenarioCreate ScenarioCreate) (string, error) {
 	r := requestForScenariosCreate{
@@ -687,7 +687,7 @@ type requestForScenariosUpdate struct {
 /*
 Update Update a scenario
 
-Updates the name, description, and/or layers of the specified scenario. Only non-nil fields in the request body are applied. Returns `400` if a newly referenced layer points at an entity that does not exist. Requires the *Edit scenario planning* permission.
+Updates the name, description, colour, and/or layers of the specified scenario. Only non-nil fields in the request body are applied. `hexCode` is a colour such as `#1f77b4` or `#abc`; an empty string clears it. A non-empty `layers` replaces the stored layers and `clearLayers` removes them all; sending both returns `400`. Returns `400` if the colour is not a valid hex code or a newly referenced layer points at an entity that does not exist. Requires the *Edit scenario planning* permission.
 */
 func (a *ScenariosService) Update(ctx context.Context, id string, scenarioPatch ScenarioPatch) (map[string]interface{}, error) {
 	r := requestForScenariosUpdate{

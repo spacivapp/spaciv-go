@@ -5,13 +5,14 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Axes** | [**[]CalcAxis**](CalcAxis.md) |  | 
+**ColumnHexCodes** | **[]string** |  | 
 **Values** | **[]float64** |  | 
 
 ## Methods
 
 ### NewCalcRes
 
-`func NewCalcRes(axes []CalcAxis, values []float64, ) *CalcRes`
+`func NewCalcRes(axes []CalcAxis, columnHexCodes []string, values []float64, ) *CalcRes`
 
 NewCalcRes instantiates a new CalcRes object
 This constructor will assign default values to properties that have it defined,
@@ -44,6 +45,26 @@ and a boolean to check if the value has been set.
 `func (o *CalcRes) SetAxes(v []CalcAxis)`
 
 SetAxes sets Axes field to given value.
+
+
+### GetColumnHexCodes
+
+`func (o *CalcRes) GetColumnHexCodes() []string`
+
+GetColumnHexCodes returns the ColumnHexCodes field if non-nil, zero value otherwise.
+
+### GetColumnHexCodesOk
+
+`func (o *CalcRes) GetColumnHexCodesOk() (*[]string, bool)`
+
+GetColumnHexCodesOk returns a tuple with the ColumnHexCodes field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetColumnHexCodes
+
+`func (o *CalcRes) SetColumnHexCodes(v []string)`
+
+SetColumnHexCodes sets ColumnHexCodes field to given value.
 
 
 ### GetValues
