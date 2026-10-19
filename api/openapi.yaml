@@ -3566,9 +3566,11 @@ paths:
       x-sdk-params: false
   /v1/floorplans/{id}:
     delete:
-      description: Permanently deletes the floor plan and all of its associated space
-        geometry. The uploaded images are not removed by this operation. Requires
-        the *Edit floorplans* permission.
+      description: "Permanently deletes the floor plan and all of its associated space\
+        \ geometry. The floor plan is removed from every variable's allowed `options`,\
+        \ and a variable whose value was the floor plan moves to its first remaining\
+        \ option. The uploaded images are not removed by this operation. Requires\
+        \ the *Edit floorplans* permission."
       operationId: floor-plans_delete
       parameters:
       - explode: false
@@ -4220,7 +4222,8 @@ paths:
         \ via `action=restore`) or omit `action` to purge it immediately. Returns\
         \ `409` if a purge keeps conflicting with concurrent writes, in which case\
         \ only some entries may have been deleted; repeating the request finishes\
-        \ the purge. Requires the *Edit objects* permission."
+        \ the purge. A completed purge clears the allowed `options` of object variables\
+        \ on the group. Requires the *Edit objects* permission."
       operationId: object-groups_delete
       parameters:
       - explode: false
@@ -4364,7 +4367,7 @@ paths:
   /v1/object-groups/{id}/entries:
     delete:
       description: |-
-        Permanently removes one or more entries from the specified object group. Each item in the body must include the `id` of the entry to delete. Removing an entry that is not there succeeds and leaves the group's counts alone.
+        Permanently removes one or more entries from the specified object group. Each item in the body must include the `id` of the entry to delete. Removing an entry that is not there succeeds and leaves the group's counts alone. Deleted entries are removed from every object variable's allowed `options`; a variable whose value included them keeps its other allowed objects, or moves to its first remaining option. Once no option is left, every object is allowed again and the value is left as it was.
 
         Returns `404` if the object group does not exist, and `409` if an entry keeps being changed by other writers while it is being deleted. Entries are deleted one at a time, so a failure part way through leaves the earlier ones deleted; re-sending the same request finishes the job. Requires the *Edit objects* permission.
       operationId: object-groups_delete-entries
@@ -5265,9 +5268,12 @@ paths:
       x-sdk-params: false
   /v1/properties/{id}:
     delete:
-      description: Permanently removes the specified property and all its nodes. Built-in
-        properties cannot be deleted. Requires the *Edit properties* permission. Returns
-        `409` if a live data collection uses the property for anonymisation.
+      description: "Permanently removes the specified property and all its nodes.\
+        \ The property is removed from every variable's allowed `options`, and a variable\
+        \ whose value was the property moves to its first remaining option; node variables\
+        \ on the property lose their options. Built-in properties cannot be deleted.\
+        \ Requires the *Edit properties* permission. Returns `409` if a live data\
+        \ collection uses the property for anonymisation."
       operationId: properties_delete
       parameters:
       - explode: false
@@ -5325,7 +5331,7 @@ paths:
       description: |-
         Applies an incremental update to the specified property. The request body may contain updated metadata and node changes for tree-type properties. Supports large node sets — the request body limit is 64 MB with a 20-second read timeout.
 
-        Renaming a node ID requires the *Edit property ID* permission in addition to *Edit properties*; a `403` is returned if that permission is absent. Node changes are rejected with a `400` for built-in property ids (e.g. `module`, `space`), which are not backed by a real stored property and cannot hold node data.
+        Renaming a node ID requires the *Edit property ID* permission in addition to *Edit properties*; a `403` is returned if that permission is absent. Deleted nodes are removed from node variables' allowed `options`, and a variable whose value was a deleted node moves to its first remaining option; renamed nodes are renamed in both the options and the value. Node changes are rejected with a `400` for built-in property ids (e.g. `module`, `space`), which are not backed by a real stored property and cannot hold node data.
 
         New or re-parented nodes are placed after their siblings. A node's `position` moves it to that zero-based index among its siblings (clamped to the end); negative positions are rejected with a `400`.
 
@@ -5485,6 +5491,8 @@ paths:
       description: "Controls the lifecycle of a scenario. Pass `action=archive` to\
         \ move it to the archive, `action=restore` to bring it back, or `action=purge`\
         \ (the default when the parameter is omitted) to permanently delete the scenario.\
+        \ Purging removes the scenario from every variable's allowed `options`; a\
+        \ variable whose value was the scenario moves to its first remaining option.\
         \ Requires the *Edit scenario planning* permission."
       operationId: scenarios_delete
       parameters:
@@ -6183,8 +6191,10 @@ paths:
       x-sdk-params: false
   /v1/space-rulesets/{id}:
     delete:
-      description: Permanently deletes a space ruleset from the current account. Requires
-        the *Edit space rule set details* permission.
+      description: Permanently deletes a space ruleset from the current account and
+        removes it from every variable's allowed `options`; a variable whose value
+        was the ruleset moves to its first remaining option. Requires the *Edit space
+        rule set details* permission.
       operationId: space-rulesets_delete
       parameters:
       - explode: false
@@ -16272,9 +16282,9 @@ components:
             \ calcRule or floorplan IDs; node IDs within the variable's property;\
             \ or object IDs within its object group. The variable's own value must\
             \ be one of them. Not allowed on number and date variables, nor on a project's\
-            \ override of an account variable. Omit, or send an empty list, for no\
-            \ restriction; responses always include the list, empty when there is\
-            \ none."
+            \ override of an account variable. A new or changed list may hold at most\
+            \ 500. Omit, or send an empty list, for no restriction; responses always\
+            \ include the list, empty when there is none."
           items:
             type: string
           type: array

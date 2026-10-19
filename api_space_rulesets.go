@@ -283,7 +283,7 @@ type requestForSpaceRulesetsDelete struct {
 /*
 Delete Delete a space ruleset
 
-Permanently deletes a space ruleset from the current account. Requires the *Edit space rule set details* permission.
+Permanently deletes a space ruleset from the current account and removes it from every variable's allowed `options`; a variable whose value was the ruleset moves to its first remaining option. Requires the *Edit space rule set details* permission.
 */
 func (a *SpaceRulesetsService) Delete(ctx context.Context, id string) (map[string]interface{}, error) {
 	r := requestForSpaceRulesetsDelete{

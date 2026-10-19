@@ -143,7 +143,7 @@ type requestForFloorPlansDelete struct {
 /*
 Delete Delete a floor plan
 
-Permanently deletes the floor plan and all of its associated space geometry. The uploaded images are not removed by this operation. Requires the *Edit floorplans* permission.
+Permanently deletes the floor plan and all of its associated space geometry. The floor plan is removed from every variable's allowed `options`, and a variable whose value was the floor plan moves to its first remaining option. The uploaded images are not removed by this operation. Requires the *Edit floorplans* permission.
 */
 func (a *FloorPlansService) Delete(ctx context.Context, id string) (map[string]interface{}, error) {
 	r := requestForFloorPlansDelete{

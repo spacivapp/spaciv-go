@@ -146,7 +146,7 @@ type ObjectGroupsDeleteParams struct {
 /*
 Delete Delete or archive an object group
 
-Permanently deletes the object group and all its entries, or transitions it to a different lifecycle state. Pass `action=archive` to archive it (recoverable via `action=restore`) or omit `action` to purge it immediately. Returns `409` if a purge keeps conflicting with concurrent writes, in which case only some entries may have been deleted; repeating the request finishes the purge. Requires the *Edit objects* permission.
+Permanently deletes the object group and all its entries, or transitions it to a different lifecycle state. Pass `action=archive` to archive it (recoverable via `action=restore`) or omit `action` to purge it immediately. Returns `409` if a purge keeps conflicting with concurrent writes, in which case only some entries may have been deleted; repeating the request finishes the purge. A completed purge clears the allowed `options` of object variables on the group. Requires the *Edit objects* permission.
 */
 func (a *ObjectGroupsService) Delete(ctx context.Context, id string, params *ObjectGroupsDeleteParams) (map[string]interface{}, error) {
 	r := requestForObjectGroupsDelete{
@@ -259,7 +259,7 @@ type requestForObjectGroupsDeleteEntries struct {
 /*
 DeleteEntries Delete entries from an object group
 
-Permanently removes one or more entries from the specified object group. Each item in the body must include the `id` of the entry to delete. Removing an entry that is not there succeeds and leaves the group's counts alone.
+Permanently removes one or more entries from the specified object group. Each item in the body must include the `id` of the entry to delete. Removing an entry that is not there succeeds and leaves the group's counts alone. Deleted entries are removed from every object variable's allowed `options`; a variable whose value included them keeps its other allowed objects, or moves to its first remaining option. Once no option is left, every object is allowed again and the value is left as it was.
 
 Returns `404` if the object group does not exist, and `409` if an entry keeps being changed by other writers while it is being deleted. Entries are deleted one at a time, so a failure part way through leaves the earlier ones deleted; re-sending the same request finishes the job. Requires the *Edit objects* permission.
 */

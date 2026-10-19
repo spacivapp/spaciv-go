@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Options** | Pointer to **[]string** | Restricts the values a dashboard control or a calculation override may choose for this variable, in display order: scenario, property, calcRule or floorplan IDs; node IDs within the variable&#39;s property; or object IDs within its object group. The variable&#39;s own value must be one of them. Not allowed on number and date variables, nor on a project&#39;s override of an account variable. Omit, or send an empty list, for no restriction; responses always include the list, empty when there is none. | [optional] 
+**Options** | Pointer to **[]string** | Restricts the values a dashboard control or a calculation override may choose for this variable, in display order: scenario, property, calcRule or floorplan IDs; node IDs within the variable&#39;s property; or object IDs within its object group. The variable&#39;s own value must be one of them. Not allowed on number and date variables, nor on a project&#39;s override of an account variable. A new or changed list may hold at most 500. Omit, or send an empty list, for no restriction; responses always include the list, empty when there is none. | [optional] 
 **CalcRule** | **string** |  | 
 **Date** | **int64** |  | 
 **DateRange** | [**VariableDate**](VariableDate.md) |  | 

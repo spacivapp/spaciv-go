@@ -145,7 +145,7 @@ type ScenariosDeleteParams struct {
 /*
 Delete Delete or archive a scenario
 
-Controls the lifecycle of a scenario. Pass `action=archive` to move it to the archive, `action=restore` to bring it back, or `action=purge` (the default when the parameter is omitted) to permanently delete the scenario. Requires the *Edit scenario planning* permission.
+Controls the lifecycle of a scenario. Pass `action=archive` to move it to the archive, `action=restore` to bring it back, or `action=purge` (the default when the parameter is omitted) to permanently delete the scenario. Purging removes the scenario from every variable's allowed `options`; a variable whose value was the scenario moves to its first remaining option. Requires the *Edit scenario planning* permission.
 */
 func (a *ScenariosService) Delete(ctx context.Context, id string, params *ScenariosDeleteParams) (map[string]interface{}, error) {
 	r := requestForScenariosDelete{

@@ -139,7 +139,7 @@ type requestForPropertiesDelete struct {
 /*
 Delete Delete a property
 
-Permanently removes the specified property and all its nodes. Built-in properties cannot be deleted. Requires the *Edit properties* permission. Returns `409` if a live data collection uses the property for anonymisation.
+Permanently removes the specified property and all its nodes. The property is removed from every variable's allowed `options`, and a variable whose value was the property moves to its first remaining option; node variables on the property lose their options. Built-in properties cannot be deleted. Requires the *Edit properties* permission. Returns `409` if a live data collection uses the property for anonymisation.
 */
 func (a *PropertiesService) Delete(ctx context.Context, id string) error {
 	r := requestForPropertiesDelete{
@@ -575,7 +575,7 @@ Update Update a property
 
 Applies an incremental update to the specified property. The request body may contain updated metadata and node changes for tree-type properties. Supports large node sets — the request body limit is 64 MB with a 20-second read timeout.
 
-Renaming a node ID requires the *Edit property ID* permission in addition to *Edit properties*; a `403` is returned if that permission is absent. Node changes are rejected with a `400` for built-in property ids (e.g. `module`, `space`), which are not backed by a real stored property and cannot hold node data.
+Renaming a node ID requires the *Edit property ID* permission in addition to *Edit properties*; a `403` is returned if that permission is absent. Deleted nodes are removed from node variables' allowed `options`, and a variable whose value was a deleted node moves to its first remaining option; renamed nodes are renamed in both the options and the value. Node changes are rejected with a `400` for built-in property ids (e.g. `module`, `space`), which are not backed by a real stored property and cannot hold node data.
 
 New or re-parented nodes are placed after their siblings. A node's `position` moves it to that zero-based index among its siblings (clamped to the end); negative positions are rejected with a `400`.
 
