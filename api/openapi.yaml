@@ -6271,6 +6271,86 @@ paths:
       tags:
       - Scripts
       x-sdk-params: false
+  /v1/scripts/scratchpad/runs:
+    post:
+      description: |-
+        Runs Python or JavaScript code once in a sandbox without saving it as a script, for working something out from the account's data. The handler is the one an integration script implements, with `input` as `event.input`; there is no build, so dependency manifests and Go are not supported. The code runs with a read-only access token scoped to the caller: only the caller's view permissions, in the caller's current project if there is one, for 5 minutes. `ctx.fetch` sends it to the Spaciv API. Files the handler writes to its output directory (`ctx.output_dir` in Python, `ctx.outputDir` in JavaScript) are returned with its stdout, stderr and return value.
+
+        Limits: code up to 256 KiB in at most 50 files, `input` up to 1 MiB, and `timeoutSeconds` up to 120 (default 30). Of the output, stdout and stderr are kept up to 256 KiB each, the return value up to 256 KiB, and up to 20 output files totalling 2 MiB. Runs count towards the account's script credits and concurrent runs.
+
+        The request waits up to `waitSeconds` for the run to finish; a run still in progress is returned without `output`, and can be read with `GET /v1/scripts/scratchpad/runs/{runId}`. A run is visible only to the user who started it, and is kept for 24 hours. Returns `422` when the language or code is not accepted, and `403` for a script's API key or a scratchpad run's own token. Requires the *AI assistant* permission.
+      operationId: scripts_create-scratchpad-runs
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ScratchpadRunPostReqBody"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScratchpadRun"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Run scratchpad code
+      tags:
+      - Scripts
+      x-sdk-params: false
+  /v1/scripts/scratchpad/runs/{runId}:
+    get:
+      description: "Returns a scratchpad run the caller started, with its output once\
+        \ it has finished. Runs are kept for 24 hours. Returns `404` when the run\
+        \ does not exist, has expired or was started by someone else, and `403` for\
+        \ a script's API key or a scratchpad run's own token. Requires the *AI assistant*\
+        \ permission."
+      operationId: scripts_get-scratchpad-runs
+      parameters:
+      - explode: false
+        in: path
+        name: runId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: "Longest to wait for a run in progress to finish before responding.\
+          \ Defaults to 0, returning at once."
+        explode: false
+        in: query
+        name: waitSeconds
+        required: false
+        schema:
+          description: "Longest to wait for a run in progress to finish before responding.\
+            \ Defaults to 0, returning at once."
+          format: int32
+          maximum: 25
+          minimum: 0
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScratchpadRun"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Get a scratchpad run
+      tags:
+      - Scripts
+      x-sdk-params: true
   /v1/scripts/usage:
     get:
       description: "Returns the credits the account's script runs were charged this\
@@ -14187,6 +14267,195 @@ components:
           type: string
       required:
       - layers
+    ScratchpadOutput:
+      additionalProperties: false
+      example:
+        result: ""
+        stdout: stdout
+        stderrTruncated: true
+        stdoutTruncated: true
+        files:
+        - path: path
+          contentType: contentType
+          content: content
+        - path: path
+          contentType: contentType
+          content: content
+        error: error
+        stderr: stderr
+      properties:
+        error:
+          description: "Why some of the output could not be collected, for example\
+            \ because it was over a limit."
+          type: string
+        files:
+          description: Files the handler wrote to its output directory.
+          items:
+            $ref: "#/components/schemas/ScratchpadOutputFile"
+          type: array
+        result: {}
+        stderr:
+          type: string
+        stderrTruncated:
+          description: Set when stderr was longer than the 256 KiB kept.
+          type: boolean
+        stdout:
+          type: string
+        stdoutTruncated:
+          description: Set when stdout was longer than the 256 KiB kept.
+          type: boolean
+      required:
+      - files
+      - stderr
+      - stderrTruncated
+      - stdout
+      - stdoutTruncated
+    ScratchpadOutputFile:
+      additionalProperties: false
+      example:
+        path: path
+        contentType: contentType
+        content: content
+      properties:
+        content:
+          description: "The file's content, base64-encoded."
+          type: string
+        contentType:
+          type: string
+        path:
+          description: Path relative to the output directory.
+          type: string
+      required:
+      - content
+      - path
+    ScratchpadRun:
+      additionalProperties: false
+      example:
+        startupMs: 1
+        startedAt: 2000-01-23T04:56:07.000+00:00
+        language: python
+        message: message
+        expiresAt: 2000-01-23T04:56:07.000+00:00
+        output:
+          result: ""
+          stdout: stdout
+          stderrTruncated: true
+          stdoutTruncated: true
+          files:
+          - path: path
+            contentType: contentType
+            content: content
+          - path: path
+            contentType: contentType
+            content: content
+          error: error
+          stderr: stderr
+        queuedAt: 2000-01-23T04:56:07.000+00:00
+        warm: true
+        endedAt: 2000-01-23T04:56:07.000+00:00
+        exitCode: 6
+        files:
+          key: files
+        timeoutSeconds: 5
+        id: id
+        durationMs: 0
+        status: status
+      properties:
+        durationMs:
+          format: int64
+          type: integer
+        endedAt:
+          format: date-time
+          type: string
+        exitCode:
+          format: int32
+          type: integer
+        expiresAt:
+          description: When the run and its output are deleted.
+          format: date-time
+          type: string
+        files:
+          additionalProperties:
+            type: string
+          description: "The code that was run, keyed by path."
+        id:
+          type: string
+        language:
+          enum:
+          - python
+          - javascript
+          type: string
+        message:
+          type: string
+        output:
+          $ref: "#/components/schemas/ScratchpadOutput"
+        queuedAt:
+          format: date-time
+          type: string
+        startedAt:
+          format: date-time
+          type: string
+        startupMs:
+          description: How long the sandbox took to start.
+          format: int64
+          type: integer
+        status:
+          description: "queued or running while the run is in progress, then success,\
+            \ error, timeout, killed or quota_exceeded."
+          type: string
+        timeoutSeconds:
+          format: int32
+          type: integer
+        warm:
+          description: Whether the run used a sandbox that had already started.
+          type: boolean
+      required:
+      - exitCode
+      - files
+      - id
+      - language
+      - status
+      - timeoutSeconds
+      - warm
+    ScratchpadRunPostReqBody:
+      additionalProperties: false
+      example:
+        input: ""
+        waitSeconds: 15
+        files:
+          key: files
+        timeoutSeconds: 10
+        language: language
+      properties:
+        files:
+          additionalProperties:
+            type: string
+          description: "Source files keyed by path. Python needs script.py defining\
+            \ handle(event, ctx) and JavaScript needs script.js exporting handle(event,\
+            \ ctx), as an integration script does, so the code can be saved as one\
+            \ unchanged."
+          minProperties: 1
+        input: {}
+        language:
+          description: "python or javascript. Go code has to be saved as a script,\
+            \ which builds it."
+          type: string
+        timeoutSeconds:
+          description: Longest the code may run. Defaults to 30.
+          format: int32
+          maximum: 120
+          minimum: 1
+          type: integer
+        waitSeconds:
+          description: Longest to wait for the run to finish before responding. Defaults
+            to 20.
+          format: int32
+          maximum: 25
+          minimum: 0
+          type: integer
+      required:
+      - files
+      - language
     ScriptAuditEntry:
       additionalProperties: false
       example:

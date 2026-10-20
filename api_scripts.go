@@ -455,6 +455,120 @@ func (a *ScriptsService) executeCreateSchedulePreview(r requestForScriptsCreateS
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type requestForScriptsCreateScratchpadRuns struct {
+	ctx context.Context
+	ApiService *ScriptsService
+	scratchpadRunPostReqBody *ScratchpadRunPostReqBody
+}
+
+/*
+CreateScratchpadRuns Run scratchpad code
+
+Runs Python or JavaScript code once in a sandbox without saving it as a script, for working something out from the account's data. The handler is the one an integration script implements, with `input` as `event.input`; there is no build, so dependency manifests and Go are not supported. The code runs with a read-only access token scoped to the caller: only the caller's view permissions, in the caller's current project if there is one, for 5 minutes. `ctx.fetch` sends it to the Spaciv API. Files the handler writes to its output directory (`ctx.output_dir` in Python, `ctx.outputDir` in JavaScript) are returned with its stdout, stderr and return value.
+
+Limits: code up to 256 KiB in at most 50 files, `input` up to 1 MiB, and `timeoutSeconds` up to 120 (default 30). Of the output, stdout and stderr are kept up to 256 KiB each, the return value up to 256 KiB, and up to 20 output files totalling 2 MiB. Runs count towards the account's script credits and concurrent runs.
+
+The request waits up to `waitSeconds` for the run to finish; a run still in progress is returned without `output`, and can be read with `GET /v1/scripts/scratchpad/runs/{runId}`. A run is visible only to the user who started it, and is kept for 24 hours. Returns `422` when the language or code is not accepted, and `403` for a script's API key or a scratchpad run's own token. Requires the *AI assistant* permission.
+*/
+func (a *ScriptsService) CreateScratchpadRuns(ctx context.Context, scratchpadRunPostReqBody ScratchpadRunPostReqBody) (*ScratchpadRun, error) {
+	r := requestForScriptsCreateScratchpadRuns{
+		ApiService: a,
+		ctx: ctx,
+		scratchpadRunPostReqBody: &scratchpadRunPostReqBody,
+	}
+	result, _, err := a.executeCreateScratchpadRuns(r)
+	return result, err
+}
+
+func (a *ScriptsService) executeCreateScratchpadRuns(r requestForScriptsCreateScratchpadRuns) (*ScratchpadRun, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ScratchpadRun
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ScriptsAPIService.CreateScratchpadRuns")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/scripts/scratchpad/runs"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.scratchpadRunPostReqBody == nil {
+		return localVarReturnValue, nil, reportError("scratchpadRunPostReqBody is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.scratchpadRunPostReqBody
+	if r.ctx != nil {
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "ScriptsAPIService.CreateScratchpadRuns")
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type requestForScriptsDelete struct {
 	ctx context.Context
 	ApiService *ScriptsService
@@ -841,6 +955,124 @@ func (a *ScriptsService) executeGetExport(r requestForScriptsGetExport) (*Script
 	}
 	if r.ctx != nil {
 		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "ScriptsAPIService.GetExport")
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type requestForScriptsGetScratchpadRuns struct {
+	ctx context.Context
+	ApiService *ScriptsService
+	runId string
+	waitSeconds *int32
+}
+
+type ScriptsGetScratchpadRunsParams struct {
+	// Longest to wait for a run in progress to finish before responding. Defaults to 0, returning at once.
+	WaitSeconds *int32
+}
+
+/*
+GetScratchpadRuns Get a scratchpad run
+
+Returns a scratchpad run the caller started, with its output once it has finished. Runs are kept for 24 hours. Returns `404` when the run does not exist, has expired or was started by someone else, and `403` for a script's API key or a scratchpad run's own token. Requires the *AI assistant* permission.
+*/
+func (a *ScriptsService) GetScratchpadRuns(ctx context.Context, runId string, params *ScriptsGetScratchpadRunsParams) (*ScratchpadRun, error) {
+	r := requestForScriptsGetScratchpadRuns{
+		ApiService: a,
+		ctx: ctx,
+		runId: runId,
+	}
+	if params != nil {
+		r.waitSeconds = params.WaitSeconds
+	}
+	result, _, err := a.executeGetScratchpadRuns(r)
+	return result, err
+}
+
+func (a *ScriptsService) executeGetScratchpadRuns(r requestForScriptsGetScratchpadRuns) (*ScratchpadRun, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ScratchpadRun
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ScriptsAPIService.GetScratchpadRuns")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/scripts/scratchpad/runs/{runId}"
+	localVarPath = strings.Replace(localVarPath, "{"+"runId"+"}", url.PathEscape(parameterValueToString(r.runId, "runId")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	if r.waitSeconds != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "waitSeconds", r.waitSeconds, "form", "")
+	}
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ctx != nil {
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "ScriptsAPIService.GetScratchpadRuns")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
