@@ -416,6 +416,40 @@ paths:
       tags:
       - Files
       x-sdk-params: false
+  /v1/account/duplicate:
+    post:
+      description: |-
+        Creates a new account owned by the authenticated user and copies the current account's content into it: projects, dashboards, floor plans, properties, object groups, top-down models, scenarios, datasets, space rulesets, variables, and files with their folders. Archived projects, object groups, scenarios and top-down models are copied and stay archived. Data collections are copied as drafts without their contributors. Members and their roles, sign-in settings, API keys, scripts, assistant conversations and the audit log are not copied; the caller is the new account's only member. Returns the new account's identifier.
+
+        Copying runs in the background, so poll `GET /v1/accounts/{id}/setup-status` until it succeeds before sending the user into the new account; it returns `500 account-setup-failed` if the content could not be copied, and the incomplete account is then deleted, after which polling it returns `403`.
+
+        Account names are unique; reusing one returns `400 account-name-in-use`. Requires a token for the account being duplicated, holding the *Manage my account* permission; a token for no account returns `400`. A script's own API key cannot duplicate an account.
+      operationId: accounts_duplicate
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AccountDuplicateReqBody"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                format: int64
+                type: integer
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Duplicate the current account
+      tags:
+      - Accounts
+      x-sdk-params: false
   /v1/account/files:
     get:
       description: |-
@@ -1242,7 +1276,7 @@ paths:
       description: |-
         Creates an account owned by the authenticated user and returns its identifier.
 
-        Unless the template is `blank`, the account is seeded from a prebuilt one. Seeding runs in the background, so poll `GET /v1/accounts/{id}/setup-status` until it succeeds before sending the user into the new account.
+        The account is seeded from the prebuilt account for the chosen template (`blank` starts almost empty). Seeding runs in the background, so poll `GET /v1/accounts/{id}/setup-status` until it succeeds before sending the user into the new account.
 
         Account names are unique; reusing one returns `400 account-name-in-use`. Requires the *Manage my account* permission.
       operationId: accounts_create
@@ -1307,18 +1341,18 @@ paths:
   /v1/accounts/{id}/setup-status:
     get:
       description: |-
-        Long-polls until the account created by `POST /v1/accounts` has finished being seeded from its template, then returns `200`.
+        Long-polls until the account created by `POST /v1/accounts` or `POST /v1/account/duplicate` has finished being seeded with its starting content, then returns `204`.
 
-        The request is held open for up to 90 seconds and returns `408` if setup has not completed by then; call it again to keep waiting. The caller must be a member of the account and hold the *Manage my account* permission.
+        The request is held open for up to 90 seconds and returns `408` if setup has not completed by then; call it again to keep waiting. Returns `500 account-setup-failed` if the content could not be copied; the account exists but is incomplete. The caller must be a member of the account and hold the *Manage my account* permission.
       operationId: accounts_get-setup-status
       parameters:
-      - description: Identifier returned by POST /v1/accounts.
+      - description: Identifier returned by POST /v1/accounts or POST /v1/account/duplicate.
         explode: false
         in: path
         name: id
         required: true
         schema:
-          description: Identifier returned by POST /v1/accounts.
+          description: Identifier returned by POST /v1/accounts or POST /v1/account/duplicate.
           format: int64
           type: integer
         style: simple
@@ -1459,13 +1493,14 @@ paths:
       x-sdk-params: false
   /v1/admin/populate:
     post:
-      description: "Copies all scenarios, properties, object groups, top-down models,\
-        \ datasets, space rulesets, projects, dashboards, floor plans, and account\
-        \ variables from a named template account into the caller's account. Local\
-        \ development uses the seeded local template account for both data and files,\
-        \ and returns 409 until its data and available files are imported. Populating\
-        \ an account from itself is rejected. Requires the *Project admin controls*\
-        \ and *Sys admin* permissions."
+      description: "Copies all files and their folders, scenarios, properties, object\
+        \ groups and their images, top-down models, datasets, data collections (as\
+        \ drafts without contributors), space rulesets, projects, dashboards, floor\
+        \ plans, and account variables from a named template account into the caller's\
+        \ account. Local development uses the seeded local template account for both\
+        \ data and files, and returns 409 until its data and available files are imported.\
+        \ Populating an account from itself is rejected. Requires the *Project admin\
+        \ controls* and *Sys admin* permissions."
       operationId: internal_create-admin-populate
       parameters: []
       requestBody:
@@ -8076,6 +8111,17 @@ components:
         parentId:
           description: Identifier of the directory to create this one in. Leave it
             out to create it at the root.
+          type: string
+      required:
+      - name
+    AccountDuplicateReqBody:
+      additionalProperties: false
+      example:
+        name: name
+      properties:
+        name:
+          description: Display name of the new account. Must not already be in use.
+          minLength: 1
           type: string
       required:
       - name

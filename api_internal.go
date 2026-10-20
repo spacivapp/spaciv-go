@@ -238,7 +238,7 @@ type requestForInternalCreateAdminPopulate struct {
 /*
 CreateAdminPopulate Populate account from template
 
-Copies all scenarios, properties, object groups, top-down models, datasets, space rulesets, projects, dashboards, floor plans, and account variables from a named template account into the caller's account. Local development uses the seeded local template account for both data and files, and returns 409 until its data and available files are imported. Populating an account from itself is rejected. Requires the *Project admin controls* and *Sys admin* permissions.
+Copies all files and their folders, scenarios, properties, object groups and their images, top-down models, datasets, data collections (as drafts without contributors), space rulesets, projects, dashboards, floor plans, and account variables from a named template account into the caller's account. Local development uses the seeded local template account for both data and files, and returns 409 until its data and available files are imported. Populating an account from itself is rejected. Requires the *Project admin controls* and *Sys admin* permissions.
 */
 func (a *InternalService) CreateAdminPopulate(ctx context.Context, body int32) error {
 	r := requestForInternalCreateAdminPopulate{

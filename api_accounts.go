@@ -34,7 +34,7 @@ Create Create an account
 
 Creates an account owned by the authenticated user and returns its identifier.
 
-Unless the template is `blank`, the account is seeded from a prebuilt one. Seeding runs in the background, so poll `GET /v1/accounts/{id}/setup-status` until it succeeds before sending the user into the new account.
+The account is seeded from the prebuilt account for the chosen template (`blank` starts almost empty). Seeding runs in the background, so poll `GET /v1/accounts/{id}/setup-status` until it succeeds before sending the user into the new account.
 
 Account names are unique; reusing one returns `400 account-name-in-use`. Requires the *Manage my account* permission.
 */
@@ -435,6 +435,120 @@ func (a *AccountsService) executeDeleteOidcProvider(r requestForAccountsDeleteOi
 	}
 
 	return localVarHTTPResponse, nil
+}
+
+type requestForAccountsDuplicate struct {
+	ctx context.Context
+	ApiService *AccountsService
+	accountDuplicateReqBody *AccountDuplicateReqBody
+}
+
+/*
+Duplicate Duplicate the current account
+
+Creates a new account owned by the authenticated user and copies the current account's content into it: projects, dashboards, floor plans, properties, object groups, top-down models, scenarios, datasets, space rulesets, variables, and files with their folders. Archived projects, object groups, scenarios and top-down models are copied and stay archived. Data collections are copied as drafts without their contributors. Members and their roles, sign-in settings, API keys, scripts, assistant conversations and the audit log are not copied; the caller is the new account's only member. Returns the new account's identifier.
+
+Copying runs in the background, so poll `GET /v1/accounts/{id}/setup-status` until it succeeds before sending the user into the new account; it returns `500 account-setup-failed` if the content could not be copied, and the incomplete account is then deleted, after which polling it returns `403`.
+
+Account names are unique; reusing one returns `400 account-name-in-use`. Requires a token for the account being duplicated, holding the *Manage my account* permission; a token for no account returns `400`. A script's own API key cannot duplicate an account.
+*/
+func (a *AccountsService) Duplicate(ctx context.Context, accountDuplicateReqBody AccountDuplicateReqBody) (int64, error) {
+	r := requestForAccountsDuplicate{
+		ApiService: a,
+		ctx: ctx,
+		accountDuplicateReqBody: &accountDuplicateReqBody,
+	}
+	result, _, err := a.executeDuplicate(r)
+	return result, err
+}
+
+func (a *AccountsService) executeDuplicate(r requestForAccountsDuplicate) (int64, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  int64
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountsAPIService.Duplicate")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/account/duplicate"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.accountDuplicateReqBody == nil {
+		return localVarReturnValue, nil, reportError("accountDuplicateReqBody is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.accountDuplicateReqBody
+	if r.ctx != nil {
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "AccountsAPIService.Duplicate")
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type requestForAccountsGet struct {
@@ -963,9 +1077,9 @@ type requestForAccountsGetSetupStatus struct {
 /*
 GetSetupStatus Wait for account setup to finish
 
-Long-polls until the account created by `POST /v1/accounts` has finished being seeded from its template, then returns `200`.
+Long-polls until the account created by `POST /v1/accounts` or `POST /v1/account/duplicate` has finished being seeded with its starting content, then returns `204`.
 
-The request is held open for up to 90 seconds and returns `408` if setup has not completed by then; call it again to keep waiting. The caller must be a member of the account and hold the *Manage my account* permission.
+The request is held open for up to 90 seconds and returns `408` if setup has not completed by then; call it again to keep waiting. Returns `500 account-setup-failed` if the content could not be copied; the account exists but is incomplete. The caller must be a member of the account and hold the *Manage my account* permission.
 */
 func (a *AccountsService) GetSetupStatus(ctx context.Context, id int64) error {
 	r := requestForAccountsGetSetupStatus{

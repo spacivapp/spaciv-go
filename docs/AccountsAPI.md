@@ -8,6 +8,7 @@ Method | HTTP request | Description
 [**CreateOidcProvider**](AccountsAPI.md#CreateOidcProvider) | **Post** /v1/account/oidc-provider | Create the current account&#39;s OIDC provider
 [**Delete**](AccountsAPI.md#Delete) | **Delete** /v1/account | Delete the current account
 [**DeleteOidcProvider**](AccountsAPI.md#DeleteOidcProvider) | **Delete** /v1/account/oidc-provider | Delete the current account&#39;s OIDC provider
+[**Duplicate**](AccountsAPI.md#Duplicate) | **Post** /v1/account/duplicate | Duplicate the current account
 [**Get**](AccountsAPI.md#Get) | **Get** /v1/account | Get the current account
 [**GetAuthOptions**](AccountsAPI.md#GetAuthOptions) | **Get** /v1/auth/options/{hostname} | List sign-in methods for a hostname
 [**GetHostname**](AccountsAPI.md#GetHostname) | **Get** /v1/accounts/{id}/hostname | Get an account&#39;s hostname
@@ -259,6 +260,69 @@ Other parameters are passed through a pointer to a apiDeleteOidcProviderRequest 
 
 - **Content-Type**: Not defined
 - **Accept**: application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## Duplicate
+
+> int64 Duplicate(ctx, accountDuplicateReqBody)
+
+Duplicate the current account
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+	accountDuplicateReqBody :=  // AccountDuplicateReqBody | 
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.Accounts.Duplicate(context.Background(), accountDuplicateReqBody)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `Accounts.Duplicate`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `Accounts.Duplicate`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiDuplicateRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **accountDuplicateReqBody** | [**AccountDuplicateReqBody**](AccountDuplicateReqBody.md) |  | 
+
+### Return type
+
+**int64**
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json, application/problem+json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -594,7 +658,7 @@ import (
 )
 
 func main() {
-	id :=  // int64 | Identifier returned by POST /v1/accounts.
+	id :=  // int64 | Identifier returned by POST /v1/accounts or POST /v1/account/duplicate.
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.Accounts.GetSetupStatus(context.Background(), id)
@@ -610,7 +674,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**id** | **int64** | Identifier returned by POST /v1/accounts. | 
+**id** | **int64** | Identifier returned by POST /v1/accounts or POST /v1/account/duplicate. | 
 
 ### Other Parameters
 

@@ -42,6 +42,7 @@ docs/AccountCalculationUsageDay.md
 docs/AccountDetailsResBody.md
 docs/AccountDirectoryPatchBody.md
 docs/AccountDirectoryPostBody.md
+docs/AccountDuplicateReqBody.md
 docs/AccountFilePatchBody.md
 docs/AccountGetAuthOptionsResBody.md
 docs/AccountOIDCProvider.md
@@ -474,6 +475,7 @@ model_account_calculation_usage_day.go
 model_account_details_res_body.go
 model_account_directory_patch_body.go
 model_account_directory_post_body.go
+model_account_duplicate_req_body.go
 model_account_file_patch_body.go
 model_account_get_auth_options_res_body.go
 model_account_oidc_provider.go
