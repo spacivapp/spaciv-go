@@ -266,24 +266,22 @@ paths:
       tags:
       - Accounts
       x-sdk-params: false
-  /v1/account/files:
+  /v1/account/directories:
     get:
       description: |-
-        Returns a page of the files stored against the account, most recently uploaded first. Files belonging to other accounts are never returned.
+        Returns a page of every directory in the account's files, at any depth, in the order they were created. Each directory gives its parent's identifier, so a client that fetches every page can build the whole tree. To list what is inside one directory, list the account's files with `parent` instead.
 
-        When `nextCursor` is present there are more files to fetch; pass it back as `cursor` to retrieve the following page. A page may come back shorter than `limit` while still having a `nextCursor`.
-
-        A file that has just been uploaded may not appear here immediately, so clients should add the record returned by the upload operation to their list rather than refetching. Requires the *View file storage* permission.
-      operationId: files_list-account-files
+        When `nextCursor` is present there are more directories to fetch; pass it back as `cursor` to retrieve the following page. Requires the *View file storage* permission.
+      operationId: files_list-account-directories
       parameters:
-      - description: Maximum number of files to return in this page.
+      - description: Maximum number of directories to return in this page.
         explode: false
         in: query
         name: limit
         required: false
         schema:
           default: 50
-          description: Maximum number of files to return in this page.
+          description: Maximum number of directories to return in this page.
           format: int32
           maximum: 200
           minimum: 1
@@ -305,6 +303,175 @@ paths:
           content:
             application/json:
               schema:
+                $ref: "#/components/schemas/DirectoryPage"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: List the account's directories
+      tags:
+      - Files
+      x-sdk-params: true
+    post:
+      description: |-
+        Creates a directory to organise the files stored against the account, at the root or inside another directory, and returns it. Directories can be nested at most 8 deep. The name is normalised to Unicode NFC, and names are unique within a directory among its files and directories, compared exactly: a name already taken there by a file or a directory is rejected with 409. Returns 404 if the account has no directory with the given `parentId`.
+
+        A directory takes up none of the account's storage quota. Requires the *Edit file storage* permission.
+      operationId: files_create-account-directories
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AccountDirectoryPostBody"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Directory"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Create a directory in the account's files
+      tags:
+      - Files
+      x-sdk-params: false
+  /v1/account/directories/{id}:
+    delete:
+      description: "Deletes an empty directory from the account's files. A directory\
+        \ that still holds a file or another directory is rejected with 409 `directory\
+        \ is not empty`: move or delete its contents first. Deleting a directory that\
+        \ is already gone succeeds rather than returning 404. Any other 409 means\
+        \ the directory changed during the request, and the request can be retried.\
+        \ Requires the *Edit file storage* permission."
+      operationId: files_delete-account-directories
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountDirectoryDeleteResponseWrapperBody"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Delete a directory
+      tags:
+      - Files
+      x-sdk-params: false
+    patch:
+      description: |-
+        Changes a directory's name, moves it into another directory, or both, and returns the updated directory. Give `name`, `parentId` or both; a body with neither is rejected with 400. Everything inside the directory moves with it and keeps its identifier, so anything referencing those files keeps working.
+
+        The name is normalised to Unicode NFC, and names are unique within a directory among its files and directories, compared exactly: a name already taken in the destination by a file or another directory, whether by a rename or a move, is rejected with 409. Moving a directory into itself or into a directory inside it, or so that something inside it would be nested more than 8 deep, is rejected with 400. Returns 404 if the account has no directory with this identifier, or none with the given `parentId`. Any other 409 means the account's directories changed during the request, and the request can be retried. Requires the *Edit file storage* permission.
+      operationId: files_update-account-directories
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AccountDirectoryPatchBody"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Directory"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Rename or move a directory
+      tags:
+      - Files
+      x-sdk-params: false
+  /v1/account/files:
+    get:
+      description: |-
+        Without `parent`, returns a page of every file stored against the account, whatever directory it is in, most recently uploaded first. Files belonging to other accounts are never returned.
+
+        With `parent`, returns a page of what is directly inside that directory, or inside the root when `parent` is `root`: its directories in `directories`, most recently created first, then its files in `files`, most recently uploaded first. Returns 404 if the account has no directory with that identifier.
+
+        When `nextCursor` is present there are more items to fetch; pass it back as `cursor`, with the same `parent`, to retrieve the following page. A page may come back shorter than `limit` while still having a `nextCursor`.
+
+        A file that has just been uploaded, moved or renamed may not show its change here immediately, so clients should apply the record returned by the upload or update operation to their list rather than refetching. Requires the *View file storage* permission.
+      operationId: files_list-account-files
+      parameters:
+      - description: Maximum number of files to return in this page.
+        explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 50
+          description: Maximum number of files to return in this page.
+          format: int32
+          maximum: 200
+          minimum: 1
+          type: integer
+        style: form
+      - description: "Opaque pagination cursor returned as nextCursor by a previous\
+          \ response. A cursor is only valid for the account, and the parent, it was\
+          \ issued for."
+        explode: false
+        in: query
+        name: cursor
+        required: false
+        schema:
+          description: "Opaque pagination cursor returned as nextCursor by a previous\
+            \ response. A cursor is only valid for the account, and the parent, it\
+            \ was issued for."
+          type: string
+        style: form
+      - description: "List only what is directly inside this directory: a directory\
+          \ identifier, or root for the root. Leave it out to list every file of the\
+          \ account, whatever directory it is in."
+        explode: false
+        in: query
+        name: parent
+        required: false
+        schema:
+          description: "List only what is directly inside this directory: a directory\
+            \ identifier, or root for the root. Leave it out to list every file of\
+            \ the account, whatever directory it is in."
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
                 $ref: "#/components/schemas/ListPage"
           description: OK
         default:
@@ -319,9 +486,9 @@ paths:
       x-sdk-params: true
     post:
       description: |-
-        Stores a file against the account and returns the record describing it. Send the request as `multipart/form-data` with a single file field named `file`. The uploaded file's name becomes the record's `name`, so it must be non-empty, at most 255 bytes and free of `/` and `\`. Any media type is accepted; `mimeType` is detected from the file's contents rather than from its name or the type the client declared. Maximum file size is 25 MiB, and uploads are rejected if a virus scan fails.
+        Stores a file against the account and returns the record describing it. Send the request as `multipart/form-data` with a single file field named `file`, and optionally a `parentId` field naming the directory to store it in; without one the file goes in the root, and a `parentId` the account has no directory for is rejected with 404. The uploaded file's name, normalised to Unicode NFC, becomes the record's `name`, so it must be non-empty and free of `/` and `\`; a name over 255 bytes is shortened to fit, keeping its extension. Names are unique within a directory among its files and directories, compared exactly, so `Report.pdf` and `report.pdf` can sit side by side: when the name is already taken there, the file is stored under the lowest free numbered name instead, such as `image (2).png`, with the number before the extension, and the response's `name` is the name it was stored under. Any media type is accepted; `mimeType` is detected from the file's contents rather than from its name or the type the client declared. Maximum file size is 25 MiB, and uploads are rejected if a virus scan fails.
 
-        The files stored against an account may total at most 1 GiB. An upload that would take the account past that is rejected with 413 and no file is added to the account, though the uploaded bytes may briefly remain in storage until they are cleaned up; deleting files frees their space. A 409 means concurrent uploads kept changing the account's usage, and the upload can be retried as it stands.
+        The files stored against an account may total at most 1 GiB. An upload that would take the account past that is rejected with 413 and no file is added to the account, though the uploaded bytes may briefly remain in storage until they are cleaned up; deleting files frees their space. A 409 means concurrent uploads kept changing the account's usage or taking the names it tried, and the upload can be retried as it stands.
 
         The response body is the same record shape the list operation returns, so a client can add it to a list it already holds instead of refetching. Requires the *Edit file storage* permission.
       operationId: files_create-account-files
@@ -383,9 +550,9 @@ paths:
       x-sdk-params: false
     patch:
       description: |-
-        Changes the display name of a file stored against the account and returns the updated record. Only the name changes: the stored content, media type, size and identifier are untouched, so anything already referencing the file keeps working.
+        Changes the display name of a file stored against the account, moves it into another directory, or both, and returns the updated record. Give `name`, `parentId` or both; a body with neither is rejected with 400. Only the name and directory change: the stored content, media type, size and identifier are untouched, so anything already referencing the file keeps working. The name is normalised to Unicode NFC, and names are unique within a directory among its files and directories, compared exactly. Giving a `name` already taken in the destination is rejected with 409. A move that gives only `parentId` never fails for its name: if the file's name is taken in the destination, it is stored under the lowest free numbered name instead, such as `lease (2).pdf`, and a name normalising makes longer than 255 bytes is shortened to fit; the response's `name` is the name it now has.
 
-        The identifier must be one returned by the upload or list operations; a malformed identifier is rejected with 400. Returns 404 if the account has no file with this identifier. Requires the *Edit file storage* permission.
+        The identifier must be one returned by the upload or list operations; a malformed identifier is rejected with 400. Returns 404 if the account has no file with this identifier, or no directory with the given `parentId`. Any other 409 means the file was moved by another request at the same time, and the request can be retried. Requires the *Edit file storage* permission.
       operationId: files_update-account-files
       parameters:
       - explode: false
@@ -414,7 +581,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorModel"
           description: Error
-      summary: Rename an account file
+      summary: Rename or move an account file
       tags:
       - Files
       x-sdk-params: false
@@ -7702,6 +7869,43 @@ components:
       - street
       - updatedAt
       - vatNumber
+    AccountDirectoryDeleteResponseWrapperBody:
+      additionalProperties: false
+      type: object
+    AccountDirectoryPatchBody:
+      additionalProperties: false
+      example:
+        name: name
+        parentId: parentId
+      properties:
+        name:
+          description: "New display name for the directory. At most 255 bytes after\
+            \ normalising to Unicode NFC. Must not contain a forward slash or a backslash,\
+            \ and must not be . or .."
+          minLength: 1
+          type: string
+        parentId:
+          description: "Identifier of the directory to move this one into, or an empty\
+            \ string to move it to the root."
+          type: string
+    AccountDirectoryPostBody:
+      additionalProperties: false
+      example:
+        name: name
+        parentId: parentId
+      properties:
+        name:
+          description: "Display name of the directory. At most 255 bytes after normalising\
+            \ to Unicode NFC. Must not contain a forward slash or a backslash, and\
+            \ must not be . or .."
+          minLength: 1
+          type: string
+        parentId:
+          description: Identifier of the directory to create this one in. Leave it
+            out to create it at the root.
+          type: string
+      required:
+      - name
     AccountFileDeleteResponseWrapperBody:
       additionalProperties: false
       type: object
@@ -7709,15 +7913,17 @@ components:
       additionalProperties: false
       example:
         name: name
+        parentId: parentId
       properties:
         name:
-          description: New display name for the file. Must not contain a forward slash
-            or a backslash.
-          maxLength: 255
+          description: New display name for the file. At most 255 bytes after normalising
+            to Unicode NFC. Must not contain a forward slash or a backslash.
           minLength: 1
           type: string
-      required:
-      - name
+        parentId:
+          description: "Identifier of the directory to move the file into, or an empty\
+            \ string to move it to the root."
+          type: string
     AccountGetAuthOptionsResBody:
       additionalProperties: false
       example:
@@ -10565,6 +10771,66 @@ components:
     DefaultDatasetData:
       additionalProperties: false
       type: object
+    Directory:
+      additionalProperties: false
+      example:
+        createdAt: 2000-01-23T04:56:07.000+00:00
+        createdBy: 0
+        name: name
+        id: id
+        parentId: parentId
+      properties:
+        createdAt:
+          description: When the directory was created (RFC 3339).
+          format: date-time
+          type: string
+        createdBy:
+          description: Identifier of the user who created the directory.
+          format: int64
+          type: integer
+        id:
+          description: Opaque identifier of the directory.
+          type: string
+        name:
+          description: "Display name of the directory. Nothing else in the same parent\
+            \ has the same name, compared exactly and after normalising to Unicode\
+            \ NFC."
+          type: string
+        parentId:
+          description: Identifier of the directory this one is in. Absent for a directory
+            at the root.
+          type: string
+      required:
+      - createdAt
+      - createdBy
+      - id
+      - name
+    DirectoryPage:
+      additionalProperties: false
+      example:
+        nextCursor: nextCursor
+        directories:
+        - createdAt: 2000-01-23T04:56:07.000+00:00
+          createdBy: 0
+          name: name
+          id: id
+          parentId: parentId
+        - createdAt: 2000-01-23T04:56:07.000+00:00
+          createdBy: 0
+          name: name
+          id: id
+          parentId: parentId
+      properties:
+        directories:
+          items:
+            $ref: "#/components/schemas/Directory"
+          type: array
+        nextCursor:
+          description: Pass back as cursor to fetch the following page. Absent on
+            the last page.
+          type: string
+      required:
+      - directories
     EntityChangeActor:
       additionalProperties: {}
       properties:
@@ -12171,6 +12437,17 @@ components:
       additionalProperties: false
       example:
         nextCursor: nextCursor
+        directories:
+        - createdAt: 2000-01-23T04:56:07.000+00:00
+          createdBy: 0
+          name: name
+          id: id
+          parentId: parentId
+        - createdAt: 2000-01-23T04:56:07.000+00:00
+          createdBy: 0
+          name: name
+          id: id
+          parentId: parentId
         files:
         - createdAt: 2000-01-23T04:56:07.000+00:00
           size: 0
@@ -12180,6 +12457,7 @@ components:
           id: id
           mimeType: mimeType
           uploadedBy: 6
+          parentId: parentId
         - createdAt: 2000-01-23T04:56:07.000+00:00
           size: 0
           quarantinedAt: 2000-01-23T04:56:07.000+00:00
@@ -12188,7 +12466,14 @@ components:
           id: id
           mimeType: mimeType
           uploadedBy: 6
+          parentId: parentId
       properties:
+        directories:
+          description: "Directories directly inside the listed directory. Returned\
+            \ only when a parent is given, and only on the pages that hold some."
+          items:
+            $ref: "#/components/schemas/Directory"
+          type: array
         files:
           items:
             $ref: "#/components/schemas/Record"
@@ -13478,6 +13763,7 @@ components:
         id: id
         mimeType: mimeType
         uploadedBy: 6
+        parentId: parentId
       properties:
         createdAt:
           description: When the file was uploaded (RFC 3339).
@@ -13492,7 +13778,12 @@ components:
           type: string
         name:
           description: "Display name of the file, taken from the uploaded file name\
-            \ and changeable afterwards."
+            \ and changeable afterwards. Nothing else in the same directory has the\
+            \ same name, compared exactly and after normalising to Unicode NFC."
+          type: string
+        parentId:
+          description: Identifier of the directory the file is in. Absent for a file
+            at the root.
           type: string
         quarantineSignature:
           description: Name of the virus signature the file matched when it was quarantined.

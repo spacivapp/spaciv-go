@@ -40,6 +40,8 @@ docs/AccountAuthOption.md
 docs/AccountCalculationUsageBody.md
 docs/AccountCalculationUsageDay.md
 docs/AccountDetailsResBody.md
+docs/AccountDirectoryPatchBody.md
+docs/AccountDirectoryPostBody.md
 docs/AccountFilePatchBody.md
 docs/AccountGetAuthOptionsResBody.md
 docs/AccountOIDCProvider.md
@@ -213,6 +215,8 @@ docs/DatasetModify.md
 docs/DatasetRes.md
 docs/DatasetsAPI.md
 docs/DaysOffData.md
+docs/Directory.md
+docs/DirectoryPage.md
 docs/EntityChangeActor.md
 docs/EntityChangedEvent.md
 docs/EntryPatch.md
@@ -441,6 +445,8 @@ model_account_auth_option.go
 model_account_calculation_usage_body.go
 model_account_calculation_usage_day.go
 model_account_details_res_body.go
+model_account_directory_patch_body.go
+model_account_directory_post_body.go
 model_account_file_patch_body.go
 model_account_get_auth_options_res_body.go
 model_account_oidc_provider.go
@@ -605,6 +611,8 @@ model_dataset_data_one_of_2.go
 model_dataset_modify.go
 model_dataset_res.go
 model_days_off_data.go
+model_directory.go
+model_directory_page.go
 model_entity_change_actor.go
 model_entity_changed_event.go
 model_entry_patch.go

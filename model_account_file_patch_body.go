@@ -13,8 +13,6 @@ package spaciv
 
 import (
 	"encoding/json"
-	"bytes"
-	"fmt"
 )
 
 // checks if the AccountFilePatchBody type satisfies the MappedNullable interface at compile time
@@ -22,19 +20,18 @@ var _ MappedNullable = &AccountFilePatchBody{}
 
 // AccountFilePatchBody struct for AccountFilePatchBody
 type AccountFilePatchBody struct {
-	// New display name for the file. Must not contain a forward slash or a backslash.
-	Name string `json:"name"`
+	// New display name for the file. At most 255 bytes after normalising to Unicode NFC. Must not contain a forward slash or a backslash.
+	Name *string `json:"name,omitempty"`
+	// Identifier of the directory to move the file into, or an empty string to move it to the root.
+	ParentId *string `json:"parentId,omitempty"`
 }
-
-type _AccountFilePatchBody AccountFilePatchBody
 
 // NewAccountFilePatchBody instantiates a new AccountFilePatchBody object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAccountFilePatchBody(name string) *AccountFilePatchBody {
+func NewAccountFilePatchBody() *AccountFilePatchBody {
 	this := AccountFilePatchBody{}
-	this.Name = name
 	return &this
 }
 
@@ -46,28 +43,68 @@ func NewAccountFilePatchBodyWithDefaults() *AccountFilePatchBody {
 	return &this
 }
 
-// GetName returns the Name field value
+// GetName returns the Name field value if set, zero value otherwise.
 func (o *AccountFilePatchBody) GetName() string {
-	if o == nil {
+	if o == nil || IsNil(o.Name) {
 		var ret string
 		return ret
 	}
-
-	return o.Name
+	return *o.Name
 }
 
-// GetNameOk returns a tuple with the Name field value
+// GetNameOk returns a tuple with the Name field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AccountFilePatchBody) GetNameOk() (*string, bool) {
-	if o == nil {
+	if o == nil || IsNil(o.Name) {
 		return nil, false
 	}
-	return &o.Name, true
+	return o.Name, true
 }
 
-// SetName sets field value
+// HasName returns a boolean if a field has been set.
+func (o *AccountFilePatchBody) HasName() bool {
+	if o != nil && !IsNil(o.Name) {
+		return true
+	}
+
+	return false
+}
+
+// SetName gets a reference to the given string and assigns it to the Name field.
 func (o *AccountFilePatchBody) SetName(v string) {
-	o.Name = v
+	o.Name = &v
+}
+
+// GetParentId returns the ParentId field value if set, zero value otherwise.
+func (o *AccountFilePatchBody) GetParentId() string {
+	if o == nil || IsNil(o.ParentId) {
+		var ret string
+		return ret
+	}
+	return *o.ParentId
+}
+
+// GetParentIdOk returns a tuple with the ParentId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AccountFilePatchBody) GetParentIdOk() (*string, bool) {
+	if o == nil || IsNil(o.ParentId) {
+		return nil, false
+	}
+	return o.ParentId, true
+}
+
+// HasParentId returns a boolean if a field has been set.
+func (o *AccountFilePatchBody) HasParentId() bool {
+	if o != nil && !IsNil(o.ParentId) {
+		return true
+	}
+
+	return false
+}
+
+// SetParentId gets a reference to the given string and assigns it to the ParentId field.
+func (o *AccountFilePatchBody) SetParentId(v string) {
+	o.ParentId = &v
 }
 
 func (o AccountFilePatchBody) MarshalJSON() ([]byte, error) {
@@ -80,45 +117,13 @@ func (o AccountFilePatchBody) MarshalJSON() ([]byte, error) {
 
 func (o AccountFilePatchBody) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["name"] = o.Name
+	if !IsNil(o.Name) {
+		toSerialize["name"] = o.Name
+	}
+	if !IsNil(o.ParentId) {
+		toSerialize["parentId"] = o.ParentId
+	}
 	return toSerialize, nil
-}
-
-func (o *AccountFilePatchBody) UnmarshalJSON(data []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"name",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(data, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varAccountFilePatchBody := _AccountFilePatchBody{}
-
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAccountFilePatchBody)
-
-	if err != nil {
-		return err
-	}
-
-	*o = AccountFilePatchBody(varAccountFilePatchBody)
-
-	return err
 }
 
 type NullableAccountFilePatchBody struct {

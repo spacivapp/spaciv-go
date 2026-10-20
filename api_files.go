@@ -24,6 +24,118 @@ import (
 
 type FilesService service
 
+type requestForFilesCreateAccountDirectories struct {
+	ctx context.Context
+	ApiService *FilesService
+	accountDirectoryPostBody *AccountDirectoryPostBody
+}
+
+/*
+CreateAccountDirectories Create a directory in the account's files
+
+Creates a directory to organise the files stored against the account, at the root or inside another directory, and returns it. Directories can be nested at most 8 deep. The name is normalised to Unicode NFC, and names are unique within a directory among its files and directories, compared exactly: a name already taken there by a file or a directory is rejected with 409. Returns 404 if the account has no directory with the given `parentId`.
+
+A directory takes up none of the account's storage quota. Requires the *Edit file storage* permission.
+*/
+func (a *FilesService) CreateAccountDirectories(ctx context.Context, accountDirectoryPostBody AccountDirectoryPostBody) (*Directory, error) {
+	r := requestForFilesCreateAccountDirectories{
+		ApiService: a,
+		ctx: ctx,
+		accountDirectoryPostBody: &accountDirectoryPostBody,
+	}
+	result, _, err := a.executeCreateAccountDirectories(r)
+	return result, err
+}
+
+func (a *FilesService) executeCreateAccountDirectories(r requestForFilesCreateAccountDirectories) (*Directory, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Directory
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FilesAPIService.CreateAccountDirectories")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/account/directories"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.accountDirectoryPostBody == nil {
+		return localVarReturnValue, nil, reportError("accountDirectoryPostBody is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.accountDirectoryPostBody
+	if r.ctx != nil {
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "FilesAPIService.CreateAccountDirectories")
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type requestForFilesCreateAccountFiles struct {
 	ctx context.Context
 	ApiService *FilesService
@@ -41,9 +153,9 @@ type FilesCreateAccountFilesParams struct {
 /*
 CreateAccountFiles Upload a file to the account
 
-Stores a file against the account and returns the record describing it. Send the request as `multipart/form-data` with a single file field named `file`. The uploaded file's name becomes the record's `name`, so it must be non-empty, at most 255 bytes and free of `/` and `\`. Any media type is accepted; `mimeType` is detected from the file's contents rather than from its name or the type the client declared. Maximum file size is 25 MiB, and uploads are rejected if a virus scan fails.
+Stores a file against the account and returns the record describing it. Send the request as `multipart/form-data` with a single file field named `file`, and optionally a `parentId` field naming the directory to store it in; without one the file goes in the root, and a `parentId` the account has no directory for is rejected with 404. The uploaded file's name, normalised to Unicode NFC, becomes the record's `name`, so it must be non-empty and free of `/` and `\`; a name over 255 bytes is shortened to fit, keeping its extension. Names are unique within a directory among its files and directories, compared exactly, so `Report.pdf` and `report.pdf` can sit side by side: when the name is already taken there, the file is stored under the lowest free numbered name instead, such as `image (2).png`, with the number before the extension, and the response's `name` is the name it was stored under. Any media type is accepted; `mimeType` is detected from the file's contents rather than from its name or the type the client declared. Maximum file size is 25 MiB, and uploads are rejected if a virus scan fails.
 
-The files stored against an account may total at most 1 GiB. An upload that would take the account past that is rejected with 413 and no file is added to the account, though the uploaded bytes may briefly remain in storage until they are cleaned up; deleting files frees their space. A 409 means concurrent uploads kept changing the account's usage, and the upload can be retried as it stands.
+The files stored against an account may total at most 1 GiB. An upload that would take the account past that is rejected with 413 and no file is added to the account, though the uploaded bytes may briefly remain in storage until they are cleaned up; deleting files frees their space. A 409 means concurrent uploads kept changing the account's usage or taking the names it tried, and the upload can be retried as it stands.
 
 The response body is the same record shape the list operation returns, so a client can add it to a list it already holds instead of refetching. Requires the *Edit file storage* permission.
 */
@@ -119,6 +231,112 @@ func (a *FilesService) executeCreateAccountFiles(r requestForFilesCreateAccountF
 	}
 	if r.ctx != nil {
 		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "FilesAPIService.CreateAccountFiles")
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type requestForFilesDeleteAccountDirectories struct {
+	ctx context.Context
+	ApiService *FilesService
+	id string
+}
+
+/*
+DeleteAccountDirectories Delete a directory
+
+Deletes an empty directory from the account's files. A directory that still holds a file or another directory is rejected with 409 `directory is not empty`: move or delete its contents first. Deleting a directory that is already gone succeeds rather than returning 404. Any other 409 means the directory changed during the request, and the request can be retried. Requires the *Edit file storage* permission.
+*/
+func (a *FilesService) DeleteAccountDirectories(ctx context.Context, id string) (map[string]interface{}, error) {
+	r := requestForFilesDeleteAccountDirectories{
+		ApiService: a,
+		ctx: ctx,
+		id: id,
+	}
+	result, _, err := a.executeDeleteAccountDirectories(r)
+	return result, err
+}
+
+func (a *FilesService) executeDeleteAccountDirectories(r requestForFilesDeleteAccountDirectories) (map[string]interface{}, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodDelete
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  map[string]interface{}
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FilesAPIService.DeleteAccountDirectories")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/account/directories/{id}"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ctx != nil {
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "FilesAPIService.DeleteAccountDirectories")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -383,28 +601,160 @@ func (a *FilesService) executeGetAccountFilesContent(r requestForFilesGetAccount
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type requestForFilesListAccountFiles struct {
+type requestForFilesListAccountDirectories struct {
 	ctx context.Context
 	ApiService *FilesService
 	limit *int32
 	cursor *string
 }
 
-type FilesListAccountFilesParams struct {
-	// Maximum number of files to return in this page.
+type FilesListAccountDirectoriesParams struct {
+	// Maximum number of directories to return in this page.
 	Limit *int32
 	// Opaque pagination cursor returned as nextCursor by a previous response. A cursor is only valid for the account it was issued to.
 	Cursor *string
 }
 
 /*
+ListAccountDirectories List the account's directories
+
+Returns a page of every directory in the account's files, at any depth, in the order they were created. Each directory gives its parent's identifier, so a client that fetches every page can build the whole tree. To list what is inside one directory, list the account's files with `parent` instead.
+
+When `nextCursor` is present there are more directories to fetch; pass it back as `cursor` to retrieve the following page. Requires the *View file storage* permission.
+*/
+func (a *FilesService) ListAccountDirectories(ctx context.Context, params *FilesListAccountDirectoriesParams) (*DirectoryPage, error) {
+	r := requestForFilesListAccountDirectories{
+		ApiService: a,
+		ctx: ctx,
+	}
+	if params != nil {
+		r.limit = params.Limit
+		r.cursor = params.Cursor
+	}
+	result, _, err := a.executeListAccountDirectories(r)
+	return result, err
+}
+
+func (a *FilesService) executeListAccountDirectories(r requestForFilesListAccountDirectories) (*DirectoryPage, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *DirectoryPage
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FilesAPIService.ListAccountDirectories")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/account/directories"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	if r.limit != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "form", "")
+	} else {
+		var defaultValue int32 = 50
+		r.limit = &defaultValue
+	}
+	if r.cursor != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "cursor", r.cursor, "form", "")
+	}
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ctx != nil {
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "FilesAPIService.ListAccountDirectories")
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type requestForFilesListAccountFiles struct {
+	ctx context.Context
+	ApiService *FilesService
+	limit *int32
+	cursor *string
+	parent *string
+}
+
+type FilesListAccountFilesParams struct {
+	// Maximum number of files to return in this page.
+	Limit *int32
+	// Opaque pagination cursor returned as nextCursor by a previous response. A cursor is only valid for the account, and the parent, it was issued for.
+	Cursor *string
+	// List only what is directly inside this directory: a directory identifier, or root for the root. Leave it out to list every file of the account, whatever directory it is in.
+	Parent *string
+}
+
+/*
 ListAccountFiles List the account's files
 
-Returns a page of the files stored against the account, most recently uploaded first. Files belonging to other accounts are never returned.
+Without `parent`, returns a page of every file stored against the account, whatever directory it is in, most recently uploaded first. Files belonging to other accounts are never returned.
 
-When `nextCursor` is present there are more files to fetch; pass it back as `cursor` to retrieve the following page. A page may come back shorter than `limit` while still having a `nextCursor`.
+With `parent`, returns a page of what is directly inside that directory, or inside the root when `parent` is `root`: its directories in `directories`, most recently created first, then its files in `files`, most recently uploaded first. Returns 404 if the account has no directory with that identifier.
 
-A file that has just been uploaded may not appear here immediately, so clients should add the record returned by the upload operation to their list rather than refetching. Requires the *View file storage* permission.
+When `nextCursor` is present there are more items to fetch; pass it back as `cursor`, with the same `parent`, to retrieve the following page. A page may come back shorter than `limit` while still having a `nextCursor`.
+
+A file that has just been uploaded, moved or renamed may not show its change here immediately, so clients should apply the record returned by the upload or update operation to their list rather than refetching. Requires the *View file storage* permission.
 */
 func (a *FilesService) ListAccountFiles(ctx context.Context, params *FilesListAccountFilesParams) (*ListPage, error) {
 	r := requestForFilesListAccountFiles{
@@ -414,6 +764,7 @@ func (a *FilesService) ListAccountFiles(ctx context.Context, params *FilesListAc
 	if params != nil {
 		r.limit = params.Limit
 		r.cursor = params.Cursor
+		r.parent = params.Parent
 	}
 	result, _, err := a.executeListAccountFiles(r)
 	return result, err
@@ -446,6 +797,9 @@ func (a *FilesService) executeListAccountFiles(r requestForFilesListAccountFiles
 	}
 	if r.cursor != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "cursor", r.cursor, "form", "")
+	}
+	if r.parent != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "parent", r.parent, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -512,6 +866,121 @@ func (a *FilesService) executeListAccountFiles(r requestForFilesListAccountFiles
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type requestForFilesUpdateAccountDirectories struct {
+	ctx context.Context
+	ApiService *FilesService
+	id string
+	accountDirectoryPatchBody *AccountDirectoryPatchBody
+}
+
+/*
+UpdateAccountDirectories Rename or move a directory
+
+Changes a directory's name, moves it into another directory, or both, and returns the updated directory. Give `name`, `parentId` or both; a body with neither is rejected with 400. Everything inside the directory moves with it and keeps its identifier, so anything referencing those files keeps working.
+
+The name is normalised to Unicode NFC, and names are unique within a directory among its files and directories, compared exactly: a name already taken in the destination by a file or another directory, whether by a rename or a move, is rejected with 409. Moving a directory into itself or into a directory inside it, or so that something inside it would be nested more than 8 deep, is rejected with 400. Returns 404 if the account has no directory with this identifier, or none with the given `parentId`. Any other 409 means the account's directories changed during the request, and the request can be retried. Requires the *Edit file storage* permission.
+*/
+func (a *FilesService) UpdateAccountDirectories(ctx context.Context, id string, accountDirectoryPatchBody AccountDirectoryPatchBody) (*Directory, error) {
+	r := requestForFilesUpdateAccountDirectories{
+		ApiService: a,
+		ctx: ctx,
+		id: id,
+		accountDirectoryPatchBody: &accountDirectoryPatchBody,
+	}
+	result, _, err := a.executeUpdateAccountDirectories(r)
+	return result, err
+}
+
+func (a *FilesService) executeUpdateAccountDirectories(r requestForFilesUpdateAccountDirectories) (*Directory, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPatch
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Directory
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FilesAPIService.UpdateAccountDirectories")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/account/directories/{id}"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.accountDirectoryPatchBody == nil {
+		return localVarReturnValue, nil, reportError("accountDirectoryPatchBody is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.accountDirectoryPatchBody
+	if r.ctx != nil {
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "FilesAPIService.UpdateAccountDirectories")
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type requestForFilesUpdateAccountFiles struct {
 	ctx context.Context
 	ApiService *FilesService
@@ -520,11 +989,11 @@ type requestForFilesUpdateAccountFiles struct {
 }
 
 /*
-UpdateAccountFiles Rename an account file
+UpdateAccountFiles Rename or move an account file
 
-Changes the display name of a file stored against the account and returns the updated record. Only the name changes: the stored content, media type, size and identifier are untouched, so anything already referencing the file keeps working.
+Changes the display name of a file stored against the account, moves it into another directory, or both, and returns the updated record. Give `name`, `parentId` or both; a body with neither is rejected with 400. Only the name and directory change: the stored content, media type, size and identifier are untouched, so anything already referencing the file keeps working. The name is normalised to Unicode NFC, and names are unique within a directory among its files and directories, compared exactly. Giving a `name` already taken in the destination is rejected with 409. A move that gives only `parentId` never fails for its name: if the file's name is taken in the destination, it is stored under the lowest free numbered name instead, such as `lease (2).pdf`, and a name normalising makes longer than 255 bytes is shortened to fit; the response's `name` is the name it now has.
 
-The identifier must be one returned by the upload or list operations; a malformed identifier is rejected with 400. Returns 404 if the account has no file with this identifier. Requires the *Edit file storage* permission.
+The identifier must be one returned by the upload or list operations; a malformed identifier is rejected with 400. Returns 404 if the account has no file with this identifier, or no directory with the given `parentId`. Any other 409 means the file was moved by another request at the same time, and the request can be retried. Requires the *Edit file storage* permission.
 */
 func (a *FilesService) UpdateAccountFiles(ctx context.Context, id string, accountFilePatchBody AccountFilePatchBody) (*Record, error) {
 	r := requestForFilesUpdateAccountFiles{

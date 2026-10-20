@@ -22,6 +22,8 @@ var _ MappedNullable = &ListPage{}
 
 // ListPage struct for ListPage
 type ListPage struct {
+	// Directories directly inside the listed directory. Returned only when a parent is given, and only on the pages that hold some.
+	Directories []Directory `json:"directories,omitempty"`
 	Files []Record `json:"files"`
 	// Pass back as cursor to fetch the following page. Absent on the last page.
 	NextCursor *string `json:"nextCursor,omitempty"`
@@ -45,6 +47,38 @@ func NewListPage(files []Record) *ListPage {
 func NewListPageWithDefaults() *ListPage {
 	this := ListPage{}
 	return &this
+}
+
+// GetDirectories returns the Directories field value if set, zero value otherwise.
+func (o *ListPage) GetDirectories() []Directory {
+	if o == nil || IsNil(o.Directories) {
+		var ret []Directory
+		return ret
+	}
+	return o.Directories
+}
+
+// GetDirectoriesOk returns a tuple with the Directories field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ListPage) GetDirectoriesOk() ([]Directory, bool) {
+	if o == nil || IsNil(o.Directories) {
+		return nil, false
+	}
+	return o.Directories, true
+}
+
+// HasDirectories returns a boolean if a field has been set.
+func (o *ListPage) HasDirectories() bool {
+	if o != nil && !IsNil(o.Directories) {
+		return true
+	}
+
+	return false
+}
+
+// SetDirectories gets a reference to the given []Directory and assigns it to the Directories field.
+func (o *ListPage) SetDirectories(v []Directory) {
+	o.Directories = v
 }
 
 // GetFiles returns the Files field value
@@ -113,6 +147,9 @@ func (o ListPage) MarshalJSON() ([]byte, error) {
 
 func (o ListPage) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Directories) {
+		toSerialize["directories"] = o.Directories
+	}
 	toSerialize["files"] = o.Files
 	if !IsNil(o.NextCursor) {
 		toSerialize["nextCursor"] = o.NextCursor

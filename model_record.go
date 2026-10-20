@@ -29,8 +29,10 @@ type Record struct {
 	Id string `json:"id"`
 	// Media type detected from the file's contents when they were last stored, rather than from its name or the type the client declared.
 	MimeType string `json:"mimeType"`
-	// Display name of the file, taken from the uploaded file name and changeable afterwards.
+	// Display name of the file, taken from the uploaded file name and changeable afterwards. Nothing else in the same directory has the same name, compared exactly and after normalising to Unicode NFC.
 	Name string `json:"name"`
+	// Identifier of the directory the file is in. Absent for a file at the root.
+	ParentId *string `json:"parentId,omitempty"`
 	// Name of the virus signature the file matched when it was quarantined.
 	QuarantineSignature *string `json:"quarantineSignature,omitempty"`
 	// When a rescan found the file matching a virus signature (RFC 3339). A quarantined file cannot be downloaded, but it can still be renamed or deleted.
@@ -162,6 +164,38 @@ func (o *Record) SetName(v string) {
 	o.Name = v
 }
 
+// GetParentId returns the ParentId field value if set, zero value otherwise.
+func (o *Record) GetParentId() string {
+	if o == nil || IsNil(o.ParentId) {
+		var ret string
+		return ret
+	}
+	return *o.ParentId
+}
+
+// GetParentIdOk returns a tuple with the ParentId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Record) GetParentIdOk() (*string, bool) {
+	if o == nil || IsNil(o.ParentId) {
+		return nil, false
+	}
+	return o.ParentId, true
+}
+
+// HasParentId returns a boolean if a field has been set.
+func (o *Record) HasParentId() bool {
+	if o != nil && !IsNil(o.ParentId) {
+		return true
+	}
+
+	return false
+}
+
+// SetParentId gets a reference to the given string and assigns it to the ParentId field.
+func (o *Record) SetParentId(v string) {
+	o.ParentId = &v
+}
+
 // GetQuarantineSignature returns the QuarantineSignature field value if set, zero value otherwise.
 func (o *Record) GetQuarantineSignature() string {
 	if o == nil || IsNil(o.QuarantineSignature) {
@@ -288,6 +322,9 @@ func (o Record) ToMap() (map[string]interface{}, error) {
 	toSerialize["id"] = o.Id
 	toSerialize["mimeType"] = o.MimeType
 	toSerialize["name"] = o.Name
+	if !IsNil(o.ParentId) {
+		toSerialize["parentId"] = o.ParentId
+	}
 	if !IsNil(o.QuarantineSignature) {
 		toSerialize["quarantineSignature"] = o.QuarantineSignature
 	}

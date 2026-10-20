@@ -7,7 +7,8 @@ Name | Type | Description | Notes
 **CreatedAt** | **time.Time** | When the file was uploaded (RFC 3339). | 
 **Id** | **string** | Opaque identifier of the file, used to rename or delete it. | 
 **MimeType** | **string** | Media type detected from the file&#39;s contents when they were last stored, rather than from its name or the type the client declared. | 
-**Name** | **string** | Display name of the file, taken from the uploaded file name and changeable afterwards. | 
+**Name** | **string** | Display name of the file, taken from the uploaded file name and changeable afterwards. Nothing else in the same directory has the same name, compared exactly and after normalising to Unicode NFC. | 
+**ParentId** | Pointer to **string** | Identifier of the directory the file is in. Absent for a file at the root. | [optional] 
 **QuarantineSignature** | Pointer to **string** | Name of the virus signature the file matched when it was quarantined. | [optional] 
 **QuarantinedAt** | Pointer to **time.Time** | When a rescan found the file matching a virus signature (RFC 3339). A quarantined file cannot be downloaded, but it can still be renamed or deleted. | [optional] 
 **Size** | **int64** | Size of the stored file in bytes. | 
@@ -111,6 +112,31 @@ and a boolean to check if the value has been set.
 
 SetName sets Name field to given value.
 
+
+### GetParentId
+
+`func (o *Record) GetParentId() string`
+
+GetParentId returns the ParentId field if non-nil, zero value otherwise.
+
+### GetParentIdOk
+
+`func (o *Record) GetParentIdOk() (*string, bool)`
+
+GetParentIdOk returns a tuple with the ParentId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetParentId
+
+`func (o *Record) SetParentId(v string)`
+
+SetParentId sets ParentId field to given value.
+
+### HasParentId
+
+`func (o *Record) HasParentId() bool`
+
+HasParentId returns a boolean if a field has been set.
 
 ### GetQuarantineSignature
 

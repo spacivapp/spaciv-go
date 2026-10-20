@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**Directories** | Pointer to [**[]Directory**](Directory.md) | Directories directly inside the listed directory. Returned only when a parent is given, and only on the pages that hold some. | [optional] 
 **Files** | [**[]Record**](Record.md) |  | 
 **NextCursor** | Pointer to **string** | Pass back as cursor to fetch the following page. Absent on the last page. | [optional] 
 
@@ -25,6 +26,31 @@ will change when the set of required properties is changed
 NewListPageWithDefaults instantiates a new ListPage object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetDirectories
+
+`func (o *ListPage) GetDirectories() []Directory`
+
+GetDirectories returns the Directories field if non-nil, zero value otherwise.
+
+### GetDirectoriesOk
+
+`func (o *ListPage) GetDirectoriesOk() (*[]Directory, bool)`
+
+GetDirectoriesOk returns a tuple with the Directories field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDirectories
+
+`func (o *ListPage) SetDirectories(v []Directory)`
+
+SetDirectories sets Directories field to given value.
+
+### HasDirectories
+
+`func (o *ListPage) HasDirectories() bool`
+
+HasDirectories returns a boolean if a field has been set.
 
 ### GetFiles
 
