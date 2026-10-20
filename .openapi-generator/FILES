@@ -55,6 +55,7 @@ docs/AccountPostOIDCProviderReqBody.md
 docs/AccountPostReqBody.md
 docs/AccountPutOIDCClientSecretReqBody.md
 docs/AccountPutReqBody.md
+docs/AccountTextFilePostBody.md
 docs/AccountUsageResBody.md
 docs/AccountsAPI.md
 docs/ActivityData.md
@@ -486,6 +487,7 @@ model_account_post_oidc_provider_req_body.go
 model_account_post_req_body.go
 model_account_put_oidc_client_secret_req_body.go
 model_account_put_req_body.go
+model_account_text_file_post_body.go
 model_account_usage_res_body.go
 model_activity_data.go
 model_activity_location_data.go

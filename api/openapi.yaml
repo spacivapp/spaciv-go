@@ -1112,6 +1112,37 @@ paths:
       tags:
       - Accounts
       x-sdk-params: false
+  /v1/account/text-files:
+    post:
+      description: |-
+        Creates an empty file to write in, at the root or inside another directory, and returns its record. The file is always text, and the name's extension, compared ignoring case, chooses its type: `.md` gives `text/markdown; charset=utf-8`, `.py` `text/x-python; charset=utf-8`, `.js` `text/javascript; charset=utf-8`, `.ts` `text/x-typescript; charset=utf-8` and `.go` `text/x-go; charset=utf-8`. Any other name, with or without an extension, gives `text/plain; charset=utf-8`. The file keeps that type when its content is replaced, as long as the new content is detected as plain text. Write the file's content by replacing it, with the `ETag` its content is read with.
+
+        The name is normalised to Unicode NFC, and names are unique within a directory among its files and directories, compared exactly: a name already taken there is rejected with 409 rather than numbered, as an upload's would be. Returns 404 if the account has no directory with the given `parentId`. The file counts towards the account's 1 GiB storage quota like an upload, and is rejected with 413 when the account is already past it. Requires the *Edit file storage* permission.
+      operationId: files_create-account-text-files
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AccountTextFilePostBody"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Record"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Create an empty text file in the account's files
+      tags:
+      - Files
+      x-sdk-params: false
   /v1/account/usage:
     get:
       description: "Returns how much the account the access token was issued for holds,\
@@ -8350,6 +8381,24 @@ components:
           type: string
         vatNumber:
           type: string
+    AccountTextFilePostBody:
+      additionalProperties: false
+      example:
+        name: name
+        parentId: parentId
+      properties:
+        name:
+          description: "Name of the new file. Its extension chooses its type. At most\
+            \ 255 bytes after normalising to Unicode NFC. Must not contain a forward\
+            \ slash or a backslash, and must not be . or .."
+          minLength: 1
+          type: string
+        parentId:
+          description: Identifier of the directory to create the file in. Leave it
+            out to create it at the root.
+          type: string
+      required:
+      - name
     AccountUsageResBody:
       additionalProperties: false
       example:
@@ -14524,7 +14573,10 @@ components:
           type: string
         mimeType:
           description: "Media type detected from the file's contents when they were\
-            \ last stored, rather than from its name or the type the client declared."
+            \ last stored, rather than from its name or the type the client declared.\
+            \ A file created empty in the app takes its type from its extension, such\
+            \ as text/markdown; charset=utf-8 for .md, and keeps it while its contents\
+            \ are detected as plain text."
           type: string
         name:
           description: "Display name of the file, taken from the uploaded file name\

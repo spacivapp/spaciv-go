@@ -277,6 +277,118 @@ func (a *FilesService) executeCreateAccountFiles(r requestForFilesCreateAccountF
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type requestForFilesCreateAccountTextFiles struct {
+	ctx context.Context
+	ApiService *FilesService
+	accountTextFilePostBody *AccountTextFilePostBody
+}
+
+/*
+CreateAccountTextFiles Create an empty text file in the account's files
+
+Creates an empty file to write in, at the root or inside another directory, and returns its record. The file is always text, and the name's extension, compared ignoring case, chooses its type: `.md` gives `text/markdown; charset=utf-8`, `.py` `text/x-python; charset=utf-8`, `.js` `text/javascript; charset=utf-8`, `.ts` `text/x-typescript; charset=utf-8` and `.go` `text/x-go; charset=utf-8`. Any other name, with or without an extension, gives `text/plain; charset=utf-8`. The file keeps that type when its content is replaced, as long as the new content is detected as plain text. Write the file's content by replacing it, with the `ETag` its content is read with.
+
+The name is normalised to Unicode NFC, and names are unique within a directory among its files and directories, compared exactly: a name already taken there is rejected with 409 rather than numbered, as an upload's would be. Returns 404 if the account has no directory with the given `parentId`. The file counts towards the account's 1 GiB storage quota like an upload, and is rejected with 413 when the account is already past it. Requires the *Edit file storage* permission.
+*/
+func (a *FilesService) CreateAccountTextFiles(ctx context.Context, accountTextFilePostBody AccountTextFilePostBody) (*Record, error) {
+	r := requestForFilesCreateAccountTextFiles{
+		ApiService: a,
+		ctx: ctx,
+		accountTextFilePostBody: &accountTextFilePostBody,
+	}
+	result, _, err := a.executeCreateAccountTextFiles(r)
+	return result, err
+}
+
+func (a *FilesService) executeCreateAccountTextFiles(r requestForFilesCreateAccountTextFiles) (*Record, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Record
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FilesAPIService.CreateAccountTextFiles")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/account/text-files"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.accountTextFilePostBody == nil {
+		return localVarReturnValue, nil, reportError("accountTextFilePostBody is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.accountTextFilePostBody
+	if r.ctx != nil {
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "FilesAPIService.CreateAccountTextFiles")
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type requestForFilesDeleteAccountDirectories struct {
 	ctx context.Context
 	ApiService *FilesService

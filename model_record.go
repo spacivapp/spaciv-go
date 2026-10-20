@@ -27,7 +27,7 @@ type Record struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Opaque identifier of the file, used to rename or delete it.
 	Id string `json:"id"`
-	// Media type detected from the file's contents when they were last stored, rather than from its name or the type the client declared.
+	// Media type detected from the file's contents when they were last stored, rather than from its name or the type the client declared. A file created empty in the app takes its type from its extension, such as text/markdown; charset=utf-8 for .md, and keeps it while its contents are detected as plain text.
 	MimeType string `json:"mimeType"`
 	// Display name of the file, taken from the uploaded file name and changeable afterwards. Nothing else in the same directory has the same name, compared exactly and after normalising to Unicode NFC.
 	Name string `json:"name"`

@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**CreateAccountDirectories**](FilesAPI.md#CreateAccountDirectories) | **Post** /v1/account/directories | Create a directory in the account&#39;s files
 [**CreateAccountFiles**](FilesAPI.md#CreateAccountFiles) | **Post** /v1/account/files | Upload a file to the account
+[**CreateAccountTextFiles**](FilesAPI.md#CreateAccountTextFiles) | **Post** /v1/account/text-files | Create an empty text file in the account&#39;s files
 [**DeleteAccountDirectories**](FilesAPI.md#DeleteAccountDirectories) | **Delete** /v1/account/directories/{id} | Delete a directory
 [**DeleteAccountFiles**](FilesAPI.md#DeleteAccountFiles) | **Delete** /v1/account/files/{id} | Delete an account file
 [**GetAccountFilesContent**](FilesAPI.md#GetAccountFilesContent) | **Get** /v1/account/files/{id}/content | Download an account file
@@ -136,6 +137,69 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: multipart/form-data
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## CreateAccountTextFiles
+
+> Record CreateAccountTextFiles(ctx, accountTextFilePostBody)
+
+Create an empty text file in the account's files
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+	accountTextFilePostBody :=  // AccountTextFilePostBody | 
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.Files.CreateAccountTextFiles(context.Background(), accountTextFilePostBody)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `Files.CreateAccountTextFiles`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `Files.CreateAccountTextFiles`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiCreateAccountTextFilesRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **accountTextFilePostBody** | [**AccountTextFilePostBody**](AccountTextFilePostBody.md) |  | 
+
+### Return type
+
+[**Record**](Record.md)
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
 - **Accept**: application/json, application/problem+json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
