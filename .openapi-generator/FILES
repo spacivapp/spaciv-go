@@ -365,6 +365,7 @@ docs/RelationshipData.md
 docs/RepairFloorplansResBody.md
 docs/ReportParamsWrapperBody.md
 docs/ReportsAPI.md
+docs/ReservedTagInfo.md
 docs/RetriesResBody.md
 docs/RetryBody.md
 docs/RoleTagsData.md
@@ -429,6 +430,7 @@ docs/SpaceRulesetListEntry.md
 docs/SpaceRulesetUpdate.md
 docs/Step.md
 docs/SysAdminUpdateFeatureGroupsParamsWrapperBody.md
+docs/TagList.md
 docs/TemplateProjectsAPI.md
 docs/TopDownModelChangelogBody.md
 docs/TopDownModelEntry.md
@@ -777,6 +779,7 @@ model_references_res.go
 model_relationship_data.go
 model_repair_floorplans_res_body.go
 model_report_params_wrapper_body.go
+model_reserved_tag_info.go
 model_retries_res_body.go
 model_retry_body.go
 model_role_tags_data.go
@@ -838,6 +841,7 @@ model_space_ruleset_list_entry.go
 model_space_ruleset_update.go
 model_step.go
 model_sys_admin_update_feature_groups_params_wrapper_body.go
+model_tag_list.go
 model_top_down_model_changelog_body.go
 model_top_down_model_entry.go
 model_top_down_model_entry_changelog_body.go

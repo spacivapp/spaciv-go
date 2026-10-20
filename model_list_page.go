@@ -22,7 +22,7 @@ var _ MappedNullable = &ListPage{}
 
 // ListPage struct for ListPage
 type ListPage struct {
-	// Directories directly inside the listed directory. Returned only when a parent is given, and only on the pages that hold some.
+	// With a parent, the directories directly inside it; with a tag, the directories that have it. Returned only on the pages that hold some.
 	Directories []Directory `json:"directories,omitempty"`
 	Files []Record `json:"files"`
 	// Pass back as cursor to fetch the following page. Absent on the last page.

@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Directories** | Pointer to [**[]Directory**](Directory.md) | Directories directly inside the listed directory. Returned only when a parent is given, and only on the pages that hold some. | [optional] 
+**Directories** | Pointer to [**[]Directory**](Directory.md) | With a parent, the directories directly inside it; with a tag, the directories that have it. Returned only on the pages that hold some. | [optional] 
 **Files** | [**[]Record**](Record.md) |  | 
 **NextCursor** | Pointer to **string** | Pass back as cursor to fetch the following page. Absent on the last page. | [optional] 
 

@@ -9,6 +9,8 @@ Name | Type | Description | Notes
 **Id** | **string** | Opaque identifier of the directory. | 
 **Name** | **string** | Display name of the directory. Nothing else in the same parent has the same name, compared exactly and after normalising to Unicode NFC. | 
 **ParentId** | Pointer to **string** | Identifier of the directory this one is in. Absent for a directory at the root. | [optional] 
+**TagProblems** | Pointer to **map[string][]string** | Problems found with the directory by its reserved tags&#39; checks, by tag. Absent when there are none. | [optional] 
+**Tags** | Pointer to **[]string** | The directory&#39;s tags, in alphabetical order. Absent when the directory has none. | [optional] 
 
 ## Methods
 
@@ -133,6 +135,56 @@ SetParentId sets ParentId field to given value.
 `func (o *Directory) HasParentId() bool`
 
 HasParentId returns a boolean if a field has been set.
+
+### GetTagProblems
+
+`func (o *Directory) GetTagProblems() map[string][]string`
+
+GetTagProblems returns the TagProblems field if non-nil, zero value otherwise.
+
+### GetTagProblemsOk
+
+`func (o *Directory) GetTagProblemsOk() (*map[string][]string, bool)`
+
+GetTagProblemsOk returns a tuple with the TagProblems field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetTagProblems
+
+`func (o *Directory) SetTagProblems(v map[string][]string)`
+
+SetTagProblems sets TagProblems field to given value.
+
+### HasTagProblems
+
+`func (o *Directory) HasTagProblems() bool`
+
+HasTagProblems returns a boolean if a field has been set.
+
+### GetTags
+
+`func (o *Directory) GetTags() []string`
+
+GetTags returns the Tags field if non-nil, zero value otherwise.
+
+### GetTagsOk
+
+`func (o *Directory) GetTagsOk() (*[]string, bool)`
+
+GetTagsOk returns a tuple with the Tags field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetTags
+
+`func (o *Directory) SetTags(v []string)`
+
+SetTags sets Tags field to given value.
+
+### HasTags
+
+`func (o *Directory) HasTags() bool`
+
+HasTags returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

@@ -20,10 +20,14 @@ var _ MappedNullable = &AccountDirectoryPatchBody{}
 
 // AccountDirectoryPatchBody struct for AccountDirectoryPatchBody
 type AccountDirectoryPatchBody struct {
+	// Tags to add to the directory. Each is lowercased and must then be at most 32 letters, digits and hyphens, starting with a letter or digit. A directory can have at most 20 tags.
+	AddTags []string `json:"addTags,omitempty"`
 	// New display name for the directory. At most 255 bytes after normalising to Unicode NFC. Must not contain a forward slash or a backslash, and must not be . or ..
 	Name *string `json:"name,omitempty"`
 	// Identifier of the directory to move this one into, or an empty string to move it to the root.
 	ParentId *string `json:"parentId,omitempty"`
+	// Tags to remove from the directory. Removing a tag the directory does not have changes nothing.
+	RemoveTags []string `json:"removeTags,omitempty"`
 }
 
 // NewAccountDirectoryPatchBody instantiates a new AccountDirectoryPatchBody object
@@ -41,6 +45,38 @@ func NewAccountDirectoryPatchBody() *AccountDirectoryPatchBody {
 func NewAccountDirectoryPatchBodyWithDefaults() *AccountDirectoryPatchBody {
 	this := AccountDirectoryPatchBody{}
 	return &this
+}
+
+// GetAddTags returns the AddTags field value if set, zero value otherwise.
+func (o *AccountDirectoryPatchBody) GetAddTags() []string {
+	if o == nil || IsNil(o.AddTags) {
+		var ret []string
+		return ret
+	}
+	return o.AddTags
+}
+
+// GetAddTagsOk returns a tuple with the AddTags field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AccountDirectoryPatchBody) GetAddTagsOk() ([]string, bool) {
+	if o == nil || IsNil(o.AddTags) {
+		return nil, false
+	}
+	return o.AddTags, true
+}
+
+// HasAddTags returns a boolean if a field has been set.
+func (o *AccountDirectoryPatchBody) HasAddTags() bool {
+	if o != nil && !IsNil(o.AddTags) {
+		return true
+	}
+
+	return false
+}
+
+// SetAddTags gets a reference to the given []string and assigns it to the AddTags field.
+func (o *AccountDirectoryPatchBody) SetAddTags(v []string) {
+	o.AddTags = v
 }
 
 // GetName returns the Name field value if set, zero value otherwise.
@@ -107,6 +143,38 @@ func (o *AccountDirectoryPatchBody) SetParentId(v string) {
 	o.ParentId = &v
 }
 
+// GetRemoveTags returns the RemoveTags field value if set, zero value otherwise.
+func (o *AccountDirectoryPatchBody) GetRemoveTags() []string {
+	if o == nil || IsNil(o.RemoveTags) {
+		var ret []string
+		return ret
+	}
+	return o.RemoveTags
+}
+
+// GetRemoveTagsOk returns a tuple with the RemoveTags field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AccountDirectoryPatchBody) GetRemoveTagsOk() ([]string, bool) {
+	if o == nil || IsNil(o.RemoveTags) {
+		return nil, false
+	}
+	return o.RemoveTags, true
+}
+
+// HasRemoveTags returns a boolean if a field has been set.
+func (o *AccountDirectoryPatchBody) HasRemoveTags() bool {
+	if o != nil && !IsNil(o.RemoveTags) {
+		return true
+	}
+
+	return false
+}
+
+// SetRemoveTags gets a reference to the given []string and assigns it to the RemoveTags field.
+func (o *AccountDirectoryPatchBody) SetRemoveTags(v []string) {
+	o.RemoveTags = v
+}
+
 func (o AccountDirectoryPatchBody) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -117,11 +185,17 @@ func (o AccountDirectoryPatchBody) MarshalJSON() ([]byte, error) {
 
 func (o AccountDirectoryPatchBody) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	if !IsNil(o.AddTags) {
+		toSerialize["addTags"] = o.AddTags
+	}
 	if !IsNil(o.Name) {
 		toSerialize["name"] = o.Name
 	}
 	if !IsNil(o.ParentId) {
 		toSerialize["parentId"] = o.ParentId
+	}
+	if !IsNil(o.RemoveTags) {
+		toSerialize["removeTags"] = o.RemoveTags
 	}
 	return toSerialize, nil
 }

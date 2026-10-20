@@ -12,6 +12,8 @@ Name | Type | Description | Notes
 **QuarantineSignature** | Pointer to **string** | Name of the virus signature the file matched when it was quarantined. | [optional] 
 **QuarantinedAt** | Pointer to **time.Time** | When a rescan found the file matching a virus signature (RFC 3339). A quarantined file cannot be downloaded, but it can still be renamed or deleted. | [optional] 
 **Size** | **int64** | Size of the stored file in bytes. | 
+**TagProblems** | Pointer to **map[string][]string** | Problems found with the file by its reserved tags&#39; checks, by tag. Absent when there are none. | [optional] 
+**Tags** | Pointer to **[]string** | The file&#39;s tags, in alphabetical order. Absent when the file has none. | [optional] 
 **UploadedBy** | **int64** | Identifier of the user who uploaded the file. | 
 
 ## Methods
@@ -207,6 +209,56 @@ and a boolean to check if the value has been set.
 
 SetSize sets Size field to given value.
 
+
+### GetTagProblems
+
+`func (o *Record) GetTagProblems() map[string][]string`
+
+GetTagProblems returns the TagProblems field if non-nil, zero value otherwise.
+
+### GetTagProblemsOk
+
+`func (o *Record) GetTagProblemsOk() (*map[string][]string, bool)`
+
+GetTagProblemsOk returns a tuple with the TagProblems field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetTagProblems
+
+`func (o *Record) SetTagProblems(v map[string][]string)`
+
+SetTagProblems sets TagProblems field to given value.
+
+### HasTagProblems
+
+`func (o *Record) HasTagProblems() bool`
+
+HasTagProblems returns a boolean if a field has been set.
+
+### GetTags
+
+`func (o *Record) GetTags() []string`
+
+GetTags returns the Tags field if non-nil, zero value otherwise.
+
+### GetTagsOk
+
+`func (o *Record) GetTagsOk() (*[]string, bool)`
+
+GetTagsOk returns a tuple with the Tags field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetTags
+
+`func (o *Record) SetTags(v []string)`
+
+SetTags sets Tags field to given value.
+
+### HasTags
+
+`func (o *Record) HasTags() bool`
+
+HasTags returns a boolean if a field has been set.
 
 ### GetUploadedBy
 

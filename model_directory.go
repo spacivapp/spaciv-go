@@ -33,6 +33,10 @@ type Directory struct {
 	Name string `json:"name"`
 	// Identifier of the directory this one is in. Absent for a directory at the root.
 	ParentId *string `json:"parentId,omitempty"`
+	// Problems found with the directory by its reserved tags' checks, by tag. Absent when there are none.
+	TagProblems map[string][]string `json:"tagProblems,omitempty"`
+	// The directory's tags, in alphabetical order. Absent when the directory has none.
+	Tags []string `json:"tags,omitempty"`
 }
 
 type _Directory Directory
@@ -186,6 +190,70 @@ func (o *Directory) SetParentId(v string) {
 	o.ParentId = &v
 }
 
+// GetTagProblems returns the TagProblems field value if set, zero value otherwise.
+func (o *Directory) GetTagProblems() map[string][]string {
+	if o == nil || IsNil(o.TagProblems) {
+		var ret map[string][]string
+		return ret
+	}
+	return o.TagProblems
+}
+
+// GetTagProblemsOk returns a tuple with the TagProblems field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Directory) GetTagProblemsOk() (map[string][]string, bool) {
+	if o == nil || IsNil(o.TagProblems) {
+		return map[string][]string{}, false
+	}
+	return o.TagProblems, true
+}
+
+// HasTagProblems returns a boolean if a field has been set.
+func (o *Directory) HasTagProblems() bool {
+	if o != nil && !IsNil(o.TagProblems) {
+		return true
+	}
+
+	return false
+}
+
+// SetTagProblems gets a reference to the given map[string][]string and assigns it to the TagProblems field.
+func (o *Directory) SetTagProblems(v map[string][]string) {
+	o.TagProblems = v
+}
+
+// GetTags returns the Tags field value if set, zero value otherwise.
+func (o *Directory) GetTags() []string {
+	if o == nil || IsNil(o.Tags) {
+		var ret []string
+		return ret
+	}
+	return o.Tags
+}
+
+// GetTagsOk returns a tuple with the Tags field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Directory) GetTagsOk() ([]string, bool) {
+	if o == nil || IsNil(o.Tags) {
+		return nil, false
+	}
+	return o.Tags, true
+}
+
+// HasTags returns a boolean if a field has been set.
+func (o *Directory) HasTags() bool {
+	if o != nil && !IsNil(o.Tags) {
+		return true
+	}
+
+	return false
+}
+
+// SetTags gets a reference to the given []string and assigns it to the Tags field.
+func (o *Directory) SetTags(v []string) {
+	o.Tags = v
+}
+
 func (o Directory) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -202,6 +270,12 @@ func (o Directory) ToMap() (map[string]interface{}, error) {
 	toSerialize["name"] = o.Name
 	if !IsNil(o.ParentId) {
 		toSerialize["parentId"] = o.ParentId
+	}
+	if !IsNil(o.TagProblems) {
+		toSerialize["tagProblems"] = o.TagProblems
+	}
+	if !IsNil(o.Tags) {
+		toSerialize["tags"] = o.Tags
 	}
 	return toSerialize, nil
 }

@@ -157,6 +157,8 @@ Stores a file against the account and returns the record describing it. Send the
 
 The files stored against an account may total at most 1 GiB. An upload that would take the account past that is rejected with 413 and no file is added to the account, though the uploaded bytes may briefly remain in storage until they are cleaned up; deleting files frees their space. A 409 means concurrent uploads kept changing the account's usage or taking the names it tried, and the upload can be retried as it stands.
 
+Uploading into a directory that has a reserved tag, or into any directory inside one at any depth, needs the permission that tag requires (*Manage my account* for `skill`); otherwise the upload is rejected with 403 and no file is added to the account. `GET /v1/account/file-tags` lists the reserved tags.
+
 The response body is the same record shape the list operation returns, so a client can add it to a list it already holds instead of refetching. Requires the *Edit file storage* permission.
 */
 func (a *FilesService) CreateAccountFiles(ctx context.Context, params *FilesCreateAccountFilesParams) (*Record, error) {
@@ -840,33 +842,143 @@ func (a *FilesService) executeListAccountDirectories(r requestForFilesListAccoun
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type requestForFilesListAccountFileTags struct {
+	ctx context.Context
+	ApiService *FilesService
+}
+
+/*
+ListAccountFileTags List the account's file and directory tags
+
+Returns every tag in use on the account's files and directories, each once, for suggesting tags as they are typed. Pass one to the list operation's `tag` to list the files and directories that have it. A tag that has just been added or removed may take a moment to be reflected here.
+
+Also returns the reserved tags, which give an item a meaning Spaciv acts on, with the kinds of item each can be added to. Requires the *View file storage* permission.
+*/
+func (a *FilesService) ListAccountFileTags(ctx context.Context) (*TagList, error) {
+	r := requestForFilesListAccountFileTags{
+		ApiService: a,
+		ctx: ctx,
+	}
+	result, _, err := a.executeListAccountFileTags(r)
+	return result, err
+}
+
+func (a *FilesService) executeListAccountFileTags(r requestForFilesListAccountFileTags) (*TagList, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *TagList
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FilesAPIService.ListAccountFileTags")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/account/file-tags"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ctx != nil {
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "FilesAPIService.ListAccountFileTags")
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type requestForFilesListAccountFiles struct {
 	ctx context.Context
 	ApiService *FilesService
 	limit *int32
 	cursor *string
 	parent *string
+	tag *string
 }
 
 type FilesListAccountFilesParams struct {
 	// Maximum number of files to return in this page.
 	Limit *int32
-	// Opaque pagination cursor returned as nextCursor by a previous response. A cursor is only valid for the account, and the parent, it was issued for.
+	// Opaque pagination cursor returned as nextCursor by a previous response. A cursor is only valid for the account, and the parent or tag, it was issued for.
 	Cursor *string
-	// List only what is directly inside this directory: a directory identifier, or root for the root. Leave it out to list every file of the account, whatever directory it is in.
+	// List only what is directly inside this directory: a directory identifier, or root for the root. Leave it out to list every file of the account, whatever directory it is in. Cannot be given with tag.
 	Parent *string
+	// List only the files and directories with this tag, wherever they are. Matched without regard to case. Cannot be given with parent.
+	Tag *string
 }
 
 /*
 ListAccountFiles List the account's files
 
-Without `parent`, returns a page of every file stored against the account, whatever directory it is in, most recently uploaded first. Files belonging to other accounts are never returned.
+Without `parent` or `tag`, returns a page of every file stored against the account, whatever directory it is in, most recently uploaded first. Files belonging to other accounts are never returned.
 
 With `parent`, returns a page of what is directly inside that directory, or inside the root when `parent` is `root`: its directories in `directories`, most recently created first, then its files in `files`, most recently uploaded first. Returns 404 if the account has no directory with that identifier.
 
-When `nextCursor` is present there are more items to fetch; pass it back as `cursor`, with the same `parent`, to retrieve the following page. A page may come back shorter than `limit` while still having a `nextCursor`.
+With `tag`, returns a page of the files and directories that have that tag, wherever they are: the files in `files` and the directories in `directories`, each most recently created first. The contents of a tagged directory are not included unless they have the tag themselves. Giving both `parent` and `tag` is rejected with 400, and so is a tag that is not at most 32 letters, digits and hyphens.
 
-A file that has just been uploaded, moved or renamed may not show its change here immediately, so clients should apply the record returned by the upload or update operation to their list rather than refetching. Requires the *View file storage* permission.
+When `nextCursor` is present there are more items to fetch; pass it back as `cursor`, with the same `parent` or `tag`, to retrieve the following page. A page may come back shorter than `limit` while still having a `nextCursor`, and may have neither files nor directories.
+
+A file that has just been uploaded, moved, renamed or tagged may not show its change here immediately, so clients should apply the record returned by the upload or update operation to their list rather than refetching. Requires the *View file storage* permission.
 */
 func (a *FilesService) ListAccountFiles(ctx context.Context, params *FilesListAccountFilesParams) (*ListPage, error) {
 	r := requestForFilesListAccountFiles{
@@ -877,6 +989,7 @@ func (a *FilesService) ListAccountFiles(ctx context.Context, params *FilesListAc
 		r.limit = params.Limit
 		r.cursor = params.Cursor
 		r.parent = params.Parent
+		r.tag = params.Tag
 	}
 	result, _, err := a.executeListAccountFiles(r)
 	return result, err
@@ -912,6 +1025,9 @@ func (a *FilesService) executeListAccountFiles(r requestForFilesListAccountFiles
 	}
 	if r.parent != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "parent", r.parent, "form", "")
+	}
+	if r.tag != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "tag", r.tag, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -986,11 +1102,17 @@ type requestForFilesUpdateAccountDirectories struct {
 }
 
 /*
-UpdateAccountDirectories Rename or move a directory
+UpdateAccountDirectories Rename, move or tag a directory
 
-Changes a directory's name, moves it into another directory, or both, and returns the updated directory. Give `name`, `parentId` or both; a body with neither is rejected with 400. Everything inside the directory moves with it and keeps its identifier, so anything referencing those files keeps working.
+Changes a directory's name, moves it into another directory, changes its tags, or any of these, and returns the updated directory. Give `name`, `parentId`, `addTags`, `removeTags` or any of them; a body with none is rejected with 400. Everything inside the directory moves with it and keeps its identifier, so anything referencing those files keeps working. A rename or move and a tag change made in one request are saved, and audited, one after the other.
 
-The name is normalised to Unicode NFC, and names are unique within a directory among its files and directories, compared exactly: a name already taken in the destination by a file or another directory, whether by a rename or a move, is rejected with 409. Moving a directory into itself or into a directory inside it, or so that something inside it would be nested more than 8 deep, is rejected with 400. Returns 404 if the account has no directory with this identifier, or none with the given `parentId`. Any other 409 means the account's directories changed during the request, and the request can be retried. Requires the *Edit file storage* permission.
+The name is normalised to Unicode NFC, and names are unique within a directory among its files and directories, compared exactly: a name already taken in the destination by a file or another directory, whether by a rename or a move, is rejected with 409. Moving a directory into itself or into a directory inside it, or so that something inside it would be nested more than 8 deep, is rejected with 400.
+
+Tags are added and removed as given, without replacing the directory's other tags, so two people tagging the same directory at once do not undo each other's changes. A tag cannot be both added and removed in one request. The files and directories inside do not take on the directory's tags.
+
+Some tags are reserved: they give an item a meaning Spaciv acts on, and `GET /v1/account/file-tags` lists them. `skill` marks a directory as a skill. Adding or removing a reserved tag, or renaming, moving, retagging or deleting a directory that has one, needs the permission that tag requires (*Manage my account* for `skill`), and so does any change to a directory inside one that has it, at any depth, including moving it into or out of one; otherwise the request is rejected with 403. A reserved tag may check the directory it is on, when it is added and whenever the directory or anything inside it changes, and record what it finds in `tagProblems` rather than refusing the change.
+
+Returns 404 if the account has no directory with this identifier, or none with the given `parentId`. Any other 409 means the account's directories changed during the request, and the request can be retried. Requires the *Edit file storage* permission.
 */
 func (a *FilesService) UpdateAccountDirectories(ctx context.Context, id string, accountDirectoryPatchBody AccountDirectoryPatchBody) (*Directory, error) {
 	r := requestForFilesUpdateAccountDirectories{
@@ -1101,11 +1223,17 @@ type requestForFilesUpdateAccountFiles struct {
 }
 
 /*
-UpdateAccountFiles Rename or move an account file
+UpdateAccountFiles Rename, move or tag an account file
 
-Changes the display name of a file stored against the account, moves it into another directory, or both, and returns the updated record. Give `name`, `parentId` or both; a body with neither is rejected with 400. Only the name and directory change: the stored content, media type, size and identifier are untouched, so anything already referencing the file keeps working. The name is normalised to Unicode NFC, and names are unique within a directory among its files and directories, compared exactly. Giving a `name` already taken in the destination is rejected with 409. A move that gives only `parentId` never fails for its name: if the file's name is taken in the destination, it is stored under the lowest free numbered name instead, such as `lease (2).pdf`, and a name normalising makes longer than 255 bytes is shortened to fit; the response's `name` is the name it now has.
+Changes the display name of a file stored against the account, moves it into another directory, changes its tags, or any of these, and returns the updated record. Give `name`, `parentId`, `addTags`, `removeTags` or any of them; a body with none is rejected with 400. The stored content, media type, size and identifier are untouched, so anything already referencing the file keeps working. A rename or move and a tag change made in one request are saved, and audited, one after the other.
 
-The identifier must be one returned by the upload or list operations; a malformed identifier is rejected with 400. Returns 404 if the account has no file with this identifier, or no directory with the given `parentId`. Any other 409 means the file was moved by another request at the same time, and the request can be retried. Requires the *Edit file storage* permission.
+The name is normalised to Unicode NFC, and names are unique within a directory among its files and directories, compared exactly. Giving a `name` already taken in the destination is rejected with 409. A move that gives only `parentId` never fails for its name: if the file's name is taken in the destination, it is stored under the lowest free numbered name instead, such as `lease (2).pdf`, and a name normalising makes longer than 255 bytes is shortened to fit; the response's `name` is the name it now has.
+
+Tags are added and removed as given, without replacing the file's other tags, so two people tagging the same file at once do not undo each other's changes. A tag cannot be both added and removed in one request.
+
+Some tags are reserved: they give an item a meaning Spaciv acts on, and `GET /v1/account/file-tags` lists them. A reserved tag can only be added to the kinds of item it applies to, so `skill` on a file is rejected with 400. Adding or removing a reserved tag, or renaming, moving, retagging or deleting an item that has one, needs the permission that tag requires (*Manage my account* for `skill`), and so does any change to a file inside a directory that has one, at any depth, including moving the file into or out of it; otherwise the request is rejected with 403. A reserved tag may check the item it is on, when it is added and after the item changes, and record what it finds in `tagProblems` rather than refusing the change.
+
+The identifier must be one returned by the upload or list operations; a malformed identifier is rejected with 400. Returns 404 if the account has no file with this identifier, or no directory with the given `parentId`. Any other 409 means the file changed during the request, and the request can be retried as it stands. Requires the *Edit file storage* permission.
 */
 func (a *FilesService) UpdateAccountFiles(ctx context.Context, id string, accountFilePatchBody AccountFilePatchBody) (*Record, error) {
 	r := requestForFilesUpdateAccountFiles{

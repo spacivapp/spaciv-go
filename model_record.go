@@ -39,6 +39,10 @@ type Record struct {
 	QuarantinedAt *time.Time `json:"quarantinedAt,omitempty"`
 	// Size of the stored file in bytes.
 	Size int64 `json:"size"`
+	// Problems found with the file by its reserved tags' checks, by tag. Absent when there are none.
+	TagProblems map[string][]string `json:"tagProblems,omitempty"`
+	// The file's tags, in alphabetical order. Absent when the file has none.
+	Tags []string `json:"tags,omitempty"`
 	// Identifier of the user who uploaded the file.
 	UploadedBy int64 `json:"uploadedBy"`
 }
@@ -284,6 +288,70 @@ func (o *Record) SetSize(v int64) {
 	o.Size = v
 }
 
+// GetTagProblems returns the TagProblems field value if set, zero value otherwise.
+func (o *Record) GetTagProblems() map[string][]string {
+	if o == nil || IsNil(o.TagProblems) {
+		var ret map[string][]string
+		return ret
+	}
+	return o.TagProblems
+}
+
+// GetTagProblemsOk returns a tuple with the TagProblems field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Record) GetTagProblemsOk() (map[string][]string, bool) {
+	if o == nil || IsNil(o.TagProblems) {
+		return map[string][]string{}, false
+	}
+	return o.TagProblems, true
+}
+
+// HasTagProblems returns a boolean if a field has been set.
+func (o *Record) HasTagProblems() bool {
+	if o != nil && !IsNil(o.TagProblems) {
+		return true
+	}
+
+	return false
+}
+
+// SetTagProblems gets a reference to the given map[string][]string and assigns it to the TagProblems field.
+func (o *Record) SetTagProblems(v map[string][]string) {
+	o.TagProblems = v
+}
+
+// GetTags returns the Tags field value if set, zero value otherwise.
+func (o *Record) GetTags() []string {
+	if o == nil || IsNil(o.Tags) {
+		var ret []string
+		return ret
+	}
+	return o.Tags
+}
+
+// GetTagsOk returns a tuple with the Tags field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Record) GetTagsOk() ([]string, bool) {
+	if o == nil || IsNil(o.Tags) {
+		return nil, false
+	}
+	return o.Tags, true
+}
+
+// HasTags returns a boolean if a field has been set.
+func (o *Record) HasTags() bool {
+	if o != nil && !IsNil(o.Tags) {
+		return true
+	}
+
+	return false
+}
+
+// SetTags gets a reference to the given []string and assigns it to the Tags field.
+func (o *Record) SetTags(v []string) {
+	o.Tags = v
+}
+
 // GetUploadedBy returns the UploadedBy field value
 func (o *Record) GetUploadedBy() int64 {
 	if o == nil {
@@ -332,6 +400,12 @@ func (o Record) ToMap() (map[string]interface{}, error) {
 		toSerialize["quarantinedAt"] = o.QuarantinedAt
 	}
 	toSerialize["size"] = o.Size
+	if !IsNil(o.TagProblems) {
+		toSerialize["tagProblems"] = o.TagProblems
+	}
+	if !IsNil(o.Tags) {
+		toSerialize["tags"] = o.Tags
+	}
 	toSerialize["uploadedBy"] = o.UploadedBy
 	return toSerialize, nil
 }

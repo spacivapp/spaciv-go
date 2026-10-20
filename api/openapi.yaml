@@ -381,9 +381,15 @@ paths:
       x-sdk-params: false
     patch:
       description: |-
-        Changes a directory's name, moves it into another directory, or both, and returns the updated directory. Give `name`, `parentId` or both; a body with neither is rejected with 400. Everything inside the directory moves with it and keeps its identifier, so anything referencing those files keeps working.
+        Changes a directory's name, moves it into another directory, changes its tags, or any of these, and returns the updated directory. Give `name`, `parentId`, `addTags`, `removeTags` or any of them; a body with none is rejected with 400. Everything inside the directory moves with it and keeps its identifier, so anything referencing those files keeps working. A rename or move and a tag change made in one request are saved, and audited, one after the other.
 
-        The name is normalised to Unicode NFC, and names are unique within a directory among its files and directories, compared exactly: a name already taken in the destination by a file or another directory, whether by a rename or a move, is rejected with 409. Moving a directory into itself or into a directory inside it, or so that something inside it would be nested more than 8 deep, is rejected with 400. Returns 404 if the account has no directory with this identifier, or none with the given `parentId`. Any other 409 means the account's directories changed during the request, and the request can be retried. Requires the *Edit file storage* permission.
+        The name is normalised to Unicode NFC, and names are unique within a directory among its files and directories, compared exactly: a name already taken in the destination by a file or another directory, whether by a rename or a move, is rejected with 409. Moving a directory into itself or into a directory inside it, or so that something inside it would be nested more than 8 deep, is rejected with 400.
+
+        Tags are added and removed as given, without replacing the directory's other tags, so two people tagging the same directory at once do not undo each other's changes. A tag cannot be both added and removed in one request. The files and directories inside do not take on the directory's tags.
+
+        Some tags are reserved: they give an item a meaning Spaciv acts on, and `GET /v1/account/file-tags` lists them. `skill` marks a directory as a skill. Adding or removing a reserved tag, or renaming, moving, retagging or deleting a directory that has one, needs the permission that tag requires (*Manage my account* for `skill`), and so does any change to a directory inside one that has it, at any depth, including moving it into or out of one; otherwise the request is rejected with 403. A reserved tag may check the directory it is on, when it is added and whenever the directory or anything inside it changes, and record what it finds in `tagProblems` rather than refusing the change.
+
+        Returns 404 if the account has no directory with this identifier, or none with the given `parentId`. Any other 409 means the account's directories changed during the request, and the request can be retried. Requires the *Edit file storage* permission.
       operationId: files_update-account-directories
       parameters:
       - explode: false
@@ -412,7 +418,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorModel"
           description: Error
-      summary: Rename or move a directory
+      summary: "Rename, move or tag a directory"
       tags:
       - Files
       x-sdk-params: false
@@ -450,16 +456,43 @@ paths:
       tags:
       - Accounts
       x-sdk-params: false
+  /v1/account/file-tags:
+    get:
+      description: |-
+        Returns every tag in use on the account's files and directories, each once, for suggesting tags as they are typed. Pass one to the list operation's `tag` to list the files and directories that have it. A tag that has just been added or removed may take a moment to be reflected here.
+
+        Also returns the reserved tags, which give an item a meaning Spaciv acts on, with the kinds of item each can be added to. Requires the *View file storage* permission.
+      operationId: files_list-account-file-tags
+      parameters: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TagList"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: List the account's file and directory tags
+      tags:
+      - Files
+      x-sdk-params: false
   /v1/account/files:
     get:
       description: |-
-        Without `parent`, returns a page of every file stored against the account, whatever directory it is in, most recently uploaded first. Files belonging to other accounts are never returned.
+        Without `parent` or `tag`, returns a page of every file stored against the account, whatever directory it is in, most recently uploaded first. Files belonging to other accounts are never returned.
 
         With `parent`, returns a page of what is directly inside that directory, or inside the root when `parent` is `root`: its directories in `directories`, most recently created first, then its files in `files`, most recently uploaded first. Returns 404 if the account has no directory with that identifier.
 
-        When `nextCursor` is present there are more items to fetch; pass it back as `cursor`, with the same `parent`, to retrieve the following page. A page may come back shorter than `limit` while still having a `nextCursor`.
+        With `tag`, returns a page of the files and directories that have that tag, wherever they are: the files in `files` and the directories in `directories`, each most recently created first. The contents of a tagged directory are not included unless they have the tag themselves. Giving both `parent` and `tag` is rejected with 400, and so is a tag that is not at most 32 letters, digits and hyphens.
 
-        A file that has just been uploaded, moved or renamed may not show its change here immediately, so clients should apply the record returned by the upload or update operation to their list rather than refetching. Requires the *View file storage* permission.
+        When `nextCursor` is present there are more items to fetch; pass it back as `cursor`, with the same `parent` or `tag`, to retrieve the following page. A page may come back shorter than `limit` while still having a `nextCursor`, and may have neither files nor directories.
+
+        A file that has just been uploaded, moved, renamed or tagged may not show its change here immediately, so clients should apply the record returned by the upload or update operation to their list rather than refetching. Requires the *View file storage* permission.
       operationId: files_list-account-files
       parameters:
       - description: Maximum number of files to return in this page.
@@ -476,21 +509,21 @@ paths:
           type: integer
         style: form
       - description: "Opaque pagination cursor returned as nextCursor by a previous\
-          \ response. A cursor is only valid for the account, and the parent, it was\
-          \ issued for."
+          \ response. A cursor is only valid for the account, and the parent or tag,\
+          \ it was issued for."
         explode: false
         in: query
         name: cursor
         required: false
         schema:
           description: "Opaque pagination cursor returned as nextCursor by a previous\
-            \ response. A cursor is only valid for the account, and the parent, it\
-            \ was issued for."
+            \ response. A cursor is only valid for the account, and the parent or\
+            \ tag, it was issued for."
           type: string
         style: form
       - description: "List only what is directly inside this directory: a directory\
           \ identifier, or root for the root. Leave it out to list every file of the\
-          \ account, whatever directory it is in."
+          \ account, whatever directory it is in. Cannot be given with tag."
         explode: false
         in: query
         name: parent
@@ -498,7 +531,18 @@ paths:
         schema:
           description: "List only what is directly inside this directory: a directory\
             \ identifier, or root for the root. Leave it out to list every file of\
-            \ the account, whatever directory it is in."
+            \ the account, whatever directory it is in. Cannot be given with tag."
+          type: string
+        style: form
+      - description: "List only the files and directories with this tag, wherever\
+          \ they are. Matched without regard to case. Cannot be given with parent."
+        explode: false
+        in: query
+        name: tag
+        required: false
+        schema:
+          description: "List only the files and directories with this tag, wherever\
+            \ they are. Matched without regard to case. Cannot be given with parent."
           type: string
         style: form
       responses:
@@ -523,6 +567,8 @@ paths:
         Stores a file against the account and returns the record describing it. Send the request as `multipart/form-data` with a single file field named `file`, and optionally a `parentId` field naming the directory to store it in; without one the file goes in the root, and a `parentId` the account has no directory for is rejected with 404. The uploaded file's name, normalised to Unicode NFC, becomes the record's `name`, so it must be non-empty and free of `/` and `\`; a name over 255 bytes is shortened to fit, keeping its extension. Names are unique within a directory among its files and directories, compared exactly, so `Report.pdf` and `report.pdf` can sit side by side: when the name is already taken there, the file is stored under the lowest free numbered name instead, such as `image (2).png`, with the number before the extension, and the response's `name` is the name it was stored under. Any media type is accepted; `mimeType` is detected from the file's contents rather than from its name or the type the client declared. Maximum file size is 25 MiB, and uploads are rejected if a virus scan fails.
 
         The files stored against an account may total at most 1 GiB. An upload that would take the account past that is rejected with 413 and no file is added to the account, though the uploaded bytes may briefly remain in storage until they are cleaned up; deleting files frees their space. A 409 means concurrent uploads kept changing the account's usage or taking the names it tried, and the upload can be retried as it stands.
+
+        Uploading into a directory that has a reserved tag, or into any directory inside one at any depth, needs the permission that tag requires (*Manage my account* for `skill`); otherwise the upload is rejected with 403 and no file is added to the account. `GET /v1/account/file-tags` lists the reserved tags.
 
         The response body is the same record shape the list operation returns, so a client can add it to a list it already holds instead of refetching. Requires the *Edit file storage* permission.
       operationId: files_create-account-files
@@ -584,9 +630,15 @@ paths:
       x-sdk-params: false
     patch:
       description: |-
-        Changes the display name of a file stored against the account, moves it into another directory, or both, and returns the updated record. Give `name`, `parentId` or both; a body with neither is rejected with 400. Only the name and directory change: the stored content, media type, size and identifier are untouched, so anything already referencing the file keeps working. The name is normalised to Unicode NFC, and names are unique within a directory among its files and directories, compared exactly. Giving a `name` already taken in the destination is rejected with 409. A move that gives only `parentId` never fails for its name: if the file's name is taken in the destination, it is stored under the lowest free numbered name instead, such as `lease (2).pdf`, and a name normalising makes longer than 255 bytes is shortened to fit; the response's `name` is the name it now has.
+        Changes the display name of a file stored against the account, moves it into another directory, changes its tags, or any of these, and returns the updated record. Give `name`, `parentId`, `addTags`, `removeTags` or any of them; a body with none is rejected with 400. The stored content, media type, size and identifier are untouched, so anything already referencing the file keeps working. A rename or move and a tag change made in one request are saved, and audited, one after the other.
 
-        The identifier must be one returned by the upload or list operations; a malformed identifier is rejected with 400. Returns 404 if the account has no file with this identifier, or no directory with the given `parentId`. Any other 409 means the file was moved by another request at the same time, and the request can be retried. Requires the *Edit file storage* permission.
+        The name is normalised to Unicode NFC, and names are unique within a directory among its files and directories, compared exactly. Giving a `name` already taken in the destination is rejected with 409. A move that gives only `parentId` never fails for its name: if the file's name is taken in the destination, it is stored under the lowest free numbered name instead, such as `lease (2).pdf`, and a name normalising makes longer than 255 bytes is shortened to fit; the response's `name` is the name it now has.
+
+        Tags are added and removed as given, without replacing the file's other tags, so two people tagging the same file at once do not undo each other's changes. A tag cannot be both added and removed in one request.
+
+        Some tags are reserved: they give an item a meaning Spaciv acts on, and `GET /v1/account/file-tags` lists them. A reserved tag can only be added to the kinds of item it applies to, so `skill` on a file is rejected with 400. Adding or removing a reserved tag, or renaming, moving, retagging or deleting an item that has one, needs the permission that tag requires (*Manage my account* for `skill`), and so does any change to a file inside a directory that has one, at any depth, including moving the file into or out of it; otherwise the request is rejected with 403. A reserved tag may check the item it is on, when it is added and after the item changes, and record what it finds in `tagProblems` rather than refusing the change.
+
+        The identifier must be one returned by the upload or list operations; a malformed identifier is rejected with 400. Returns 404 if the account has no file with this identifier, or no directory with the given `parentId`. Any other 409 means the file changed during the request, and the request can be retried as it stands. Requires the *Edit file storage* permission.
       operationId: files_update-account-files
       parameters:
       - explode: false
@@ -615,7 +667,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorModel"
           description: Error
-      summary: Rename or move an account file
+      summary: "Rename, move or tag an account file"
       tags:
       - Files
       x-sdk-params: false
@@ -8083,9 +8135,29 @@ components:
     AccountDirectoryPatchBody:
       additionalProperties: false
       example:
+        addTags:
+        - addTags
+        - addTags
+        - addTags
+        - addTags
+        - addTags
+        removeTags:
+        - removeTags
+        - removeTags
+        - removeTags
+        - removeTags
+        - removeTags
         name: name
         parentId: parentId
       properties:
+        addTags:
+          description: "Tags to add to the directory. Each is lowercased and must\
+            \ then be at most 32 letters, digits and hyphens, starting with a letter\
+            \ or digit. A directory can have at most 20 tags."
+          items:
+            type: string
+          maxItems: 20
+          type: array
         name:
           description: "New display name for the directory. At most 255 bytes after\
             \ normalising to Unicode NFC. Must not contain a forward slash or a backslash,\
@@ -8096,6 +8168,13 @@ components:
           description: "Identifier of the directory to move this one into, or an empty\
             \ string to move it to the root."
           type: string
+        removeTags:
+          description: Tags to remove from the directory. Removing a tag the directory
+            does not have changes nothing.
+          items:
+            type: string
+          maxItems: 20
+          type: array
     AccountDirectoryPostBody:
       additionalProperties: false
       example:
@@ -8131,9 +8210,29 @@ components:
     AccountFilePatchBody:
       additionalProperties: false
       example:
+        addTags:
+        - addTags
+        - addTags
+        - addTags
+        - addTags
+        - addTags
+        removeTags:
+        - removeTags
+        - removeTags
+        - removeTags
+        - removeTags
+        - removeTags
         name: name
         parentId: parentId
       properties:
+        addTags:
+          description: "Tags to add to the file. Each is lowercased and must then\
+            \ be at most 32 letters, digits and hyphens, starting with a letter or\
+            \ digit. A file can have at most 20 tags."
+          items:
+            type: string
+          maxItems: 20
+          type: array
         name:
           description: New display name for the file. At most 255 bytes after normalising
             to Unicode NFC. Must not contain a forward slash or a backslash.
@@ -8143,6 +8242,13 @@ components:
           description: "Identifier of the directory to move the file into, or an empty\
             \ string to move it to the root."
           type: string
+        removeTags:
+          description: Tags to remove from the file. Removing a tag the file does
+            not have changes nothing.
+          items:
+            type: string
+          maxItems: 20
+          type: array
     AccountGetAuthOptionsResBody:
       additionalProperties: false
       example:
@@ -11072,7 +11178,14 @@ components:
         createdBy: 0
         name: name
         id: id
+        tagProblems:
+          key:
+          - tagProblems
+          - tagProblems
         parentId: parentId
+        tags:
+        - tags
+        - tags
       properties:
         createdAt:
           description: When the directory was created (RFC 3339).
@@ -11094,6 +11207,18 @@ components:
           description: Identifier of the directory this one is in. Absent for a directory
             at the root.
           type: string
+        tagProblems:
+          additionalProperties:
+            items:
+              type: string
+          description: "Problems found with the directory by its reserved tags' checks,\
+            \ by tag. Absent when there are none."
+        tags:
+          description: "The directory's tags, in alphabetical order. Absent when the\
+            \ directory has none."
+          items:
+            type: string
+          type: array
       required:
       - createdAt
       - createdBy
@@ -11108,12 +11233,26 @@ components:
           createdBy: 0
           name: name
           id: id
+          tagProblems:
+            key:
+            - tagProblems
+            - tagProblems
           parentId: parentId
+          tags:
+          - tags
+          - tags
         - createdAt: 2000-01-23T04:56:07.000+00:00
           createdBy: 0
           name: name
           id: id
+          tagProblems:
+            key:
+            - tagProblems
+            - tagProblems
           parentId: parentId
+          tags:
+          - tags
+          - tags
       properties:
         directories:
           items:
@@ -12759,12 +12898,26 @@ components:
           createdBy: 0
           name: name
           id: id
+          tagProblems:
+            key:
+            - tagProblems
+            - tagProblems
           parentId: parentId
+          tags:
+          - tags
+          - tags
         - createdAt: 2000-01-23T04:56:07.000+00:00
           createdBy: 0
           name: name
           id: id
+          tagProblems:
+            key:
+            - tagProblems
+            - tagProblems
           parentId: parentId
+          tags:
+          - tags
+          - tags
         files:
         - createdAt: 2000-01-23T04:56:07.000+00:00
           size: 0
@@ -12773,8 +12926,15 @@ components:
           name: name
           id: id
           mimeType: mimeType
+          tagProblems:
+            key:
+            - tagProblems
+            - tagProblems
           uploadedBy: 6
           parentId: parentId
+          tags:
+          - tags
+          - tags
         - createdAt: 2000-01-23T04:56:07.000+00:00
           size: 0
           quarantinedAt: 2000-01-23T04:56:07.000+00:00
@@ -12782,12 +12942,20 @@ components:
           name: name
           id: id
           mimeType: mimeType
+          tagProblems:
+            key:
+            - tagProblems
+            - tagProblems
           uploadedBy: 6
           parentId: parentId
+          tags:
+          - tags
+          - tags
       properties:
         directories:
-          description: "Directories directly inside the listed directory. Returned\
-            \ only when a parent is given, and only on the pages that hold some."
+          description: "With a parent, the directories directly inside it; with a\
+            \ tag, the directories that have it. Returned only on the pages that hold\
+            \ some."
           items:
             $ref: "#/components/schemas/Directory"
           type: array
@@ -14608,8 +14776,15 @@ components:
         name: name
         id: id
         mimeType: mimeType
+        tagProblems:
+          key:
+          - tagProblems
+          - tagProblems
         uploadedBy: 6
         parentId: parentId
+        tags:
+        - tags
+        - tags
       properties:
         createdAt:
           description: When the file was uploaded (RFC 3339).
@@ -14647,6 +14822,18 @@ components:
           description: Size of the stored file in bytes.
           format: int64
           type: integer
+        tagProblems:
+          additionalProperties:
+            items:
+              type: string
+          description: "Problems found with the file by its reserved tags' checks,\
+            \ by tag. Absent when there are none."
+        tags:
+          description: "The file's tags, in alphabetical order. Absent when the file\
+            \ has none."
+          items:
+            type: string
+          type: array
         uploadedBy:
           description: Identifier of the user who uploaded the file.
           format: int64
@@ -14760,6 +14947,28 @@ components:
       required:
       - dashboard
       - email
+    ReservedTagInfo:
+      additionalProperties: false
+      example:
+        name: name
+        kinds:
+        - file
+        - file
+      properties:
+        kinds:
+          description: The kinds of item the tag can be applied to.
+          items:
+            enum:
+            - file
+            - directory
+            type: string
+          type: array
+        name:
+          description: The reserved tag.
+          type: string
+      required:
+      - kinds
+      - name
     RetriesResBody:
       additionalProperties: false
       example:
@@ -17412,6 +17621,38 @@ components:
           type: integer
       required:
       - sortOrder
+    TagList:
+      additionalProperties: false
+      example:
+        reserved:
+        - name: name
+          kinds:
+          - file
+          - file
+        - name: name
+          kinds:
+          - file
+          - file
+        tags:
+        - tags
+        - tags
+      properties:
+        reserved:
+          description: "The tags that give an item a meaning Spaciv acts on. Adding\
+            \ or removing one, or changing anything in an item that has one, needs\
+            \ a particular permission."
+          items:
+            $ref: "#/components/schemas/ReservedTagInfo"
+          type: array
+        tags:
+          description: "Every tag on the account's files and directories, in alphabetical\
+            \ order."
+          items:
+            type: string
+          type: array
+      required:
+      - reserved
+      - tags
     TopDownModelChangelogBody:
       additionalProperties: false
       example:

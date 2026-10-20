@@ -4,8 +4,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**AddTags** | Pointer to **[]string** | Tags to add to the file. Each is lowercased and must then be at most 32 letters, digits and hyphens, starting with a letter or digit. A file can have at most 20 tags. | [optional] 
 **Name** | Pointer to **string** | New display name for the file. At most 255 bytes after normalising to Unicode NFC. Must not contain a forward slash or a backslash. | [optional] 
 **ParentId** | Pointer to **string** | Identifier of the directory to move the file into, or an empty string to move it to the root. | [optional] 
+**RemoveTags** | Pointer to **[]string** | Tags to remove from the file. Removing a tag the file does not have changes nothing. | [optional] 
 
 ## Methods
 
@@ -25,6 +27,31 @@ will change when the set of required properties is changed
 NewAccountFilePatchBodyWithDefaults instantiates a new AccountFilePatchBody object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetAddTags
+
+`func (o *AccountFilePatchBody) GetAddTags() []string`
+
+GetAddTags returns the AddTags field if non-nil, zero value otherwise.
+
+### GetAddTagsOk
+
+`func (o *AccountFilePatchBody) GetAddTagsOk() (*[]string, bool)`
+
+GetAddTagsOk returns a tuple with the AddTags field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetAddTags
+
+`func (o *AccountFilePatchBody) SetAddTags(v []string)`
+
+SetAddTags sets AddTags field to given value.
+
+### HasAddTags
+
+`func (o *AccountFilePatchBody) HasAddTags() bool`
+
+HasAddTags returns a boolean if a field has been set.
 
 ### GetName
 
@@ -75,6 +102,31 @@ SetParentId sets ParentId field to given value.
 `func (o *AccountFilePatchBody) HasParentId() bool`
 
 HasParentId returns a boolean if a field has been set.
+
+### GetRemoveTags
+
+`func (o *AccountFilePatchBody) GetRemoveTags() []string`
+
+GetRemoveTags returns the RemoveTags field if non-nil, zero value otherwise.
+
+### GetRemoveTagsOk
+
+`func (o *AccountFilePatchBody) GetRemoveTagsOk() (*[]string, bool)`
+
+GetRemoveTagsOk returns a tuple with the RemoveTags field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetRemoveTags
+
+`func (o *AccountFilePatchBody) SetRemoveTags(v []string)`
+
+SetRemoveTags sets RemoveTags field to given value.
+
+### HasRemoveTags
+
+`func (o *AccountFilePatchBody) HasRemoveTags() bool`
+
+HasRemoveTags returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

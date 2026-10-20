@@ -11,9 +11,10 @@ Method | HTTP request | Description
 [**DeleteAccountFiles**](FilesAPI.md#DeleteAccountFiles) | **Delete** /v1/account/files/{id} | Delete an account file
 [**GetAccountFilesContent**](FilesAPI.md#GetAccountFilesContent) | **Get** /v1/account/files/{id}/content | Download an account file
 [**ListAccountDirectories**](FilesAPI.md#ListAccountDirectories) | **Get** /v1/account/directories | List the account&#39;s directories
+[**ListAccountFileTags**](FilesAPI.md#ListAccountFileTags) | **Get** /v1/account/file-tags | List the account&#39;s file and directory tags
 [**ListAccountFiles**](FilesAPI.md#ListAccountFiles) | **Get** /v1/account/files | List the account&#39;s files
-[**UpdateAccountDirectories**](FilesAPI.md#UpdateAccountDirectories) | **Patch** /v1/account/directories/{id} | Rename or move a directory
-[**UpdateAccountFiles**](FilesAPI.md#UpdateAccountFiles) | **Patch** /v1/account/files/{id} | Rename or move an account file
+[**UpdateAccountDirectories**](FilesAPI.md#UpdateAccountDirectories) | **Patch** /v1/account/directories/{id} | Rename, move or tag a directory
+[**UpdateAccountFiles**](FilesAPI.md#UpdateAccountFiles) | **Patch** /v1/account/files/{id} | Rename, move or tag an account file
 [**UpdateAccountFilesContent**](FilesAPI.md#UpdateAccountFilesContent) | **Put** /v1/account/files/{id}/content | Replace an account file&#39;s content
 
 
@@ -471,6 +472,64 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
+## ListAccountFileTags
+
+> TagList ListAccountFileTags(ctx)
+
+List the account's file and directory tags
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.Files.ListAccountFileTags(context.Background())
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `Files.ListAccountFileTags`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `Files.ListAccountFileTags`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+This endpoint does not need any parameter.
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiListAccountFileTagsRequest struct via the builder pattern
+
+
+### Return type
+
+[**TagList**](TagList.md)
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## ListAccountFiles
 
 > ListPage ListAccountFiles(ctx, params)
@@ -514,8 +573,9 @@ Other parameters are passed through a pointer to a apiListAccountFilesRequest st
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **limit** | **int32** | Maximum number of files to return in this page. | [default to 50]
- **cursor** | **string** | Opaque pagination cursor returned as nextCursor by a previous response. A cursor is only valid for the account, and the parent, it was issued for. | 
- **parent** | **string** | List only what is directly inside this directory: a directory identifier, or root for the root. Leave it out to list every file of the account, whatever directory it is in. | 
+ **cursor** | **string** | Opaque pagination cursor returned as nextCursor by a previous response. A cursor is only valid for the account, and the parent or tag, it was issued for. | 
+ **parent** | **string** | List only what is directly inside this directory: a directory identifier, or root for the root. Leave it out to list every file of the account, whatever directory it is in. Cannot be given with tag. | 
+ **tag** | **string** | List only the files and directories with this tag, wherever they are. Matched without regard to case. Cannot be given with parent. | 
 
 ### Return type
 
@@ -539,7 +599,7 @@ Name | Type | Description  | Notes
 
 > Directory UpdateAccountDirectories(ctx, id, accountDirectoryPatchBody)
 
-Rename or move a directory
+Rename, move or tag a directory
 
 
 
@@ -608,7 +668,7 @@ Name | Type | Description  | Notes
 
 > Record UpdateAccountFiles(ctx, id, accountFilePatchBody)
 
-Rename or move an account file
+Rename, move or tag an account file
 
 
 
