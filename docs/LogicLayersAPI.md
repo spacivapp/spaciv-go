@@ -284,7 +284,7 @@ Name | Type | Description  | Notes
 
 ## GetSpaceRulesets
 
-> SpaceRuleSetJSON GetSpaceRulesets(ctx, id, params)
+> SpaceRuleSetJSON GetSpaceRulesets(ctx, id)
 
 Get a logic layer
 
@@ -306,7 +306,7 @@ func main() {
 	id :=  // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	resp, err := client.LogicLayers.GetSpaceRulesets(context.Background(), id, nil)
+	resp, err := client.LogicLayers.GetSpaceRulesets(context.Background(), id)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `LogicLayers.GetSpaceRulesets`: %v\n", err)
 	}
@@ -330,7 +330,6 @@ Other parameters are passed through a pointer to a apiGetSpaceRulesetsRequest st
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **format** | **string** | stored returns the config as it was saved; logic converts a config saved by an app from before logic layers into a LogicLayerConfig. | [default to &quot;stored&quot;]
 
 ### Return type
 

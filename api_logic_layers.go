@@ -490,27 +490,18 @@ type requestForLogicLayersGetSpaceRulesets struct {
 	ctx context.Context
 	ApiService *LogicLayersService
 	id string
-	format *string
-}
-
-type LogicLayersGetSpaceRulesetsParams struct {
-	// stored returns the config as it was saved; logic converts a config saved by an app from before logic layers into a LogicLayerConfig.
-	Format *string
 }
 
 /*
 GetSpaceRulesets Get a logic layer
 
-Returns the full detail of a logic layer, including its rules as a `LogicLayerConfig`. Each rule balances the supply objects its filters select against the demand objects its filters select, at a ratio of supply per demand or as a total spread over the demand. Configs saved by an app from before logic layers are returned as saved unless `format=logic` is set. Returns `404` if the logic layer does not exist. Requires the *View space rule set details* permission.
+Returns the full detail of a logic layer, including its rules as a `LogicLayerConfig`. Each rule balances the supply objects its filters select against the demand objects its filters select, at a ratio of supply per demand or as a total spread over the demand. Returns `404` if the logic layer does not exist. Requires the *View space rule set details* permission.
 */
-func (a *LogicLayersService) GetSpaceRulesets(ctx context.Context, id string, params *LogicLayersGetSpaceRulesetsParams) (*SpaceRuleSetJSON, error) {
+func (a *LogicLayersService) GetSpaceRulesets(ctx context.Context, id string) (*SpaceRuleSetJSON, error) {
 	r := requestForLogicLayersGetSpaceRulesets{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
-	}
-	if params != nil {
-		r.format = params.Format
 	}
 	result, _, err := a.executeGetSpaceRulesets(r)
 	return result, err
@@ -536,12 +527,6 @@ func (a *LogicLayersService) executeGetSpaceRulesets(r requestForLogicLayersGetS
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
-	if r.format != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "format", r.format, "form", "")
-	} else {
-		var defaultValue string = "stored"
-		r.format = &defaultValue
-	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -941,7 +926,7 @@ type requestForLogicLayersUpdateSpaceRulesets struct {
 /*
 UpdateSpaceRulesets Update a logic layer
 
-Updates one or more fields of a logic layer. Only fields present in the request body are changed; `modifiedAt` is always updated to the current time. `config` is a `LogicLayerConfig`; one in a space rule shape from before logic layers is converted and stored as the logic layer it converts to. Functions may use account number variables (`{"var": "account:<id>"}`), which needs the *Variable controls* feature. Returns `400` if `config` is not a valid logic layer or uses an unknown or non-number variable, and `404` if the logic layer does not exist. Requires the *Edit space rule set details* permission.
+Updates one or more fields of a logic layer. Only fields present in the request body are changed; `modifiedAt` is always updated to the current time. `config` is a `LogicLayerConfig`. Functions may use account number variables (`{"var": "account:<id>"}`), which needs the *Variable controls* feature. Returns `400` if `config` is not a valid logic layer or uses an unknown or non-number variable, and `404` if the logic layer does not exist. Requires the *Edit space rule set details* permission.
 */
 func (a *LogicLayersService) UpdateSpaceRulesets(ctx context.Context, id string, spaceRulesetUpdate SpaceRulesetUpdate) (map[string]interface{}, error) {
 	r := requestForLogicLayersUpdateSpaceRulesets{

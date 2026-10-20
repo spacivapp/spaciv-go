@@ -6625,10 +6625,8 @@ paths:
       description: "Returns the full detail of a logic layer, including its rules\
         \ as a `LogicLayerConfig`. Each rule balances the supply objects its filters\
         \ select against the demand objects its filters select, at a ratio of supply\
-        \ per demand or as a total spread over the demand. Configs saved by an app\
-        \ from before logic layers are returned as saved unless `format=logic` is\
-        \ set. Returns `404` if the logic layer does not exist. Requires the *View\
-        \ space rule set details* permission."
+        \ per demand or as a total spread over the demand. Returns `404` if the logic\
+        \ layer does not exist. Requires the *View space rule set details* permission."
       operationId: logic-layers_get-space-rulesets
       parameters:
       - explode: false
@@ -6638,21 +6636,6 @@ paths:
         schema:
           type: string
         style: simple
-      - description: stored returns the config as it was saved; logic converts a config
-          saved by an app from before logic layers into a LogicLayerConfig.
-        explode: false
-        in: query
-        name: format
-        required: false
-        schema:
-          default: stored
-          description: stored returns the config as it was saved; logic converts a
-            config saved by an app from before logic layers into a LogicLayerConfig.
-          enum:
-          - stored
-          - logic
-          type: string
-        style: form
       responses:
         "200":
           content:
@@ -6669,17 +6652,15 @@ paths:
       summary: Get a logic layer
       tags:
       - Logic layers
-      x-sdk-params: true
+      x-sdk-params: false
     patch:
       description: "Updates one or more fields of a logic layer. Only fields present\
         \ in the request body are changed; `modifiedAt` is always updated to the current\
-        \ time. `config` is a `LogicLayerConfig`; one in a space rule shape from before\
-        \ logic layers is converted and stored as the logic layer it converts to.\
-        \ Functions may use account number variables (`{\"var\": \"account:<id>\"\
-        }`), which needs the *Variable controls* feature. Returns `400` if `config`\
-        \ is not a valid logic layer or uses an unknown or non-number variable, and\
-        \ `404` if the logic layer does not exist. Requires the *Edit space rule set\
-        \ details* permission."
+        \ time. `config` is a `LogicLayerConfig`. Functions may use account number\
+        \ variables (`{\"var\": \"account:<id>\"}`), which needs the *Variable controls*\
+        \ feature. Returns `400` if `config` is not a valid logic layer or uses an\
+        \ unknown or non-number variable, and `404` if the logic layer does not exist.\
+        \ Requires the *Edit space rule set details* permission."
       operationId: logic-layers_update-space-rulesets
       parameters:
       - explode: false
