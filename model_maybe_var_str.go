@@ -19,14 +19,14 @@ import (
 
 // MaybeVarStr - struct for MaybeVarStr
 type MaybeVarStr struct {
-	CalcRuleRefOneOf5 *CalcRuleRefOneOf5
+	CalcRuleRefOneOf6 *CalcRuleRefOneOf6
 	MaybeVarStrOneOf *MaybeVarStrOneOf
 }
 
-// CalcRuleRefOneOf5AsMaybeVarStr is a convenience function that returns CalcRuleRefOneOf5 wrapped in MaybeVarStr
-func CalcRuleRefOneOf5AsMaybeVarStr(v *CalcRuleRefOneOf5) MaybeVarStr {
+// CalcRuleRefOneOf6AsMaybeVarStr is a convenience function that returns CalcRuleRefOneOf6 wrapped in MaybeVarStr
+func CalcRuleRefOneOf6AsMaybeVarStr(v *CalcRuleRefOneOf6) MaybeVarStr {
 	return MaybeVarStr{
-		CalcRuleRefOneOf5: v,
+		CalcRuleRefOneOf6: v,
 	}
 }
 
@@ -42,21 +42,21 @@ func MaybeVarStrOneOfAsMaybeVarStr(v *MaybeVarStrOneOf) MaybeVarStr {
 func (dst *MaybeVarStr) UnmarshalJSON(data []byte) error {
 	var err error
 	match := 0
-	// try to unmarshal data into CalcRuleRefOneOf5
-	err = newStrictDecoder(data).Decode(&dst.CalcRuleRefOneOf5)
+	// try to unmarshal data into CalcRuleRefOneOf6
+	err = newStrictDecoder(data).Decode(&dst.CalcRuleRefOneOf6)
 	if err == nil {
-		jsonCalcRuleRefOneOf5, _ := json.Marshal(dst.CalcRuleRefOneOf5)
-		if string(jsonCalcRuleRefOneOf5) == "{}" { // empty struct
-			dst.CalcRuleRefOneOf5 = nil
+		jsonCalcRuleRefOneOf6, _ := json.Marshal(dst.CalcRuleRefOneOf6)
+		if string(jsonCalcRuleRefOneOf6) == "{}" { // empty struct
+			dst.CalcRuleRefOneOf6 = nil
 		} else {
-			if err = validator.Validate(dst.CalcRuleRefOneOf5); err != nil {
-				dst.CalcRuleRefOneOf5 = nil
+			if err = validator.Validate(dst.CalcRuleRefOneOf6); err != nil {
+				dst.CalcRuleRefOneOf6 = nil
 			} else {
 				match++
 			}
 		}
 	} else {
-		dst.CalcRuleRefOneOf5 = nil
+		dst.CalcRuleRefOneOf6 = nil
 	}
 
 	// try to unmarshal data into MaybeVarStrOneOf
@@ -78,7 +78,7 @@ func (dst *MaybeVarStr) UnmarshalJSON(data []byte) error {
 
 	if match > 1 { // more than 1 match
 		// reset to nil
-		dst.CalcRuleRefOneOf5 = nil
+		dst.CalcRuleRefOneOf6 = nil
 		dst.MaybeVarStrOneOf = nil
 
 		return fmt.Errorf("data matches more than one schema in oneOf(MaybeVarStr)")
@@ -91,8 +91,8 @@ func (dst *MaybeVarStr) UnmarshalJSON(data []byte) error {
 
 // Marshal data from the first non-nil pointers in the struct to JSON
 func (src MaybeVarStr) MarshalJSON() ([]byte, error) {
-	if src.CalcRuleRefOneOf5 != nil {
-		return json.Marshal(&src.CalcRuleRefOneOf5)
+	if src.CalcRuleRefOneOf6 != nil {
+		return json.Marshal(&src.CalcRuleRefOneOf6)
 	}
 
 	if src.MaybeVarStrOneOf != nil {
@@ -107,8 +107,8 @@ func (obj *MaybeVarStr) GetActualInstance() (interface{}) {
 	if obj == nil {
 		return nil
 	}
-	if obj.CalcRuleRefOneOf5 != nil {
-		return obj.CalcRuleRefOneOf5
+	if obj.CalcRuleRefOneOf6 != nil {
+		return obj.CalcRuleRefOneOf6
 	}
 
 	if obj.MaybeVarStrOneOf != nil {
@@ -121,8 +121,8 @@ func (obj *MaybeVarStr) GetActualInstance() (interface{}) {
 
 // Get the actual instance value
 func (obj MaybeVarStr) GetActualInstanceValue() (interface{}) {
-	if obj.CalcRuleRefOneOf5 != nil {
-		return *obj.CalcRuleRefOneOf5
+	if obj.CalcRuleRefOneOf6 != nil {
+		return *obj.CalcRuleRefOneOf6
 	}
 
 	if obj.MaybeVarStrOneOf != nil {

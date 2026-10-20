@@ -25,6 +25,7 @@ type CalcRuleRef struct {
 	CalcRuleRefOneOf3 *CalcRuleRefOneOf3
 	CalcRuleRefOneOf4 *CalcRuleRefOneOf4
 	CalcRuleRefOneOf5 *CalcRuleRefOneOf5
+	CalcRuleRefOneOf6 *CalcRuleRefOneOf6
 }
 
 // CalcRuleRefOneOfAsCalcRuleRef is a convenience function that returns CalcRuleRefOneOf wrapped in CalcRuleRef
@@ -66,6 +67,13 @@ func CalcRuleRefOneOf4AsCalcRuleRef(v *CalcRuleRefOneOf4) CalcRuleRef {
 func CalcRuleRefOneOf5AsCalcRuleRef(v *CalcRuleRefOneOf5) CalcRuleRef {
 	return CalcRuleRef{
 		CalcRuleRefOneOf5: v,
+	}
+}
+
+// CalcRuleRefOneOf6AsCalcRuleRef is a convenience function that returns CalcRuleRefOneOf6 wrapped in CalcRuleRef
+func CalcRuleRefOneOf6AsCalcRuleRef(v *CalcRuleRefOneOf6) CalcRuleRef {
+	return CalcRuleRef{
+		CalcRuleRefOneOf6: v,
 	}
 }
 
@@ -176,6 +184,23 @@ func (dst *CalcRuleRef) UnmarshalJSON(data []byte) error {
 		dst.CalcRuleRefOneOf5 = nil
 	}
 
+	// try to unmarshal data into CalcRuleRefOneOf6
+	err = newStrictDecoder(data).Decode(&dst.CalcRuleRefOneOf6)
+	if err == nil {
+		jsonCalcRuleRefOneOf6, _ := json.Marshal(dst.CalcRuleRefOneOf6)
+		if string(jsonCalcRuleRefOneOf6) == "{}" { // empty struct
+			dst.CalcRuleRefOneOf6 = nil
+		} else {
+			if err = validator.Validate(dst.CalcRuleRefOneOf6); err != nil {
+				dst.CalcRuleRefOneOf6 = nil
+			} else {
+				match++
+			}
+		}
+	} else {
+		dst.CalcRuleRefOneOf6 = nil
+	}
+
 	if match > 1 { // more than 1 match
 		// reset to nil
 		dst.CalcRuleRefOneOf = nil
@@ -184,6 +209,7 @@ func (dst *CalcRuleRef) UnmarshalJSON(data []byte) error {
 		dst.CalcRuleRefOneOf3 = nil
 		dst.CalcRuleRefOneOf4 = nil
 		dst.CalcRuleRefOneOf5 = nil
+		dst.CalcRuleRefOneOf6 = nil
 
 		return fmt.Errorf("data matches more than one schema in oneOf(CalcRuleRef)")
 	} else if match == 1 {
@@ -219,6 +245,10 @@ func (src CalcRuleRef) MarshalJSON() ([]byte, error) {
 		return json.Marshal(&src.CalcRuleRefOneOf5)
 	}
 
+	if src.CalcRuleRefOneOf6 != nil {
+		return json.Marshal(&src.CalcRuleRefOneOf6)
+	}
+
 	return nil, nil // no data in oneOf schemas
 }
 
@@ -251,6 +281,10 @@ func (obj *CalcRuleRef) GetActualInstance() (interface{}) {
 		return obj.CalcRuleRefOneOf5
 	}
 
+	if obj.CalcRuleRefOneOf6 != nil {
+		return obj.CalcRuleRefOneOf6
+	}
+
 	// all schemas are nil
 	return nil
 }
@@ -279,6 +313,10 @@ func (obj CalcRuleRef) GetActualInstanceValue() (interface{}) {
 
 	if obj.CalcRuleRefOneOf5 != nil {
 		return *obj.CalcRuleRefOneOf5
+	}
+
+	if obj.CalcRuleRefOneOf6 != nil {
+		return *obj.CalcRuleRefOneOf6
 	}
 
 	// all schemas are nil

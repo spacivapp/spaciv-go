@@ -22,7 +22,7 @@ var _ MappedNullable = &LayerVariablesRes{}
 
 // LayerVariablesRes struct for LayerVariablesRes
 type LayerVariablesRes struct {
-	// For each active scenario whose layers' modifier formulas use account variables, those variable ids (account:<id>), including the layers of stacked scenarios.
+	// For each active scenario whose layers' modifier or logic layer formulas use account variables, those variable ids (account:<id>), including the layers of stacked scenarios.
 	Scenarios map[string][]string `json:"scenarios"`
 }
 

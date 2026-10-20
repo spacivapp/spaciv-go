@@ -22,7 +22,7 @@ var _ MappedNullable = &CalcRuleRefOneOf3{}
 
 // CalcRuleRefOneOf3 struct for CalcRuleRefOneOf3
 type CalcRuleRefOneOf3 struct {
-	Select CalcSelect `json:"select"`
+	Num float64 `json:"num"`
 }
 
 type _CalcRuleRefOneOf3 CalcRuleRefOneOf3
@@ -31,9 +31,9 @@ type _CalcRuleRefOneOf3 CalcRuleRefOneOf3
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCalcRuleRefOneOf3(select_ CalcSelect) *CalcRuleRefOneOf3 {
+func NewCalcRuleRefOneOf3(num float64) *CalcRuleRefOneOf3 {
 	this := CalcRuleRefOneOf3{}
-	this.Select = select_
+	this.Num = num
 	return &this
 }
 
@@ -45,28 +45,28 @@ func NewCalcRuleRefOneOf3WithDefaults() *CalcRuleRefOneOf3 {
 	return &this
 }
 
-// GetSelect returns the Select field value
-func (o *CalcRuleRefOneOf3) GetSelect() CalcSelect {
+// GetNum returns the Num field value
+func (o *CalcRuleRefOneOf3) GetNum() float64 {
 	if o == nil {
-		var ret CalcSelect
+		var ret float64
 		return ret
 	}
 
-	return o.Select
+	return o.Num
 }
 
-// GetSelectOk returns a tuple with the Select field value
+// GetNumOk returns a tuple with the Num field value
 // and a boolean to check if the value has been set.
-func (o *CalcRuleRefOneOf3) GetSelectOk() (*CalcSelect, bool) {
+func (o *CalcRuleRefOneOf3) GetNumOk() (*float64, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Select, true
+	return &o.Num, true
 }
 
-// SetSelect sets field value
-func (o *CalcRuleRefOneOf3) SetSelect(v CalcSelect) {
-	o.Select = v
+// SetNum sets field value
+func (o *CalcRuleRefOneOf3) SetNum(v float64) {
+	o.Num = v
 }
 
 func (o CalcRuleRefOneOf3) MarshalJSON() ([]byte, error) {
@@ -79,7 +79,7 @@ func (o CalcRuleRefOneOf3) MarshalJSON() ([]byte, error) {
 
 func (o CalcRuleRefOneOf3) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["select"] = o.Select
+	toSerialize["num"] = o.Num
 	return toSerialize, nil
 }
 
@@ -88,7 +88,7 @@ func (o *CalcRuleRefOneOf3) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"select",
+		"num",
 	}
 
 	allProperties := make(map[string]interface{})

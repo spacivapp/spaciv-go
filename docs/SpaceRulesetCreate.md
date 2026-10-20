@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 **Description** | Pointer to **string** |  | [optional] 
 **Name** | **string** |  | 
 **Preset** | Pointer to **string** | UUID of a preset space ruleset to copy as the starting configuration. When supplied, the type, creation mode, config, and space modules are all taken from the preset. | [optional] 
-**Type** | **string** | Ruleset type: \&quot;Standard\&quot;, \&quot;Amenity\&quot;, or \&quot;Advanced\&quot;. Determines the initial calculation configuration template when no preset is supplied. | 
+**Type** | **string** | Kept as a label: \&quot;Standard\&quot;, \&quot;Amenity\&quot;, or \&quot;Advanced\&quot;. Every logic layer starts with no rules when no preset is supplied. | 
 
 ## Methods
 

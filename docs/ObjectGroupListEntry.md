@@ -6,7 +6,6 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Description** | **string** |  | 
 **Entries** | **int32** |  | 
-**HasModules** | **bool** |  | 
 **Id** | **string** |  | 
 **IsPublic** | **bool** |  | 
 **Name** | **string** |  | 
@@ -15,7 +14,7 @@ Name | Type | Description | Notes
 
 ### NewObjectGroupListEntry
 
-`func NewObjectGroupListEntry(description string, entries int32, hasModules bool, id string, isPublic bool, name string, ) *ObjectGroupListEntry`
+`func NewObjectGroupListEntry(description string, entries int32, id string, isPublic bool, name string, ) *ObjectGroupListEntry`
 
 NewObjectGroupListEntry instantiates a new ObjectGroupListEntry object
 This constructor will assign default values to properties that have it defined,
@@ -68,26 +67,6 @@ and a boolean to check if the value has been set.
 `func (o *ObjectGroupListEntry) SetEntries(v int32)`
 
 SetEntries sets Entries field to given value.
-
-
-### GetHasModules
-
-`func (o *ObjectGroupListEntry) GetHasModules() bool`
-
-GetHasModules returns the HasModules field if non-nil, zero value otherwise.
-
-### GetHasModulesOk
-
-`func (o *ObjectGroupListEntry) GetHasModulesOk() (*bool, bool)`
-
-GetHasModulesOk returns a tuple with the HasModules field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetHasModules
-
-`func (o *ObjectGroupListEntry) SetHasModules(v bool)`
-
-SetHasModules sets HasModules field to given value.
 
 
 ### GetId

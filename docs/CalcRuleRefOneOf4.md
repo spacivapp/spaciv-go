@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**SumOf** | [**CalcRuleRef**](CalcRuleRef.md) |  | 
+**Select** | [**CalcSelect**](CalcSelect.md) |  | 
 
 ## Methods
 
 ### NewCalcRuleRefOneOf4
 
-`func NewCalcRuleRefOneOf4(sumOf CalcRuleRef, ) *CalcRuleRefOneOf4`
+`func NewCalcRuleRefOneOf4(select_ CalcSelect, ) *CalcRuleRefOneOf4`
 
 NewCalcRuleRefOneOf4 instantiates a new CalcRuleRefOneOf4 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewCalcRuleRefOneOf4WithDefaults instantiates a new CalcRuleRefOneOf4 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetSumOf
+### GetSelect
 
-`func (o *CalcRuleRefOneOf4) GetSumOf() CalcRuleRef`
+`func (o *CalcRuleRefOneOf4) GetSelect() CalcSelect`
 
-GetSumOf returns the SumOf field if non-nil, zero value otherwise.
+GetSelect returns the Select field if non-nil, zero value otherwise.
 
-### GetSumOfOk
+### GetSelectOk
 
-`func (o *CalcRuleRefOneOf4) GetSumOfOk() (*CalcRuleRef, bool)`
+`func (o *CalcRuleRefOneOf4) GetSelectOk() (*CalcSelect, bool)`
 
-GetSumOfOk returns a tuple with the SumOf field if it's non-nil, zero value otherwise
+GetSelectOk returns a tuple with the Select field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetSumOf
+### SetSelect
 
-`func (o *CalcRuleRefOneOf4) SetSumOf(v CalcRuleRef)`
+`func (o *CalcRuleRefOneOf4) SetSelect(v CalcSelect)`
 
-SetSumOf sets SumOf field to given value.
+SetSelect sets Select field to given value.
 
 
 

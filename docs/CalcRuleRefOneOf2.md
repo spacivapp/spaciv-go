@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Num** | **float64** |  | 
+**Condition** | [**CalcCondition**](CalcCondition.md) |  | 
 
 ## Methods
 
 ### NewCalcRuleRefOneOf2
 
-`func NewCalcRuleRefOneOf2(num float64, ) *CalcRuleRefOneOf2`
+`func NewCalcRuleRefOneOf2(condition CalcCondition, ) *CalcRuleRefOneOf2`
 
 NewCalcRuleRefOneOf2 instantiates a new CalcRuleRefOneOf2 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewCalcRuleRefOneOf2WithDefaults instantiates a new CalcRuleRefOneOf2 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetNum
+### GetCondition
 
-`func (o *CalcRuleRefOneOf2) GetNum() float64`
+`func (o *CalcRuleRefOneOf2) GetCondition() CalcCondition`
 
-GetNum returns the Num field if non-nil, zero value otherwise.
+GetCondition returns the Condition field if non-nil, zero value otherwise.
 
-### GetNumOk
+### GetConditionOk
 
-`func (o *CalcRuleRefOneOf2) GetNumOk() (*float64, bool)`
+`func (o *CalcRuleRefOneOf2) GetConditionOk() (*CalcCondition, bool)`
 
-GetNumOk returns a tuple with the Num field if it's non-nil, zero value otherwise
+GetConditionOk returns a tuple with the Condition field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetNum
+### SetCondition
 
-`func (o *CalcRuleRefOneOf2) SetNum(v float64)`
+`func (o *CalcRuleRefOneOf2) SetCondition(v CalcCondition)`
 
-SetNum sets Num field to given value.
+SetCondition sets Condition field to given value.
 
 
 

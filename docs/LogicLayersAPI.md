@@ -1,26 +1,26 @@
-# \SpaceRulesetsAPI
+# \LogicLayersAPI
 
 All URIs are relative to *https://api.spaciv.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**Create**](SpaceRulesetsAPI.md#Create) | **Post** /v1/space-rulesets | Create a space ruleset
-[**CreateImage**](SpaceRulesetsAPI.md#CreateImage) | **Post** /v1/space-rulesets/{id}/image | Upload a space ruleset image
-[**Delete**](SpaceRulesetsAPI.md#Delete) | **Delete** /v1/space-rulesets/{id} | Delete a space ruleset
-[**DeleteImage**](SpaceRulesetsAPI.md#DeleteImage) | **Delete** /v1/space-rulesets/{id}/image | Delete a space ruleset image
-[**Get**](SpaceRulesetsAPI.md#Get) | **Get** /v1/space-rulesets/{id} | Get a space ruleset
-[**GetImage**](SpaceRulesetsAPI.md#GetImage) | **Get** /v1/space-rulesets/{id}/image | Get a space ruleset image
-[**List**](SpaceRulesetsAPI.md#List) | **Get** /v1/space-rulesets | List space rulesets
-[**ListPresets**](SpaceRulesetsAPI.md#ListPresets) | **Get** /v1/space-rulesets/presets | List preset space rulesets
-[**Update**](SpaceRulesetsAPI.md#Update) | **Patch** /v1/space-rulesets/{id} | Update a space ruleset
+[**CreateSpaceRulesets**](LogicLayersAPI.md#CreateSpaceRulesets) | **Post** /v1/space-rulesets | Create a logic layer
+[**CreateSpaceRulesetsImage**](LogicLayersAPI.md#CreateSpaceRulesetsImage) | **Post** /v1/space-rulesets/{id}/image | Upload a space ruleset image
+[**DeleteSpaceRulesets**](LogicLayersAPI.md#DeleteSpaceRulesets) | **Delete** /v1/space-rulesets/{id} | Delete a logic layer
+[**DeleteSpaceRulesetsImage**](LogicLayersAPI.md#DeleteSpaceRulesetsImage) | **Delete** /v1/space-rulesets/{id}/image | Delete a space ruleset image
+[**GetSpaceRulesets**](LogicLayersAPI.md#GetSpaceRulesets) | **Get** /v1/space-rulesets/{id} | Get a logic layer
+[**GetSpaceRulesetsImage**](LogicLayersAPI.md#GetSpaceRulesetsImage) | **Get** /v1/space-rulesets/{id}/image | Get a space ruleset image
+[**ListSpaceRulesets**](LogicLayersAPI.md#ListSpaceRulesets) | **Get** /v1/space-rulesets | List logic layers
+[**ListSpaceRulesetsPresets**](LogicLayersAPI.md#ListSpaceRulesetsPresets) | **Get** /v1/space-rulesets/presets | List preset logic layers
+[**UpdateSpaceRulesets**](LogicLayersAPI.md#UpdateSpaceRulesets) | **Patch** /v1/space-rulesets/{id} | Update a logic layer
 
 
 
-## Create
+## CreateSpaceRulesets
 
-> map[string]interface{} Create(ctx, spaceRulesetCreate)
+> map[string]interface{} CreateSpaceRulesets(ctx, spaceRulesetCreate)
 
-Create a space ruleset
+Create a logic layer
 
 
 
@@ -40,11 +40,11 @@ func main() {
 	spaceRulesetCreate :=  // SpaceRulesetCreate | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	resp, err := client.SpaceRulesets.Create(context.Background(), spaceRulesetCreate)
+	resp, err := client.LogicLayers.CreateSpaceRulesets(context.Background(), spaceRulesetCreate)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `SpaceRulesets.Create`: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `LogicLayers.CreateSpaceRulesets`: %v\n", err)
 	}
-	fmt.Fprintf(os.Stdout, "Response from `SpaceRulesets.Create`: %v\n", resp)
+	fmt.Fprintf(os.Stdout, "Response from `LogicLayers.CreateSpaceRulesets`: %v\n", resp)
 }
 ```
 
@@ -54,7 +54,7 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiCreateRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiCreateSpaceRulesetsRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -79,9 +79,9 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## CreateImage
+## CreateSpaceRulesetsImage
 
-> map[string]interface{} CreateImage(ctx, id, params)
+> map[string]interface{} CreateSpaceRulesetsImage(ctx, id, params)
 
 Upload a space ruleset image
 
@@ -103,11 +103,11 @@ func main() {
 	id :=  // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	resp, err := client.SpaceRulesets.CreateImage(context.Background(), id, nil)
+	resp, err := client.LogicLayers.CreateSpaceRulesetsImage(context.Background(), id, nil)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `SpaceRulesets.CreateImage`: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `LogicLayers.CreateSpaceRulesetsImage`: %v\n", err)
 	}
-	fmt.Fprintf(os.Stdout, "Response from `SpaceRulesets.CreateImage`: %v\n", resp)
+	fmt.Fprintf(os.Stdout, "Response from `LogicLayers.CreateSpaceRulesetsImage`: %v\n", resp)
 }
 ```
 
@@ -121,7 +121,7 @@ Name | Type | Description  | Notes
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiCreateImageRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiCreateSpaceRulesetsImageRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -148,11 +148,11 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## Delete
+## DeleteSpaceRulesets
 
-> map[string]interface{} Delete(ctx, id)
+> map[string]interface{} DeleteSpaceRulesets(ctx, id)
 
-Delete a space ruleset
+Delete a logic layer
 
 
 
@@ -172,11 +172,11 @@ func main() {
 	id :=  // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	resp, err := client.SpaceRulesets.Delete(context.Background(), id)
+	resp, err := client.LogicLayers.DeleteSpaceRulesets(context.Background(), id)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `SpaceRulesets.Delete`: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `LogicLayers.DeleteSpaceRulesets`: %v\n", err)
 	}
-	fmt.Fprintf(os.Stdout, "Response from `SpaceRulesets.Delete`: %v\n", resp)
+	fmt.Fprintf(os.Stdout, "Response from `LogicLayers.DeleteSpaceRulesets`: %v\n", resp)
 }
 ```
 
@@ -190,7 +190,7 @@ Name | Type | Description  | Notes
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiDeleteRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiDeleteSpaceRulesetsRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -215,9 +215,9 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## DeleteImage
+## DeleteSpaceRulesetsImage
 
-> map[string]interface{} DeleteImage(ctx, id)
+> map[string]interface{} DeleteSpaceRulesetsImage(ctx, id)
 
 Delete a space ruleset image
 
@@ -239,11 +239,11 @@ func main() {
 	id :=  // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	resp, err := client.SpaceRulesets.DeleteImage(context.Background(), id)
+	resp, err := client.LogicLayers.DeleteSpaceRulesetsImage(context.Background(), id)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `SpaceRulesets.DeleteImage`: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `LogicLayers.DeleteSpaceRulesetsImage`: %v\n", err)
 	}
-	fmt.Fprintf(os.Stdout, "Response from `SpaceRulesets.DeleteImage`: %v\n", resp)
+	fmt.Fprintf(os.Stdout, "Response from `LogicLayers.DeleteSpaceRulesetsImage`: %v\n", resp)
 }
 ```
 
@@ -257,7 +257,7 @@ Name | Type | Description  | Notes
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiDeleteImageRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiDeleteSpaceRulesetsImageRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -282,11 +282,11 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## Get
+## GetSpaceRulesets
 
-> SpaceRuleSetJSON Get(ctx, id)
+> SpaceRuleSetJSON GetSpaceRulesets(ctx, id, params)
 
-Get a space ruleset
+Get a logic layer
 
 
 
@@ -306,11 +306,11 @@ func main() {
 	id :=  // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	resp, err := client.SpaceRulesets.Get(context.Background(), id)
+	resp, err := client.LogicLayers.GetSpaceRulesets(context.Background(), id, nil)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `SpaceRulesets.Get`: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `LogicLayers.GetSpaceRulesets`: %v\n", err)
 	}
-	fmt.Fprintf(os.Stdout, "Response from `SpaceRulesets.Get`: %v\n", resp)
+	fmt.Fprintf(os.Stdout, "Response from `LogicLayers.GetSpaceRulesets`: %v\n", resp)
 }
 ```
 
@@ -324,12 +324,13 @@ Name | Type | Description  | Notes
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiGetRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiGetSpaceRulesetsRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **format** | **string** | stored returns the config as it was saved; logic converts a config saved by an app from before logic layers into a LogicLayerConfig. | [default to &quot;stored&quot;]
 
 ### Return type
 
@@ -349,9 +350,9 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## GetImage
+## GetSpaceRulesetsImage
 
-> string GetImage(ctx, id, params)
+> string GetSpaceRulesetsImage(ctx, id, params)
 
 Get a space ruleset image
 
@@ -373,11 +374,11 @@ func main() {
 	id :=  // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	resp, err := client.SpaceRulesets.GetImage(context.Background(), id, nil)
+	resp, err := client.LogicLayers.GetSpaceRulesetsImage(context.Background(), id, nil)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `SpaceRulesets.GetImage`: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `LogicLayers.GetSpaceRulesetsImage`: %v\n", err)
 	}
-	fmt.Fprintf(os.Stdout, "Response from `SpaceRulesets.GetImage`: %v\n", resp)
+	fmt.Fprintf(os.Stdout, "Response from `LogicLayers.GetSpaceRulesetsImage`: %v\n", resp)
 }
 ```
 
@@ -391,7 +392,7 @@ Name | Type | Description  | Notes
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiGetImageRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiGetSpaceRulesetsImageRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -417,11 +418,11 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
-## List
+## ListSpaceRulesets
 
-> []SpaceRulesetListEntry List(ctx)
+> []SpaceRulesetListEntry ListSpaceRulesets(ctx)
 
-List space rulesets
+List logic layers
 
 
 
@@ -440,11 +441,11 @@ import (
 func main() {
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	resp, err := client.SpaceRulesets.List(context.Background())
+	resp, err := client.LogicLayers.ListSpaceRulesets(context.Background())
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `SpaceRulesets.List`: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `LogicLayers.ListSpaceRulesets`: %v\n", err)
 	}
-	fmt.Fprintf(os.Stdout, "Response from `SpaceRulesets.List`: %v\n", resp)
+	fmt.Fprintf(os.Stdout, "Response from `LogicLayers.ListSpaceRulesets`: %v\n", resp)
 }
 ```
 
@@ -454,7 +455,7 @@ This endpoint does not need any parameter.
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiListRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiListSpaceRulesetsRequest struct via the builder pattern
 
 
 ### Return type
@@ -475,11 +476,11 @@ Other parameters are passed through a pointer to a apiListRequest struct via the
 [[Back to README]](../README.md)
 
 
-## ListPresets
+## ListSpaceRulesetsPresets
 
-> []SpaceRuleSet ListPresets(ctx)
+> []SpaceRuleSet ListSpaceRulesetsPresets(ctx)
 
-List preset space rulesets
+List preset logic layers
 
 
 
@@ -498,11 +499,11 @@ import (
 func main() {
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	resp, err := client.SpaceRulesets.ListPresets(context.Background())
+	resp, err := client.LogicLayers.ListSpaceRulesetsPresets(context.Background())
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `SpaceRulesets.ListPresets`: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `LogicLayers.ListSpaceRulesetsPresets`: %v\n", err)
 	}
-	fmt.Fprintf(os.Stdout, "Response from `SpaceRulesets.ListPresets`: %v\n", resp)
+	fmt.Fprintf(os.Stdout, "Response from `LogicLayers.ListSpaceRulesetsPresets`: %v\n", resp)
 }
 ```
 
@@ -512,7 +513,7 @@ This endpoint does not need any parameter.
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiListPresetsRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiListSpaceRulesetsPresetsRequest struct via the builder pattern
 
 
 ### Return type
@@ -533,11 +534,11 @@ Other parameters are passed through a pointer to a apiListPresetsRequest struct 
 [[Back to README]](../README.md)
 
 
-## Update
+## UpdateSpaceRulesets
 
-> map[string]interface{} Update(ctx, id, spaceRulesetUpdate)
+> map[string]interface{} UpdateSpaceRulesets(ctx, id, spaceRulesetUpdate)
 
-Update a space ruleset
+Update a logic layer
 
 
 
@@ -558,11 +559,11 @@ func main() {
 	spaceRulesetUpdate :=  // SpaceRulesetUpdate | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	resp, err := client.SpaceRulesets.Update(context.Background(), id, spaceRulesetUpdate)
+	resp, err := client.LogicLayers.UpdateSpaceRulesets(context.Background(), id, spaceRulesetUpdate)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `SpaceRulesets.Update`: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `LogicLayers.UpdateSpaceRulesets`: %v\n", err)
 	}
-	fmt.Fprintf(os.Stdout, "Response from `SpaceRulesets.Update`: %v\n", resp)
+	fmt.Fprintf(os.Stdout, "Response from `LogicLayers.UpdateSpaceRulesets`: %v\n", resp)
 }
 ```
 
@@ -576,7 +577,7 @@ Name | Type | Description  | Notes
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiUpdateRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiUpdateSpaceRulesetsRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes

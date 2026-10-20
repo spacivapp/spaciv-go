@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Attr** | [**MaybeVarProp**](MaybeVarProp.md) |  | 
 **BinaryOperator** | [**CalcRuleFloat**](CalcRuleFloat.md) |  | 
+**Condition** | [**CalcCondition**](CalcCondition.md) |  | 
 **Num** | **float64** |  | 
 **Select** | [**CalcSelect**](CalcSelect.md) |  | 
 **SumOf** | [**CalcRuleRef**](CalcRuleRef.md) |  | 
@@ -15,7 +16,7 @@ Name | Type | Description | Notes
 
 ### NewCalcRuleRef
 
-`func NewCalcRuleRef(attr MaybeVarProp, binaryOperator CalcRuleFloat, num float64, select_ CalcSelect, sumOf CalcRuleRef, var_ string, ) *CalcRuleRef`
+`func NewCalcRuleRef(attr MaybeVarProp, binaryOperator CalcRuleFloat, condition CalcCondition, num float64, select_ CalcSelect, sumOf CalcRuleRef, var_ string, ) *CalcRuleRef`
 
 NewCalcRuleRef instantiates a new CalcRuleRef object
 This constructor will assign default values to properties that have it defined,
@@ -68,6 +69,26 @@ and a boolean to check if the value has been set.
 `func (o *CalcRuleRef) SetBinaryOperator(v CalcRuleFloat)`
 
 SetBinaryOperator sets BinaryOperator field to given value.
+
+
+### GetCondition
+
+`func (o *CalcRuleRef) GetCondition() CalcCondition`
+
+GetCondition returns the Condition field if non-nil, zero value otherwise.
+
+### GetConditionOk
+
+`func (o *CalcRuleRef) GetConditionOk() (*CalcCondition, bool)`
+
+GetConditionOk returns a tuple with the Condition field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCondition
+
+`func (o *CalcRuleRef) SetCondition(v CalcCondition)`
+
+SetCondition sets Condition field to given value.
 
 
 ### GetNum

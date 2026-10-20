@@ -444,7 +444,7 @@ type requestForVariablesListReferences struct {
 /*
 ListReferences List account variable references
 
-Returns every place in the account that uses the account-level variable: project value overrides, project filters, dashboard visualisations and the modifier formulas of layers, across all projects including archived ones. A variable can only be deleted, or have its type changed, when this list is empty. Requires the *View projects* permission.
+Returns every place in the account that uses the account-level variable: project value overrides, project filters, dashboard visualisations, the modifier formulas of layers and the functions of logic layers, across all projects including archived ones. A variable can only be deleted, or have its type changed, when this list is empty. Requires the *View projects* permission.
 */
 func (a *VariablesService) ListReferences(ctx context.Context, id string) (*ReferencesRes, error) {
 	r := requestForVariablesListReferences{

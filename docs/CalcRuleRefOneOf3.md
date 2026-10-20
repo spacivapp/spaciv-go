@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Select** | [**CalcSelect**](CalcSelect.md) |  | 
+**Num** | **float64** |  | 
 
 ## Methods
 
 ### NewCalcRuleRefOneOf3
 
-`func NewCalcRuleRefOneOf3(select_ CalcSelect, ) *CalcRuleRefOneOf3`
+`func NewCalcRuleRefOneOf3(num float64, ) *CalcRuleRefOneOf3`
 
 NewCalcRuleRefOneOf3 instantiates a new CalcRuleRefOneOf3 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewCalcRuleRefOneOf3WithDefaults instantiates a new CalcRuleRefOneOf3 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetSelect
+### GetNum
 
-`func (o *CalcRuleRefOneOf3) GetSelect() CalcSelect`
+`func (o *CalcRuleRefOneOf3) GetNum() float64`
 
-GetSelect returns the Select field if non-nil, zero value otherwise.
+GetNum returns the Num field if non-nil, zero value otherwise.
 
-### GetSelectOk
+### GetNumOk
 
-`func (o *CalcRuleRefOneOf3) GetSelectOk() (*CalcSelect, bool)`
+`func (o *CalcRuleRefOneOf3) GetNumOk() (*float64, bool)`
 
-GetSelectOk returns a tuple with the Select field if it's non-nil, zero value otherwise
+GetNumOk returns a tuple with the Num field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetSelect
+### SetNum
 
-`func (o *CalcRuleRefOneOf3) SetSelect(v CalcSelect)`
+`func (o *CalcRuleRefOneOf3) SetNum(v float64)`
 
-SetSelect sets Select field to given value.
+SetNum sets Num field to given value.
 
 
 

@@ -22,30 +22,30 @@ import (
 )
 
 
-type SpaceRulesetsService service
+type LogicLayersService service
 
-type requestForSpaceRulesetsCreate struct {
+type requestForLogicLayersCreateSpaceRulesets struct {
 	ctx context.Context
-	ApiService *SpaceRulesetsService
+	ApiService *LogicLayersService
 	spaceRulesetCreate *SpaceRulesetCreate
 }
 
 /*
-Create Create a space ruleset
+CreateSpaceRulesets Create a logic layer
 
-Creates a new space ruleset for the current account. Supply `preset` to copy an existing built-in preset as the starting configuration; the preset's space modules are cloned into the account's module library as needed. Omit `preset` to start with an empty configuration for the given `type`. Requires the *Edit space rule sets* permission.
+Creates a new logic layer for the current account. Supply `preset` to copy an existing built-in preset as the starting configuration; the preset's space modules are cloned into the account's module library as needed. Omit `preset` to start with no rules. Requires the *Edit space rule sets* permission.
 */
-func (a *SpaceRulesetsService) Create(ctx context.Context, spaceRulesetCreate SpaceRulesetCreate) (map[string]interface{}, error) {
-	r := requestForSpaceRulesetsCreate{
+func (a *LogicLayersService) CreateSpaceRulesets(ctx context.Context, spaceRulesetCreate SpaceRulesetCreate) (map[string]interface{}, error) {
+	r := requestForLogicLayersCreateSpaceRulesets{
 		ApiService: a,
 		ctx: ctx,
 		spaceRulesetCreate: &spaceRulesetCreate,
 	}
-	result, _, err := a.executeCreate(r)
+	result, _, err := a.executeCreateSpaceRulesets(r)
 	return result, err
 }
 
-func (a *SpaceRulesetsService) executeCreate(r requestForSpaceRulesetsCreate) (map[string]interface{}, *http.Response, error) {
+func (a *LogicLayersService) executeCreateSpaceRulesets(r requestForLogicLayersCreateSpaceRulesets) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -53,7 +53,7 @@ func (a *SpaceRulesetsService) executeCreate(r requestForSpaceRulesetsCreate) (m
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SpaceRulesetsAPIService.Create")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogicLayersAPIService.CreateSpaceRulesets")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -87,7 +87,7 @@ func (a *SpaceRulesetsService) executeCreate(r requestForSpaceRulesetsCreate) (m
 	// body params
 	localVarPostBody = r.spaceRulesetCreate
 	if r.ctx != nil {
-		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "SpaceRulesetsAPIService.Create")
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "LogicLayersAPIService.CreateSpaceRulesets")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -134,15 +134,15 @@ func (a *SpaceRulesetsService) executeCreate(r requestForSpaceRulesetsCreate) (m
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type requestForSpaceRulesetsCreateImage struct {
+type requestForLogicLayersCreateSpaceRulesetsImage struct {
 	ctx context.Context
-	ApiService *SpaceRulesetsService
+	ApiService *LogicLayersService
 	id string
 	filename *os.File
 	name *string
 }
 
-type SpaceRulesetsCreateImageParams struct {
+type LogicLayersCreateSpaceRulesetsImageParams struct {
 	// filename of the file being uploaded
 	Filename *os.File
 	// general purpose name for multipart form value
@@ -150,12 +150,12 @@ type SpaceRulesetsCreateImageParams struct {
 }
 
 /*
-CreateImage Upload a space ruleset image
+CreateSpaceRulesetsImage Upload a space ruleset image
 
 Uploads an illustrative image for a space ruleset. Send the file as `multipart/form-data` with the field key `file`. Accepted MIME types: `image/png`, `image/jpeg`, `image/gif`, `image/webp`, `image/svg+xml` (detected from file bytes). No larger than 4 MB. Replaces any previously uploaded image. Requires the *Edit space rule sets* permission.
 */
-func (a *SpaceRulesetsService) CreateImage(ctx context.Context, id string, params *SpaceRulesetsCreateImageParams) (map[string]interface{}, error) {
-	r := requestForSpaceRulesetsCreateImage{
+func (a *LogicLayersService) CreateSpaceRulesetsImage(ctx context.Context, id string, params *LogicLayersCreateSpaceRulesetsImageParams) (map[string]interface{}, error) {
+	r := requestForLogicLayersCreateSpaceRulesetsImage{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
@@ -164,11 +164,11 @@ func (a *SpaceRulesetsService) CreateImage(ctx context.Context, id string, param
 		r.filename = params.Filename
 		r.name = params.Name
 	}
-	result, _, err := a.executeCreateImage(r)
+	result, _, err := a.executeCreateSpaceRulesetsImage(r)
 	return result, err
 }
 
-func (a *SpaceRulesetsService) executeCreateImage(r requestForSpaceRulesetsCreateImage) (map[string]interface{}, *http.Response, error) {
+func (a *LogicLayersService) executeCreateSpaceRulesetsImage(r requestForLogicLayersCreateSpaceRulesetsImage) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
@@ -176,7 +176,7 @@ func (a *SpaceRulesetsService) executeCreateImage(r requestForSpaceRulesetsCreat
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SpaceRulesetsAPIService.CreateImage")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogicLayersAPIService.CreateSpaceRulesetsImage")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -227,7 +227,7 @@ func (a *SpaceRulesetsService) executeCreateImage(r requestForSpaceRulesetsCreat
 		parameterAddToHeaderOrQuery(localVarFormParams, "name", r.name, "", "")
 	}
 	if r.ctx != nil {
-		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "SpaceRulesetsAPIService.CreateImage")
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "LogicLayersAPIService.CreateSpaceRulesetsImage")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -274,28 +274,28 @@ func (a *SpaceRulesetsService) executeCreateImage(r requestForSpaceRulesetsCreat
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type requestForSpaceRulesetsDelete struct {
+type requestForLogicLayersDeleteSpaceRulesets struct {
 	ctx context.Context
-	ApiService *SpaceRulesetsService
+	ApiService *LogicLayersService
 	id string
 }
 
 /*
-Delete Delete a space ruleset
+DeleteSpaceRulesets Delete a logic layer
 
-Permanently deletes a space ruleset from the current account and removes it from every variable's allowed `options`; a variable whose value was the ruleset moves to its first remaining option. Requires the *Edit space rule set details* permission.
+Permanently deletes a logic layer from the current account and removes it from every variable's allowed `options`; a variable whose value was the logic layer moves to its first remaining option. Requires the *Edit space rule set details* permission.
 */
-func (a *SpaceRulesetsService) Delete(ctx context.Context, id string) (map[string]interface{}, error) {
-	r := requestForSpaceRulesetsDelete{
+func (a *LogicLayersService) DeleteSpaceRulesets(ctx context.Context, id string) (map[string]interface{}, error) {
+	r := requestForLogicLayersDeleteSpaceRulesets{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
 	}
-	result, _, err := a.executeDelete(r)
+	result, _, err := a.executeDeleteSpaceRulesets(r)
 	return result, err
 }
 
-func (a *SpaceRulesetsService) executeDelete(r requestForSpaceRulesetsDelete) (map[string]interface{}, *http.Response, error) {
+func (a *LogicLayersService) executeDeleteSpaceRulesets(r requestForLogicLayersDeleteSpaceRulesets) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
@@ -303,7 +303,7 @@ func (a *SpaceRulesetsService) executeDelete(r requestForSpaceRulesetsDelete) (m
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SpaceRulesetsAPIService.Delete")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogicLayersAPIService.DeleteSpaceRulesets")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -333,7 +333,7 @@ func (a *SpaceRulesetsService) executeDelete(r requestForSpaceRulesetsDelete) (m
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.ctx != nil {
-		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "SpaceRulesetsAPIService.Delete")
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "LogicLayersAPIService.DeleteSpaceRulesets")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -380,28 +380,28 @@ func (a *SpaceRulesetsService) executeDelete(r requestForSpaceRulesetsDelete) (m
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type requestForSpaceRulesetsDeleteImage struct {
+type requestForLogicLayersDeleteSpaceRulesetsImage struct {
 	ctx context.Context
-	ApiService *SpaceRulesetsService
+	ApiService *LogicLayersService
 	id string
 }
 
 /*
-DeleteImage Delete a space ruleset image
+DeleteSpaceRulesetsImage Delete a space ruleset image
 
 Removes the custom image for a space ruleset. After deletion, `GET /v1/space-rulesets/{id}/image` returns a generated default image unless `noFallback` is set. Requires the *Edit space rule sets* permission.
 */
-func (a *SpaceRulesetsService) DeleteImage(ctx context.Context, id string) (map[string]interface{}, error) {
-	r := requestForSpaceRulesetsDeleteImage{
+func (a *LogicLayersService) DeleteSpaceRulesetsImage(ctx context.Context, id string) (map[string]interface{}, error) {
+	r := requestForLogicLayersDeleteSpaceRulesetsImage{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
 	}
-	result, _, err := a.executeDeleteImage(r)
+	result, _, err := a.executeDeleteSpaceRulesetsImage(r)
 	return result, err
 }
 
-func (a *SpaceRulesetsService) executeDeleteImage(r requestForSpaceRulesetsDeleteImage) (map[string]interface{}, *http.Response, error) {
+func (a *LogicLayersService) executeDeleteSpaceRulesetsImage(r requestForLogicLayersDeleteSpaceRulesetsImage) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
@@ -409,7 +409,7 @@ func (a *SpaceRulesetsService) executeDeleteImage(r requestForSpaceRulesetsDelet
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SpaceRulesetsAPIService.DeleteImage")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogicLayersAPIService.DeleteSpaceRulesetsImage")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -439,7 +439,7 @@ func (a *SpaceRulesetsService) executeDeleteImage(r requestForSpaceRulesetsDelet
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.ctx != nil {
-		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "SpaceRulesetsAPIService.DeleteImage")
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "LogicLayersAPIService.DeleteSpaceRulesetsImage")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -486,28 +486,37 @@ func (a *SpaceRulesetsService) executeDeleteImage(r requestForSpaceRulesetsDelet
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type requestForSpaceRulesetsGet struct {
+type requestForLogicLayersGetSpaceRulesets struct {
 	ctx context.Context
-	ApiService *SpaceRulesetsService
+	ApiService *LogicLayersService
 	id string
+	format *string
+}
+
+type LogicLayersGetSpaceRulesetsParams struct {
+	// stored returns the config as it was saved; logic converts a config saved by an app from before logic layers into a LogicLayerConfig.
+	Format *string
 }
 
 /*
-Get Get a space ruleset
+GetSpaceRulesets Get a logic layer
 
-Returns the full detail of a space ruleset including its calculation configuration. Requires the *View space rule set details* permission.
+Returns the full detail of a logic layer, including its rules as a `LogicLayerConfig`. Each rule balances the supply objects its filters select against the demand objects its filters select, at a ratio of supply per demand or as a total spread over the demand. Configs saved by an app from before logic layers are returned as saved unless `format=logic` is set. Returns `404` if the logic layer does not exist. Requires the *View space rule set details* permission.
 */
-func (a *SpaceRulesetsService) Get(ctx context.Context, id string) (*SpaceRuleSetJSON, error) {
-	r := requestForSpaceRulesetsGet{
+func (a *LogicLayersService) GetSpaceRulesets(ctx context.Context, id string, params *LogicLayersGetSpaceRulesetsParams) (*SpaceRuleSetJSON, error) {
+	r := requestForLogicLayersGetSpaceRulesets{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
 	}
-	result, _, err := a.executeGet(r)
+	if params != nil {
+		r.format = params.Format
+	}
+	result, _, err := a.executeGetSpaceRulesets(r)
 	return result, err
 }
 
-func (a *SpaceRulesetsService) executeGet(r requestForSpaceRulesetsGet) (*SpaceRuleSetJSON, *http.Response, error) {
+func (a *LogicLayersService) executeGetSpaceRulesets(r requestForLogicLayersGetSpaceRulesets) (*SpaceRuleSetJSON, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -515,7 +524,7 @@ func (a *SpaceRulesetsService) executeGet(r requestForSpaceRulesetsGet) (*SpaceR
 		localVarReturnValue  *SpaceRuleSetJSON
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SpaceRulesetsAPIService.Get")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogicLayersAPIService.GetSpaceRulesets")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -527,6 +536,12 @@ func (a *SpaceRulesetsService) executeGet(r requestForSpaceRulesetsGet) (*SpaceR
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
+	if r.format != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "format", r.format, "form", "")
+	} else {
+		var defaultValue string = "stored"
+		r.format = &defaultValue
+	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -545,7 +560,7 @@ func (a *SpaceRulesetsService) executeGet(r requestForSpaceRulesetsGet) (*SpaceR
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.ctx != nil {
-		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "SpaceRulesetsAPIService.Get")
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "LogicLayersAPIService.GetSpaceRulesets")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -592,25 +607,25 @@ func (a *SpaceRulesetsService) executeGet(r requestForSpaceRulesetsGet) (*SpaceR
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type requestForSpaceRulesetsGetImage struct {
+type requestForLogicLayersGetSpaceRulesetsImage struct {
 	ctx context.Context
-	ApiService *SpaceRulesetsService
+	ApiService *LogicLayersService
 	id string
 	noFallback *bool
 }
 
-type SpaceRulesetsGetImageParams struct {
+type LogicLayersGetSpaceRulesetsImageParams struct {
 	// When true, returns 404 if no custom image has been uploaded rather than generating a default image from the ruleset name.
 	NoFallback *bool
 }
 
 /*
-GetImage Get a space ruleset image
+GetSpaceRulesetsImage Get a space ruleset image
 
 Returns the illustrative image for a space ruleset. If no image has been uploaded and `noFallback` is not set, a default image is generated from the ruleset name. The response `Content-Type` header reflects the actual image format. Requires the *View space rule sets* permission. Returns `403` (`file quarantined: it matched a virus signature`) when a rescan found the stored image matches a virus signature; the bytes are kept for investigation.
 */
-func (a *SpaceRulesetsService) GetImage(ctx context.Context, id string, params *SpaceRulesetsGetImageParams) (string, error) {
-	r := requestForSpaceRulesetsGetImage{
+func (a *LogicLayersService) GetSpaceRulesetsImage(ctx context.Context, id string, params *LogicLayersGetSpaceRulesetsImageParams) (string, error) {
+	r := requestForLogicLayersGetSpaceRulesetsImage{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
@@ -618,11 +633,11 @@ func (a *SpaceRulesetsService) GetImage(ctx context.Context, id string, params *
 	if params != nil {
 		r.noFallback = params.NoFallback
 	}
-	result, _, err := a.executeGetImage(r)
+	result, _, err := a.executeGetSpaceRulesetsImage(r)
 	return result, err
 }
 
-func (a *SpaceRulesetsService) executeGetImage(r requestForSpaceRulesetsGetImage) (string, *http.Response, error) {
+func (a *LogicLayersService) executeGetSpaceRulesetsImage(r requestForLogicLayersGetSpaceRulesetsImage) (string, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -630,7 +645,7 @@ func (a *SpaceRulesetsService) executeGetImage(r requestForSpaceRulesetsGetImage
 		localVarReturnValue  string
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SpaceRulesetsAPIService.GetImage")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogicLayersAPIService.GetSpaceRulesetsImage")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -663,7 +678,7 @@ func (a *SpaceRulesetsService) executeGetImage(r requestForSpaceRulesetsGetImage
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.ctx != nil {
-		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "SpaceRulesetsAPIService.GetImage")
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "LogicLayersAPIService.GetSpaceRulesetsImage")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -710,26 +725,26 @@ func (a *SpaceRulesetsService) executeGetImage(r requestForSpaceRulesetsGetImage
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type requestForSpaceRulesetsList struct {
+type requestForLogicLayersListSpaceRulesets struct {
 	ctx context.Context
-	ApiService *SpaceRulesetsService
+	ApiService *LogicLayersService
 }
 
 /*
-List List space rulesets
+ListSpaceRulesets List logic layers
 
-Returns all space rulesets belonging to the current account with summary fields. Use `GET /v1/space-rulesets/{id}` to retrieve the full configuration for a specific ruleset. Requires the *View space rule sets* permission.
+Returns all logic layers belonging to the current account with summary fields. Use `GET /v1/space-rulesets/{id}` to retrieve the full configuration for a specific logic layer. Requires the *View space rule sets* permission.
 */
-func (a *SpaceRulesetsService) List(ctx context.Context) ([]SpaceRulesetListEntry, error) {
-	r := requestForSpaceRulesetsList{
+func (a *LogicLayersService) ListSpaceRulesets(ctx context.Context) ([]SpaceRulesetListEntry, error) {
+	r := requestForLogicLayersListSpaceRulesets{
 		ApiService: a,
 		ctx: ctx,
 	}
-	result, _, err := a.executeList(r)
+	result, _, err := a.executeListSpaceRulesets(r)
 	return result, err
 }
 
-func (a *SpaceRulesetsService) executeList(r requestForSpaceRulesetsList) ([]SpaceRulesetListEntry, *http.Response, error) {
+func (a *LogicLayersService) executeListSpaceRulesets(r requestForLogicLayersListSpaceRulesets) ([]SpaceRulesetListEntry, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -737,7 +752,7 @@ func (a *SpaceRulesetsService) executeList(r requestForSpaceRulesetsList) ([]Spa
 		localVarReturnValue  []SpaceRulesetListEntry
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SpaceRulesetsAPIService.List")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogicLayersAPIService.ListSpaceRulesets")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -766,7 +781,7 @@ func (a *SpaceRulesetsService) executeList(r requestForSpaceRulesetsList) ([]Spa
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.ctx != nil {
-		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "SpaceRulesetsAPIService.List")
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "LogicLayersAPIService.ListSpaceRulesets")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -813,26 +828,26 @@ func (a *SpaceRulesetsService) executeList(r requestForSpaceRulesetsList) ([]Spa
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type requestForSpaceRulesetsListPresets struct {
+type requestForLogicLayersListSpaceRulesetsPresets struct {
 	ctx context.Context
-	ApiService *SpaceRulesetsService
+	ApiService *LogicLayersService
 }
 
 /*
-ListPresets List preset space rulesets
+ListSpaceRulesetsPresets List preset logic layers
 
-Returns the spaciv-supplied preset space rulesets available to all accounts. Pass one of the returned IDs as `preset` when calling `POST /v1/space-rulesets` to create a copy in the current account. Requires the *View space rule sets* permission.
+Returns the spaciv-supplied preset logic layers available to all accounts. Pass one of the returned IDs as `preset` when calling `POST /v1/space-rulesets` to create a copy in the current account. Requires the *View space rule sets* permission.
 */
-func (a *SpaceRulesetsService) ListPresets(ctx context.Context) ([]SpaceRuleSet, error) {
-	r := requestForSpaceRulesetsListPresets{
+func (a *LogicLayersService) ListSpaceRulesetsPresets(ctx context.Context) ([]SpaceRuleSet, error) {
+	r := requestForLogicLayersListSpaceRulesetsPresets{
 		ApiService: a,
 		ctx: ctx,
 	}
-	result, _, err := a.executeListPresets(r)
+	result, _, err := a.executeListSpaceRulesetsPresets(r)
 	return result, err
 }
 
-func (a *SpaceRulesetsService) executeListPresets(r requestForSpaceRulesetsListPresets) ([]SpaceRuleSet, *http.Response, error) {
+func (a *LogicLayersService) executeListSpaceRulesetsPresets(r requestForLogicLayersListSpaceRulesetsPresets) ([]SpaceRuleSet, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
@@ -840,7 +855,7 @@ func (a *SpaceRulesetsService) executeListPresets(r requestForSpaceRulesetsListP
 		localVarReturnValue  []SpaceRuleSet
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SpaceRulesetsAPIService.ListPresets")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogicLayersAPIService.ListSpaceRulesetsPresets")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -869,7 +884,7 @@ func (a *SpaceRulesetsService) executeListPresets(r requestForSpaceRulesetsListP
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	if r.ctx != nil {
-		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "SpaceRulesetsAPIService.ListPresets")
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "LogicLayersAPIService.ListSpaceRulesetsPresets")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
@@ -916,30 +931,30 @@ func (a *SpaceRulesetsService) executeListPresets(r requestForSpaceRulesetsListP
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type requestForSpaceRulesetsUpdate struct {
+type requestForLogicLayersUpdateSpaceRulesets struct {
 	ctx context.Context
-	ApiService *SpaceRulesetsService
+	ApiService *LogicLayersService
 	id string
 	spaceRulesetUpdate *SpaceRulesetUpdate
 }
 
 /*
-Update Update a space ruleset
+UpdateSpaceRulesets Update a logic layer
 
-Updates one or more fields of a space ruleset. Only fields present in the request body are changed; `modifiedAt` is always updated to the current time. Returns `404` if the ruleset does not exist. Requires the *Edit space rule set details* permission.
+Updates one or more fields of a logic layer. Only fields present in the request body are changed; `modifiedAt` is always updated to the current time. `config` is a `LogicLayerConfig`; one in a space rule shape from before logic layers is checked to convert to a logic layer and stored as sent. Functions may use account number variables (`{"var": "account:<id>"}`), which needs the *Variable controls* feature. Returns `400` if `config` is not a valid logic layer or uses an unknown or non-number variable, and `404` if the logic layer does not exist. Requires the *Edit space rule set details* permission.
 */
-func (a *SpaceRulesetsService) Update(ctx context.Context, id string, spaceRulesetUpdate SpaceRulesetUpdate) (map[string]interface{}, error) {
-	r := requestForSpaceRulesetsUpdate{
+func (a *LogicLayersService) UpdateSpaceRulesets(ctx context.Context, id string, spaceRulesetUpdate SpaceRulesetUpdate) (map[string]interface{}, error) {
+	r := requestForLogicLayersUpdateSpaceRulesets{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
 		spaceRulesetUpdate: &spaceRulesetUpdate,
 	}
-	result, _, err := a.executeUpdate(r)
+	result, _, err := a.executeUpdateSpaceRulesets(r)
 	return result, err
 }
 
-func (a *SpaceRulesetsService) executeUpdate(r requestForSpaceRulesetsUpdate) (map[string]interface{}, *http.Response, error) {
+func (a *LogicLayersService) executeUpdateSpaceRulesets(r requestForLogicLayersUpdateSpaceRulesets) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPatch
 		localVarPostBody     interface{}
@@ -947,7 +962,7 @@ func (a *SpaceRulesetsService) executeUpdate(r requestForSpaceRulesetsUpdate) (m
 		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SpaceRulesetsAPIService.Update")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogicLayersAPIService.UpdateSpaceRulesets")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
@@ -982,7 +997,7 @@ func (a *SpaceRulesetsService) executeUpdate(r requestForSpaceRulesetsUpdate) (m
 	// body params
 	localVarPostBody = r.spaceRulesetUpdate
 	if r.ctx != nil {
-		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "SpaceRulesetsAPIService.Update")
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "LogicLayersAPIService.UpdateSpaceRulesets")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {

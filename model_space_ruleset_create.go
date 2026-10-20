@@ -26,7 +26,7 @@ type SpaceRulesetCreate struct {
 	Name string `json:"name"`
 	// UUID of a preset space ruleset to copy as the starting configuration. When supplied, the type, creation mode, config, and space modules are all taken from the preset.
 	Preset *string `json:"preset,omitempty"`
-	// Ruleset type: \"Standard\", \"Amenity\", or \"Advanced\". Determines the initial calculation configuration template when no preset is supplied.
+	// Kept as a label: \"Standard\", \"Amenity\", or \"Advanced\". Every logic layer starts with no rules when no preset is supplied.
 	Type string `json:"type"`
 }
 

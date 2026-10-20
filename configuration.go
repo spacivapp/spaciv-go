@@ -90,7 +90,7 @@ type Configuration struct {
 func NewConfiguration() *Configuration {
 	cfg := &Configuration{
 		DefaultHeader:    make(map[string]string),
-		UserAgent:        "OpenAPI-Generator/0.1.21/go",
+		UserAgent:        "OpenAPI-Generator/0.1.22/go",
 		Debug:            false,
 		Servers:          ServerConfigurations{
 			{
@@ -163,6 +163,16 @@ func NewConfiguration() *Configuration {
 					Description: "Local development",
 				},
 			},
+			"LogicLayersAPIService.GetSpaceRulesetsImage": {
+				{
+					URL: "https://usercontent.spaciv.com",
+					Description: "Production",
+				},
+				{
+					URL: "http://localhost:8090",
+					Description: "Local development",
+				},
+			},
 			"ObjectGroupsAPIService.GetEntriesImage": {
 				{
 					URL: "https://usercontent.spaciv.com",
@@ -174,16 +184,6 @@ func NewConfiguration() *Configuration {
 				},
 			},
 			"ProjectsAPIService.GetImage": {
-				{
-					URL: "https://usercontent.spaciv.com",
-					Description: "Production",
-				},
-				{
-					URL: "http://localhost:8090",
-					Description: "Local development",
-				},
-			},
-			"SpaceRulesetsAPIService.GetImage": {
 				{
 					URL: "https://usercontent.spaciv.com",
 					Description: "Production",

@@ -5,6 +5,7 @@ All URIs are relative to *https://api.spaciv.com*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**Create**](ObjectGroupsAPI.md#Create) | **Post** /v1/object-groups | Create an object group
+[**CreateSelect**](ObjectGroupsAPI.md#CreateSelect) | **Post** /v1/object-groups/select | Select objects by filters
 [**Delete**](ObjectGroupsAPI.md#Delete) | **Delete** /v1/object-groups/{id} | Delete or archive an object group
 [**DeleteEntries**](ObjectGroupsAPI.md#DeleteEntries) | **Delete** /v1/object-groups/{id}/entries | Delete entries from an object group
 [**DeleteEntriesImage**](ObjectGroupsAPI.md#DeleteEntriesImage) | **Delete** /v1/object-groups/{id}/entries/{entryId}/image | Delete an entry&#39;s image
@@ -71,6 +72,69 @@ Name | Type | Description  | Notes
 ### Return type
 
 **string**
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## CreateSelect
+
+> Selection CreateSelect(ctx, selectObjectsParamsWrapperBody)
+
+Select objects by filters
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+	selectObjectsParamsWrapperBody :=  // SelectObjectsParamsWrapperBody | 
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.ObjectGroups.CreateSelect(context.Background(), selectObjectsParamsWrapperBody)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `ObjectGroups.CreateSelect`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `ObjectGroups.CreateSelect`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiCreateSelectRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **selectObjectsParamsWrapperBody** | [**SelectObjectsParamsWrapperBody**](SelectObjectsParamsWrapperBody.md) |  | 
+
+### Return type
+
+[**Selection**](Selection.md)
 
 ### Authorization
 

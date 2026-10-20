@@ -80,6 +80,8 @@ type APIClient struct {
 
 	Localisation *LocalisationService
 
+	LogicLayers *LogicLayersService
+
 	Lookups *LookupsService
 
 	Needs *NeedsService
@@ -97,8 +99,6 @@ type APIClient struct {
 	Scripts *ScriptsService
 
 	Service *ServiceService
-
-	SpaceRulesets *SpaceRulesetsService
 
 	TemplateProjects *TemplateProjectsService
 
@@ -140,6 +140,7 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.Integrations = (*IntegrationsService)(&c.common)
 	c.Internal = (*InternalService)(&c.common)
 	c.Localisation = (*LocalisationService)(&c.common)
+	c.LogicLayers = (*LogicLayersService)(&c.common)
 	c.Lookups = (*LookupsService)(&c.common)
 	c.Needs = (*NeedsService)(&c.common)
 	c.ObjectGroups = (*ObjectGroupsService)(&c.common)
@@ -149,7 +150,6 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.Scenarios = (*ScenariosService)(&c.common)
 	c.Scripts = (*ScriptsService)(&c.common)
 	c.Service = (*ServiceService)(&c.common)
-	c.SpaceRulesets = (*SpaceRulesetsService)(&c.common)
 	c.TemplateProjects = (*TemplateProjectsService)(&c.common)
 	c.TopDownModels = (*TopDownModelsService)(&c.common)
 	c.Users = (*UsersService)(&c.common)

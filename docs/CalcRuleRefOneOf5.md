@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Var** | **string** |  | 
+**SumOf** | [**CalcRuleRef**](CalcRuleRef.md) |  | 
 
 ## Methods
 
 ### NewCalcRuleRefOneOf5
 
-`func NewCalcRuleRefOneOf5(var_ string, ) *CalcRuleRefOneOf5`
+`func NewCalcRuleRefOneOf5(sumOf CalcRuleRef, ) *CalcRuleRefOneOf5`
 
 NewCalcRuleRefOneOf5 instantiates a new CalcRuleRefOneOf5 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewCalcRuleRefOneOf5WithDefaults instantiates a new CalcRuleRefOneOf5 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetVar
+### GetSumOf
 
-`func (o *CalcRuleRefOneOf5) GetVar() string`
+`func (o *CalcRuleRefOneOf5) GetSumOf() CalcRuleRef`
 
-GetVar returns the Var field if non-nil, zero value otherwise.
+GetSumOf returns the SumOf field if non-nil, zero value otherwise.
 
-### GetVarOk
+### GetSumOfOk
 
-`func (o *CalcRuleRefOneOf5) GetVarOk() (*string, bool)`
+`func (o *CalcRuleRefOneOf5) GetSumOfOk() (*CalcRuleRef, bool)`
 
-GetVarOk returns a tuple with the Var field if it's non-nil, zero value otherwise
+GetSumOfOk returns a tuple with the SumOf field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetVar
+### SetSumOf
 
-`func (o *CalcRuleRefOneOf5) SetVar(v string)`
+`func (o *CalcRuleRefOneOf5) SetSumOf(v CalcRuleRef)`
 
-SetVar sets Var field to given value.
+SetSumOf sets SumOf field to given value.
 
 
 

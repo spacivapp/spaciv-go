@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Scenarios** | **map[string][]string** | For each active scenario whose layers&#39; modifier formulas use account variables, those variable ids (account:&lt;id&gt;), including the layers of stacked scenarios. | 
+**Scenarios** | **map[string][]string** | For each active scenario whose layers&#39; modifier or logic layer formulas use account variables, those variable ids (account:&lt;id&gt;), including the layers of stacked scenarios. | 
 
 ## Methods
 

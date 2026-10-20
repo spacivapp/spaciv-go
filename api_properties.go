@@ -139,7 +139,7 @@ type requestForPropertiesDelete struct {
 /*
 Delete Delete a property
 
-Permanently removes the specified property and all its nodes. The property is removed from every variable's allowed `options`, and a variable whose value was the property moves to its first remaining option; node variables on the property lose their options. Built-in properties cannot be deleted. Requires the *Edit properties* permission. Returns `409` if a live data collection uses the property for anonymisation.
+Permanently removes the specified property and all its nodes. The property is removed from every variable's allowed `options`, and a variable whose value was the property moves to its first remaining option; node variables on the property lose their options. Built-in properties, including object group properties (id `og:<object group id>`), cannot be deleted. Requires the *Edit properties* permission. Returns `409` if a live data collection uses the property for anonymisation.
 */
 func (a *PropertiesService) Delete(ctx context.Context, id string) error {
 	r := requestForPropertiesDelete{
@@ -343,7 +343,7 @@ Get Get a property
 
 Returns the full record for a single property, including its metadata and — for tree-type properties — the complete node hierarchy.
 
-Callers with only the *View public properties* permission receive a `403` if the property is not public. Built-in system properties (such as `count`, `module`, `consumer`) are always available to callers with either permission. Callers with *Edit properties* are treated as having full view access, since a caller trusted to modify a property must also be able to read it.
+Callers with only the *View public properties* permission receive a `403` if the property is not public. Built-in system properties (`count`, `growth`) are always available to callers with either permission. An object group property has the id `og:<object group id>`, is named after its object group, and its tree has one node per object in the group (node id = object id) under a `Root` node; it returns `404` when the object group does not exist, and `403` unless the caller can see the group's objects (*View objects* or *Edit objects*, or *View public objects* for a public group) and, for a private group, has full property access. Callers with *Edit properties* are treated as having full view access, since a caller trusted to modify a property must also be able to read it.
 */
 func (a *PropertiesService) Get(ctx context.Context, id string) (*PropertyRes, error) {
 	r := requestForPropertiesGet{
@@ -456,7 +456,7 @@ type PropertiesListParams struct {
 /*
 List List properties
 
-Returns all properties available to the account, sorted alphabetically by name. Built-in system properties are always included.
+Returns all properties available to the account, sorted alphabetically by name. Built-in system properties are included: `count` and `growth`, and one tree property per active object group, with the id `og:<object group id>`, named after the group, whose nodes are the group's objects. An object group property is listed only to callers who can see that group's objects (*View objects* or *Edit objects*, or *View public objects* for a public group), and is public when its group is.
 
 Callers with *View properties* or *Edit properties* see all properties; callers with only *View public properties* see only those marked public. Use `types` to restrict results to specific property types.
 */
@@ -575,7 +575,7 @@ Update Update a property
 
 Applies an incremental update to the specified property. The request body may contain updated metadata and node changes for tree-type properties. Supports large node sets — the request body limit is 64 MB with a 20-second read timeout.
 
-Renaming a node ID requires the *Edit property ID* permission in addition to *Edit properties*; a `403` is returned if that permission is absent. Deleted nodes are removed from node variables' allowed `options`, and a variable whose value was a deleted node moves to its first remaining option; renamed nodes are renamed in both the options and the value. Node changes are rejected with a `400` for built-in property ids (e.g. `module`, `space`), which are not backed by a real stored property and cannot hold node data.
+Renaming a node ID requires the *Edit property ID* permission in addition to *Edit properties*; a `403` is returned if that permission is absent. Deleted nodes are removed from node variables' allowed `options`, and a variable whose value was a deleted node moves to its first remaining option; renamed nodes are renamed in both the options and the value. Node changes are rejected with a `400` for the built-in property ids `count` and `growth`, which are not backed by a real stored property and cannot hold node data. Any update to an object group property (id `og:<object group id>`) is rejected with a `400`: its name and nodes come from the object group.
 
 New or re-parented nodes are placed after their siblings. A node's `position` moves it to that zero-based index among its siblings (clamped to the end); negative positions are rejected with a `400`.
 

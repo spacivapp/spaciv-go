@@ -22,7 +22,7 @@ var _ MappedNullable = &CalcRuleRefOneOf2{}
 
 // CalcRuleRefOneOf2 struct for CalcRuleRefOneOf2
 type CalcRuleRefOneOf2 struct {
-	Num float64 `json:"num"`
+	Condition CalcCondition `json:"condition"`
 }
 
 type _CalcRuleRefOneOf2 CalcRuleRefOneOf2
@@ -31,9 +31,9 @@ type _CalcRuleRefOneOf2 CalcRuleRefOneOf2
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCalcRuleRefOneOf2(num float64) *CalcRuleRefOneOf2 {
+func NewCalcRuleRefOneOf2(condition CalcCondition) *CalcRuleRefOneOf2 {
 	this := CalcRuleRefOneOf2{}
-	this.Num = num
+	this.Condition = condition
 	return &this
 }
 
@@ -45,28 +45,28 @@ func NewCalcRuleRefOneOf2WithDefaults() *CalcRuleRefOneOf2 {
 	return &this
 }
 
-// GetNum returns the Num field value
-func (o *CalcRuleRefOneOf2) GetNum() float64 {
+// GetCondition returns the Condition field value
+func (o *CalcRuleRefOneOf2) GetCondition() CalcCondition {
 	if o == nil {
-		var ret float64
+		var ret CalcCondition
 		return ret
 	}
 
-	return o.Num
+	return o.Condition
 }
 
-// GetNumOk returns a tuple with the Num field value
+// GetConditionOk returns a tuple with the Condition field value
 // and a boolean to check if the value has been set.
-func (o *CalcRuleRefOneOf2) GetNumOk() (*float64, bool) {
+func (o *CalcRuleRefOneOf2) GetConditionOk() (*CalcCondition, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Num, true
+	return &o.Condition, true
 }
 
-// SetNum sets field value
-func (o *CalcRuleRefOneOf2) SetNum(v float64) {
-	o.Num = v
+// SetCondition sets field value
+func (o *CalcRuleRefOneOf2) SetCondition(v CalcCondition) {
+	o.Condition = v
 }
 
 func (o CalcRuleRefOneOf2) MarshalJSON() ([]byte, error) {
@@ -79,7 +79,7 @@ func (o CalcRuleRefOneOf2) MarshalJSON() ([]byte, error) {
 
 func (o CalcRuleRefOneOf2) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["num"] = o.Num
+	toSerialize["condition"] = o.Condition
 	return toSerialize, nil
 }
 
@@ -88,7 +88,7 @@ func (o *CalcRuleRefOneOf2) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"num",
+		"condition",
 	}
 
 	allProperties := make(map[string]interface{})

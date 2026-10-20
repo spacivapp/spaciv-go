@@ -22,7 +22,7 @@ var _ MappedNullable = &CalcRuleRefOneOf4{}
 
 // CalcRuleRefOneOf4 struct for CalcRuleRefOneOf4
 type CalcRuleRefOneOf4 struct {
-	SumOf CalcRuleRef `json:"sumOf"`
+	Select CalcSelect `json:"select"`
 }
 
 type _CalcRuleRefOneOf4 CalcRuleRefOneOf4
@@ -31,9 +31,9 @@ type _CalcRuleRefOneOf4 CalcRuleRefOneOf4
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCalcRuleRefOneOf4(sumOf CalcRuleRef) *CalcRuleRefOneOf4 {
+func NewCalcRuleRefOneOf4(select_ CalcSelect) *CalcRuleRefOneOf4 {
 	this := CalcRuleRefOneOf4{}
-	this.SumOf = sumOf
+	this.Select = select_
 	return &this
 }
 
@@ -45,28 +45,28 @@ func NewCalcRuleRefOneOf4WithDefaults() *CalcRuleRefOneOf4 {
 	return &this
 }
 
-// GetSumOf returns the SumOf field value
-func (o *CalcRuleRefOneOf4) GetSumOf() CalcRuleRef {
+// GetSelect returns the Select field value
+func (o *CalcRuleRefOneOf4) GetSelect() CalcSelect {
 	if o == nil {
-		var ret CalcRuleRef
+		var ret CalcSelect
 		return ret
 	}
 
-	return o.SumOf
+	return o.Select
 }
 
-// GetSumOfOk returns a tuple with the SumOf field value
+// GetSelectOk returns a tuple with the Select field value
 // and a boolean to check if the value has been set.
-func (o *CalcRuleRefOneOf4) GetSumOfOk() (*CalcRuleRef, bool) {
+func (o *CalcRuleRefOneOf4) GetSelectOk() (*CalcSelect, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.SumOf, true
+	return &o.Select, true
 }
 
-// SetSumOf sets field value
-func (o *CalcRuleRefOneOf4) SetSumOf(v CalcRuleRef) {
-	o.SumOf = v
+// SetSelect sets field value
+func (o *CalcRuleRefOneOf4) SetSelect(v CalcSelect) {
+	o.Select = v
 }
 
 func (o CalcRuleRefOneOf4) MarshalJSON() ([]byte, error) {
@@ -79,7 +79,7 @@ func (o CalcRuleRefOneOf4) MarshalJSON() ([]byte, error) {
 
 func (o CalcRuleRefOneOf4) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["sumOf"] = o.SumOf
+	toSerialize["select"] = o.Select
 	return toSerialize, nil
 }
 
@@ -88,7 +88,7 @@ func (o *CalcRuleRefOneOf4) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"sumOf",
+		"select",
 	}
 
 	allProperties := make(map[string]interface{})

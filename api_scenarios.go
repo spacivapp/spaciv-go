@@ -582,7 +582,7 @@ type requestForScenariosListLayerVariables struct {
 /*
 ListLayerVariables List account variables used by scenario layers
 
-Returns, per active scenario, the account variables that the modifier formulas of its layers reference, following stacked scenarios. Changing one of these variables recalculates every visualisation of that scenario. Scenarios whose layers use no account variables are omitted. Requires the *View projects* permission and the *Variable controls* feature.
+Returns, per active scenario, the account variables that the modifier formulas and logic layer functions of its layers reference, following stacked scenarios. Changing one of these variables recalculates every visualisation of that scenario. Scenarios whose layers use no account variables are omitted. Requires the *View projects* permission and the *Variable controls* feature.
 */
 func (a *ScenariosService) ListLayerVariables(ctx context.Context) (*LayerVariablesRes, error) {
 	r := requestForScenariosListLayerVariables{

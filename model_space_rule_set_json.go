@@ -22,7 +22,7 @@ var _ MappedNullable = &SpaceRuleSetJSON{}
 
 // SpaceRuleSetJSON struct for SpaceRuleSetJSON
 type SpaceRuleSetJSON struct {
-	Config interface{} `json:"config"`
+	Config LogicLayerConfig `json:"config"`
 	CreatedDate string `json:"createdDate"`
 	CreationMode string `json:"creationMode"`
 	Description string `json:"description"`
@@ -37,7 +37,7 @@ type _SpaceRuleSetJSON SpaceRuleSetJSON
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewSpaceRuleSetJSON(config interface{}, createdDate string, creationMode string, description string, modifiedDate string, name string, type_ string) *SpaceRuleSetJSON {
+func NewSpaceRuleSetJSON(config LogicLayerConfig, createdDate string, creationMode string, description string, modifiedDate string, name string, type_ string) *SpaceRuleSetJSON {
 	this := SpaceRuleSetJSON{}
 	this.Config = config
 	this.CreatedDate = createdDate
@@ -58,10 +58,9 @@ func NewSpaceRuleSetJSONWithDefaults() *SpaceRuleSetJSON {
 }
 
 // GetConfig returns the Config field value
-// If the value is explicit nil, the zero value for interface{} will be returned
-func (o *SpaceRuleSetJSON) GetConfig() interface{} {
+func (o *SpaceRuleSetJSON) GetConfig() LogicLayerConfig {
 	if o == nil {
-		var ret interface{}
+		var ret LogicLayerConfig
 		return ret
 	}
 
@@ -70,16 +69,15 @@ func (o *SpaceRuleSetJSON) GetConfig() interface{} {
 
 // GetConfigOk returns a tuple with the Config field value
 // and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *SpaceRuleSetJSON) GetConfigOk() (*interface{}, bool) {
-	if o == nil || IsNil(o.Config) {
+func (o *SpaceRuleSetJSON) GetConfigOk() (*LogicLayerConfig, bool) {
+	if o == nil {
 		return nil, false
 	}
 	return &o.Config, true
 }
 
 // SetConfig sets field value
-func (o *SpaceRuleSetJSON) SetConfig(v interface{}) {
+func (o *SpaceRuleSetJSON) SetConfig(v LogicLayerConfig) {
 	o.Config = v
 }
 
@@ -237,9 +235,7 @@ func (o SpaceRuleSetJSON) MarshalJSON() ([]byte, error) {
 
 func (o SpaceRuleSetJSON) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if o.Config != nil {
-		toSerialize["config"] = o.Config
-	}
+	toSerialize["config"] = o.Config
 	toSerialize["createdDate"] = o.CreatedDate
 	toSerialize["creationMode"] = o.CreationMode
 	toSerialize["description"] = o.Description

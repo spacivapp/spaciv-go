@@ -131,6 +131,116 @@ func (a *ObjectGroupsService) executeCreate(r requestForObjectGroupsCreate) (str
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type requestForObjectGroupsCreateSelect struct {
+	ctx context.Context
+	ApiService *ObjectGroupsService
+	selectObjectsParamsWrapperBody *SelectObjectsParamsWrapperBody
+}
+
+/*
+CreateSelect Select objects by filters
+
+Lists the objects in the account's active object groups that `filters` select, grouped by object group, both by name. Filters match as in a calculation: an object group's own properties apply to each of its entries, a tree node also selects the nodes below it, and a group's property (`og:<object group id>`) selects that group's entries. At most 500 objects are returned, with `truncated` set when more matched. Nothing is changed. Requires the *View objects* permission.
+*/
+func (a *ObjectGroupsService) CreateSelect(ctx context.Context, selectObjectsParamsWrapperBody SelectObjectsParamsWrapperBody) (*Selection, error) {
+	r := requestForObjectGroupsCreateSelect{
+		ApiService: a,
+		ctx: ctx,
+		selectObjectsParamsWrapperBody: &selectObjectsParamsWrapperBody,
+	}
+	result, _, err := a.executeCreateSelect(r)
+	return result, err
+}
+
+func (a *ObjectGroupsService) executeCreateSelect(r requestForObjectGroupsCreateSelect) (*Selection, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *Selection
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ObjectGroupsAPIService.CreateSelect")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/object-groups/select"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.selectObjectsParamsWrapperBody == nil {
+		return localVarReturnValue, nil, reportError("selectObjectsParamsWrapperBody is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.selectObjectsParamsWrapperBody
+	if r.ctx != nil {
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "ObjectGroupsAPIService.CreateSelect")
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type requestForObjectGroupsDelete struct {
 	ctx context.Context
 	ApiService *ObjectGroupsService

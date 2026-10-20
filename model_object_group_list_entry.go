@@ -24,7 +24,6 @@ var _ MappedNullable = &ObjectGroupListEntry{}
 type ObjectGroupListEntry struct {
 	Description string `json:"description"`
 	Entries int32 `json:"entries"`
-	HasModules bool `json:"hasModules"`
 	Id string `json:"id"`
 	IsPublic bool `json:"isPublic"`
 	Name string `json:"name"`
@@ -36,11 +35,10 @@ type _ObjectGroupListEntry ObjectGroupListEntry
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewObjectGroupListEntry(description string, entries int32, hasModules bool, id string, isPublic bool, name string) *ObjectGroupListEntry {
+func NewObjectGroupListEntry(description string, entries int32, id string, isPublic bool, name string) *ObjectGroupListEntry {
 	this := ObjectGroupListEntry{}
 	this.Description = description
 	this.Entries = entries
-	this.HasModules = hasModules
 	this.Id = id
 	this.IsPublic = isPublic
 	this.Name = name
@@ -101,30 +99,6 @@ func (o *ObjectGroupListEntry) GetEntriesOk() (*int32, bool) {
 // SetEntries sets field value
 func (o *ObjectGroupListEntry) SetEntries(v int32) {
 	o.Entries = v
-}
-
-// GetHasModules returns the HasModules field value
-func (o *ObjectGroupListEntry) GetHasModules() bool {
-	if o == nil {
-		var ret bool
-		return ret
-	}
-
-	return o.HasModules
-}
-
-// GetHasModulesOk returns a tuple with the HasModules field value
-// and a boolean to check if the value has been set.
-func (o *ObjectGroupListEntry) GetHasModulesOk() (*bool, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.HasModules, true
-}
-
-// SetHasModules sets field value
-func (o *ObjectGroupListEntry) SetHasModules(v bool) {
-	o.HasModules = v
 }
 
 // GetId returns the Id field value
@@ -211,7 +185,6 @@ func (o ObjectGroupListEntry) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["description"] = o.Description
 	toSerialize["entries"] = o.Entries
-	toSerialize["hasModules"] = o.HasModules
 	toSerialize["id"] = o.Id
 	toSerialize["isPublic"] = o.IsPublic
 	toSerialize["name"] = o.Name
@@ -225,7 +198,6 @@ func (o *ObjectGroupListEntry) UnmarshalJSON(data []byte) (err error) {
 	requiredProperties := []string{
 		"description",
 		"entries",
-		"hasModules",
 		"id",
 		"isPublic",
 		"name",

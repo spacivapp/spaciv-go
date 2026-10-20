@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Config** | **interface{}** |  | 
+**Config** | [**LogicLayerConfig**](LogicLayerConfig.md) |  | 
 **CreatedDate** | **string** |  | 
 **CreationMode** | **string** |  | 
 **Description** | **string** |  | 
@@ -16,7 +16,7 @@ Name | Type | Description | Notes
 
 ### NewSpaceRuleSetJSON
 
-`func NewSpaceRuleSetJSON(config interface{}, createdDate string, creationMode string, description string, modifiedDate string, name string, type_ string, ) *SpaceRuleSetJSON`
+`func NewSpaceRuleSetJSON(config LogicLayerConfig, createdDate string, creationMode string, description string, modifiedDate string, name string, type_ string, ) *SpaceRuleSetJSON`
 
 NewSpaceRuleSetJSON instantiates a new SpaceRuleSetJSON object
 This constructor will assign default values to properties that have it defined,
@@ -33,34 +33,24 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetConfig
 
-`func (o *SpaceRuleSetJSON) GetConfig() interface{}`
+`func (o *SpaceRuleSetJSON) GetConfig() LogicLayerConfig`
 
 GetConfig returns the Config field if non-nil, zero value otherwise.
 
 ### GetConfigOk
 
-`func (o *SpaceRuleSetJSON) GetConfigOk() (*interface{}, bool)`
+`func (o *SpaceRuleSetJSON) GetConfigOk() (*LogicLayerConfig, bool)`
 
 GetConfigOk returns a tuple with the Config field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetConfig
 
-`func (o *SpaceRuleSetJSON) SetConfig(v interface{})`
+`func (o *SpaceRuleSetJSON) SetConfig(v LogicLayerConfig)`
 
 SetConfig sets Config field to given value.
 
 
-### SetConfigNil
-
-`func (o *SpaceRuleSetJSON) SetConfigNil(b bool)`
-
- SetConfigNil sets the value for Config to be an explicit nil
-
-### UnsetConfig
-`func (o *SpaceRuleSetJSON) UnsetConfig()`
-
-UnsetConfig ensures that no value is present for Config, not even an explicit nil
 ### GetCreatedDate
 
 `func (o *SpaceRuleSetJSON) GetCreatedDate() string`

@@ -69,9 +69,9 @@ tags:
   name: Object groups
 - description: Uploaded floor plan drawings and the space data derived from them.
   name: Floor plans
-- description: "Rules that turn headcount and activity into required space, plus their\
-    \ illustrative images."
-  name: Space rulesets
+- description: "Layers that balance supply against demand, such as the space that\
+    \ headcount and activity need, plus their illustrative images."
+  name: Logic layers
 - description: Ratio-driven space models built from organisation-wide totals rather
     than individual teams.
   name: Top-down models
@@ -4008,10 +4008,10 @@ paths:
   /v1/layer-variables:
     get:
       description: "Returns, per active scenario, the account variables that the modifier\
-        \ formulas of its layers reference, following stacked scenarios. Changing\
-        \ one of these variables recalculates every visualisation of that scenario.\
-        \ Scenarios whose layers use no account variables are omitted. Requires the\
-        \ *View projects* permission and the *Variable controls* feature."
+        \ formulas and logic layer functions of its layers reference, following stacked\
+        \ scenarios. Changing one of these variables recalculates every visualisation\
+        \ of that scenario. Scenarios whose layers use no account variables are omitted.\
+        \ Requires the *View projects* permission and the *Variable controls* feature."
       operationId: scenarios_list-layer-variables
       parameters: []
       responses:
@@ -5050,6 +5050,40 @@ paths:
       tags:
       - Object groups
       x-sdk-params: true
+  /v1/object-groups/select:
+    post:
+      description: "Lists the objects in the account's active object groups that `filters`\
+        \ select, grouped by object group, both by name. Filters match as in a calculation:\
+        \ an object group's own properties apply to each of its entries, a tree node\
+        \ also selects the nodes below it, and a group's property (`og:<object group\
+        \ id>`) selects that group's entries. At most 500 objects are returned, with\
+        \ `truncated` set when more matched. Nothing is changed. Requires the *View\
+        \ objects* permission."
+      operationId: object-groups_create-select
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SelectObjectsParamsWrapperBody"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Selection"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Select objects by filters
+      tags:
+      - Object groups
+      x-sdk-params: false
   /v1/project:
     delete:
       description: "Archives, restores, or permanently deletes the current project\
@@ -5358,7 +5392,7 @@ paths:
   /v1/properties:
     get:
       description: |-
-        Returns all properties available to the account, sorted alphabetically by name. Built-in system properties are always included.
+        Returns all properties available to the account, sorted alphabetically by name. Built-in system properties are included: `count` and `growth`, and one tree property per active object group, with the id `og:<object group id>`, named after the group, whose nodes are the group's objects. An object group property is listed only to callers who can see that group's objects (*View objects* or *Edit objects*, or *View public objects* for a public group), and is public when its group is.
 
         Callers with *View properties* or *Edit properties* see all properties; callers with only *View public properties* see only those marked public. Use `types` to restrict results to specific property types.
       operationId: properties_list
@@ -5438,9 +5472,10 @@ paths:
       description: "Permanently removes the specified property and all its nodes.\
         \ The property is removed from every variable's allowed `options`, and a variable\
         \ whose value was the property moves to its first remaining option; node variables\
-        \ on the property lose their options. Built-in properties cannot be deleted.\
-        \ Requires the *Edit properties* permission. Returns `409` if a live data\
-        \ collection uses the property for anonymisation."
+        \ on the property lose their options. Built-in properties, including object\
+        \ group properties (id `og:<object group id>`), cannot be deleted. Requires\
+        \ the *Edit properties* permission. Returns `409` if a live data collection\
+        \ uses the property for anonymisation."
       operationId: properties_delete
       parameters:
       - explode: false
@@ -5467,7 +5502,7 @@ paths:
       description: |-
         Returns the full record for a single property, including its metadata and — for tree-type properties — the complete node hierarchy.
 
-        Callers with only the *View public properties* permission receive a `403` if the property is not public. Built-in system properties (such as `count`, `module`, `consumer`) are always available to callers with either permission. Callers with *Edit properties* are treated as having full view access, since a caller trusted to modify a property must also be able to read it.
+        Callers with only the *View public properties* permission receive a `403` if the property is not public. Built-in system properties (`count`, `growth`) are always available to callers with either permission. An object group property has the id `og:<object group id>`, is named after its object group, and its tree has one node per object in the group (node id = object id) under a `Root` node; it returns `404` when the object group does not exist, and `403` unless the caller can see the group's objects (*View objects* or *Edit objects*, or *View public objects* for a public group) and, for a private group, has full property access. Callers with *Edit properties* are treated as having full view access, since a caller trusted to modify a property must also be able to read it.
       operationId: properties_get
       parameters:
       - explode: false
@@ -5498,7 +5533,7 @@ paths:
       description: |-
         Applies an incremental update to the specified property. The request body may contain updated metadata and node changes for tree-type properties. Supports large node sets — the request body limit is 64 MB with a 20-second read timeout.
 
-        Renaming a node ID requires the *Edit property ID* permission in addition to *Edit properties*; a `403` is returned if that permission is absent. Deleted nodes are removed from node variables' allowed `options`, and a variable whose value was a deleted node moves to its first remaining option; renamed nodes are renamed in both the options and the value. Node changes are rejected with a `400` for built-in property ids (e.g. `module`, `space`), which are not backed by a real stored property and cannot hold node data.
+        Renaming a node ID requires the *Edit property ID* permission in addition to *Edit properties*; a `403` is returned if that permission is absent. Deleted nodes are removed from node variables' allowed `options`, and a variable whose value was a deleted node moves to its first remaining option; renamed nodes are renamed in both the options and the value. Node changes are rejected with a `400` for the built-in property ids `count` and `growth`, which are not backed by a real stored property and cannot hold node data. Any update to an object group property (id `og:<object group id>`) is rejected with a `400`: its name and nodes come from the object group.
 
         New or re-parented nodes are placed after their siblings. A node's `position` moves it to that zero-based index among its siblings (clamped to the end); negative positions are rejected with a `400`.
 
@@ -6381,10 +6416,10 @@ paths:
       x-sdk-params: false
   /v1/space-rulesets:
     get:
-      description: "Returns all space rulesets belonging to the current account with\
+      description: "Returns all logic layers belonging to the current account with\
         \ summary fields. Use `GET /v1/space-rulesets/{id}` to retrieve the full configuration\
-        \ for a specific ruleset. Requires the *View space rule sets* permission."
-      operationId: space-rulesets_list
+        \ for a specific logic layer. Requires the *View space rule sets* permission."
+      operationId: logic-layers_list-space-rulesets
       parameters: []
       responses:
         "200":
@@ -6401,17 +6436,16 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorModel"
           description: Error
-      summary: List space rulesets
+      summary: List logic layers
       tags:
-      - Space rulesets
+      - Logic layers
       x-sdk-params: false
     post:
-      description: Creates a new space ruleset for the current account. Supply `preset`
+      description: Creates a new logic layer for the current account. Supply `preset`
         to copy an existing built-in preset as the starting configuration; the preset's
         space modules are cloned into the account's module library as needed. Omit
-        `preset` to start with an empty configuration for the given `type`. Requires
-        the *Edit space rule sets* permission.
-      operationId: space-rulesets_create
+        `preset` to start with no rules. Requires the *Edit space rule sets* permission.
+      operationId: logic-layers_create-space-rulesets
       parameters: []
       requestBody:
         content:
@@ -6432,17 +6466,17 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorModel"
           description: Error
-      summary: Create a space ruleset
+      summary: Create a logic layer
       tags:
-      - Space rulesets
+      - Logic layers
       x-sdk-params: false
   /v1/space-rulesets/{id}:
     delete:
-      description: Permanently deletes a space ruleset from the current account and
+      description: Permanently deletes a logic layer from the current account and
         removes it from every variable's allowed `options`; a variable whose value
-        was the ruleset moves to its first remaining option. Requires the *Edit space
-        rule set details* permission.
-      operationId: space-rulesets_delete
+        was the logic layer moves to its first remaining option. Requires the *Edit
+        space rule set details* permission.
+      operationId: logic-layers_delete-space-rulesets
       parameters:
       - explode: false
         in: path
@@ -6464,14 +6498,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorModel"
           description: Error
-      summary: Delete a space ruleset
+      summary: Delete a logic layer
       tags:
-      - Space rulesets
+      - Logic layers
       x-sdk-params: false
     get:
-      description: Returns the full detail of a space ruleset including its calculation
-        configuration. Requires the *View space rule set details* permission.
-      operationId: space-rulesets_get
+      description: "Returns the full detail of a logic layer, including its rules\
+        \ as a `LogicLayerConfig`. Each rule balances the supply objects its filters\
+        \ select against the demand objects its filters select, at a ratio of supply\
+        \ per demand or as a total spread over the demand. Configs saved by an app\
+        \ from before logic layers are returned as saved unless `format=logic` is\
+        \ set. Returns `404` if the logic layer does not exist. Requires the *View\
+        \ space rule set details* permission."
+      operationId: logic-layers_get-space-rulesets
       parameters:
       - explode: false
         in: path
@@ -6480,6 +6519,21 @@ paths:
         schema:
           type: string
         style: simple
+      - description: stored returns the config as it was saved; logic converts a config
+          saved by an app from before logic layers into a LogicLayerConfig.
+        explode: false
+        in: query
+        name: format
+        required: false
+        schema:
+          default: stored
+          description: stored returns the config as it was saved; logic converts a
+            config saved by an app from before logic layers into a LogicLayerConfig.
+          enum:
+          - stored
+          - logic
+          type: string
+        style: form
       responses:
         "200":
           content:
@@ -6493,16 +6547,21 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorModel"
           description: Error
-      summary: Get a space ruleset
+      summary: Get a logic layer
       tags:
-      - Space rulesets
-      x-sdk-params: false
+      - Logic layers
+      x-sdk-params: true
     patch:
-      description: Updates one or more fields of a space ruleset. Only fields present
-        in the request body are changed; `modifiedAt` is always updated to the current
-        time. Returns `404` if the ruleset does not exist. Requires the *Edit space
-        rule set details* permission.
-      operationId: space-rulesets_update
+      description: "Updates one or more fields of a logic layer. Only fields present\
+        \ in the request body are changed; `modifiedAt` is always updated to the current\
+        \ time. `config` is a `LogicLayerConfig`; one in a space rule shape from before\
+        \ logic layers is checked to convert to a logic layer and stored as sent.\
+        \ Functions may use account number variables (`{\"var\": \"account:<id>\"\
+        }`), which needs the *Variable controls* feature. Returns `400` if `config`\
+        \ is not a valid logic layer or uses an unknown or non-number variable, and\
+        \ `404` if the logic layer does not exist. Requires the *Edit space rule set\
+        \ details* permission."
+      operationId: logic-layers_update-space-rulesets
       parameters:
       - explode: false
         in: path
@@ -6530,16 +6589,16 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorModel"
           description: Error
-      summary: Update a space ruleset
+      summary: Update a logic layer
       tags:
-      - Space rulesets
+      - Logic layers
       x-sdk-params: false
   /v1/space-rulesets/{id}/image:
     delete:
       description: "Removes the custom image for a space ruleset. After deletion,\
         \ `GET /v1/space-rulesets/{id}/image` returns a generated default image unless\
         \ `noFallback` is set. Requires the *Edit space rule sets* permission."
-      operationId: space-rulesets_delete-image
+      operationId: logic-layers_delete-space-rulesets-image
       parameters:
       - explode: false
         in: path
@@ -6563,7 +6622,7 @@ paths:
           description: Error
       summary: Delete a space ruleset image
       tags:
-      - Space rulesets
+      - Logic layers
       x-sdk-params: false
     get:
       description: "Returns the illustrative image for a space ruleset. If no image\
@@ -6572,7 +6631,7 @@ paths:
         \ image format. Requires the *View space rule sets* permission. Returns `403`\
         \ (`file quarantined: it matched a virus signature`) when a rescan found the\
         \ stored image matches a virus signature; the bytes are kept for investigation."
-      operationId: space-rulesets_get-image
+      operationId: logic-layers_get-space-rulesets-image
       parameters:
       - explode: false
         in: path
@@ -6633,7 +6692,7 @@ paths:
         url: http://localhost:8090
       summary: Get a space ruleset image
       tags:
-      - Space rulesets
+      - Logic layers
       x-sdk-params: true
     post:
       description: "Uploads an illustrative image for a space ruleset. Send the file\
@@ -6641,7 +6700,7 @@ paths:
         \ `image/png`, `image/jpeg`, `image/gif`, `image/webp`, `image/svg+xml` (detected\
         \ from file bytes). No larger than 4 MB. Replaces any previously uploaded\
         \ image. Requires the *Edit space rule sets* permission."
-      operationId: space-rulesets_create-image
+      operationId: logic-layers_create-space-rulesets-image
       parameters:
       - explode: false
         in: path
@@ -6671,15 +6730,15 @@ paths:
           description: Error
       summary: Upload a space ruleset image
       tags:
-      - Space rulesets
+      - Logic layers
       x-sdk-params: true
   /v1/space-rulesets/presets:
     get:
-      description: Returns the spaciv-supplied preset space rulesets available to
-        all accounts. Pass one of the returned IDs as `preset` when calling `POST
-        /v1/space-rulesets` to create a copy in the current account. Requires the
-        *View space rule sets* permission.
-      operationId: space-rulesets_list-presets
+      description: Returns the spaciv-supplied preset logic layers available to all
+        accounts. Pass one of the returned IDs as `preset` when calling `POST /v1/space-rulesets`
+        to create a copy in the current account. Requires the *View space rule sets*
+        permission.
+      operationId: logic-layers_list-space-rulesets-presets
       parameters: []
       responses:
         "200":
@@ -6696,9 +6755,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorModel"
           description: Error
-      summary: List preset space rulesets
+      summary: List preset logic layers
       tags:
-      - Space rulesets
+      - Logic layers
       x-sdk-params: false
   /v1/template-projects/{id}/mapping:
     get:
@@ -7036,9 +7095,10 @@ paths:
         \ created. Supply the entry's ID in the request body (`id` field). A non-empty\
         \ `objects` replaces the entry's stored objects and `clearObjects` removes\
         \ them all; sending both returns `400`. Each `properties.map[].formula` must\
-        \ be a per-object expression: numbers, static property references and the\
-        \ add, subtract, multiply and divide operators. With `variable_controls` enabled,\
-        \ formulas may also reference numeric account variables by `account:<id>`;\
+        \ be a per-object expression: numbers, static property references, the add,\
+        \ subtract, multiply and divide operators, and `condition` (if a comparison\
+        \ or a `has` test, then one expression, else another). With `variable_controls`\
+        \ enabled, formulas may also reference numeric account variables by `account:<id>`;\
         \ other variable references are rejected. `sumOf`, `select`, unknown operators\
         \ and references to unknown properties or nodes are rejected with `400` naming\
         \ the offending field. Returns `404` if the model does not exist. Requires\
@@ -7631,10 +7691,11 @@ paths:
   /v1/variables/{id}/references:
     get:
       description: "Returns every place in the account that uses the account-level\
-        \ variable: project value overrides, project filters, dashboard visualisations\
-        \ and the modifier formulas of layers, across all projects including archived\
-        \ ones. A variable can only be deleted, or have its type changed, when this\
-        \ list is empty. Requires the *View projects* permission."
+        \ variable: project value overrides, project filters, dashboard visualisations,\
+        \ the modifier formulas of layers and the functions of logic layers, across\
+        \ all projects including archived ones. A variable can only be deleted, or\
+        \ have its type changed, when this list is empty. Requires the *View projects*\
+        \ permission."
       operationId: variables_list-references
       parameters:
       - description: "Account variable ID, either qualified (account:<id>) or bare."
@@ -9498,6 +9559,33 @@ components:
       - params
       - scenario
       - segment
+    CalcCompare:
+      additionalProperties: false
+      properties:
+        left:
+          $ref: "#/components/schemas/CalcRuleRef"
+        op:
+          format: int32
+          type: integer
+        right:
+          $ref: "#/components/schemas/CalcRuleRef"
+      required:
+      - left
+      - op
+      - right
+    CalcCondition:
+      additionalProperties: false
+      properties:
+        else:
+          $ref: "#/components/schemas/CalcRuleRef"
+        if:
+          $ref: "#/components/schemas/CalcTest"
+        then:
+          $ref: "#/components/schemas/CalcRuleRef"
+      required:
+      - else
+      - if
+      - then
     CalcErrorBody:
       additionalProperties: false
       example:
@@ -9599,6 +9687,30 @@ components:
           $ref: "#/components/schemas/VariableTypeMismatchDetail"
       required:
       - kind
+    CalcHasNode:
+      additionalProperties: false
+      properties:
+        exact:
+          type: boolean
+        nodes:
+          items:
+            type: string
+          type: array
+        property:
+          type: string
+      required:
+      - exact
+      - nodes
+      - property
+    CalcIsObject:
+      additionalProperties: false
+      properties:
+        objects:
+          items:
+            type: string
+          type: array
+      required:
+      - objects
     CalcList:
       additionalProperties: false
       properties:
@@ -9731,6 +9843,7 @@ components:
       - $ref: "#/components/schemas/CalcRuleRef_oneOf_3"
       - $ref: "#/components/schemas/CalcRuleRef_oneOf_4"
       - $ref: "#/components/schemas/CalcRuleRef_oneOf_5"
+      - $ref: "#/components/schemas/CalcRuleRef_oneOf_6"
     CalcSegmentation:
       oneOf:
       - $ref: "#/components/schemas/CalcSegmentation_oneOf"
@@ -9746,6 +9859,11 @@ components:
       required:
       - calc
       - object
+    CalcTest:
+      oneOf:
+      - $ref: "#/components/schemas/CalcTest_oneOf"
+      - $ref: "#/components/schemas/CalcTest_oneOf_1"
+      - $ref: "#/components/schemas/CalcTest_oneOf_2"
     CalcTreeList:
       additionalProperties: false
       properties:
@@ -12188,6 +12306,29 @@ components:
       required:
       - list
       - total
+    Group:
+      additionalProperties: false
+      example:
+        objects:
+        - name: name
+          id: id
+        - name: name
+          id: id
+        name: name
+        id: id
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        objects:
+          items:
+            $ref: "#/components/schemas/Object"
+          type: array
+      required:
+      - id
+      - name
+      - objects
     I18nTranslationsExportParamsWrapperBody:
       additionalProperties: false
       example:
@@ -12472,9 +12613,9 @@ components:
           additionalProperties:
             items:
               type: string
-          description: "For each active scenario whose layers' modifier formulas use\
-            \ account variables, those variable ids (account:<id>), including the\
-            \ layers of stacked scenarios."
+          description: "For each active scenario whose layers' modifier or logic layer\
+            \ formulas use account variables, those variable ids (account:<id>), including\
+            \ the layers of stacked scenarios."
       required:
       - scenarios
     ListAccountsForUserRow:
@@ -12630,6 +12771,528 @@ components:
           type: number
       required:
       - atTheOffice
+    LogicAssignment:
+      example:
+        property: property
+      oneOf:
+      - $ref: "#/components/schemas/LogicAssignment_oneOf"
+      - $ref: "#/components/schemas/LogicAssignment_oneOf_1"
+      properties:
+        property:
+          type: string
+      required:
+      - property
+    LogicDemand:
+      additionalProperties: false
+      example:
+        amount:
+          attr:
+            static:
+              node: node
+              property: property
+        filters:
+        - ands:
+          - propertyNode:
+            - propertyNode
+            - propertyNode
+            set: 6
+            property: property
+            propertyVar: propertyVar
+            objectGroup: objectGroup
+            object:
+            - object
+            - object
+          - propertyNode:
+            - propertyNode
+            - propertyNode
+            set: 6
+            property: property
+            propertyVar: propertyVar
+            objectGroup: objectGroup
+            object:
+            - object
+            - object
+        - ands:
+          - propertyNode:
+            - propertyNode
+            - propertyNode
+            set: 6
+            property: property
+            propertyVar: propertyVar
+            objectGroup: objectGroup
+            object:
+            - object
+            - object
+          - propertyNode:
+            - propertyNode
+            - propertyNode
+            set: 6
+            property: property
+            propertyVar: propertyVar
+            objectGroup: objectGroup
+            object:
+            - object
+            - object
+      properties:
+        amount:
+          $ref: "#/components/schemas/CalcRuleRef"
+        filters:
+          items:
+            $ref: "#/components/schemas/FilterGroup"
+          type: array
+      required:
+      - amount
+      - filters
+    LogicLayerConfig:
+      additionalProperties: false
+      example:
+        rules:
+        - output:
+          - property: property
+          - property: property
+          name: name
+          exactNodes: true
+          per:
+            basis: 0
+            demand: null
+            supply: null
+          demand:
+            amount:
+              attr:
+                static:
+                  node: node
+                  property: property
+            filters:
+            - ands:
+              - propertyNode:
+                - propertyNode
+                - propertyNode
+                set: 6
+                property: property
+                propertyVar: propertyVar
+                objectGroup: objectGroup
+                object:
+                - object
+                - object
+              - propertyNode:
+                - propertyNode
+                - propertyNode
+                set: 6
+                property: property
+                propertyVar: propertyVar
+                objectGroup: objectGroup
+                object:
+                - object
+                - object
+            - ands:
+              - propertyNode:
+                - propertyNode
+                - propertyNode
+                set: 6
+                property: property
+                propertyVar: propertyVar
+                objectGroup: objectGroup
+                object:
+                - object
+                - object
+              - propertyNode:
+                - propertyNode
+                - propertyNode
+                set: 6
+                property: property
+                propertyVar: propertyVar
+                objectGroup: objectGroup
+                object:
+                - object
+                - object
+          supply:
+            ignoreMissingWeights: true
+            filters:
+            - ands:
+              - propertyNode:
+                - propertyNode
+                - propertyNode
+                set: 6
+                property: property
+                propertyVar: propertyVar
+                objectGroup: objectGroup
+                object:
+                - object
+                - object
+              - propertyNode:
+                - propertyNode
+                - propertyNode
+                set: 6
+                property: property
+                propertyVar: propertyVar
+                objectGroup: objectGroup
+                object:
+                - object
+                - object
+            - ands:
+              - propertyNode:
+                - propertyNode
+                - propertyNode
+                set: 6
+                property: property
+                propertyVar: propertyVar
+                objectGroup: objectGroup
+                object:
+                - object
+                - object
+              - propertyNode:
+                - propertyNode
+                - propertyNode
+                set: 6
+                property: property
+                propertyVar: propertyVar
+                objectGroup: objectGroup
+                object:
+                - object
+                - object
+            weights:
+              key:
+                weight: 6.027456183070403
+        - output:
+          - property: property
+          - property: property
+          name: name
+          exactNodes: true
+          per:
+            basis: 0
+            demand: null
+            supply: null
+          demand:
+            amount:
+              attr:
+                static:
+                  node: node
+                  property: property
+            filters:
+            - ands:
+              - propertyNode:
+                - propertyNode
+                - propertyNode
+                set: 6
+                property: property
+                propertyVar: propertyVar
+                objectGroup: objectGroup
+                object:
+                - object
+                - object
+              - propertyNode:
+                - propertyNode
+                - propertyNode
+                set: 6
+                property: property
+                propertyVar: propertyVar
+                objectGroup: objectGroup
+                object:
+                - object
+                - object
+            - ands:
+              - propertyNode:
+                - propertyNode
+                - propertyNode
+                set: 6
+                property: property
+                propertyVar: propertyVar
+                objectGroup: objectGroup
+                object:
+                - object
+                - object
+              - propertyNode:
+                - propertyNode
+                - propertyNode
+                set: 6
+                property: property
+                propertyVar: propertyVar
+                objectGroup: objectGroup
+                object:
+                - object
+                - object
+          supply:
+            ignoreMissingWeights: true
+            filters:
+            - ands:
+              - propertyNode:
+                - propertyNode
+                - propertyNode
+                set: 6
+                property: property
+                propertyVar: propertyVar
+                objectGroup: objectGroup
+                object:
+                - object
+                - object
+              - propertyNode:
+                - propertyNode
+                - propertyNode
+                set: 6
+                property: property
+                propertyVar: propertyVar
+                objectGroup: objectGroup
+                object:
+                - object
+                - object
+            - ands:
+              - propertyNode:
+                - propertyNode
+                - propertyNode
+                set: 6
+                property: property
+                propertyVar: propertyVar
+                objectGroup: objectGroup
+                object:
+                - object
+                - object
+              - propertyNode:
+                - propertyNode
+                - propertyNode
+                set: 6
+                property: property
+                propertyVar: propertyVar
+                objectGroup: objectGroup
+                object:
+                - object
+                - object
+            weights:
+              key:
+                weight: 6.027456183070403
+        type: type
+      properties:
+        rules:
+          items:
+            $ref: "#/components/schemas/LogicRule"
+          type: array
+        type:
+          type: string
+      required:
+      - rules
+      - type
+    LogicPer:
+      additionalProperties: false
+      example:
+        basis: 0
+        demand: null
+        supply: null
+      properties:
+        basis:
+          format: int32
+          type: integer
+        demand:
+          $ref: "#/components/schemas/CalcRuleRef"
+        supply:
+          $ref: "#/components/schemas/CalcRuleRef"
+      required:
+      - basis
+      - demand
+      - supply
+    LogicRule:
+      additionalProperties: false
+      example:
+        output:
+        - property: property
+        - property: property
+        name: name
+        exactNodes: true
+        per:
+          basis: 0
+          demand: null
+          supply: null
+        demand:
+          amount:
+            attr:
+              static:
+                node: node
+                property: property
+          filters:
+          - ands:
+            - propertyNode:
+              - propertyNode
+              - propertyNode
+              set: 6
+              property: property
+              propertyVar: propertyVar
+              objectGroup: objectGroup
+              object:
+              - object
+              - object
+            - propertyNode:
+              - propertyNode
+              - propertyNode
+              set: 6
+              property: property
+              propertyVar: propertyVar
+              objectGroup: objectGroup
+              object:
+              - object
+              - object
+          - ands:
+            - propertyNode:
+              - propertyNode
+              - propertyNode
+              set: 6
+              property: property
+              propertyVar: propertyVar
+              objectGroup: objectGroup
+              object:
+              - object
+              - object
+            - propertyNode:
+              - propertyNode
+              - propertyNode
+              set: 6
+              property: property
+              propertyVar: propertyVar
+              objectGroup: objectGroup
+              object:
+              - object
+              - object
+        supply:
+          ignoreMissingWeights: true
+          filters:
+          - ands:
+            - propertyNode:
+              - propertyNode
+              - propertyNode
+              set: 6
+              property: property
+              propertyVar: propertyVar
+              objectGroup: objectGroup
+              object:
+              - object
+              - object
+            - propertyNode:
+              - propertyNode
+              - propertyNode
+              set: 6
+              property: property
+              propertyVar: propertyVar
+              objectGroup: objectGroup
+              object:
+              - object
+              - object
+          - ands:
+            - propertyNode:
+              - propertyNode
+              - propertyNode
+              set: 6
+              property: property
+              propertyVar: propertyVar
+              objectGroup: objectGroup
+              object:
+              - object
+              - object
+            - propertyNode:
+              - propertyNode
+              - propertyNode
+              set: 6
+              property: property
+              propertyVar: propertyVar
+              objectGroup: objectGroup
+              object:
+              - object
+              - object
+          weights:
+            key:
+              weight: 6.027456183070403
+      properties:
+        demand:
+          $ref: "#/components/schemas/LogicDemand"
+        exactNodes:
+          type: boolean
+        name:
+          type: string
+        output:
+          items:
+            $ref: "#/components/schemas/LogicAssignment"
+          type: array
+        per:
+          $ref: "#/components/schemas/LogicPer"
+        supply:
+          $ref: "#/components/schemas/LogicSupply"
+      required:
+      - demand
+      - exactNodes
+      - name
+      - output
+      - per
+      - supply
+    LogicSupply:
+      additionalProperties: false
+      example:
+        ignoreMissingWeights: true
+        filters:
+        - ands:
+          - propertyNode:
+            - propertyNode
+            - propertyNode
+            set: 6
+            property: property
+            propertyVar: propertyVar
+            objectGroup: objectGroup
+            object:
+            - object
+            - object
+          - propertyNode:
+            - propertyNode
+            - propertyNode
+            set: 6
+            property: property
+            propertyVar: propertyVar
+            objectGroup: objectGroup
+            object:
+            - object
+            - object
+        - ands:
+          - propertyNode:
+            - propertyNode
+            - propertyNode
+            set: 6
+            property: property
+            propertyVar: propertyVar
+            objectGroup: objectGroup
+            object:
+            - object
+            - object
+          - propertyNode:
+            - propertyNode
+            - propertyNode
+            set: 6
+            property: property
+            propertyVar: propertyVar
+            objectGroup: objectGroup
+            object:
+            - object
+            - object
+        weights:
+          key:
+            weight: 6.027456183070403
+      properties:
+        filters:
+          items:
+            $ref: "#/components/schemas/FilterGroup"
+          type: array
+        ignoreMissingWeights:
+          type: boolean
+        weights:
+          additionalProperties:
+            $ref: "#/components/schemas/LogicSupplyWeight"
+      required:
+      - filters
+      - ignoreMissingWeights
+      - weights
+    LogicSupplyWeight:
+      additionalProperties: false
+      example:
+        weight: 6.027456183070403
+      properties:
+        weight:
+          format: double
+          type: number
+      required:
+      - weight
     MappingProp:
       additionalProperties: false
       example:
@@ -12683,15 +13346,15 @@ components:
     MaybeVarInt:
       oneOf:
       - $ref: "#/components/schemas/MaybeVarInt_oneOf"
-      - $ref: "#/components/schemas/CalcRuleRef_oneOf_5"
+      - $ref: "#/components/schemas/CalcRuleRef_oneOf_6"
     MaybeVarProp:
       oneOf:
       - $ref: "#/components/schemas/MaybeVarProp_oneOf"
-      - $ref: "#/components/schemas/CalcRuleRef_oneOf_5"
+      - $ref: "#/components/schemas/CalcRuleRef_oneOf_6"
     MaybeVarStr:
       oneOf:
       - $ref: "#/components/schemas/MaybeVarStr_oneOf"
-      - $ref: "#/components/schemas/CalcRuleRef_oneOf_5"
+      - $ref: "#/components/schemas/CalcRuleRef_oneOf_6"
     MeetingDetailsData:
       additionalProperties: false
       properties:
@@ -12827,6 +13490,19 @@ components:
       - maxSelections
       - minSelections
       - options
+    Object:
+      additionalProperties: false
+      example:
+        name: name
+        id: id
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      required:
+      - id
+      - name
     ObjectGroupChangelogBody:
       additionalProperties: false
       example:
@@ -13024,7 +13700,6 @@ components:
     ObjectGroupListEntry:
       additionalProperties: false
       example:
-        hasModules: true
         entries: 0
         name: name
         description: description
@@ -13036,8 +13711,6 @@ components:
         entries:
           format: int32
           type: integer
-        hasModules:
-          type: boolean
         id:
           type: string
         isPublic:
@@ -13047,7 +13720,6 @@ components:
       required:
       - description
       - entries
-      - hasModules
       - id
       - isPublic
       - name
@@ -13055,14 +13727,12 @@ components:
       additionalProperties: false
       example:
         list:
-        - hasModules: true
-          entries: 0
+        - entries: 0
           name: name
           description: description
           isPublic: true
           id: id
-        - hasModules: true
-          entries: 0
+        - entries: 0
           name: name
           description: description
           isPublic: true
@@ -15843,6 +16513,94 @@ components:
           type: string
       required:
       - webhookUrl
+    SelectObjectsParamsWrapperBody:
+      additionalProperties: false
+      example:
+        filters:
+        - ands:
+          - propertyNode:
+            - propertyNode
+            - propertyNode
+            set: 6
+            property: property
+            propertyVar: propertyVar
+            objectGroup: objectGroup
+            object:
+            - object
+            - object
+          - propertyNode:
+            - propertyNode
+            - propertyNode
+            set: 6
+            property: property
+            propertyVar: propertyVar
+            objectGroup: objectGroup
+            object:
+            - object
+            - object
+        - ands:
+          - propertyNode:
+            - propertyNode
+            - propertyNode
+            set: 6
+            property: property
+            propertyVar: propertyVar
+            objectGroup: objectGroup
+            object:
+            - object
+            - object
+          - propertyNode:
+            - propertyNode
+            - propertyNode
+            set: 6
+            property: property
+            propertyVar: propertyVar
+            objectGroup: objectGroup
+            object:
+            - object
+            - object
+      properties:
+        filters:
+          description: "Filter groups, of which any may match; within a group every\
+            \ filter must. None selects every object."
+          items:
+            $ref: "#/components/schemas/FilterGroup"
+          type: array
+      required:
+      - filters
+    Selection:
+      additionalProperties: false
+      example:
+        groups:
+        - objects:
+          - name: name
+            id: id
+          - name: name
+            id: id
+          name: name
+          id: id
+        - objects:
+          - name: name
+            id: id
+          - name: name
+            id: id
+          name: name
+          id: id
+        truncated: true
+      properties:
+        groups:
+          description: "The object groups holding a selected object, by name, each\
+            \ with its selected objects by name."
+          items:
+            $ref: "#/components/schemas/Group"
+          type: array
+        truncated:
+          description: More objects matched than were returned; narrow the filters
+            to see the rest.
+          type: boolean
+      required:
+      - groups
+      - truncated
     SendPasswordPutReqBody:
       additionalProperties: false
       example:
@@ -15997,9 +16755,224 @@ components:
         name: name
         description: description
         type: type
-        config: ""
+        config:
+          rules:
+          - output:
+            - property: property
+            - property: property
+            name: name
+            exactNodes: true
+            per:
+              basis: 0
+              demand: null
+              supply: null
+            demand:
+              amount:
+                attr:
+                  static:
+                    node: node
+                    property: property
+              filters:
+              - ands:
+                - propertyNode:
+                  - propertyNode
+                  - propertyNode
+                  set: 6
+                  property: property
+                  propertyVar: propertyVar
+                  objectGroup: objectGroup
+                  object:
+                  - object
+                  - object
+                - propertyNode:
+                  - propertyNode
+                  - propertyNode
+                  set: 6
+                  property: property
+                  propertyVar: propertyVar
+                  objectGroup: objectGroup
+                  object:
+                  - object
+                  - object
+              - ands:
+                - propertyNode:
+                  - propertyNode
+                  - propertyNode
+                  set: 6
+                  property: property
+                  propertyVar: propertyVar
+                  objectGroup: objectGroup
+                  object:
+                  - object
+                  - object
+                - propertyNode:
+                  - propertyNode
+                  - propertyNode
+                  set: 6
+                  property: property
+                  propertyVar: propertyVar
+                  objectGroup: objectGroup
+                  object:
+                  - object
+                  - object
+            supply:
+              ignoreMissingWeights: true
+              filters:
+              - ands:
+                - propertyNode:
+                  - propertyNode
+                  - propertyNode
+                  set: 6
+                  property: property
+                  propertyVar: propertyVar
+                  objectGroup: objectGroup
+                  object:
+                  - object
+                  - object
+                - propertyNode:
+                  - propertyNode
+                  - propertyNode
+                  set: 6
+                  property: property
+                  propertyVar: propertyVar
+                  objectGroup: objectGroup
+                  object:
+                  - object
+                  - object
+              - ands:
+                - propertyNode:
+                  - propertyNode
+                  - propertyNode
+                  set: 6
+                  property: property
+                  propertyVar: propertyVar
+                  objectGroup: objectGroup
+                  object:
+                  - object
+                  - object
+                - propertyNode:
+                  - propertyNode
+                  - propertyNode
+                  set: 6
+                  property: property
+                  propertyVar: propertyVar
+                  objectGroup: objectGroup
+                  object:
+                  - object
+                  - object
+              weights:
+                key:
+                  weight: 6.027456183070403
+          - output:
+            - property: property
+            - property: property
+            name: name
+            exactNodes: true
+            per:
+              basis: 0
+              demand: null
+              supply: null
+            demand:
+              amount:
+                attr:
+                  static:
+                    node: node
+                    property: property
+              filters:
+              - ands:
+                - propertyNode:
+                  - propertyNode
+                  - propertyNode
+                  set: 6
+                  property: property
+                  propertyVar: propertyVar
+                  objectGroup: objectGroup
+                  object:
+                  - object
+                  - object
+                - propertyNode:
+                  - propertyNode
+                  - propertyNode
+                  set: 6
+                  property: property
+                  propertyVar: propertyVar
+                  objectGroup: objectGroup
+                  object:
+                  - object
+                  - object
+              - ands:
+                - propertyNode:
+                  - propertyNode
+                  - propertyNode
+                  set: 6
+                  property: property
+                  propertyVar: propertyVar
+                  objectGroup: objectGroup
+                  object:
+                  - object
+                  - object
+                - propertyNode:
+                  - propertyNode
+                  - propertyNode
+                  set: 6
+                  property: property
+                  propertyVar: propertyVar
+                  objectGroup: objectGroup
+                  object:
+                  - object
+                  - object
+            supply:
+              ignoreMissingWeights: true
+              filters:
+              - ands:
+                - propertyNode:
+                  - propertyNode
+                  - propertyNode
+                  set: 6
+                  property: property
+                  propertyVar: propertyVar
+                  objectGroup: objectGroup
+                  object:
+                  - object
+                  - object
+                - propertyNode:
+                  - propertyNode
+                  - propertyNode
+                  set: 6
+                  property: property
+                  propertyVar: propertyVar
+                  objectGroup: objectGroup
+                  object:
+                  - object
+                  - object
+              - ands:
+                - propertyNode:
+                  - propertyNode
+                  - propertyNode
+                  set: 6
+                  property: property
+                  propertyVar: propertyVar
+                  objectGroup: objectGroup
+                  object:
+                  - object
+                  - object
+                - propertyNode:
+                  - propertyNode
+                  - propertyNode
+                  set: 6
+                  property: property
+                  propertyVar: propertyVar
+                  objectGroup: objectGroup
+                  object:
+                  - object
+                  - object
+              weights:
+                key:
+                  weight: 6.027456183070403
+          type: type
       properties:
-        config: {}
+        config:
+          $ref: "#/components/schemas/LogicLayerConfig"
         createdDate:
           type: string
         creationMode:
@@ -16038,9 +17011,8 @@ components:
             \ all taken from the preset."
           type: string
         type:
-          description: "Ruleset type: \"Standard\", \"Amenity\", or \"Advanced\".\
-            \ Determines the initial calculation configuration template when no preset\
-            \ is supplied."
+          description: "Kept as a label: \"Standard\", \"Amenity\", or \"Advanced\"\
+            . Every logic layer starts with no rules when no preset is supplied."
           type: string
       required:
       - name
@@ -17069,24 +18041,30 @@ components:
       - binaryOperator
     CalcRuleRef_oneOf_2:
       properties:
+        condition:
+          $ref: "#/components/schemas/CalcCondition"
+      required:
+      - condition
+    CalcRuleRef_oneOf_3:
+      properties:
         num:
           format: double
           type: number
       required:
       - num
-    CalcRuleRef_oneOf_3:
+    CalcRuleRef_oneOf_4:
       properties:
         select:
           $ref: "#/components/schemas/CalcSelect"
       required:
       - select
-    CalcRuleRef_oneOf_4:
+    CalcRuleRef_oneOf_5:
       properties:
         sumOf:
           $ref: "#/components/schemas/CalcRuleRef"
       required:
       - sumOf
-    CalcRuleRef_oneOf_5:
+    CalcRuleRef_oneOf_6:
       properties:
         var:
           type: string
@@ -17110,6 +18088,24 @@ components:
           $ref: "#/components/schemas/ScenarioList"
       required:
       - scenarios
+    CalcTest_oneOf:
+      properties:
+        compare:
+          $ref: "#/components/schemas/CalcCompare"
+      required:
+      - compare
+    CalcTest_oneOf_1:
+      properties:
+        has:
+          $ref: "#/components/schemas/CalcHasNode"
+      required:
+      - has
+    CalcTest_oneOf_2:
+      properties:
+        isObject:
+          $ref: "#/components/schemas/CalcIsObject"
+      required:
+      - isObject
     ContributionData_oneOf:
       example:
         activity:
@@ -17529,6 +18525,19 @@ components:
           type: object
       required:
       - stack
+    LogicAssignment_oneOf:
+      properties:
+        link:
+          format: int32
+          type: integer
+      required:
+      - link
+    LogicAssignment_oneOf_1:
+      properties:
+        node:
+          type: string
+      required:
+      - node
     MaybeVarInt_oneOf:
       example:
         static: 0
