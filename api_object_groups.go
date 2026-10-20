@@ -1277,7 +1277,7 @@ type requestForObjectGroupsReplaceEntries struct {
 /*
 ReplaceEntries Upsert entries in an object group
 
-Creates or updates one or more entries within the specified object group in a single request. Each item in the body must include an `id`; if an entry with that ID already exists it is updated, otherwise a new entry is created. Returns `409` if an entry is being changed concurrently and the write cannot be retried safely; entries are written one at a time, so a failure part way through leaves the earlier ones written. Requires the *Edit objects* permission.
+Creates or updates one or more entries within the specified object group in a single request. Each item in the body must include an `id`; if an entry with that ID already exists it is updated, otherwise a new entry is created. Returns `409` if an entry is being changed concurrently and the write cannot be retried safely; entries are written one at a time, so a failure part way through leaves the earlier ones written. Requires the *Edit objects* permission, and *View file storage* to link a File property to a file it was not already linked to.
 */
 func (a *ObjectGroupsService) ReplaceEntries(ctx context.Context, id string, objectGroupEntryUpdate []ObjectGroupEntryUpdate) error {
 	r := requestForObjectGroupsReplaceEntries{
@@ -1629,7 +1629,7 @@ Applies a partial update to one or more existing entries within the specified ob
 
 Only the fields present in an item are changed, and `properties` merges one property at a time: a property named in the request replaces that property's nodes, a property named with a `null` value or an empty `nodes` map is removed from the entry, and a property the request does not name is left as-is.
 
-Every entry is resolved before any of them is written, so a `404` means nothing was changed; an entry deleted after that point reports as a `409` instead. Writing is one transaction per entry rather than a single atomic batch, so a failure once writing has begun leaves the earlier entries updated; the error names them. Re-sending the same request finishes the job, since applying a patch twice is a no-op. Returns `409` if an entry is being changed concurrently and the write cannot be retried safely. Requires the *Edit objects* permission.
+Every entry is resolved before any of them is written, so a `404` means nothing was changed; an entry deleted after that point reports as a `409` instead. Writing is one transaction per entry rather than a single atomic batch, so a failure once writing has begun leaves the earlier entries updated; the error names them. Re-sending the same request finishes the job, since applying a patch twice is a no-op. Returns `409` if an entry is being changed concurrently and the write cannot be retried safely. Requires the *Edit objects* permission, and *View file storage* to link a File property to a file it was not already linked to.
 */
 func (a *ObjectGroupsService) UpdateEntries(ctx context.Context, id string, entryPatch []EntryPatch) error {
 	r := requestForObjectGroupsUpdateEntries{
