@@ -6586,7 +6586,7 @@ paths:
       description: "Updates one or more fields of a logic layer. Only fields present\
         \ in the request body are changed; `modifiedAt` is always updated to the current\
         \ time. `config` is a `LogicLayerConfig`; one in a space rule shape from before\
-        \ logic layers is checked to convert to a logic layer and stored as sent.\
+        \ logic layers is converted and stored as the logic layer it converts to.\
         \ Functions may use account number variables (`{\"var\": \"account:<id>\"\
         }`), which needs the *Variable controls* feature. Returns `400` if `config`\
         \ is not a valid logic layer or uses an unknown or non-number variable, and\
