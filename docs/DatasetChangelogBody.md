@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 **Code** | **string** |  | 
 **ContributorDescription** | **string** |  | 
 **ContributorInfo** | **string** |  | 
-**Data** | [**DatasetChangelogData**](DatasetChangelogData.md) |  | 
+**Data** | [**NullableDatasetChangelogData**](DatasetChangelogData.md) |  | 
 **Description** | **string** |  | 
 **InUse** | **bool** |  | 
 **IsPublic** | **bool** |  | 
@@ -21,7 +21,7 @@ Name | Type | Description | Notes
 
 ### NewDatasetChangelogBody
 
-`func NewDatasetChangelogBody(code string, contributorDescription string, contributorInfo string, data DatasetChangelogData, description string, inUse bool, isPublic bool, name string, published bool, question string, type_ int32, visualisationType string, ) *DatasetChangelogBody`
+`func NewDatasetChangelogBody(code string, contributorDescription string, contributorInfo string, data NullableDatasetChangelogData, description string, inUse bool, isPublic bool, name string, published bool, question string, type_ int32, visualisationType string, ) *DatasetChangelogBody`
 
 NewDatasetChangelogBody instantiates a new DatasetChangelogBody object
 This constructor will assign default values to properties that have it defined,
@@ -116,6 +116,16 @@ and a boolean to check if the value has been set.
 SetData sets Data field to given value.
 
 
+### SetDataNil
+
+`func (o *DatasetChangelogBody) SetDataNil(b bool)`
+
+ SetDataNil sets the value for Data to be an explicit nil
+
+### UnsetData
+`func (o *DatasetChangelogBody) UnsetData()`
+
+UnsetData ensures that no value is present for Data, not even an explicit nil
 ### GetDescription
 
 `func (o *DatasetChangelogBody) GetDescription() string`

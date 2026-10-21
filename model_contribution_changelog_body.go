@@ -22,8 +22,8 @@ var _ MappedNullable = &ContributionChangelogBody{}
 
 // ContributionChangelogBody struct for ContributionChangelogBody
 type ContributionChangelogBody struct {
-	Data Contribution `json:"data"`
-	Membership ContributionMembership `json:"membership"`
+	Data NullableContribution `json:"data"`
+	Membership NullableContributionMembership `json:"membership"`
 	Node string `json:"node"`
 	PooledContributionId string `json:"pooledContributionId"`
 	State int32 `json:"state"`
@@ -35,7 +35,7 @@ type _ContributionChangelogBody ContributionChangelogBody
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewContributionChangelogBody(data Contribution, membership ContributionMembership, node string, pooledContributionId string, state int32) *ContributionChangelogBody {
+func NewContributionChangelogBody(data NullableContribution, membership NullableContributionMembership, node string, pooledContributionId string, state int32) *ContributionChangelogBody {
 	this := ContributionChangelogBody{}
 	this.Data = data
 	this.Membership = membership
@@ -54,51 +54,55 @@ func NewContributionChangelogBodyWithDefaults() *ContributionChangelogBody {
 }
 
 // GetData returns the Data field value
+// If the value is explicit nil, the zero value for Contribution will be returned
 func (o *ContributionChangelogBody) GetData() Contribution {
-	if o == nil {
+	if o == nil || o.Data.Get() == nil {
 		var ret Contribution
 		return ret
 	}
 
-	return o.Data
+	return *o.Data.Get()
 }
 
 // GetDataOk returns a tuple with the Data field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *ContributionChangelogBody) GetDataOk() (*Contribution, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Data, true
+	return o.Data.Get(), o.Data.IsSet()
 }
 
 // SetData sets field value
 func (o *ContributionChangelogBody) SetData(v Contribution) {
-	o.Data = v
+	o.Data.Set(&v)
 }
 
 // GetMembership returns the Membership field value
+// If the value is explicit nil, the zero value for ContributionMembership will be returned
 func (o *ContributionChangelogBody) GetMembership() ContributionMembership {
-	if o == nil {
+	if o == nil || o.Membership.Get() == nil {
 		var ret ContributionMembership
 		return ret
 	}
 
-	return o.Membership
+	return *o.Membership.Get()
 }
 
 // GetMembershipOk returns a tuple with the Membership field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *ContributionChangelogBody) GetMembershipOk() (*ContributionMembership, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Membership, true
+	return o.Membership.Get(), o.Membership.IsSet()
 }
 
 // SetMembership sets field value
 func (o *ContributionChangelogBody) SetMembership(v ContributionMembership) {
-	o.Membership = v
+	o.Membership.Set(&v)
 }
 
 // GetNode returns the Node field value
@@ -183,8 +187,8 @@ func (o ContributionChangelogBody) MarshalJSON() ([]byte, error) {
 
 func (o ContributionChangelogBody) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["data"] = o.Data
-	toSerialize["membership"] = o.Membership
+	toSerialize["data"] = o.Data.Get()
+	toSerialize["membership"] = o.Membership.Get()
 	toSerialize["node"] = o.Node
 	toSerialize["pooledContributionId"] = o.PooledContributionId
 	toSerialize["state"] = o.State

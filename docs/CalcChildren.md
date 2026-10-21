@@ -4,18 +4,18 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Date** | [**MaybeVarInt**](MaybeVarInt.md) |  | 
+**Date** | [**NullableMaybeVarInt**](MaybeVarInt.md) |  | 
 **Filters** | [**[]FilterGroup**](FilterGroup.md) |  | 
-**Function** | [**MaybeVarFunc**](MaybeVarFunc.md) |  | 
+**Function** | [**NullableMaybeVarFunc**](MaybeVarFunc.md) |  | 
 **Params** | [**map[string]ParameterType**](ParameterType.md) |  | 
-**Scenario** | [**MaybeVarStr**](MaybeVarStr.md) |  | 
-**Segment** | [**MaybeVarProp**](MaybeVarProp.md) |  | 
+**Scenario** | [**NullableMaybeVarStr**](MaybeVarStr.md) |  | 
+**Segment** | [**NullableMaybeVarProp**](MaybeVarProp.md) |  | 
 
 ## Methods
 
 ### NewCalcChildren
 
-`func NewCalcChildren(date MaybeVarInt, filters []FilterGroup, function MaybeVarFunc, params map[string]ParameterType, scenario MaybeVarStr, segment MaybeVarProp, ) *CalcChildren`
+`func NewCalcChildren(date NullableMaybeVarInt, filters []FilterGroup, function NullableMaybeVarFunc, params map[string]ParameterType, scenario NullableMaybeVarStr, segment NullableMaybeVarProp, ) *CalcChildren`
 
 NewCalcChildren instantiates a new CalcChildren object
 This constructor will assign default values to properties that have it defined,
@@ -50,6 +50,16 @@ and a boolean to check if the value has been set.
 SetDate sets Date field to given value.
 
 
+### SetDateNil
+
+`func (o *CalcChildren) SetDateNil(b bool)`
+
+ SetDateNil sets the value for Date to be an explicit nil
+
+### UnsetDate
+`func (o *CalcChildren) UnsetDate()`
+
+UnsetDate ensures that no value is present for Date, not even an explicit nil
 ### GetFilters
 
 `func (o *CalcChildren) GetFilters() []FilterGroup`
@@ -90,6 +100,16 @@ and a boolean to check if the value has been set.
 SetFunction sets Function field to given value.
 
 
+### SetFunctionNil
+
+`func (o *CalcChildren) SetFunctionNil(b bool)`
+
+ SetFunctionNil sets the value for Function to be an explicit nil
+
+### UnsetFunction
+`func (o *CalcChildren) UnsetFunction()`
+
+UnsetFunction ensures that no value is present for Function, not even an explicit nil
 ### GetParams
 
 `func (o *CalcChildren) GetParams() map[string]ParameterType`
@@ -130,6 +150,16 @@ and a boolean to check if the value has been set.
 SetScenario sets Scenario field to given value.
 
 
+### SetScenarioNil
+
+`func (o *CalcChildren) SetScenarioNil(b bool)`
+
+ SetScenarioNil sets the value for Scenario to be an explicit nil
+
+### UnsetScenario
+`func (o *CalcChildren) UnsetScenario()`
+
+UnsetScenario ensures that no value is present for Scenario, not even an explicit nil
 ### GetSegment
 
 `func (o *CalcChildren) GetSegment() MaybeVarProp`
@@ -150,6 +180,16 @@ and a boolean to check if the value has been set.
 SetSegment sets Segment field to given value.
 
 
+### SetSegmentNil
+
+`func (o *CalcChildren) SetSegmentNil(b bool)`
+
+ SetSegmentNil sets the value for Segment to be an explicit nil
+
+### UnsetSegment
+`func (o *CalcChildren) UnsetSegment()`
+
+UnsetSegment ensures that no value is present for Segment, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

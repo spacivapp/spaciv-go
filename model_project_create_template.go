@@ -25,7 +25,7 @@ type ProjectCreateTemplate struct {
 	Id int32 `json:"id"`
 	PropertyMap map[string]MaybeVarProp `json:"propertyMap"`
 	ScenarioMap map[string]MaybeVarStr `json:"scenarioMap"`
-	Variables []VariableRes `json:"variables"`
+	Variables []VariableResRequest `json:"variables"`
 }
 
 type _ProjectCreateTemplate ProjectCreateTemplate
@@ -34,7 +34,7 @@ type _ProjectCreateTemplate ProjectCreateTemplate
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewProjectCreateTemplate(id int32, propertyMap map[string]MaybeVarProp, scenarioMap map[string]MaybeVarStr, variables []VariableRes) *ProjectCreateTemplate {
+func NewProjectCreateTemplate(id int32, propertyMap map[string]MaybeVarProp, scenarioMap map[string]MaybeVarStr, variables []VariableResRequest) *ProjectCreateTemplate {
 	this := ProjectCreateTemplate{}
 	this.Id = id
 	this.PropertyMap = propertyMap
@@ -124,9 +124,9 @@ func (o *ProjectCreateTemplate) SetScenarioMap(v map[string]MaybeVarStr) {
 }
 
 // GetVariables returns the Variables field value
-func (o *ProjectCreateTemplate) GetVariables() []VariableRes {
+func (o *ProjectCreateTemplate) GetVariables() []VariableResRequest {
 	if o == nil {
-		var ret []VariableRes
+		var ret []VariableResRequest
 		return ret
 	}
 
@@ -135,7 +135,7 @@ func (o *ProjectCreateTemplate) GetVariables() []VariableRes {
 
 // GetVariablesOk returns a tuple with the Variables field value
 // and a boolean to check if the value has been set.
-func (o *ProjectCreateTemplate) GetVariablesOk() ([]VariableRes, bool) {
+func (o *ProjectCreateTemplate) GetVariablesOk() ([]VariableResRequest, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -143,7 +143,7 @@ func (o *ProjectCreateTemplate) GetVariablesOk() ([]VariableRes, bool) {
 }
 
 // SetVariables sets field value
-func (o *ProjectCreateTemplate) SetVariables(v []VariableRes) {
+func (o *ProjectCreateTemplate) SetVariables(v []VariableResRequest) {
 	o.Variables = v
 }
 

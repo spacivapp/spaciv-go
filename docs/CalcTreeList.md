@@ -4,19 +4,19 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Axis2** | [**CalcSegmentation**](CalcSegmentation.md) |  | 
+**Axis2** | [**NullableCalcSegmentation**](CalcSegmentation.md) |  | 
 **Date** | Pointer to [**MaybeVarInt**](MaybeVarInt.md) |  | [optional] 
 **Filters** | [**[]FilterGroup**](FilterGroup.md) |  | 
 **Function** | Pointer to [**MaybeVarFunc**](MaybeVarFunc.md) |  | [optional] 
 **Params** | [**map[string]ParameterType**](ParameterType.md) |  | 
 **Scenario** | Pointer to [**MaybeVarStr**](MaybeVarStr.md) |  | [optional] 
-**Tree** | [**PropertySource**](PropertySource.md) |  | 
+**Tree** | [**NullablePropertySource**](PropertySource.md) |  | 
 
 ## Methods
 
 ### NewCalcTreeList
 
-`func NewCalcTreeList(axis2 CalcSegmentation, filters []FilterGroup, params map[string]ParameterType, tree PropertySource, ) *CalcTreeList`
+`func NewCalcTreeList(axis2 NullableCalcSegmentation, filters []FilterGroup, params map[string]ParameterType, tree NullablePropertySource, ) *CalcTreeList`
 
 NewCalcTreeList instantiates a new CalcTreeList object
 This constructor will assign default values to properties that have it defined,
@@ -51,6 +51,16 @@ and a boolean to check if the value has been set.
 SetAxis2 sets Axis2 field to given value.
 
 
+### SetAxis2Nil
+
+`func (o *CalcTreeList) SetAxis2Nil(b bool)`
+
+ SetAxis2Nil sets the value for Axis2 to be an explicit nil
+
+### UnsetAxis2
+`func (o *CalcTreeList) UnsetAxis2()`
+
+UnsetAxis2 ensures that no value is present for Axis2, not even an explicit nil
 ### GetDate
 
 `func (o *CalcTreeList) GetDate() MaybeVarInt`
@@ -186,6 +196,16 @@ and a boolean to check if the value has been set.
 SetTree sets Tree field to given value.
 
 
+### SetTreeNil
+
+`func (o *CalcTreeList) SetTreeNil(b bool)`
+
+ SetTreeNil sets the value for Tree to be an explicit nil
+
+### UnsetTree
+`func (o *CalcTreeList) UnsetTree()`
+
+UnsetTree ensures that no value is present for Tree, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

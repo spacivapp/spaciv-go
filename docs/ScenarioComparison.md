@@ -5,18 +5,18 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Filters** | [**[]FilterGroup**](FilterGroup.md) |  | 
-**From** | [**MaybeVarInt**](MaybeVarInt.md) |  | 
-**Function** | [**MaybeVarFunc**](MaybeVarFunc.md) |  | 
+**From** | [**NullableMaybeVarInt**](MaybeVarInt.md) |  | 
+**Function** | [**NullableMaybeVarFunc**](MaybeVarFunc.md) |  | 
 **Params** | [**map[string]ParameterType**](ParameterType.md) |  | 
 **Scenario** | Pointer to **[]string** |  | [optional] 
 **ScenarioRefs** | Pointer to [**[]MaybeVarStr**](MaybeVarStr.md) |  | [optional] 
-**To** | [**MaybeVarInt**](MaybeVarInt.md) |  | 
+**To** | [**NullableMaybeVarInt**](MaybeVarInt.md) |  | 
 
 ## Methods
 
 ### NewScenarioComparison
 
-`func NewScenarioComparison(filters []FilterGroup, from MaybeVarInt, function MaybeVarFunc, params map[string]ParameterType, to MaybeVarInt, ) *ScenarioComparison`
+`func NewScenarioComparison(filters []FilterGroup, from NullableMaybeVarInt, function NullableMaybeVarFunc, params map[string]ParameterType, to NullableMaybeVarInt, ) *ScenarioComparison`
 
 NewScenarioComparison instantiates a new ScenarioComparison object
 This constructor will assign default values to properties that have it defined,
@@ -71,6 +71,16 @@ and a boolean to check if the value has been set.
 SetFrom sets From field to given value.
 
 
+### SetFromNil
+
+`func (o *ScenarioComparison) SetFromNil(b bool)`
+
+ SetFromNil sets the value for From to be an explicit nil
+
+### UnsetFrom
+`func (o *ScenarioComparison) UnsetFrom()`
+
+UnsetFrom ensures that no value is present for From, not even an explicit nil
 ### GetFunction
 
 `func (o *ScenarioComparison) GetFunction() MaybeVarFunc`
@@ -91,6 +101,16 @@ and a boolean to check if the value has been set.
 SetFunction sets Function field to given value.
 
 
+### SetFunctionNil
+
+`func (o *ScenarioComparison) SetFunctionNil(b bool)`
+
+ SetFunctionNil sets the value for Function to be an explicit nil
+
+### UnsetFunction
+`func (o *ScenarioComparison) UnsetFunction()`
+
+UnsetFunction ensures that no value is present for Function, not even an explicit nil
 ### GetParams
 
 `func (o *ScenarioComparison) GetParams() map[string]ParameterType`
@@ -181,6 +201,16 @@ and a boolean to check if the value has been set.
 SetTo sets To field to given value.
 
 
+### SetToNil
+
+`func (o *ScenarioComparison) SetToNil(b bool)`
+
+ SetToNil sets the value for To to be an explicit nil
+
+### UnsetTo
+`func (o *ScenarioComparison) UnsetTo()`
+
+UnsetTo ensures that no value is present for To, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

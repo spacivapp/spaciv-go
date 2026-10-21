@@ -22,7 +22,7 @@ var _ MappedNullable = &TopDownModelEntryList{}
 
 // TopDownModelEntryList struct for TopDownModelEntryList
 type TopDownModelEntryList struct {
-	Data TopDownModelEntryChangelogBody `json:"data"`
+	Data NullableTopDownModelEntryChangelogBody `json:"data"`
 	Id string `json:"id"`
 }
 
@@ -32,7 +32,7 @@ type _TopDownModelEntryList TopDownModelEntryList
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTopDownModelEntryList(data TopDownModelEntryChangelogBody, id string) *TopDownModelEntryList {
+func NewTopDownModelEntryList(data NullableTopDownModelEntryChangelogBody, id string) *TopDownModelEntryList {
 	this := TopDownModelEntryList{}
 	this.Data = data
 	this.Id = id
@@ -48,27 +48,29 @@ func NewTopDownModelEntryListWithDefaults() *TopDownModelEntryList {
 }
 
 // GetData returns the Data field value
+// If the value is explicit nil, the zero value for TopDownModelEntryChangelogBody will be returned
 func (o *TopDownModelEntryList) GetData() TopDownModelEntryChangelogBody {
-	if o == nil {
+	if o == nil || o.Data.Get() == nil {
 		var ret TopDownModelEntryChangelogBody
 		return ret
 	}
 
-	return o.Data
+	return *o.Data.Get()
 }
 
 // GetDataOk returns a tuple with the Data field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *TopDownModelEntryList) GetDataOk() (*TopDownModelEntryChangelogBody, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Data, true
+	return o.Data.Get(), o.Data.IsSet()
 }
 
 // SetData sets field value
 func (o *TopDownModelEntryList) SetData(v TopDownModelEntryChangelogBody) {
-	o.Data = v
+	o.Data.Set(&v)
 }
 
 // GetId returns the Id field value
@@ -105,7 +107,7 @@ func (o TopDownModelEntryList) MarshalJSON() ([]byte, error) {
 
 func (o TopDownModelEntryList) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["data"] = o.Data
+	toSerialize["data"] = o.Data.Get()
 	toSerialize["id"] = o.Id
 	return toSerialize, nil
 }

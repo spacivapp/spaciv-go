@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Data** | [**MaybeVarProp**](MaybeVarProp.md) |  | 
+**Data** | [**NullableMaybeVarProp**](MaybeVarProp.md) |  | 
 **Name** | **string** |  | 
 **Resolved** | **bool** |  | 
 
@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 
 ### NewMappingProp
 
-`func NewMappingProp(data MaybeVarProp, name string, resolved bool, ) *MappingProp`
+`func NewMappingProp(data NullableMaybeVarProp, name string, resolved bool, ) *MappingProp`
 
 NewMappingProp instantiates a new MappingProp object
 This constructor will assign default values to properties that have it defined,
@@ -47,6 +47,16 @@ and a boolean to check if the value has been set.
 SetData sets Data field to given value.
 
 
+### SetDataNil
+
+`func (o *MappingProp) SetDataNil(b bool)`
+
+ SetDataNil sets the value for Data to be an explicit nil
+
+### UnsetData
+`func (o *MappingProp) UnsetData()`
+
+UnsetData ensures that no value is present for Data, not even an explicit nil
 ### GetName
 
 `func (o *MappingProp) GetName() string`

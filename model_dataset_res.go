@@ -22,7 +22,7 @@ var _ MappedNullable = &DatasetRes{}
 
 // DatasetRes struct for DatasetRes
 type DatasetRes struct {
-	Data DatasetChangelogBody `json:"data"`
+	Data NullableDatasetChangelogBody `json:"data"`
 	Id string `json:"id"`
 }
 
@@ -32,7 +32,7 @@ type _DatasetRes DatasetRes
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDatasetRes(data DatasetChangelogBody, id string) *DatasetRes {
+func NewDatasetRes(data NullableDatasetChangelogBody, id string) *DatasetRes {
 	this := DatasetRes{}
 	this.Data = data
 	this.Id = id
@@ -48,27 +48,29 @@ func NewDatasetResWithDefaults() *DatasetRes {
 }
 
 // GetData returns the Data field value
+// If the value is explicit nil, the zero value for DatasetChangelogBody will be returned
 func (o *DatasetRes) GetData() DatasetChangelogBody {
-	if o == nil {
+	if o == nil || o.Data.Get() == nil {
 		var ret DatasetChangelogBody
 		return ret
 	}
 
-	return o.Data
+	return *o.Data.Get()
 }
 
 // GetDataOk returns a tuple with the Data field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *DatasetRes) GetDataOk() (*DatasetChangelogBody, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Data, true
+	return o.Data.Get(), o.Data.IsSet()
 }
 
 // SetData sets field value
 func (o *DatasetRes) SetData(v DatasetChangelogBody) {
-	o.Data = v
+	o.Data.Set(&v)
 }
 
 // GetId returns the Id field value
@@ -105,7 +107,7 @@ func (o DatasetRes) MarshalJSON() ([]byte, error) {
 
 func (o DatasetRes) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["data"] = o.Data
+	toSerialize["data"] = o.Data.Get()
 	toSerialize["id"] = o.Id
 	return toSerialize, nil
 }

@@ -22,8 +22,8 @@ var _ MappedNullable = &PropertyRes{}
 
 // PropertyRes struct for PropertyRes
 type PropertyRes struct {
-	Tree PropertyNode `json:"tree"`
-	Value PropertyChangelogBody `json:"value"`
+	Tree NullablePropertyNode `json:"tree"`
+	Value NullablePropertyChangelogBody `json:"value"`
 }
 
 type _PropertyRes PropertyRes
@@ -32,7 +32,7 @@ type _PropertyRes PropertyRes
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewPropertyRes(tree PropertyNode, value PropertyChangelogBody) *PropertyRes {
+func NewPropertyRes(tree NullablePropertyNode, value NullablePropertyChangelogBody) *PropertyRes {
 	this := PropertyRes{}
 	this.Tree = tree
 	this.Value = value
@@ -48,51 +48,55 @@ func NewPropertyResWithDefaults() *PropertyRes {
 }
 
 // GetTree returns the Tree field value
+// If the value is explicit nil, the zero value for PropertyNode will be returned
 func (o *PropertyRes) GetTree() PropertyNode {
-	if o == nil {
+	if o == nil || o.Tree.Get() == nil {
 		var ret PropertyNode
 		return ret
 	}
 
-	return o.Tree
+	return *o.Tree.Get()
 }
 
 // GetTreeOk returns a tuple with the Tree field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *PropertyRes) GetTreeOk() (*PropertyNode, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Tree, true
+	return o.Tree.Get(), o.Tree.IsSet()
 }
 
 // SetTree sets field value
 func (o *PropertyRes) SetTree(v PropertyNode) {
-	o.Tree = v
+	o.Tree.Set(&v)
 }
 
 // GetValue returns the Value field value
+// If the value is explicit nil, the zero value for PropertyChangelogBody will be returned
 func (o *PropertyRes) GetValue() PropertyChangelogBody {
-	if o == nil {
+	if o == nil || o.Value.Get() == nil {
 		var ret PropertyChangelogBody
 		return ret
 	}
 
-	return o.Value
+	return *o.Value.Get()
 }
 
 // GetValueOk returns a tuple with the Value field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *PropertyRes) GetValueOk() (*PropertyChangelogBody, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Value, true
+	return o.Value.Get(), o.Value.IsSet()
 }
 
 // SetValue sets field value
 func (o *PropertyRes) SetValue(v PropertyChangelogBody) {
-	o.Value = v
+	o.Value.Set(&v)
 }
 
 func (o PropertyRes) MarshalJSON() ([]byte, error) {
@@ -105,8 +109,8 @@ func (o PropertyRes) MarshalJSON() ([]byte, error) {
 
 func (o PropertyRes) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["tree"] = o.Tree
-	toSerialize["value"] = o.Value
+	toSerialize["tree"] = o.Tree.Get()
+	toSerialize["value"] = o.Value.Get()
 	return toSerialize, nil
 }
 

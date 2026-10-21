@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Data** | [**Contribution**](Contribution.md) |  | 
-**Membership** | [**ContributionMembership**](ContributionMembership.md) |  | 
+**Data** | [**NullableContribution**](Contribution.md) |  | 
+**Membership** | [**NullableContributionMembership**](ContributionMembership.md) |  | 
 **Node** | **string** |  | 
 **PooledContributionId** | **string** |  | 
 **State** | **int32** |  | 
@@ -14,7 +14,7 @@ Name | Type | Description | Notes
 
 ### NewContributionChangelogBody
 
-`func NewContributionChangelogBody(data Contribution, membership ContributionMembership, node string, pooledContributionId string, state int32, ) *ContributionChangelogBody`
+`func NewContributionChangelogBody(data NullableContribution, membership NullableContributionMembership, node string, pooledContributionId string, state int32, ) *ContributionChangelogBody`
 
 NewContributionChangelogBody instantiates a new ContributionChangelogBody object
 This constructor will assign default values to properties that have it defined,
@@ -49,6 +49,16 @@ and a boolean to check if the value has been set.
 SetData sets Data field to given value.
 
 
+### SetDataNil
+
+`func (o *ContributionChangelogBody) SetDataNil(b bool)`
+
+ SetDataNil sets the value for Data to be an explicit nil
+
+### UnsetData
+`func (o *ContributionChangelogBody) UnsetData()`
+
+UnsetData ensures that no value is present for Data, not even an explicit nil
 ### GetMembership
 
 `func (o *ContributionChangelogBody) GetMembership() ContributionMembership`
@@ -69,6 +79,16 @@ and a boolean to check if the value has been set.
 SetMembership sets Membership field to given value.
 
 
+### SetMembershipNil
+
+`func (o *ContributionChangelogBody) SetMembershipNil(b bool)`
+
+ SetMembershipNil sets the value for Membership to be an explicit nil
+
+### UnsetMembership
+`func (o *ContributionChangelogBody) UnsetMembership()`
+
+UnsetMembership ensures that no value is present for Membership, not even an explicit nil
 ### GetNode
 
 `func (o *ContributionChangelogBody) GetNode() string`

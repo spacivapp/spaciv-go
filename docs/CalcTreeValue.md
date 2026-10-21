@@ -9,13 +9,13 @@ Name | Type | Description | Notes
 **Function** | Pointer to [**MaybeVarFunc**](MaybeVarFunc.md) |  | [optional] 
 **Params** | [**map[string]ParameterType**](ParameterType.md) |  | 
 **Scenario** | Pointer to [**MaybeVarStr**](MaybeVarStr.md) |  | [optional] 
-**Tree** | [**PropertySource**](PropertySource.md) |  | 
+**Tree** | [**NullablePropertySource**](PropertySource.md) |  | 
 
 ## Methods
 
 ### NewCalcTreeValue
 
-`func NewCalcTreeValue(filters []FilterGroup, params map[string]ParameterType, tree PropertySource, ) *CalcTreeValue`
+`func NewCalcTreeValue(filters []FilterGroup, params map[string]ParameterType, tree NullablePropertySource, ) *CalcTreeValue`
 
 NewCalcTreeValue instantiates a new CalcTreeValue object
 This constructor will assign default values to properties that have it defined,
@@ -165,6 +165,16 @@ and a boolean to check if the value has been set.
 SetTree sets Tree field to given value.
 
 
+### SetTreeNil
+
+`func (o *CalcTreeValue) SetTreeNil(b bool)`
+
+ SetTreeNil sets the value for Tree to be an explicit nil
+
+### UnsetTree
+`func (o *CalcTreeValue) UnsetTree()`
+
+UnsetTree ensures that no value is present for Tree, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

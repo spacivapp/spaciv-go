@@ -22,7 +22,7 @@ var _ MappedNullable = &CalcBody{}
 
 // CalcBody struct for CalcBody
 type CalcBody struct {
-	Data DataShapes `json:"data"`
+	Data DataShapesRequest `json:"data"`
 	// The order to lay the result's values out in, outermost first. `1` is day, `2` tree node, `3` series, `4` scenario and `5` group. Every result has day and tree node; a card adds series (single values, categorisation mixes, lists and tree lists), scenario (scenario comparisons and tree lists over scenarios) or, for a 2D list, group for its rows and series or scenario for its columns. List each of the card's dimensions exactly once, in any order; leave this out for day, tree node, then the card's own dimensions. Any other list is rejected with `400` and `kind` `invalid_dimensions`.
 	Dimensions []int32 `json:"dimensions,omitempty"`
 	Filters []FilterGroup `json:"filters"`
@@ -37,7 +37,7 @@ type _CalcBody CalcBody
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCalcBody(data DataShapes, filters []FilterGroup) *CalcBody {
+func NewCalcBody(data DataShapesRequest, filters []FilterGroup) *CalcBody {
 	this := CalcBody{}
 	this.Data = data
 	this.Filters = filters
@@ -53,9 +53,9 @@ func NewCalcBodyWithDefaults() *CalcBody {
 }
 
 // GetData returns the Data field value
-func (o *CalcBody) GetData() DataShapes {
+func (o *CalcBody) GetData() DataShapesRequest {
 	if o == nil {
-		var ret DataShapes
+		var ret DataShapesRequest
 		return ret
 	}
 
@@ -64,7 +64,7 @@ func (o *CalcBody) GetData() DataShapes {
 
 // GetDataOk returns a tuple with the Data field value
 // and a boolean to check if the value has been set.
-func (o *CalcBody) GetDataOk() (*DataShapes, bool) {
+func (o *CalcBody) GetDataOk() (*DataShapesRequest, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -72,7 +72,7 @@ func (o *CalcBody) GetDataOk() (*DataShapes, bool) {
 }
 
 // SetData sets field value
-func (o *CalcBody) SetData(v DataShapes) {
+func (o *CalcBody) SetData(v DataShapesRequest) {
 	o.Data = v
 }
 

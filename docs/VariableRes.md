@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Data** | [**VariableChangelog**](VariableChangelog.md) |  | 
+**Data** | [**NullableVariableChangelog**](VariableChangelog.md) |  | 
 **Id** | **string** |  | 
 
 ## Methods
 
 ### NewVariableRes
 
-`func NewVariableRes(data VariableChangelog, id string, ) *VariableRes`
+`func NewVariableRes(data NullableVariableChangelog, id string, ) *VariableRes`
 
 NewVariableRes instantiates a new VariableRes object
 This constructor will assign default values to properties that have it defined,
@@ -46,6 +46,16 @@ and a boolean to check if the value has been set.
 SetData sets Data field to given value.
 
 
+### SetDataNil
+
+`func (o *VariableRes) SetDataNil(b bool)`
+
+ SetDataNil sets the value for Data to be an explicit nil
+
+### UnsetData
+`func (o *VariableRes) UnsetData()`
+
+UnsetData ensures that no value is present for Data, not even an explicit nil
 ### GetId
 
 `func (o *VariableRes) GetId() string`

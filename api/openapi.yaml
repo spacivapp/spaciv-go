@@ -9630,7 +9630,7 @@ components:
         - 1
       properties:
         data:
-          $ref: "#/components/schemas/DataShapes"
+          $ref: "#/components/schemas/DataShapesRequest"
         dimensions:
           description: "The order to lay the result's values out in, outermost first.\
             \ `1` is day, `2` tree node, `3` series, `4` scenario and `5` group. Every\
@@ -9660,6 +9660,31 @@ components:
       - data
       - filters
     CalcChildren:
+      additionalProperties: false
+      properties:
+        date:
+          $ref: "#/components/schemas/MaybeVarInt"
+        filters:
+          items:
+            $ref: "#/components/schemas/FilterGroup"
+          type: array
+        function:
+          $ref: "#/components/schemas/MaybeVarFunc"
+        params:
+          additionalProperties:
+            $ref: "#/components/schemas/ParameterType"
+        scenario:
+          $ref: "#/components/schemas/MaybeVarStr"
+        segment:
+          $ref: "#/components/schemas/MaybeVarProp"
+      required:
+      - date
+      - filters
+      - function
+      - params
+      - scenario
+      - segment
+    CalcChildrenRequest:
       additionalProperties: false
       example:
         date:
@@ -9727,10 +9752,10 @@ components:
             $ref: "#/components/schemas/FilterGroup"
           type: array
         function:
-          $ref: "#/components/schemas/MaybeVarFunc"
+          $ref: "#/components/schemas/MaybeVarFuncRequest"
         params:
           additionalProperties:
-            $ref: "#/components/schemas/ParameterType"
+            $ref: "#/components/schemas/ParameterTypeRequest"
         scenario:
           $ref: "#/components/schemas/MaybeVarStr"
         segment:
@@ -9756,6 +9781,20 @@ components:
       - left
       - op
       - right
+    CalcCompareRequest:
+      additionalProperties: false
+      properties:
+        left:
+          $ref: "#/components/schemas/CalcRuleRefRequest"
+        op:
+          format: int32
+          type: integer
+        right:
+          $ref: "#/components/schemas/CalcRuleRefRequest"
+      required:
+      - left
+      - op
+      - right
     CalcCondition:
       additionalProperties: false
       properties:
@@ -9765,6 +9804,19 @@ components:
           $ref: "#/components/schemas/CalcTest"
         then:
           $ref: "#/components/schemas/CalcRuleRef"
+      required:
+      - else
+      - if
+      - then
+    CalcConditionRequest:
+      additionalProperties: false
+      properties:
+        else:
+          $ref: "#/components/schemas/CalcRuleRefRequest"
+        if:
+          $ref: "#/components/schemas/CalcTestRequest"
+        then:
+          $ref: "#/components/schemas/CalcRuleRefRequest"
       required:
       - else
       - if
@@ -9934,6 +9986,46 @@ components:
       - name
       - params
       - scenario
+    CalcListEntryRequest:
+      additionalProperties: false
+      properties:
+        function:
+          $ref: "#/components/schemas/MaybeVarFuncRequest"
+        hexCode:
+          type: string
+        name:
+          type: string
+        params:
+          additionalProperties:
+            $ref: "#/components/schemas/ParameterTypeRequest"
+        scenario:
+          $ref: "#/components/schemas/MaybeVarStr"
+      required:
+      - function
+      - name
+      - params
+      - scenario
+    CalcListRequest:
+      additionalProperties: false
+      properties:
+        date:
+          $ref: "#/components/schemas/MaybeVarInt"
+        filters:
+          items:
+            $ref: "#/components/schemas/FilterGroup"
+          type: array
+        list:
+          items:
+            $ref: "#/components/schemas/CalcListEntryRequest"
+          type: array
+        timeSpan:
+          format: int32
+          type: integer
+        to:
+          $ref: "#/components/schemas/MaybeVarInt"
+      required:
+      - filters
+      - list
     CalcListTwoD:
       additionalProperties: false
       properties:
@@ -9941,6 +10033,24 @@ components:
           $ref: "#/components/schemas/CalcSegmentation"
         axis2:
           $ref: "#/components/schemas/CalcSegmentation"
+        date:
+          $ref: "#/components/schemas/MaybeVarInt"
+        filters:
+          items:
+            $ref: "#/components/schemas/FilterGroup"
+          type: array
+      required:
+      - axis1
+      - axis2
+      - date
+      - filters
+    CalcListTwoDRequest:
+      additionalProperties: false
+      properties:
+        axis1:
+          $ref: "#/components/schemas/CalcSegmentationRequest"
+        axis2:
+          $ref: "#/components/schemas/CalcSegmentationRequest"
         date:
           $ref: "#/components/schemas/MaybeVarInt"
         filters:
@@ -10018,6 +10128,20 @@ components:
       - left
       - op
       - right
+    CalcRuleFloatRequest:
+      additionalProperties: false
+      properties:
+        left:
+          $ref: "#/components/schemas/CalcRuleRefRequest"
+        op:
+          format: int32
+          type: integer
+        right:
+          $ref: "#/components/schemas/CalcRuleRefRequest"
+      required:
+      - left
+      - op
+      - right
     CalcRuleRef:
       oneOf:
       - $ref: "#/components/schemas/CalcRuleRef_oneOf"
@@ -10027,9 +10151,23 @@ components:
       - $ref: "#/components/schemas/CalcRuleRef_oneOf_4"
       - $ref: "#/components/schemas/CalcRuleRef_oneOf_5"
       - $ref: "#/components/schemas/CalcRuleRef_oneOf_6"
+    CalcRuleRefRequest:
+      oneOf:
+      - $ref: "#/components/schemas/CalcRuleRef_oneOf"
+      - $ref: "#/components/schemas/CalcRuleRefRequest_oneOf"
+      - $ref: "#/components/schemas/CalcRuleRefRequest_oneOf_1"
+      - $ref: "#/components/schemas/CalcRuleRef_oneOf_3"
+      - $ref: "#/components/schemas/CalcRuleRefRequest_oneOf_2"
+      - $ref: "#/components/schemas/CalcRuleRefRequest_oneOf_3"
+      - $ref: "#/components/schemas/CalcRuleRef_oneOf_6"
     CalcSegmentation:
       oneOf:
       - $ref: "#/components/schemas/CalcSegmentation_oneOf"
+      - $ref: "#/components/schemas/CalcSegmentation_oneOf_1"
+      - $ref: "#/components/schemas/CalcSegmentation_oneOf_2"
+    CalcSegmentationRequest:
+      oneOf:
+      - $ref: "#/components/schemas/CalcSegmentationRequest_oneOf"
       - $ref: "#/components/schemas/CalcSegmentation_oneOf_1"
       - $ref: "#/components/schemas/CalcSegmentation_oneOf_2"
     CalcSelect:
@@ -10042,9 +10180,24 @@ components:
       required:
       - calc
       - object
+    CalcSelectRequest:
+      additionalProperties: false
+      properties:
+        calc:
+          $ref: "#/components/schemas/CalcRuleRefRequest"
+        object:
+          $ref: "#/components/schemas/MaybeVarProp"
+      required:
+      - calc
+      - object
     CalcTest:
       oneOf:
       - $ref: "#/components/schemas/CalcTest_oneOf"
+      - $ref: "#/components/schemas/CalcTest_oneOf_1"
+      - $ref: "#/components/schemas/CalcTest_oneOf_2"
+    CalcTestRequest:
+      oneOf:
+      - $ref: "#/components/schemas/CalcTestRequest_oneOf"
       - $ref: "#/components/schemas/CalcTest_oneOf_1"
       - $ref: "#/components/schemas/CalcTest_oneOf_2"
     CalcTreeList:
@@ -10063,6 +10216,31 @@ components:
         params:
           additionalProperties:
             $ref: "#/components/schemas/ParameterType"
+        scenario:
+          $ref: "#/components/schemas/MaybeVarStr"
+        tree:
+          $ref: "#/components/schemas/PropertySource"
+      required:
+      - axis2
+      - filters
+      - params
+      - tree
+    CalcTreeListRequest:
+      additionalProperties: false
+      properties:
+        axis2:
+          $ref: "#/components/schemas/CalcSegmentationRequest"
+        date:
+          $ref: "#/components/schemas/MaybeVarInt"
+        filters:
+          items:
+            $ref: "#/components/schemas/FilterGroup"
+          type: array
+        function:
+          $ref: "#/components/schemas/MaybeVarFuncRequest"
+        params:
+          additionalProperties:
+            $ref: "#/components/schemas/ParameterTypeRequest"
         scenario:
           $ref: "#/components/schemas/MaybeVarStr"
         tree:
@@ -10094,6 +10272,28 @@ components:
       - filters
       - params
       - tree
+    CalcTreeValueRequest:
+      additionalProperties: false
+      properties:
+        date:
+          $ref: "#/components/schemas/MaybeVarInt"
+        filters:
+          items:
+            $ref: "#/components/schemas/FilterGroup"
+          type: array
+        function:
+          $ref: "#/components/schemas/MaybeVarFuncRequest"
+        params:
+          additionalProperties:
+            $ref: "#/components/schemas/ParameterTypeRequest"
+        scenario:
+          $ref: "#/components/schemas/MaybeVarStr"
+        tree:
+          $ref: "#/components/schemas/PropertySource"
+      required:
+      - filters
+      - params
+      - tree
     CalcTypeSingleValue:
       additionalProperties: false
       properties:
@@ -10108,6 +10308,28 @@ components:
         params:
           additionalProperties:
             $ref: "#/components/schemas/ParameterType"
+        scenario:
+          $ref: "#/components/schemas/MaybeVarStr"
+      required:
+      - date
+      - filters
+      - function
+      - params
+      - scenario
+    CalcTypeSingleValueRequest:
+      additionalProperties: false
+      properties:
+        date:
+          $ref: "#/components/schemas/MaybeVarInt"
+        filters:
+          items:
+            $ref: "#/components/schemas/FilterGroup"
+          type: array
+        function:
+          $ref: "#/components/schemas/MaybeVarFuncRequest"
+        params:
+          additionalProperties:
+            $ref: "#/components/schemas/ParameterTypeRequest"
         scenario:
           $ref: "#/components/schemas/MaybeVarStr"
       required:
@@ -10344,6 +10566,28 @@ components:
       - $ref: "#/components/schemas/ContributionData_oneOf_17"
       - $ref: "#/components/schemas/ContributionData_oneOf_18"
       - $ref: "#/components/schemas/ContributionData_oneOf_19"
+    ContributionDataRequest:
+      oneOf:
+      - $ref: "#/components/schemas/ContributionData_oneOf"
+      - $ref: "#/components/schemas/ContributionData_oneOf_1"
+      - $ref: "#/components/schemas/ContributionData_oneOf_2"
+      - $ref: "#/components/schemas/ContributionData_oneOf_3"
+      - $ref: "#/components/schemas/ContributionData_oneOf_4"
+      - $ref: "#/components/schemas/ContributionData_oneOf_5"
+      - $ref: "#/components/schemas/ContributionData_oneOf_6"
+      - $ref: "#/components/schemas/ContributionData_oneOf_7"
+      - $ref: "#/components/schemas/ContributionDataRequest_oneOf"
+      - $ref: "#/components/schemas/ContributionData_oneOf_9"
+      - $ref: "#/components/schemas/ContributionData_oneOf_10"
+      - $ref: "#/components/schemas/ContributionData_oneOf_11"
+      - $ref: "#/components/schemas/ContributionData_oneOf_12"
+      - $ref: "#/components/schemas/ContributionData_oneOf_13"
+      - $ref: "#/components/schemas/ContributionData_oneOf_14"
+      - $ref: "#/components/schemas/ContributionData_oneOf_15"
+      - $ref: "#/components/schemas/ContributionData_oneOf_16"
+      - $ref: "#/components/schemas/ContributionData_oneOf_17"
+      - $ref: "#/components/schemas/ContributionData_oneOf_18"
+      - $ref: "#/components/schemas/ContributionData_oneOf_19"
     ContributionListEntry:
       additionalProperties: false
       example:
@@ -10415,7 +10659,7 @@ components:
         state: 0
       properties:
         data:
-          $ref: "#/components/schemas/Contribution"
+          $ref: "#/components/schemas/ContributionRequest"
         node:
           type: string
         state:
@@ -10428,6 +10672,25 @@ components:
     ContributionPostResponseWrapperBody:
       additionalProperties: false
       type: object
+    ContributionRequest:
+      additionalProperties: false
+      example:
+        data:
+          key:
+            activity:
+              other: 2.3021358869347655
+              collaborateVirtual: 6.027456183070403
+              communicate: 1.4658129805029452
+              projectWork: 7.061401241503109
+              focus: 5.962133916683182
+              collaborate: 0.8008281904610115
+              focusDeep: 5.637376656633329
+      properties:
+        data:
+          additionalProperties:
+            $ref: "#/components/schemas/ContributionDataRequest"
+      required:
+      - data
     Cookie:
       additionalProperties: false
       properties:
@@ -10550,7 +10813,7 @@ components:
               variable: variable
       properties:
         card:
-          $ref: "#/components/schemas/DashboardCard"
+          $ref: "#/components/schemas/DashboardCardRequest"
         index:
           format: int32
           type: integer
@@ -10571,6 +10834,10 @@ components:
       oneOf:
       - $ref: "#/components/schemas/DashboardCardItem_oneOf"
       - $ref: "#/components/schemas/DashboardCardItem_oneOf_1"
+    DashboardCardItemRequest:
+      oneOf:
+      - $ref: "#/components/schemas/DashboardCardItem_oneOf"
+      - $ref: "#/components/schemas/DashboardCardItemRequest_oneOf"
     DashboardCardMove:
       additionalProperties: false
       example:
@@ -10591,6 +10858,42 @@ components:
       - $ref: "#/components/schemas/DashboardCardPatch_oneOf"
       - $ref: "#/components/schemas/DashboardCardPatch_oneOf_1"
       - $ref: "#/components/schemas/DashboardCardPatch_oneOf_2"
+    DashboardCardRequest:
+      additionalProperties: false
+      example:
+        size: 6
+        kind: 0
+        name: name
+        description: description
+        items:
+        - control:
+            variable: variable
+        - control:
+            variable: variable
+      properties:
+        description:
+          type: string
+        items:
+          description: "The card's visualisations and controls, in display order.\
+            \ Each item sets exactly one of `visualisation` or `control`. A card cannot\
+            \ have two controls bound to the same variable, and a row-break card has\
+            \ no items."
+          items:
+            $ref: "#/components/schemas/DashboardCardItemRequest"
+          type: array
+        kind:
+          description: '`0` is a card of items and `1` a row break.'
+          format: int32
+          type: integer
+        name:
+          type: string
+        size:
+          format: int32
+          type: integer
+      required:
+      - description
+      - name
+      - size
     DashboardCardUpdate:
       additionalProperties: false
       example:
@@ -10607,7 +10910,7 @@ components:
               variable: variable
       properties:
         card:
-          $ref: "#/components/schemas/DashboardCard"
+          $ref: "#/components/schemas/DashboardCardRequest"
         index:
           format: int32
           type: integer
@@ -10739,7 +11042,7 @@ components:
       properties:
         cards:
           items:
-            $ref: "#/components/schemas/DashboardCard"
+            $ref: "#/components/schemas/DashboardCardRequest"
           type: array
         description:
           type: string
@@ -10806,6 +11109,47 @@ components:
       - text
       - unit
       - visualisation
+    DashboardVisualisationCalcRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: "#/components/schemas/DataShapesRequest"
+        decimalPlaces:
+          format: int32
+          type: integer
+        floorplan:
+          type: string
+        hideRoot:
+          type: boolean
+        keyValueSize:
+          format: int32
+          type: integer
+        keyValueSuffix:
+          type: string
+        name:
+          type: string
+        removeZeros:
+          type: boolean
+        text:
+          type: string
+        unit:
+          format: int32
+          type: integer
+        visualisation:
+          format: int32
+          type: integer
+      required:
+      - data
+      - decimalPlaces
+      - floorplan
+      - hideRoot
+      - keyValueSize
+      - keyValueSuffix
+      - name
+      - removeZeros
+      - text
+      - unit
+      - visualisation
     DataCollectionAddResponseBody:
       additionalProperties: false
       example:
@@ -10830,6 +11174,15 @@ components:
       - $ref: "#/components/schemas/DataShapes_oneOf_4"
       - $ref: "#/components/schemas/DataShapes_oneOf_5"
       - $ref: "#/components/schemas/DataShapes_oneOf_6"
+    DataShapesRequest:
+      oneOf:
+      - $ref: "#/components/schemas/DataShapesRequest_oneOf"
+      - $ref: "#/components/schemas/DataShapesRequest_oneOf_1"
+      - $ref: "#/components/schemas/DataShapesRequest_oneOf_2"
+      - $ref: "#/components/schemas/DataShapesRequest_oneOf_3"
+      - $ref: "#/components/schemas/DataShapesRequest_oneOf_4"
+      - $ref: "#/components/schemas/DataShapesRequest_oneOf_5"
+      - $ref: "#/components/schemas/DataShapesRequest_oneOf_6"
     DatacollectionAuthentication:
       oneOf:
       - $ref: "#/components/schemas/DatacollectionAuthentication_oneOf"
@@ -11478,7 +11831,7 @@ components:
         setDefault: true
       properties:
         data:
-          $ref: "#/components/schemas/Contribution"
+          $ref: "#/components/schemas/ContributionRequest"
         delete:
           type: boolean
         description:
@@ -12781,6 +13134,31 @@ components:
       - thursday
       - tuesday
       - wednesday
+    InOfficeHoursDataRequest:
+      additionalProperties: false
+      properties:
+        friday:
+          $ref: "#/components/schemas/InOfficeData"
+        monday:
+          $ref: "#/components/schemas/InOfficeData"
+        saturday:
+          $ref: "#/components/schemas/InOfficeData"
+        sunday:
+          $ref: "#/components/schemas/InOfficeData"
+        thursday:
+          $ref: "#/components/schemas/InOfficeData"
+        tuesday:
+          $ref: "#/components/schemas/InOfficeData"
+        wednesday:
+          $ref: "#/components/schemas/InOfficeData"
+      required:
+      - friday
+      - monday
+      - saturday
+      - sunday
+      - thursday
+      - tuesday
+      - wednesday
     IntegrationCreateSlackParamsWrapperBody:
       additionalProperties: false
       example:
@@ -13656,6 +14034,12 @@ components:
       - name
       - resolved
     MaybeVarFunc:
+      properties:
+        static:
+          $ref: "#/components/schemas/CalcRuleRef"
+      required:
+      - static
+    MaybeVarFuncRequest:
       example:
         static:
           attr:
@@ -13664,7 +14048,7 @@ components:
               property: property
       properties:
         static:
-          $ref: "#/components/schemas/CalcRuleRef"
+          $ref: "#/components/schemas/CalcRuleRefRequest"
       required:
       - static
     MaybeVarInt:
@@ -14152,6 +14536,13 @@ components:
       - inTransit
     ParameterType:
       additionalProperties: false
+      properties:
+        property:
+          $ref: "#/components/schemas/MaybeVarProp"
+      required:
+      - property
+    ParameterTypeRequest:
+      additionalProperties: false
       example:
         property: null
       properties:
@@ -14300,7 +14691,7 @@ components:
             $ref: "#/components/schemas/MaybeVarStr"
         variables:
           items:
-            $ref: "#/components/schemas/VariableRes"
+            $ref: "#/components/schemas/VariableResRequest"
           type: array
       required:
       - id
@@ -15165,6 +15556,36 @@ components:
         params:
           additionalProperties:
             $ref: "#/components/schemas/ParameterType"
+        scenario:
+          items:
+            type: string
+          type: array
+        scenarioRefs:
+          items:
+            $ref: "#/components/schemas/MaybeVarStr"
+          type: array
+        to:
+          $ref: "#/components/schemas/MaybeVarInt"
+      required:
+      - filters
+      - from
+      - function
+      - params
+      - to
+    ScenarioComparisonRequest:
+      additionalProperties: false
+      properties:
+        filters:
+          items:
+            $ref: "#/components/schemas/FilterGroup"
+          type: array
+        from:
+          $ref: "#/components/schemas/MaybeVarInt"
+        function:
+          $ref: "#/components/schemas/MaybeVarFuncRequest"
+        params:
+          additionalProperties:
+            $ref: "#/components/schemas/ParameterTypeRequest"
         scenario:
           items:
             type: string
@@ -18058,6 +18479,31 @@ components:
       required:
       - formula
       - nodeId
+    TopDownModelEntryPropertyNodesRequest:
+      additionalProperties: false
+      example:
+        start: 6
+        formula:
+          attr:
+            static:
+              node: node
+              property: property
+        end: 0
+        nodeId: nodeId
+      properties:
+        end:
+          format: int64
+          type: integer
+        formula:
+          $ref: "#/components/schemas/CalcRuleRefRequest"
+        nodeId:
+          type: string
+        start:
+          format: int64
+          type: integer
+      required:
+      - formula
+      - nodeId
     TopDownModelEntryUpdate:
       additionalProperties: false
       example:
@@ -18161,7 +18607,7 @@ components:
       properties:
         map:
           items:
-            $ref: "#/components/schemas/TopDownModelEntryPropertyNodes"
+            $ref: "#/components/schemas/TopDownModelEntryPropertyNodesRequest"
           type: array
       required:
       - map
@@ -18299,6 +18745,22 @@ components:
       - acceptTerms
       - email
     VariableChangelog:
+      additionalProperties: false
+      example:
+        data:
+          options:
+          - options
+          - options
+        name: name
+      properties:
+        data:
+          $ref: "#/components/schemas/VariableData"
+        name:
+          type: string
+      required:
+      - data
+      - name
+    VariableChangelogRequest:
       additionalProperties: false
       example:
         data:
@@ -18491,6 +18953,16 @@ components:
       required:
       - data
       - id
+    VariableResRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: "#/components/schemas/VariableChangelogRequest"
+        id:
+          type: string
+      required:
+      - data
+      - id
     VariableTypeMismatchDetail:
       additionalProperties: false
       example:
@@ -18517,7 +18989,7 @@ components:
       properties:
         data:
           additionalProperties:
-            $ref: "#/components/schemas/VariableChangelog"
+            $ref: "#/components/schemas/VariableChangelogRequest"
       required:
       - data
     files_create_account_files_request:
@@ -18608,6 +19080,30 @@ components:
           type: string
       required:
       - var
+    CalcRuleRefRequest_oneOf:
+      properties:
+        binaryOperator:
+          $ref: "#/components/schemas/CalcRuleFloatRequest"
+      required:
+      - binaryOperator
+    CalcRuleRefRequest_oneOf_1:
+      properties:
+        condition:
+          $ref: "#/components/schemas/CalcConditionRequest"
+      required:
+      - condition
+    CalcRuleRefRequest_oneOf_2:
+      properties:
+        select:
+          $ref: "#/components/schemas/CalcSelectRequest"
+      required:
+      - select
+    CalcRuleRefRequest_oneOf_3:
+      properties:
+        sumOf:
+          $ref: "#/components/schemas/CalcRuleRefRequest"
+      required:
+      - sumOf
     CalcSegmentation_oneOf:
       properties:
         entries:
@@ -18626,6 +19122,12 @@ components:
           $ref: "#/components/schemas/ScenarioList"
       required:
       - scenarios
+    CalcSegmentationRequest_oneOf:
+      properties:
+        entries:
+          $ref: "#/components/schemas/CalcListRequest"
+      required:
+      - entries
     CalcTest_oneOf:
       properties:
         compare:
@@ -18644,6 +19146,12 @@ components:
           $ref: "#/components/schemas/CalcIsObject"
       required:
       - isObject
+    CalcTestRequest_oneOf:
+      properties:
+        compare:
+          $ref: "#/components/schemas/CalcCompareRequest"
+      required:
+      - compare
     ContributionData_oneOf:
       example:
         activity:
@@ -18775,6 +19283,12 @@ components:
           type: number
       required:
       - workingtime
+    ContributionDataRequest_oneOf:
+      properties:
+        inOfficeHours:
+          $ref: "#/components/schemas/InOfficeHoursDataRequest"
+      required:
+      - inOfficeHours
     DashboardCardItem_oneOf:
       example:
         control:
@@ -18788,6 +19302,12 @@ components:
       properties:
         visualisation:
           $ref: "#/components/schemas/DashboardVisualisationCalc"
+      required:
+      - visualisation
+    DashboardCardItemRequest_oneOf:
+      properties:
+        visualisation:
+          $ref: "#/components/schemas/DashboardVisualisationCalcRequest"
       required:
       - visualisation
     DashboardCardPatch_oneOf:
@@ -18813,6 +19333,48 @@ components:
       required:
       - updateCard
     DataShapes_oneOf:
+      properties:
+        categorisationMix:
+          $ref: "#/components/schemas/CalcChildren"
+      required:
+      - categorisationMix
+    DataShapes_oneOf_1:
+      properties:
+        compareScenario:
+          $ref: "#/components/schemas/ScenarioComparison"
+      required:
+      - compareScenario
+    DataShapes_oneOf_2:
+      properties:
+        list:
+          $ref: "#/components/schemas/CalcList"
+      required:
+      - list
+    DataShapes_oneOf_3:
+      properties:
+        listTwoD:
+          $ref: "#/components/schemas/CalcListTwoD"
+      required:
+      - listTwoD
+    DataShapes_oneOf_4:
+      properties:
+        singleValue:
+          $ref: "#/components/schemas/CalcTypeSingleValue"
+      required:
+      - singleValue
+    DataShapes_oneOf_5:
+      properties:
+        treeList:
+          $ref: "#/components/schemas/CalcTreeList"
+      required:
+      - treeList
+    DataShapes_oneOf_6:
+      properties:
+        treeValue:
+          $ref: "#/components/schemas/CalcTreeValue"
+      required:
+      - treeValue
+    DataShapesRequest_oneOf:
       example:
         categorisationMix:
           date:
@@ -18874,43 +19436,43 @@ components:
               property: null
       properties:
         categorisationMix:
-          $ref: "#/components/schemas/CalcChildren"
+          $ref: "#/components/schemas/CalcChildrenRequest"
       required:
       - categorisationMix
-    DataShapes_oneOf_1:
+    DataShapesRequest_oneOf_1:
       properties:
         compareScenario:
-          $ref: "#/components/schemas/ScenarioComparison"
+          $ref: "#/components/schemas/ScenarioComparisonRequest"
       required:
       - compareScenario
-    DataShapes_oneOf_2:
+    DataShapesRequest_oneOf_2:
       properties:
         list:
-          $ref: "#/components/schemas/CalcList"
+          $ref: "#/components/schemas/CalcListRequest"
       required:
       - list
-    DataShapes_oneOf_3:
+    DataShapesRequest_oneOf_3:
       properties:
         listTwoD:
-          $ref: "#/components/schemas/CalcListTwoD"
+          $ref: "#/components/schemas/CalcListTwoDRequest"
       required:
       - listTwoD
-    DataShapes_oneOf_4:
+    DataShapesRequest_oneOf_4:
       properties:
         singleValue:
-          $ref: "#/components/schemas/CalcTypeSingleValue"
+          $ref: "#/components/schemas/CalcTypeSingleValueRequest"
       required:
       - singleValue
-    DataShapes_oneOf_5:
+    DataShapesRequest_oneOf_5:
       properties:
         treeList:
-          $ref: "#/components/schemas/CalcTreeList"
+          $ref: "#/components/schemas/CalcTreeListRequest"
       required:
       - treeList
-    DataShapes_oneOf_6:
+    DataShapesRequest_oneOf_6:
       properties:
         treeValue:
-          $ref: "#/components/schemas/CalcTreeValue"
+          $ref: "#/components/schemas/CalcTreeValueRequest"
       required:
       - treeValue
     DatacollectionAuthentication_oneOf:

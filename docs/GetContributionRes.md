@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **ContributionId** | **string** |  | 
-**Data** | [**Contribution**](Contribution.md) |  | 
+**Data** | [**NullableContribution**](Contribution.md) |  | 
 **IsAnonymous** | **bool** |  | 
 **Node** | **string** |  | 
 **State** | **int32** |  | 
@@ -14,7 +14,7 @@ Name | Type | Description | Notes
 
 ### NewGetContributionRes
 
-`func NewGetContributionRes(contributionId string, data Contribution, isAnonymous bool, node string, state int32, ) *GetContributionRes`
+`func NewGetContributionRes(contributionId string, data NullableContribution, isAnonymous bool, node string, state int32, ) *GetContributionRes`
 
 NewGetContributionRes instantiates a new GetContributionRes object
 This constructor will assign default values to properties that have it defined,
@@ -69,6 +69,16 @@ and a boolean to check if the value has been set.
 SetData sets Data field to given value.
 
 
+### SetDataNil
+
+`func (o *GetContributionRes) SetDataNil(b bool)`
+
+ SetDataNil sets the value for Data to be an explicit nil
+
+### UnsetData
+`func (o *GetContributionRes) UnsetData()`
+
+UnsetData ensures that no value is present for Data, not even an explicit nil
 ### GetIsAnonymous
 
 `func (o *GetContributionRes) GetIsAnonymous() bool`

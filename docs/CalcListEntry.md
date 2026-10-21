@@ -4,17 +4,17 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Function** | [**MaybeVarFunc**](MaybeVarFunc.md) |  | 
+**Function** | [**NullableMaybeVarFunc**](MaybeVarFunc.md) |  | 
 **HexCode** | Pointer to **string** |  | [optional] 
 **Name** | **string** |  | 
 **Params** | [**map[string]ParameterType**](ParameterType.md) |  | 
-**Scenario** | [**MaybeVarStr**](MaybeVarStr.md) |  | 
+**Scenario** | [**NullableMaybeVarStr**](MaybeVarStr.md) |  | 
 
 ## Methods
 
 ### NewCalcListEntry
 
-`func NewCalcListEntry(function MaybeVarFunc, name string, params map[string]ParameterType, scenario MaybeVarStr, ) *CalcListEntry`
+`func NewCalcListEntry(function NullableMaybeVarFunc, name string, params map[string]ParameterType, scenario NullableMaybeVarStr, ) *CalcListEntry`
 
 NewCalcListEntry instantiates a new CalcListEntry object
 This constructor will assign default values to properties that have it defined,
@@ -49,6 +49,16 @@ and a boolean to check if the value has been set.
 SetFunction sets Function field to given value.
 
 
+### SetFunctionNil
+
+`func (o *CalcListEntry) SetFunctionNil(b bool)`
+
+ SetFunctionNil sets the value for Function to be an explicit nil
+
+### UnsetFunction
+`func (o *CalcListEntry) UnsetFunction()`
+
+UnsetFunction ensures that no value is present for Function, not even an explicit nil
 ### GetHexCode
 
 `func (o *CalcListEntry) GetHexCode() string`
@@ -134,6 +144,16 @@ and a boolean to check if the value has been set.
 SetScenario sets Scenario field to given value.
 
 
+### SetScenarioNil
+
+`func (o *CalcListEntry) SetScenarioNil(b bool)`
+
+ SetScenarioNil sets the value for Scenario to be an explicit nil
+
+### UnsetScenario
+`func (o *CalcListEntry) UnsetScenario()`
+
+UnsetScenario ensures that no value is present for Scenario, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

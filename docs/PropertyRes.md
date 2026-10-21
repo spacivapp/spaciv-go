@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Tree** | [**PropertyNode**](PropertyNode.md) |  | 
-**Value** | [**PropertyChangelogBody**](PropertyChangelogBody.md) |  | 
+**Tree** | [**NullablePropertyNode**](PropertyNode.md) |  | 
+**Value** | [**NullablePropertyChangelogBody**](PropertyChangelogBody.md) |  | 
 
 ## Methods
 
 ### NewPropertyRes
 
-`func NewPropertyRes(tree PropertyNode, value PropertyChangelogBody, ) *PropertyRes`
+`func NewPropertyRes(tree NullablePropertyNode, value NullablePropertyChangelogBody, ) *PropertyRes`
 
 NewPropertyRes instantiates a new PropertyRes object
 This constructor will assign default values to properties that have it defined,
@@ -46,6 +46,16 @@ and a boolean to check if the value has been set.
 SetTree sets Tree field to given value.
 
 
+### SetTreeNil
+
+`func (o *PropertyRes) SetTreeNil(b bool)`
+
+ SetTreeNil sets the value for Tree to be an explicit nil
+
+### UnsetTree
+`func (o *PropertyRes) UnsetTree()`
+
+UnsetTree ensures that no value is present for Tree, not even an explicit nil
 ### GetValue
 
 `func (o *PropertyRes) GetValue() PropertyChangelogBody`
@@ -66,6 +76,16 @@ and a boolean to check if the value has been set.
 SetValue sets Value field to given value.
 
 
+### SetValueNil
+
+`func (o *PropertyRes) SetValueNil(b bool)`
+
+ SetValueNil sets the value for Value to be an explicit nil
+
+### UnsetValue
+`func (o *PropertyRes) UnsetValue()`
+
+UnsetValue ensures that no value is present for Value, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

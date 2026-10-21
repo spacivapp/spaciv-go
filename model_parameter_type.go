@@ -22,7 +22,7 @@ var _ MappedNullable = &ParameterType{}
 
 // ParameterType struct for ParameterType
 type ParameterType struct {
-	Property MaybeVarProp `json:"property"`
+	Property NullableMaybeVarProp `json:"property"`
 }
 
 type _ParameterType ParameterType
@@ -31,7 +31,7 @@ type _ParameterType ParameterType
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewParameterType(property MaybeVarProp) *ParameterType {
+func NewParameterType(property NullableMaybeVarProp) *ParameterType {
 	this := ParameterType{}
 	this.Property = property
 	return &this
@@ -46,27 +46,29 @@ func NewParameterTypeWithDefaults() *ParameterType {
 }
 
 // GetProperty returns the Property field value
+// If the value is explicit nil, the zero value for MaybeVarProp will be returned
 func (o *ParameterType) GetProperty() MaybeVarProp {
-	if o == nil {
+	if o == nil || o.Property.Get() == nil {
 		var ret MaybeVarProp
 		return ret
 	}
 
-	return o.Property
+	return *o.Property.Get()
 }
 
 // GetPropertyOk returns a tuple with the Property field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *ParameterType) GetPropertyOk() (*MaybeVarProp, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Property, true
+	return o.Property.Get(), o.Property.IsSet()
 }
 
 // SetProperty sets field value
 func (o *ParameterType) SetProperty(v MaybeVarProp) {
-	o.Property = v
+	o.Property.Set(&v)
 }
 
 func (o ParameterType) MarshalJSON() ([]byte, error) {
@@ -79,7 +81,7 @@ func (o ParameterType) MarshalJSON() ([]byte, error) {
 
 func (o ParameterType) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["property"] = o.Property
+	toSerialize["property"] = o.Property.Get()
 	return toSerialize, nil
 }
 

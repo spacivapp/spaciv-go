@@ -7,13 +7,13 @@ Name | Type | Description | Notes
 **Id** | **int32** |  | 
 **PropertyMap** | [**map[string]MaybeVarProp**](MaybeVarProp.md) |  | 
 **ScenarioMap** | [**map[string]MaybeVarStr**](MaybeVarStr.md) |  | 
-**Variables** | [**[]VariableRes**](VariableRes.md) |  | 
+**Variables** | [**[]VariableResRequest**](VariableResRequest.md) |  | 
 
 ## Methods
 
 ### NewProjectCreateTemplate
 
-`func NewProjectCreateTemplate(id int32, propertyMap map[string]MaybeVarProp, scenarioMap map[string]MaybeVarStr, variables []VariableRes, ) *ProjectCreateTemplate`
+`func NewProjectCreateTemplate(id int32, propertyMap map[string]MaybeVarProp, scenarioMap map[string]MaybeVarStr, variables []VariableResRequest, ) *ProjectCreateTemplate`
 
 NewProjectCreateTemplate instantiates a new ProjectCreateTemplate object
 This constructor will assign default values to properties that have it defined,
@@ -90,20 +90,20 @@ SetScenarioMap sets ScenarioMap field to given value.
 
 ### GetVariables
 
-`func (o *ProjectCreateTemplate) GetVariables() []VariableRes`
+`func (o *ProjectCreateTemplate) GetVariables() []VariableResRequest`
 
 GetVariables returns the Variables field if non-nil, zero value otherwise.
 
 ### GetVariablesOk
 
-`func (o *ProjectCreateTemplate) GetVariablesOk() (*[]VariableRes, bool)`
+`func (o *ProjectCreateTemplate) GetVariablesOk() (*[]VariableResRequest, bool)`
 
 GetVariablesOk returns a tuple with the Variables field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetVariables
 
-`func (o *ProjectCreateTemplate) SetVariables(v []VariableRes)`
+`func (o *ProjectCreateTemplate) SetVariables(v []VariableResRequest)`
 
 SetVariables sets Variables field to given value.
 

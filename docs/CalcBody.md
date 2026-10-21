@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Data** | [**DataShapes**](DataShapes.md) |  | 
+**Data** | [**DataShapesRequest**](DataShapesRequest.md) |  | 
 **Dimensions** | Pointer to **[]int32** | The order to lay the result&#39;s values out in, outermost first. &#x60;1&#x60; is day, &#x60;2&#x60; tree node, &#x60;3&#x60; series, &#x60;4&#x60; scenario and &#x60;5&#x60; group. Every result has day and tree node; a card adds series (single values, categorisation mixes, lists and tree lists), scenario (scenario comparisons and tree lists over scenarios) or, for a 2D list, group for its rows and series or scenario for its columns. List each of the card&#39;s dimensions exactly once, in any order; leave this out for day, tree node, then the card&#39;s own dimensions. Any other list is rejected with &#x60;400&#x60; and &#x60;kind&#x60; &#x60;invalid_dimensions&#x60;. | [optional] 
 **Filters** | [**[]FilterGroup**](FilterGroup.md) |  | 
 **IncludeObjects** | Pointer to **bool** |  | [optional] 
@@ -15,7 +15,7 @@ Name | Type | Description | Notes
 
 ### NewCalcBody
 
-`func NewCalcBody(data DataShapes, filters []FilterGroup, ) *CalcBody`
+`func NewCalcBody(data DataShapesRequest, filters []FilterGroup, ) *CalcBody`
 
 NewCalcBody instantiates a new CalcBody object
 This constructor will assign default values to properties that have it defined,
@@ -32,20 +32,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetData
 
-`func (o *CalcBody) GetData() DataShapes`
+`func (o *CalcBody) GetData() DataShapesRequest`
 
 GetData returns the Data field if non-nil, zero value otherwise.
 
 ### GetDataOk
 
-`func (o *CalcBody) GetDataOk() (*DataShapes, bool)`
+`func (o *CalcBody) GetDataOk() (*DataShapesRequest, bool)`
 
 GetDataOk returns a tuple with the Data field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetData
 
-`func (o *CalcBody) SetData(v DataShapes)`
+`func (o *CalcBody) SetData(v DataShapesRequest)`
 
 SetData sets Data field to given value.
 

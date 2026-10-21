@@ -4,17 +4,17 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Date** | [**MaybeVarInt**](MaybeVarInt.md) |  | 
+**Date** | [**NullableMaybeVarInt**](MaybeVarInt.md) |  | 
 **Filters** | [**[]FilterGroup**](FilterGroup.md) |  | 
-**Function** | [**MaybeVarFunc**](MaybeVarFunc.md) |  | 
+**Function** | [**NullableMaybeVarFunc**](MaybeVarFunc.md) |  | 
 **Params** | [**map[string]ParameterType**](ParameterType.md) |  | 
-**Scenario** | [**MaybeVarStr**](MaybeVarStr.md) |  | 
+**Scenario** | [**NullableMaybeVarStr**](MaybeVarStr.md) |  | 
 
 ## Methods
 
 ### NewCalcTypeSingleValue
 
-`func NewCalcTypeSingleValue(date MaybeVarInt, filters []FilterGroup, function MaybeVarFunc, params map[string]ParameterType, scenario MaybeVarStr, ) *CalcTypeSingleValue`
+`func NewCalcTypeSingleValue(date NullableMaybeVarInt, filters []FilterGroup, function NullableMaybeVarFunc, params map[string]ParameterType, scenario NullableMaybeVarStr, ) *CalcTypeSingleValue`
 
 NewCalcTypeSingleValue instantiates a new CalcTypeSingleValue object
 This constructor will assign default values to properties that have it defined,
@@ -49,6 +49,16 @@ and a boolean to check if the value has been set.
 SetDate sets Date field to given value.
 
 
+### SetDateNil
+
+`func (o *CalcTypeSingleValue) SetDateNil(b bool)`
+
+ SetDateNil sets the value for Date to be an explicit nil
+
+### UnsetDate
+`func (o *CalcTypeSingleValue) UnsetDate()`
+
+UnsetDate ensures that no value is present for Date, not even an explicit nil
 ### GetFilters
 
 `func (o *CalcTypeSingleValue) GetFilters() []FilterGroup`
@@ -89,6 +99,16 @@ and a boolean to check if the value has been set.
 SetFunction sets Function field to given value.
 
 
+### SetFunctionNil
+
+`func (o *CalcTypeSingleValue) SetFunctionNil(b bool)`
+
+ SetFunctionNil sets the value for Function to be an explicit nil
+
+### UnsetFunction
+`func (o *CalcTypeSingleValue) UnsetFunction()`
+
+UnsetFunction ensures that no value is present for Function, not even an explicit nil
 ### GetParams
 
 `func (o *CalcTypeSingleValue) GetParams() map[string]ParameterType`
@@ -129,6 +149,16 @@ and a boolean to check if the value has been set.
 SetScenario sets Scenario field to given value.
 
 
+### SetScenarioNil
+
+`func (o *CalcTypeSingleValue) SetScenarioNil(b bool)`
+
+ SetScenarioNil sets the value for Scenario to be an explicit nil
+
+### UnsetScenario
+`func (o *CalcTypeSingleValue) UnsetScenario()`
+
+UnsetScenario ensures that no value is present for Scenario, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

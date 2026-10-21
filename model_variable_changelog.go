@@ -22,7 +22,7 @@ var _ MappedNullable = &VariableChangelog{}
 
 // VariableChangelog struct for VariableChangelog
 type VariableChangelog struct {
-	Data VariableData `json:"data"`
+	Data NullableVariableData `json:"data"`
 	Name string `json:"name"`
 }
 
@@ -32,7 +32,7 @@ type _VariableChangelog VariableChangelog
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewVariableChangelog(data VariableData, name string) *VariableChangelog {
+func NewVariableChangelog(data NullableVariableData, name string) *VariableChangelog {
 	this := VariableChangelog{}
 	this.Data = data
 	this.Name = name
@@ -48,27 +48,29 @@ func NewVariableChangelogWithDefaults() *VariableChangelog {
 }
 
 // GetData returns the Data field value
+// If the value is explicit nil, the zero value for VariableData will be returned
 func (o *VariableChangelog) GetData() VariableData {
-	if o == nil {
+	if o == nil || o.Data.Get() == nil {
 		var ret VariableData
 		return ret
 	}
 
-	return o.Data
+	return *o.Data.Get()
 }
 
 // GetDataOk returns a tuple with the Data field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *VariableChangelog) GetDataOk() (*VariableData, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Data, true
+	return o.Data.Get(), o.Data.IsSet()
 }
 
 // SetData sets field value
 func (o *VariableChangelog) SetData(v VariableData) {
-	o.Data = v
+	o.Data.Set(&v)
 }
 
 // GetName returns the Name field value
@@ -105,7 +107,7 @@ func (o VariableChangelog) MarshalJSON() ([]byte, error) {
 
 func (o VariableChangelog) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["data"] = o.Data
+	toSerialize["data"] = o.Data.Get()
 	toSerialize["name"] = o.Name
 	return toSerialize, nil
 }

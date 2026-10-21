@@ -6,7 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Completed** | **int32** |  | 
 **ContributorCount** | **int32** |  | 
-**Datacollection** | [**DatacollectionChangelogBody**](DatacollectionChangelogBody.md) |  | 
+**Datacollection** | [**NullableDatacollectionChangelogBody**](DatacollectionChangelogBody.md) |  | 
 **Id** | **string** |  | 
 **Started** | **int32** |  | 
 **Total** | **int32** |  | 
@@ -15,7 +15,7 @@ Name | Type | Description | Notes
 
 ### NewGetDatacollectionRes
 
-`func NewGetDatacollectionRes(completed int32, contributorCount int32, datacollection DatacollectionChangelogBody, id string, started int32, total int32, ) *GetDatacollectionRes`
+`func NewGetDatacollectionRes(completed int32, contributorCount int32, datacollection NullableDatacollectionChangelogBody, id string, started int32, total int32, ) *GetDatacollectionRes`
 
 NewGetDatacollectionRes instantiates a new GetDatacollectionRes object
 This constructor will assign default values to properties that have it defined,
@@ -90,6 +90,16 @@ and a boolean to check if the value has been set.
 SetDatacollection sets Datacollection field to given value.
 
 
+### SetDatacollectionNil
+
+`func (o *GetDatacollectionRes) SetDatacollectionNil(b bool)`
+
+ SetDatacollectionNil sets the value for Datacollection to be an explicit nil
+
+### UnsetDatacollection
+`func (o *GetDatacollectionRes) UnsetDatacollection()`
+
+UnsetDatacollection ensures that no value is present for Datacollection, not even an explicit nil
 ### GetId
 
 `func (o *GetDatacollectionRes) GetId() string`

@@ -22,11 +22,11 @@ var _ MappedNullable = &CalcTypeSingleValue{}
 
 // CalcTypeSingleValue struct for CalcTypeSingleValue
 type CalcTypeSingleValue struct {
-	Date MaybeVarInt `json:"date"`
+	Date NullableMaybeVarInt `json:"date"`
 	Filters []FilterGroup `json:"filters"`
-	Function MaybeVarFunc `json:"function"`
+	Function NullableMaybeVarFunc `json:"function"`
 	Params map[string]ParameterType `json:"params"`
-	Scenario MaybeVarStr `json:"scenario"`
+	Scenario NullableMaybeVarStr `json:"scenario"`
 }
 
 type _CalcTypeSingleValue CalcTypeSingleValue
@@ -35,7 +35,7 @@ type _CalcTypeSingleValue CalcTypeSingleValue
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCalcTypeSingleValue(date MaybeVarInt, filters []FilterGroup, function MaybeVarFunc, params map[string]ParameterType, scenario MaybeVarStr) *CalcTypeSingleValue {
+func NewCalcTypeSingleValue(date NullableMaybeVarInt, filters []FilterGroup, function NullableMaybeVarFunc, params map[string]ParameterType, scenario NullableMaybeVarStr) *CalcTypeSingleValue {
 	this := CalcTypeSingleValue{}
 	this.Date = date
 	this.Filters = filters
@@ -54,27 +54,29 @@ func NewCalcTypeSingleValueWithDefaults() *CalcTypeSingleValue {
 }
 
 // GetDate returns the Date field value
+// If the value is explicit nil, the zero value for MaybeVarInt will be returned
 func (o *CalcTypeSingleValue) GetDate() MaybeVarInt {
-	if o == nil {
+	if o == nil || o.Date.Get() == nil {
 		var ret MaybeVarInt
 		return ret
 	}
 
-	return o.Date
+	return *o.Date.Get()
 }
 
 // GetDateOk returns a tuple with the Date field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *CalcTypeSingleValue) GetDateOk() (*MaybeVarInt, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Date, true
+	return o.Date.Get(), o.Date.IsSet()
 }
 
 // SetDate sets field value
 func (o *CalcTypeSingleValue) SetDate(v MaybeVarInt) {
-	o.Date = v
+	o.Date.Set(&v)
 }
 
 // GetFilters returns the Filters field value
@@ -102,27 +104,29 @@ func (o *CalcTypeSingleValue) SetFilters(v []FilterGroup) {
 }
 
 // GetFunction returns the Function field value
+// If the value is explicit nil, the zero value for MaybeVarFunc will be returned
 func (o *CalcTypeSingleValue) GetFunction() MaybeVarFunc {
-	if o == nil {
+	if o == nil || o.Function.Get() == nil {
 		var ret MaybeVarFunc
 		return ret
 	}
 
-	return o.Function
+	return *o.Function.Get()
 }
 
 // GetFunctionOk returns a tuple with the Function field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *CalcTypeSingleValue) GetFunctionOk() (*MaybeVarFunc, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Function, true
+	return o.Function.Get(), o.Function.IsSet()
 }
 
 // SetFunction sets field value
 func (o *CalcTypeSingleValue) SetFunction(v MaybeVarFunc) {
-	o.Function = v
+	o.Function.Set(&v)
 }
 
 // GetParams returns the Params field value
@@ -150,27 +154,29 @@ func (o *CalcTypeSingleValue) SetParams(v map[string]ParameterType) {
 }
 
 // GetScenario returns the Scenario field value
+// If the value is explicit nil, the zero value for MaybeVarStr will be returned
 func (o *CalcTypeSingleValue) GetScenario() MaybeVarStr {
-	if o == nil {
+	if o == nil || o.Scenario.Get() == nil {
 		var ret MaybeVarStr
 		return ret
 	}
 
-	return o.Scenario
+	return *o.Scenario.Get()
 }
 
 // GetScenarioOk returns a tuple with the Scenario field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *CalcTypeSingleValue) GetScenarioOk() (*MaybeVarStr, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Scenario, true
+	return o.Scenario.Get(), o.Scenario.IsSet()
 }
 
 // SetScenario sets field value
 func (o *CalcTypeSingleValue) SetScenario(v MaybeVarStr) {
-	o.Scenario = v
+	o.Scenario.Set(&v)
 }
 
 func (o CalcTypeSingleValue) MarshalJSON() ([]byte, error) {
@@ -183,11 +189,11 @@ func (o CalcTypeSingleValue) MarshalJSON() ([]byte, error) {
 
 func (o CalcTypeSingleValue) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["date"] = o.Date
+	toSerialize["date"] = o.Date.Get()
 	toSerialize["filters"] = o.Filters
-	toSerialize["function"] = o.Function
+	toSerialize["function"] = o.Function.Get()
 	toSerialize["params"] = o.Params
-	toSerialize["scenario"] = o.Scenario
+	toSerialize["scenario"] = o.Scenario.Get()
 	return toSerialize, nil
 }
 

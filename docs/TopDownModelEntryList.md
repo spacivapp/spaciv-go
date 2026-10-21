@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Data** | [**TopDownModelEntryChangelogBody**](TopDownModelEntryChangelogBody.md) |  | 
+**Data** | [**NullableTopDownModelEntryChangelogBody**](TopDownModelEntryChangelogBody.md) |  | 
 **Id** | **string** |  | 
 
 ## Methods
 
 ### NewTopDownModelEntryList
 
-`func NewTopDownModelEntryList(data TopDownModelEntryChangelogBody, id string, ) *TopDownModelEntryList`
+`func NewTopDownModelEntryList(data NullableTopDownModelEntryChangelogBody, id string, ) *TopDownModelEntryList`
 
 NewTopDownModelEntryList instantiates a new TopDownModelEntryList object
 This constructor will assign default values to properties that have it defined,
@@ -46,6 +46,16 @@ and a boolean to check if the value has been set.
 SetData sets Data field to given value.
 
 
+### SetDataNil
+
+`func (o *TopDownModelEntryList) SetDataNil(b bool)`
+
+ SetDataNil sets the value for Data to be an explicit nil
+
+### UnsetData
+`func (o *TopDownModelEntryList) UnsetData()`
+
+UnsetData ensures that no value is present for Data, not even an explicit nil
 ### GetId
 
 `func (o *TopDownModelEntryList) GetId() string`

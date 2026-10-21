@@ -22,11 +22,11 @@ var _ MappedNullable = &CalcListEntry{}
 
 // CalcListEntry struct for CalcListEntry
 type CalcListEntry struct {
-	Function MaybeVarFunc `json:"function"`
+	Function NullableMaybeVarFunc `json:"function"`
 	HexCode *string `json:"hexCode,omitempty"`
 	Name string `json:"name"`
 	Params map[string]ParameterType `json:"params"`
-	Scenario MaybeVarStr `json:"scenario"`
+	Scenario NullableMaybeVarStr `json:"scenario"`
 }
 
 type _CalcListEntry CalcListEntry
@@ -35,7 +35,7 @@ type _CalcListEntry CalcListEntry
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCalcListEntry(function MaybeVarFunc, name string, params map[string]ParameterType, scenario MaybeVarStr) *CalcListEntry {
+func NewCalcListEntry(function NullableMaybeVarFunc, name string, params map[string]ParameterType, scenario NullableMaybeVarStr) *CalcListEntry {
 	this := CalcListEntry{}
 	this.Function = function
 	this.Name = name
@@ -53,27 +53,29 @@ func NewCalcListEntryWithDefaults() *CalcListEntry {
 }
 
 // GetFunction returns the Function field value
+// If the value is explicit nil, the zero value for MaybeVarFunc will be returned
 func (o *CalcListEntry) GetFunction() MaybeVarFunc {
-	if o == nil {
+	if o == nil || o.Function.Get() == nil {
 		var ret MaybeVarFunc
 		return ret
 	}
 
-	return o.Function
+	return *o.Function.Get()
 }
 
 // GetFunctionOk returns a tuple with the Function field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *CalcListEntry) GetFunctionOk() (*MaybeVarFunc, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Function, true
+	return o.Function.Get(), o.Function.IsSet()
 }
 
 // SetFunction sets field value
 func (o *CalcListEntry) SetFunction(v MaybeVarFunc) {
-	o.Function = v
+	o.Function.Set(&v)
 }
 
 // GetHexCode returns the HexCode field value if set, zero value otherwise.
@@ -157,27 +159,29 @@ func (o *CalcListEntry) SetParams(v map[string]ParameterType) {
 }
 
 // GetScenario returns the Scenario field value
+// If the value is explicit nil, the zero value for MaybeVarStr will be returned
 func (o *CalcListEntry) GetScenario() MaybeVarStr {
-	if o == nil {
+	if o == nil || o.Scenario.Get() == nil {
 		var ret MaybeVarStr
 		return ret
 	}
 
-	return o.Scenario
+	return *o.Scenario.Get()
 }
 
 // GetScenarioOk returns a tuple with the Scenario field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *CalcListEntry) GetScenarioOk() (*MaybeVarStr, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Scenario, true
+	return o.Scenario.Get(), o.Scenario.IsSet()
 }
 
 // SetScenario sets field value
 func (o *CalcListEntry) SetScenario(v MaybeVarStr) {
-	o.Scenario = v
+	o.Scenario.Set(&v)
 }
 
 func (o CalcListEntry) MarshalJSON() ([]byte, error) {
@@ -190,13 +194,13 @@ func (o CalcListEntry) MarshalJSON() ([]byte, error) {
 
 func (o CalcListEntry) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["function"] = o.Function
+	toSerialize["function"] = o.Function.Get()
 	if !IsNil(o.HexCode) {
 		toSerialize["hexCode"] = o.HexCode
 	}
 	toSerialize["name"] = o.Name
 	toSerialize["params"] = o.Params
-	toSerialize["scenario"] = o.Scenario
+	toSerialize["scenario"] = o.Scenario.Get()
 	return toSerialize, nil
 }
 

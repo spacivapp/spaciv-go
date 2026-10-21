@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Cards** | [**[]DashboardCard**](DashboardCard.md) |  | 
+**Cards** | [**[]DashboardCardRequest**](DashboardCardRequest.md) |  | 
 **Description** | **string** |  | 
 **Id** | Pointer to **string** |  | [optional] 
 **Name** | **string** |  | 
@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 
 ### NewDashboardPost
 
-`func NewDashboardPost(cards []DashboardCard, description string, name string, ) *DashboardPost`
+`func NewDashboardPost(cards []DashboardCardRequest, description string, name string, ) *DashboardPost`
 
 NewDashboardPost instantiates a new DashboardPost object
 This constructor will assign default values to properties that have it defined,
@@ -30,20 +30,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetCards
 
-`func (o *DashboardPost) GetCards() []DashboardCard`
+`func (o *DashboardPost) GetCards() []DashboardCardRequest`
 
 GetCards returns the Cards field if non-nil, zero value otherwise.
 
 ### GetCardsOk
 
-`func (o *DashboardPost) GetCardsOk() (*[]DashboardCard, bool)`
+`func (o *DashboardPost) GetCardsOk() (*[]DashboardCardRequest, bool)`
 
 GetCardsOk returns a tuple with the Cards field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetCards
 
-`func (o *DashboardPost) SetCards(v []DashboardCard)`
+`func (o *DashboardPost) SetCards(v []DashboardCardRequest)`
 
 SetCards sets Cards field to given value.
 

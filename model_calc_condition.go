@@ -22,9 +22,9 @@ var _ MappedNullable = &CalcCondition{}
 
 // CalcCondition struct for CalcCondition
 type CalcCondition struct {
-	Else CalcRuleRef `json:"else"`
-	If CalcTest `json:"if"`
-	Then CalcRuleRef `json:"then"`
+	Else NullableCalcRuleRef `json:"else"`
+	If NullableCalcTest `json:"if"`
+	Then NullableCalcRuleRef `json:"then"`
 }
 
 type _CalcCondition CalcCondition
@@ -33,7 +33,7 @@ type _CalcCondition CalcCondition
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCalcCondition(else_ CalcRuleRef, if_ CalcTest, then CalcRuleRef) *CalcCondition {
+func NewCalcCondition(else_ NullableCalcRuleRef, if_ NullableCalcTest, then NullableCalcRuleRef) *CalcCondition {
 	this := CalcCondition{}
 	this.Else = else_
 	this.If = if_
@@ -50,75 +50,81 @@ func NewCalcConditionWithDefaults() *CalcCondition {
 }
 
 // GetElse returns the Else field value
+// If the value is explicit nil, the zero value for CalcRuleRef will be returned
 func (o *CalcCondition) GetElse() CalcRuleRef {
-	if o == nil {
+	if o == nil || o.Else.Get() == nil {
 		var ret CalcRuleRef
 		return ret
 	}
 
-	return o.Else
+	return *o.Else.Get()
 }
 
 // GetElseOk returns a tuple with the Else field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *CalcCondition) GetElseOk() (*CalcRuleRef, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Else, true
+	return o.Else.Get(), o.Else.IsSet()
 }
 
 // SetElse sets field value
 func (o *CalcCondition) SetElse(v CalcRuleRef) {
-	o.Else = v
+	o.Else.Set(&v)
 }
 
 // GetIf returns the If field value
+// If the value is explicit nil, the zero value for CalcTest will be returned
 func (o *CalcCondition) GetIf() CalcTest {
-	if o == nil {
+	if o == nil || o.If.Get() == nil {
 		var ret CalcTest
 		return ret
 	}
 
-	return o.If
+	return *o.If.Get()
 }
 
 // GetIfOk returns a tuple with the If field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *CalcCondition) GetIfOk() (*CalcTest, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.If, true
+	return o.If.Get(), o.If.IsSet()
 }
 
 // SetIf sets field value
 func (o *CalcCondition) SetIf(v CalcTest) {
-	o.If = v
+	o.If.Set(&v)
 }
 
 // GetThen returns the Then field value
+// If the value is explicit nil, the zero value for CalcRuleRef will be returned
 func (o *CalcCondition) GetThen() CalcRuleRef {
-	if o == nil {
+	if o == nil || o.Then.Get() == nil {
 		var ret CalcRuleRef
 		return ret
 	}
 
-	return o.Then
+	return *o.Then.Get()
 }
 
 // GetThenOk returns a tuple with the Then field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *CalcCondition) GetThenOk() (*CalcRuleRef, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Then, true
+	return o.Then.Get(), o.Then.IsSet()
 }
 
 // SetThen sets field value
 func (o *CalcCondition) SetThen(v CalcRuleRef) {
-	o.Then = v
+	o.Then.Set(&v)
 }
 
 func (o CalcCondition) MarshalJSON() ([]byte, error) {
@@ -131,9 +137,9 @@ func (o CalcCondition) MarshalJSON() ([]byte, error) {
 
 func (o CalcCondition) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["else"] = o.Else
-	toSerialize["if"] = o.If
-	toSerialize["then"] = o.Then
+	toSerialize["else"] = o.Else.Get()
+	toSerialize["if"] = o.If.Get()
+	toSerialize["then"] = o.Then.Get()
 	return toSerialize, nil
 }
 

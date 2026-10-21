@@ -22,9 +22,9 @@ var _ MappedNullable = &CalcListTwoD{}
 
 // CalcListTwoD struct for CalcListTwoD
 type CalcListTwoD struct {
-	Axis1 CalcSegmentation `json:"axis1"`
-	Axis2 CalcSegmentation `json:"axis2"`
-	Date MaybeVarInt `json:"date"`
+	Axis1 NullableCalcSegmentation `json:"axis1"`
+	Axis2 NullableCalcSegmentation `json:"axis2"`
+	Date NullableMaybeVarInt `json:"date"`
 	Filters []FilterGroup `json:"filters"`
 }
 
@@ -34,7 +34,7 @@ type _CalcListTwoD CalcListTwoD
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCalcListTwoD(axis1 CalcSegmentation, axis2 CalcSegmentation, date MaybeVarInt, filters []FilterGroup) *CalcListTwoD {
+func NewCalcListTwoD(axis1 NullableCalcSegmentation, axis2 NullableCalcSegmentation, date NullableMaybeVarInt, filters []FilterGroup) *CalcListTwoD {
 	this := CalcListTwoD{}
 	this.Axis1 = axis1
 	this.Axis2 = axis2
@@ -52,75 +52,81 @@ func NewCalcListTwoDWithDefaults() *CalcListTwoD {
 }
 
 // GetAxis1 returns the Axis1 field value
+// If the value is explicit nil, the zero value for CalcSegmentation will be returned
 func (o *CalcListTwoD) GetAxis1() CalcSegmentation {
-	if o == nil {
+	if o == nil || o.Axis1.Get() == nil {
 		var ret CalcSegmentation
 		return ret
 	}
 
-	return o.Axis1
+	return *o.Axis1.Get()
 }
 
 // GetAxis1Ok returns a tuple with the Axis1 field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *CalcListTwoD) GetAxis1Ok() (*CalcSegmentation, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Axis1, true
+	return o.Axis1.Get(), o.Axis1.IsSet()
 }
 
 // SetAxis1 sets field value
 func (o *CalcListTwoD) SetAxis1(v CalcSegmentation) {
-	o.Axis1 = v
+	o.Axis1.Set(&v)
 }
 
 // GetAxis2 returns the Axis2 field value
+// If the value is explicit nil, the zero value for CalcSegmentation will be returned
 func (o *CalcListTwoD) GetAxis2() CalcSegmentation {
-	if o == nil {
+	if o == nil || o.Axis2.Get() == nil {
 		var ret CalcSegmentation
 		return ret
 	}
 
-	return o.Axis2
+	return *o.Axis2.Get()
 }
 
 // GetAxis2Ok returns a tuple with the Axis2 field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *CalcListTwoD) GetAxis2Ok() (*CalcSegmentation, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Axis2, true
+	return o.Axis2.Get(), o.Axis2.IsSet()
 }
 
 // SetAxis2 sets field value
 func (o *CalcListTwoD) SetAxis2(v CalcSegmentation) {
-	o.Axis2 = v
+	o.Axis2.Set(&v)
 }
 
 // GetDate returns the Date field value
+// If the value is explicit nil, the zero value for MaybeVarInt will be returned
 func (o *CalcListTwoD) GetDate() MaybeVarInt {
-	if o == nil {
+	if o == nil || o.Date.Get() == nil {
 		var ret MaybeVarInt
 		return ret
 	}
 
-	return o.Date
+	return *o.Date.Get()
 }
 
 // GetDateOk returns a tuple with the Date field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *CalcListTwoD) GetDateOk() (*MaybeVarInt, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Date, true
+	return o.Date.Get(), o.Date.IsSet()
 }
 
 // SetDate sets field value
 func (o *CalcListTwoD) SetDate(v MaybeVarInt) {
-	o.Date = v
+	o.Date.Set(&v)
 }
 
 // GetFilters returns the Filters field value
@@ -157,9 +163,9 @@ func (o CalcListTwoD) MarshalJSON() ([]byte, error) {
 
 func (o CalcListTwoD) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["axis1"] = o.Axis1
-	toSerialize["axis2"] = o.Axis2
-	toSerialize["date"] = o.Date
+	toSerialize["axis1"] = o.Axis1.Get()
+	toSerialize["axis2"] = o.Axis2.Get()
+	toSerialize["date"] = o.Date.Get()
 	toSerialize["filters"] = o.Filters
 	return toSerialize, nil
 }

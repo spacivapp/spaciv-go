@@ -23,7 +23,7 @@ var _ MappedNullable = &DatacollectionChangelogBody{}
 // DatacollectionChangelogBody struct for DatacollectionChangelogBody
 type DatacollectionChangelogBody struct {
 	AnonymisationProperty string `json:"anonymisationProperty"`
-	AuthenticationMode DatacollectionAuthentication `json:"authenticationMode"`
+	AuthenticationMode NullableDatacollectionAuthentication `json:"authenticationMode"`
 	CompleteMessage string `json:"completeMessage"`
 	Contributors []DatacollectionContributor `json:"contributors"`
 	ContributorsUploaded bool `json:"contributorsUploaded"`
@@ -45,7 +45,7 @@ type _DatacollectionChangelogBody DatacollectionChangelogBody
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDatacollectionChangelogBody(anonymisationProperty string, authenticationMode DatacollectionAuthentication, completeMessage string, contributors []DatacollectionContributor, contributorsUploaded bool, description string, end string, inviteMessage string, name string, resendInviteMessage string, start string, status int32, steps []Step, thankYouMessage string, welcomeMessage string) *DatacollectionChangelogBody {
+func NewDatacollectionChangelogBody(anonymisationProperty string, authenticationMode NullableDatacollectionAuthentication, completeMessage string, contributors []DatacollectionContributor, contributorsUploaded bool, description string, end string, inviteMessage string, name string, resendInviteMessage string, start string, status int32, steps []Step, thankYouMessage string, welcomeMessage string) *DatacollectionChangelogBody {
 	this := DatacollectionChangelogBody{}
 	this.AnonymisationProperty = anonymisationProperty
 	this.AuthenticationMode = authenticationMode
@@ -98,27 +98,29 @@ func (o *DatacollectionChangelogBody) SetAnonymisationProperty(v string) {
 }
 
 // GetAuthenticationMode returns the AuthenticationMode field value
+// If the value is explicit nil, the zero value for DatacollectionAuthentication will be returned
 func (o *DatacollectionChangelogBody) GetAuthenticationMode() DatacollectionAuthentication {
-	if o == nil {
+	if o == nil || o.AuthenticationMode.Get() == nil {
 		var ret DatacollectionAuthentication
 		return ret
 	}
 
-	return o.AuthenticationMode
+	return *o.AuthenticationMode.Get()
 }
 
 // GetAuthenticationModeOk returns a tuple with the AuthenticationMode field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *DatacollectionChangelogBody) GetAuthenticationModeOk() (*DatacollectionAuthentication, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.AuthenticationMode, true
+	return o.AuthenticationMode.Get(), o.AuthenticationMode.IsSet()
 }
 
 // SetAuthenticationMode sets field value
 func (o *DatacollectionChangelogBody) SetAuthenticationMode(v DatacollectionAuthentication) {
-	o.AuthenticationMode = v
+	o.AuthenticationMode.Set(&v)
 }
 
 // GetCompleteMessage returns the CompleteMessage field value
@@ -444,7 +446,7 @@ func (o DatacollectionChangelogBody) MarshalJSON() ([]byte, error) {
 func (o DatacollectionChangelogBody) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["anonymisationProperty"] = o.AnonymisationProperty
-	toSerialize["authenticationMode"] = o.AuthenticationMode
+	toSerialize["authenticationMode"] = o.AuthenticationMode.Get()
 	toSerialize["completeMessage"] = o.CompleteMessage
 	toSerialize["contributors"] = o.Contributors
 	toSerialize["contributorsUploaded"] = o.ContributorsUploaded

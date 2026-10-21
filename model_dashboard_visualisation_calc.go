@@ -22,7 +22,7 @@ var _ MappedNullable = &DashboardVisualisationCalc{}
 
 // DashboardVisualisationCalc struct for DashboardVisualisationCalc
 type DashboardVisualisationCalc struct {
-	Data DataShapes `json:"data"`
+	Data NullableDataShapes `json:"data"`
 	DecimalPlaces int32 `json:"decimalPlaces"`
 	Floorplan string `json:"floorplan"`
 	HideRoot bool `json:"hideRoot"`
@@ -41,7 +41,7 @@ type _DashboardVisualisationCalc DashboardVisualisationCalc
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDashboardVisualisationCalc(data DataShapes, decimalPlaces int32, floorplan string, hideRoot bool, keyValueSize int32, keyValueSuffix string, name string, removeZeros bool, text string, unit int32, visualisation int32) *DashboardVisualisationCalc {
+func NewDashboardVisualisationCalc(data NullableDataShapes, decimalPlaces int32, floorplan string, hideRoot bool, keyValueSize int32, keyValueSuffix string, name string, removeZeros bool, text string, unit int32, visualisation int32) *DashboardVisualisationCalc {
 	this := DashboardVisualisationCalc{}
 	this.Data = data
 	this.DecimalPlaces = decimalPlaces
@@ -66,27 +66,29 @@ func NewDashboardVisualisationCalcWithDefaults() *DashboardVisualisationCalc {
 }
 
 // GetData returns the Data field value
+// If the value is explicit nil, the zero value for DataShapes will be returned
 func (o *DashboardVisualisationCalc) GetData() DataShapes {
-	if o == nil {
+	if o == nil || o.Data.Get() == nil {
 		var ret DataShapes
 		return ret
 	}
 
-	return o.Data
+	return *o.Data.Get()
 }
 
 // GetDataOk returns a tuple with the Data field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *DashboardVisualisationCalc) GetDataOk() (*DataShapes, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Data, true
+	return o.Data.Get(), o.Data.IsSet()
 }
 
 // SetData sets field value
 func (o *DashboardVisualisationCalc) SetData(v DataShapes) {
-	o.Data = v
+	o.Data.Set(&v)
 }
 
 // GetDecimalPlaces returns the DecimalPlaces field value
@@ -339,7 +341,7 @@ func (o DashboardVisualisationCalc) MarshalJSON() ([]byte, error) {
 
 func (o DashboardVisualisationCalc) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["data"] = o.Data
+	toSerialize["data"] = o.Data.Get()
 	toSerialize["decimalPlaces"] = o.DecimalPlaces
 	toSerialize["floorplan"] = o.Floorplan
 	toSerialize["hideRoot"] = o.HideRoot

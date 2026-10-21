@@ -22,12 +22,12 @@ var _ MappedNullable = &LogicRule{}
 
 // LogicRule struct for LogicRule
 type LogicRule struct {
-	Demand LogicDemand `json:"demand"`
+	Demand NullableLogicDemand `json:"demand"`
 	ExactNodes bool `json:"exactNodes"`
 	Name string `json:"name"`
 	Output []LogicAssignment `json:"output"`
-	Per LogicPer `json:"per"`
-	Supply LogicSupply `json:"supply"`
+	Per NullableLogicPer `json:"per"`
+	Supply NullableLogicSupply `json:"supply"`
 }
 
 type _LogicRule LogicRule
@@ -36,7 +36,7 @@ type _LogicRule LogicRule
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewLogicRule(demand LogicDemand, exactNodes bool, name string, output []LogicAssignment, per LogicPer, supply LogicSupply) *LogicRule {
+func NewLogicRule(demand NullableLogicDemand, exactNodes bool, name string, output []LogicAssignment, per NullableLogicPer, supply NullableLogicSupply) *LogicRule {
 	this := LogicRule{}
 	this.Demand = demand
 	this.ExactNodes = exactNodes
@@ -56,27 +56,29 @@ func NewLogicRuleWithDefaults() *LogicRule {
 }
 
 // GetDemand returns the Demand field value
+// If the value is explicit nil, the zero value for LogicDemand will be returned
 func (o *LogicRule) GetDemand() LogicDemand {
-	if o == nil {
+	if o == nil || o.Demand.Get() == nil {
 		var ret LogicDemand
 		return ret
 	}
 
-	return o.Demand
+	return *o.Demand.Get()
 }
 
 // GetDemandOk returns a tuple with the Demand field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *LogicRule) GetDemandOk() (*LogicDemand, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Demand, true
+	return o.Demand.Get(), o.Demand.IsSet()
 }
 
 // SetDemand sets field value
 func (o *LogicRule) SetDemand(v LogicDemand) {
-	o.Demand = v
+	o.Demand.Set(&v)
 }
 
 // GetExactNodes returns the ExactNodes field value
@@ -152,51 +154,55 @@ func (o *LogicRule) SetOutput(v []LogicAssignment) {
 }
 
 // GetPer returns the Per field value
+// If the value is explicit nil, the zero value for LogicPer will be returned
 func (o *LogicRule) GetPer() LogicPer {
-	if o == nil {
+	if o == nil || o.Per.Get() == nil {
 		var ret LogicPer
 		return ret
 	}
 
-	return o.Per
+	return *o.Per.Get()
 }
 
 // GetPerOk returns a tuple with the Per field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *LogicRule) GetPerOk() (*LogicPer, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Per, true
+	return o.Per.Get(), o.Per.IsSet()
 }
 
 // SetPer sets field value
 func (o *LogicRule) SetPer(v LogicPer) {
-	o.Per = v
+	o.Per.Set(&v)
 }
 
 // GetSupply returns the Supply field value
+// If the value is explicit nil, the zero value for LogicSupply will be returned
 func (o *LogicRule) GetSupply() LogicSupply {
-	if o == nil {
+	if o == nil || o.Supply.Get() == nil {
 		var ret LogicSupply
 		return ret
 	}
 
-	return o.Supply
+	return *o.Supply.Get()
 }
 
 // GetSupplyOk returns a tuple with the Supply field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *LogicRule) GetSupplyOk() (*LogicSupply, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Supply, true
+	return o.Supply.Get(), o.Supply.IsSet()
 }
 
 // SetSupply sets field value
 func (o *LogicRule) SetSupply(v LogicSupply) {
-	o.Supply = v
+	o.Supply.Set(&v)
 }
 
 func (o LogicRule) MarshalJSON() ([]byte, error) {
@@ -209,12 +215,12 @@ func (o LogicRule) MarshalJSON() ([]byte, error) {
 
 func (o LogicRule) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["demand"] = o.Demand
+	toSerialize["demand"] = o.Demand.Get()
 	toSerialize["exactNodes"] = o.ExactNodes
 	toSerialize["name"] = o.Name
 	toSerialize["output"] = o.Output
-	toSerialize["per"] = o.Per
-	toSerialize["supply"] = o.Supply
+	toSerialize["per"] = o.Per.Get()
+	toSerialize["supply"] = o.Supply.Get()
 	return toSerialize, nil
 }
 

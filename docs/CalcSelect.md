@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Calc** | [**CalcRuleRef**](CalcRuleRef.md) |  | 
-**Object** | [**MaybeVarProp**](MaybeVarProp.md) |  | 
+**Calc** | [**NullableCalcRuleRef**](CalcRuleRef.md) |  | 
+**Object** | [**NullableMaybeVarProp**](MaybeVarProp.md) |  | 
 
 ## Methods
 
 ### NewCalcSelect
 
-`func NewCalcSelect(calc CalcRuleRef, object MaybeVarProp, ) *CalcSelect`
+`func NewCalcSelect(calc NullableCalcRuleRef, object NullableMaybeVarProp, ) *CalcSelect`
 
 NewCalcSelect instantiates a new CalcSelect object
 This constructor will assign default values to properties that have it defined,
@@ -46,6 +46,16 @@ and a boolean to check if the value has been set.
 SetCalc sets Calc field to given value.
 
 
+### SetCalcNil
+
+`func (o *CalcSelect) SetCalcNil(b bool)`
+
+ SetCalcNil sets the value for Calc to be an explicit nil
+
+### UnsetCalc
+`func (o *CalcSelect) UnsetCalc()`
+
+UnsetCalc ensures that no value is present for Calc, not even an explicit nil
 ### GetObject
 
 `func (o *CalcSelect) GetObject() MaybeVarProp`
@@ -66,6 +76,16 @@ and a boolean to check if the value has been set.
 SetObject sets Object field to given value.
 
 
+### SetObjectNil
+
+`func (o *CalcSelect) SetObjectNil(b bool)`
+
+ SetObjectNil sets the value for Object to be an explicit nil
+
+### UnsetObject
+`func (o *CalcSelect) UnsetObject()`
+
+UnsetObject ensures that no value is present for Object, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

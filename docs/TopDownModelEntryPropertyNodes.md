@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **End** | Pointer to **int64** |  | [optional] 
-**Formula** | [**CalcRuleRef**](CalcRuleRef.md) |  | 
+**Formula** | [**NullableCalcRuleRef**](CalcRuleRef.md) |  | 
 **NodeId** | **string** |  | 
 **Start** | Pointer to **int64** |  | [optional] 
 
@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 
 ### NewTopDownModelEntryPropertyNodes
 
-`func NewTopDownModelEntryPropertyNodes(formula CalcRuleRef, nodeId string, ) *TopDownModelEntryPropertyNodes`
+`func NewTopDownModelEntryPropertyNodes(formula NullableCalcRuleRef, nodeId string, ) *TopDownModelEntryPropertyNodes`
 
 NewTopDownModelEntryPropertyNodes instantiates a new TopDownModelEntryPropertyNodes object
 This constructor will assign default values to properties that have it defined,
@@ -73,6 +73,16 @@ and a boolean to check if the value has been set.
 SetFormula sets Formula field to given value.
 
 
+### SetFormulaNil
+
+`func (o *TopDownModelEntryPropertyNodes) SetFormulaNil(b bool)`
+
+ SetFormulaNil sets the value for Formula to be an explicit nil
+
+### UnsetFormula
+`func (o *TopDownModelEntryPropertyNodes) UnsetFormula()`
+
+UnsetFormula ensures that no value is present for Formula, not even an explicit nil
 ### GetNodeId
 
 `func (o *TopDownModelEntryPropertyNodes) GetNodeId() string`

@@ -22,13 +22,13 @@ var _ MappedNullable = &CalcTreeList{}
 
 // CalcTreeList struct for CalcTreeList
 type CalcTreeList struct {
-	Axis2 CalcSegmentation `json:"axis2"`
+	Axis2 NullableCalcSegmentation `json:"axis2"`
 	Date *MaybeVarInt `json:"date,omitempty"`
 	Filters []FilterGroup `json:"filters"`
 	Function *MaybeVarFunc `json:"function,omitempty"`
 	Params map[string]ParameterType `json:"params"`
 	Scenario *MaybeVarStr `json:"scenario,omitempty"`
-	Tree PropertySource `json:"tree"`
+	Tree NullablePropertySource `json:"tree"`
 }
 
 type _CalcTreeList CalcTreeList
@@ -37,7 +37,7 @@ type _CalcTreeList CalcTreeList
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCalcTreeList(axis2 CalcSegmentation, filters []FilterGroup, params map[string]ParameterType, tree PropertySource) *CalcTreeList {
+func NewCalcTreeList(axis2 NullableCalcSegmentation, filters []FilterGroup, params map[string]ParameterType, tree NullablePropertySource) *CalcTreeList {
 	this := CalcTreeList{}
 	this.Axis2 = axis2
 	this.Filters = filters
@@ -55,27 +55,29 @@ func NewCalcTreeListWithDefaults() *CalcTreeList {
 }
 
 // GetAxis2 returns the Axis2 field value
+// If the value is explicit nil, the zero value for CalcSegmentation will be returned
 func (o *CalcTreeList) GetAxis2() CalcSegmentation {
-	if o == nil {
+	if o == nil || o.Axis2.Get() == nil {
 		var ret CalcSegmentation
 		return ret
 	}
 
-	return o.Axis2
+	return *o.Axis2.Get()
 }
 
 // GetAxis2Ok returns a tuple with the Axis2 field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *CalcTreeList) GetAxis2Ok() (*CalcSegmentation, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Axis2, true
+	return o.Axis2.Get(), o.Axis2.IsSet()
 }
 
 // SetAxis2 sets field value
 func (o *CalcTreeList) SetAxis2(v CalcSegmentation) {
-	o.Axis2 = v
+	o.Axis2.Set(&v)
 }
 
 // GetDate returns the Date field value if set, zero value otherwise.
@@ -223,27 +225,29 @@ func (o *CalcTreeList) SetScenario(v MaybeVarStr) {
 }
 
 // GetTree returns the Tree field value
+// If the value is explicit nil, the zero value for PropertySource will be returned
 func (o *CalcTreeList) GetTree() PropertySource {
-	if o == nil {
+	if o == nil || o.Tree.Get() == nil {
 		var ret PropertySource
 		return ret
 	}
 
-	return o.Tree
+	return *o.Tree.Get()
 }
 
 // GetTreeOk returns a tuple with the Tree field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *CalcTreeList) GetTreeOk() (*PropertySource, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Tree, true
+	return o.Tree.Get(), o.Tree.IsSet()
 }
 
 // SetTree sets field value
 func (o *CalcTreeList) SetTree(v PropertySource) {
-	o.Tree = v
+	o.Tree.Set(&v)
 }
 
 func (o CalcTreeList) MarshalJSON() ([]byte, error) {
@@ -256,7 +260,7 @@ func (o CalcTreeList) MarshalJSON() ([]byte, error) {
 
 func (o CalcTreeList) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["axis2"] = o.Axis2
+	toSerialize["axis2"] = o.Axis2.Get()
 	if !IsNil(o.Date) {
 		toSerialize["date"] = o.Date
 	}
@@ -268,7 +272,7 @@ func (o CalcTreeList) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Scenario) {
 		toSerialize["scenario"] = o.Scenario
 	}
-	toSerialize["tree"] = o.Tree
+	toSerialize["tree"] = o.Tree.Get()
 	return toSerialize, nil
 }
 

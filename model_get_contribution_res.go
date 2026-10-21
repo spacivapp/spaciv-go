@@ -23,7 +23,7 @@ var _ MappedNullable = &GetContributionRes{}
 // GetContributionRes struct for GetContributionRes
 type GetContributionRes struct {
 	ContributionId string `json:"contributionId"`
-	Data Contribution `json:"data"`
+	Data NullableContribution `json:"data"`
 	IsAnonymous bool `json:"isAnonymous"`
 	Node string `json:"node"`
 	State int32 `json:"state"`
@@ -35,7 +35,7 @@ type _GetContributionRes GetContributionRes
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGetContributionRes(contributionId string, data Contribution, isAnonymous bool, node string, state int32) *GetContributionRes {
+func NewGetContributionRes(contributionId string, data NullableContribution, isAnonymous bool, node string, state int32) *GetContributionRes {
 	this := GetContributionRes{}
 	this.ContributionId = contributionId
 	this.Data = data
@@ -78,27 +78,29 @@ func (o *GetContributionRes) SetContributionId(v string) {
 }
 
 // GetData returns the Data field value
+// If the value is explicit nil, the zero value for Contribution will be returned
 func (o *GetContributionRes) GetData() Contribution {
-	if o == nil {
+	if o == nil || o.Data.Get() == nil {
 		var ret Contribution
 		return ret
 	}
 
-	return o.Data
+	return *o.Data.Get()
 }
 
 // GetDataOk returns a tuple with the Data field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *GetContributionRes) GetDataOk() (*Contribution, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Data, true
+	return o.Data.Get(), o.Data.IsSet()
 }
 
 // SetData sets field value
 func (o *GetContributionRes) SetData(v Contribution) {
-	o.Data = v
+	o.Data.Set(&v)
 }
 
 // GetIsAnonymous returns the IsAnonymous field value
@@ -184,7 +186,7 @@ func (o GetContributionRes) MarshalJSON() ([]byte, error) {
 func (o GetContributionRes) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["contributionId"] = o.ContributionId
-	toSerialize["data"] = o.Data
+	toSerialize["data"] = o.Data.Get()
 	toSerialize["isAnonymous"] = o.IsAnonymous
 	toSerialize["node"] = o.Node
 	toSerialize["state"] = o.State

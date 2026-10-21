@@ -23,12 +23,12 @@ var _ MappedNullable = &ScenarioComparison{}
 // ScenarioComparison struct for ScenarioComparison
 type ScenarioComparison struct {
 	Filters []FilterGroup `json:"filters"`
-	From MaybeVarInt `json:"from"`
-	Function MaybeVarFunc `json:"function"`
+	From NullableMaybeVarInt `json:"from"`
+	Function NullableMaybeVarFunc `json:"function"`
 	Params map[string]ParameterType `json:"params"`
 	Scenario []string `json:"scenario,omitempty"`
 	ScenarioRefs []MaybeVarStr `json:"scenarioRefs,omitempty"`
-	To MaybeVarInt `json:"to"`
+	To NullableMaybeVarInt `json:"to"`
 }
 
 type _ScenarioComparison ScenarioComparison
@@ -37,7 +37,7 @@ type _ScenarioComparison ScenarioComparison
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewScenarioComparison(filters []FilterGroup, from MaybeVarInt, function MaybeVarFunc, params map[string]ParameterType, to MaybeVarInt) *ScenarioComparison {
+func NewScenarioComparison(filters []FilterGroup, from NullableMaybeVarInt, function NullableMaybeVarFunc, params map[string]ParameterType, to NullableMaybeVarInt) *ScenarioComparison {
 	this := ScenarioComparison{}
 	this.Filters = filters
 	this.From = from
@@ -80,51 +80,55 @@ func (o *ScenarioComparison) SetFilters(v []FilterGroup) {
 }
 
 // GetFrom returns the From field value
+// If the value is explicit nil, the zero value for MaybeVarInt will be returned
 func (o *ScenarioComparison) GetFrom() MaybeVarInt {
-	if o == nil {
+	if o == nil || o.From.Get() == nil {
 		var ret MaybeVarInt
 		return ret
 	}
 
-	return o.From
+	return *o.From.Get()
 }
 
 // GetFromOk returns a tuple with the From field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *ScenarioComparison) GetFromOk() (*MaybeVarInt, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.From, true
+	return o.From.Get(), o.From.IsSet()
 }
 
 // SetFrom sets field value
 func (o *ScenarioComparison) SetFrom(v MaybeVarInt) {
-	o.From = v
+	o.From.Set(&v)
 }
 
 // GetFunction returns the Function field value
+// If the value is explicit nil, the zero value for MaybeVarFunc will be returned
 func (o *ScenarioComparison) GetFunction() MaybeVarFunc {
-	if o == nil {
+	if o == nil || o.Function.Get() == nil {
 		var ret MaybeVarFunc
 		return ret
 	}
 
-	return o.Function
+	return *o.Function.Get()
 }
 
 // GetFunctionOk returns a tuple with the Function field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *ScenarioComparison) GetFunctionOk() (*MaybeVarFunc, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Function, true
+	return o.Function.Get(), o.Function.IsSet()
 }
 
 // SetFunction sets field value
 func (o *ScenarioComparison) SetFunction(v MaybeVarFunc) {
-	o.Function = v
+	o.Function.Set(&v)
 }
 
 // GetParams returns the Params field value
@@ -216,27 +220,29 @@ func (o *ScenarioComparison) SetScenarioRefs(v []MaybeVarStr) {
 }
 
 // GetTo returns the To field value
+// If the value is explicit nil, the zero value for MaybeVarInt will be returned
 func (o *ScenarioComparison) GetTo() MaybeVarInt {
-	if o == nil {
+	if o == nil || o.To.Get() == nil {
 		var ret MaybeVarInt
 		return ret
 	}
 
-	return o.To
+	return *o.To.Get()
 }
 
 // GetToOk returns a tuple with the To field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *ScenarioComparison) GetToOk() (*MaybeVarInt, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.To, true
+	return o.To.Get(), o.To.IsSet()
 }
 
 // SetTo sets field value
 func (o *ScenarioComparison) SetTo(v MaybeVarInt) {
-	o.To = v
+	o.To.Set(&v)
 }
 
 func (o ScenarioComparison) MarshalJSON() ([]byte, error) {
@@ -250,8 +256,8 @@ func (o ScenarioComparison) MarshalJSON() ([]byte, error) {
 func (o ScenarioComparison) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["filters"] = o.Filters
-	toSerialize["from"] = o.From
-	toSerialize["function"] = o.Function
+	toSerialize["from"] = o.From.Get()
+	toSerialize["function"] = o.Function.Get()
 	toSerialize["params"] = o.Params
 	if !IsNil(o.Scenario) {
 		toSerialize["scenario"] = o.Scenario
@@ -259,7 +265,7 @@ func (o ScenarioComparison) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ScenarioRefs) {
 		toSerialize["scenarioRefs"] = o.ScenarioRefs
 	}
-	toSerialize["to"] = o.To
+	toSerialize["to"] = o.To.Get()
 	return toSerialize, nil
 }
 

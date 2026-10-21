@@ -4,16 +4,16 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Axis1** | [**CalcSegmentation**](CalcSegmentation.md) |  | 
-**Axis2** | [**CalcSegmentation**](CalcSegmentation.md) |  | 
-**Date** | [**MaybeVarInt**](MaybeVarInt.md) |  | 
+**Axis1** | [**NullableCalcSegmentation**](CalcSegmentation.md) |  | 
+**Axis2** | [**NullableCalcSegmentation**](CalcSegmentation.md) |  | 
+**Date** | [**NullableMaybeVarInt**](MaybeVarInt.md) |  | 
 **Filters** | [**[]FilterGroup**](FilterGroup.md) |  | 
 
 ## Methods
 
 ### NewCalcListTwoD
 
-`func NewCalcListTwoD(axis1 CalcSegmentation, axis2 CalcSegmentation, date MaybeVarInt, filters []FilterGroup, ) *CalcListTwoD`
+`func NewCalcListTwoD(axis1 NullableCalcSegmentation, axis2 NullableCalcSegmentation, date NullableMaybeVarInt, filters []FilterGroup, ) *CalcListTwoD`
 
 NewCalcListTwoD instantiates a new CalcListTwoD object
 This constructor will assign default values to properties that have it defined,
@@ -48,6 +48,16 @@ and a boolean to check if the value has been set.
 SetAxis1 sets Axis1 field to given value.
 
 
+### SetAxis1Nil
+
+`func (o *CalcListTwoD) SetAxis1Nil(b bool)`
+
+ SetAxis1Nil sets the value for Axis1 to be an explicit nil
+
+### UnsetAxis1
+`func (o *CalcListTwoD) UnsetAxis1()`
+
+UnsetAxis1 ensures that no value is present for Axis1, not even an explicit nil
 ### GetAxis2
 
 `func (o *CalcListTwoD) GetAxis2() CalcSegmentation`
@@ -68,6 +78,16 @@ and a boolean to check if the value has been set.
 SetAxis2 sets Axis2 field to given value.
 
 
+### SetAxis2Nil
+
+`func (o *CalcListTwoD) SetAxis2Nil(b bool)`
+
+ SetAxis2Nil sets the value for Axis2 to be an explicit nil
+
+### UnsetAxis2
+`func (o *CalcListTwoD) UnsetAxis2()`
+
+UnsetAxis2 ensures that no value is present for Axis2, not even an explicit nil
 ### GetDate
 
 `func (o *CalcListTwoD) GetDate() MaybeVarInt`
@@ -88,6 +108,16 @@ and a boolean to check if the value has been set.
 SetDate sets Date field to given value.
 
 
+### SetDateNil
+
+`func (o *CalcListTwoD) SetDateNil(b bool)`
+
+ SetDateNil sets the value for Date to be an explicit nil
+
+### UnsetDate
+`func (o *CalcListTwoD) UnsetDate()`
+
+UnsetDate ensures that no value is present for Date, not even an explicit nil
 ### GetFilters
 
 `func (o *CalcListTwoD) GetFilters() []FilterGroup`

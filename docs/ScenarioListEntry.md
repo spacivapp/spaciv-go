@@ -5,13 +5,13 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Id** | **string** |  | 
-**Scenario** | [**ScenarioChangelogBody**](ScenarioChangelogBody.md) |  | 
+**Scenario** | [**NullableScenarioChangelogBody**](ScenarioChangelogBody.md) |  | 
 
 ## Methods
 
 ### NewScenarioListEntry
 
-`func NewScenarioListEntry(id string, scenario ScenarioChangelogBody, ) *ScenarioListEntry`
+`func NewScenarioListEntry(id string, scenario NullableScenarioChangelogBody, ) *ScenarioListEntry`
 
 NewScenarioListEntry instantiates a new ScenarioListEntry object
 This constructor will assign default values to properties that have it defined,
@@ -66,6 +66,16 @@ and a boolean to check if the value has been set.
 SetScenario sets Scenario field to given value.
 
 
+### SetScenarioNil
+
+`func (o *ScenarioListEntry) SetScenarioNil(b bool)`
+
+ SetScenarioNil sets the value for Scenario to be an explicit nil
+
+### UnsetScenario
+`func (o *ScenarioListEntry) UnsetScenario()`
+
+UnsetScenario ensures that no value is present for Scenario, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

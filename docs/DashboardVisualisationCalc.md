@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Data** | [**DataShapes**](DataShapes.md) |  | 
+**Data** | [**NullableDataShapes**](DataShapes.md) |  | 
 **DecimalPlaces** | **int32** |  | 
 **Floorplan** | **string** |  | 
 **HideRoot** | **bool** |  | 
@@ -20,7 +20,7 @@ Name | Type | Description | Notes
 
 ### NewDashboardVisualisationCalc
 
-`func NewDashboardVisualisationCalc(data DataShapes, decimalPlaces int32, floorplan string, hideRoot bool, keyValueSize int32, keyValueSuffix string, name string, removeZeros bool, text string, unit int32, visualisation int32, ) *DashboardVisualisationCalc`
+`func NewDashboardVisualisationCalc(data NullableDataShapes, decimalPlaces int32, floorplan string, hideRoot bool, keyValueSize int32, keyValueSuffix string, name string, removeZeros bool, text string, unit int32, visualisation int32, ) *DashboardVisualisationCalc`
 
 NewDashboardVisualisationCalc instantiates a new DashboardVisualisationCalc object
 This constructor will assign default values to properties that have it defined,
@@ -55,6 +55,16 @@ and a boolean to check if the value has been set.
 SetData sets Data field to given value.
 
 
+### SetDataNil
+
+`func (o *DashboardVisualisationCalc) SetDataNil(b bool)`
+
+ SetDataNil sets the value for Data to be an explicit nil
+
+### UnsetData
+`func (o *DashboardVisualisationCalc) UnsetData()`
+
+UnsetData ensures that no value is present for Data, not even an explicit nil
 ### GetDecimalPlaces
 
 `func (o *DashboardVisualisationCalc) GetDecimalPlaces() int32`

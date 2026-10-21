@@ -24,7 +24,7 @@ var _ MappedNullable = &GetDatacollectionRes{}
 type GetDatacollectionRes struct {
 	Completed int32 `json:"completed"`
 	ContributorCount int32 `json:"contributorCount"`
-	Datacollection DatacollectionChangelogBody `json:"datacollection"`
+	Datacollection NullableDatacollectionChangelogBody `json:"datacollection"`
 	Id string `json:"id"`
 	Started int32 `json:"started"`
 	Total int32 `json:"total"`
@@ -36,7 +36,7 @@ type _GetDatacollectionRes GetDatacollectionRes
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGetDatacollectionRes(completed int32, contributorCount int32, datacollection DatacollectionChangelogBody, id string, started int32, total int32) *GetDatacollectionRes {
+func NewGetDatacollectionRes(completed int32, contributorCount int32, datacollection NullableDatacollectionChangelogBody, id string, started int32, total int32) *GetDatacollectionRes {
 	this := GetDatacollectionRes{}
 	this.Completed = completed
 	this.ContributorCount = contributorCount
@@ -104,27 +104,29 @@ func (o *GetDatacollectionRes) SetContributorCount(v int32) {
 }
 
 // GetDatacollection returns the Datacollection field value
+// If the value is explicit nil, the zero value for DatacollectionChangelogBody will be returned
 func (o *GetDatacollectionRes) GetDatacollection() DatacollectionChangelogBody {
-	if o == nil {
+	if o == nil || o.Datacollection.Get() == nil {
 		var ret DatacollectionChangelogBody
 		return ret
 	}
 
-	return o.Datacollection
+	return *o.Datacollection.Get()
 }
 
 // GetDatacollectionOk returns a tuple with the Datacollection field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *GetDatacollectionRes) GetDatacollectionOk() (*DatacollectionChangelogBody, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Datacollection, true
+	return o.Datacollection.Get(), o.Datacollection.IsSet()
 }
 
 // SetDatacollection sets field value
 func (o *GetDatacollectionRes) SetDatacollection(v DatacollectionChangelogBody) {
-	o.Datacollection = v
+	o.Datacollection.Set(&v)
 }
 
 // GetId returns the Id field value
@@ -211,7 +213,7 @@ func (o GetDatacollectionRes) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["completed"] = o.Completed
 	toSerialize["contributorCount"] = o.ContributorCount
-	toSerialize["datacollection"] = o.Datacollection
+	toSerialize["datacollection"] = o.Datacollection.Get()
 	toSerialize["id"] = o.Id
 	toSerialize["started"] = o.Started
 	toSerialize["total"] = o.Total

@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ContributionChangelogBody** | [**ContributionChangelogBody**](ContributionChangelogBody.md) |  | 
+**ContributionChangelogBody** | [**NullableContributionChangelogBody**](ContributionChangelogBody.md) |  | 
 **Email** | **string** |  | 
 **FirstName** | **string** |  | 
 **Userid** | **string** |  | 
@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 
 ### NewContributionListEntry
 
-`func NewContributionListEntry(contributionChangelogBody ContributionChangelogBody, email string, firstName string, userid string, ) *ContributionListEntry`
+`func NewContributionListEntry(contributionChangelogBody NullableContributionChangelogBody, email string, firstName string, userid string, ) *ContributionListEntry`
 
 NewContributionListEntry instantiates a new ContributionListEntry object
 This constructor will assign default values to properties that have it defined,
@@ -48,6 +48,16 @@ and a boolean to check if the value has been set.
 SetContributionChangelogBody sets ContributionChangelogBody field to given value.
 
 
+### SetContributionChangelogBodyNil
+
+`func (o *ContributionListEntry) SetContributionChangelogBodyNil(b bool)`
+
+ SetContributionChangelogBodyNil sets the value for ContributionChangelogBody to be an explicit nil
+
+### UnsetContributionChangelogBody
+`func (o *ContributionListEntry) UnsetContributionChangelogBody()`
+
+UnsetContributionChangelogBody ensures that no value is present for ContributionChangelogBody, not even an explicit nil
 ### GetEmail
 
 `func (o *ContributionListEntry) GetEmail() string`

@@ -27,7 +27,7 @@ type CalcTreeValue struct {
 	Function *MaybeVarFunc `json:"function,omitempty"`
 	Params map[string]ParameterType `json:"params"`
 	Scenario *MaybeVarStr `json:"scenario,omitempty"`
-	Tree PropertySource `json:"tree"`
+	Tree NullablePropertySource `json:"tree"`
 }
 
 type _CalcTreeValue CalcTreeValue
@@ -36,7 +36,7 @@ type _CalcTreeValue CalcTreeValue
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCalcTreeValue(filters []FilterGroup, params map[string]ParameterType, tree PropertySource) *CalcTreeValue {
+func NewCalcTreeValue(filters []FilterGroup, params map[string]ParameterType, tree NullablePropertySource) *CalcTreeValue {
 	this := CalcTreeValue{}
 	this.Filters = filters
 	this.Params = params
@@ -197,27 +197,29 @@ func (o *CalcTreeValue) SetScenario(v MaybeVarStr) {
 }
 
 // GetTree returns the Tree field value
+// If the value is explicit nil, the zero value for PropertySource will be returned
 func (o *CalcTreeValue) GetTree() PropertySource {
-	if o == nil {
+	if o == nil || o.Tree.Get() == nil {
 		var ret PropertySource
 		return ret
 	}
 
-	return o.Tree
+	return *o.Tree.Get()
 }
 
 // GetTreeOk returns a tuple with the Tree field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *CalcTreeValue) GetTreeOk() (*PropertySource, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Tree, true
+	return o.Tree.Get(), o.Tree.IsSet()
 }
 
 // SetTree sets field value
 func (o *CalcTreeValue) SetTree(v PropertySource) {
-	o.Tree = v
+	o.Tree.Set(&v)
 }
 
 func (o CalcTreeValue) MarshalJSON() ([]byte, error) {
@@ -241,7 +243,7 @@ func (o CalcTreeValue) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Scenario) {
 		toSerialize["scenario"] = o.Scenario
 	}
-	toSerialize["tree"] = o.Tree
+	toSerialize["tree"] = o.Tree.Get()
 	return toSerialize, nil
 }
 

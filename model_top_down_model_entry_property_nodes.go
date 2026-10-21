@@ -23,7 +23,7 @@ var _ MappedNullable = &TopDownModelEntryPropertyNodes{}
 // TopDownModelEntryPropertyNodes struct for TopDownModelEntryPropertyNodes
 type TopDownModelEntryPropertyNodes struct {
 	End *int64 `json:"end,omitempty"`
-	Formula CalcRuleRef `json:"formula"`
+	Formula NullableCalcRuleRef `json:"formula"`
 	NodeId string `json:"nodeId"`
 	Start *int64 `json:"start,omitempty"`
 }
@@ -34,7 +34,7 @@ type _TopDownModelEntryPropertyNodes TopDownModelEntryPropertyNodes
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTopDownModelEntryPropertyNodes(formula CalcRuleRef, nodeId string) *TopDownModelEntryPropertyNodes {
+func NewTopDownModelEntryPropertyNodes(formula NullableCalcRuleRef, nodeId string) *TopDownModelEntryPropertyNodes {
 	this := TopDownModelEntryPropertyNodes{}
 	this.Formula = formula
 	this.NodeId = nodeId
@@ -82,27 +82,29 @@ func (o *TopDownModelEntryPropertyNodes) SetEnd(v int64) {
 }
 
 // GetFormula returns the Formula field value
+// If the value is explicit nil, the zero value for CalcRuleRef will be returned
 func (o *TopDownModelEntryPropertyNodes) GetFormula() CalcRuleRef {
-	if o == nil {
+	if o == nil || o.Formula.Get() == nil {
 		var ret CalcRuleRef
 		return ret
 	}
 
-	return o.Formula
+	return *o.Formula.Get()
 }
 
 // GetFormulaOk returns a tuple with the Formula field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *TopDownModelEntryPropertyNodes) GetFormulaOk() (*CalcRuleRef, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Formula, true
+	return o.Formula.Get(), o.Formula.IsSet()
 }
 
 // SetFormula sets field value
 func (o *TopDownModelEntryPropertyNodes) SetFormula(v CalcRuleRef) {
-	o.Formula = v
+	o.Formula.Set(&v)
 }
 
 // GetNodeId returns the NodeId field value
@@ -174,7 +176,7 @@ func (o TopDownModelEntryPropertyNodes) ToMap() (map[string]interface{}, error) 
 	if !IsNil(o.End) {
 		toSerialize["end"] = o.End
 	}
-	toSerialize["formula"] = o.Formula
+	toSerialize["formula"] = o.Formula.Get()
 	toSerialize["nodeId"] = o.NodeId
 	if !IsNil(o.Start) {
 		toSerialize["start"] = o.Start

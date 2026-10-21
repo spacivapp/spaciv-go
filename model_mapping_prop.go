@@ -22,7 +22,7 @@ var _ MappedNullable = &MappingProp{}
 
 // MappingProp struct for MappingProp
 type MappingProp struct {
-	Data MaybeVarProp `json:"data"`
+	Data NullableMaybeVarProp `json:"data"`
 	Name string `json:"name"`
 	Resolved bool `json:"resolved"`
 }
@@ -33,7 +33,7 @@ type _MappingProp MappingProp
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewMappingProp(data MaybeVarProp, name string, resolved bool) *MappingProp {
+func NewMappingProp(data NullableMaybeVarProp, name string, resolved bool) *MappingProp {
 	this := MappingProp{}
 	this.Data = data
 	this.Name = name
@@ -50,27 +50,29 @@ func NewMappingPropWithDefaults() *MappingProp {
 }
 
 // GetData returns the Data field value
+// If the value is explicit nil, the zero value for MaybeVarProp will be returned
 func (o *MappingProp) GetData() MaybeVarProp {
-	if o == nil {
+	if o == nil || o.Data.Get() == nil {
 		var ret MaybeVarProp
 		return ret
 	}
 
-	return o.Data
+	return *o.Data.Get()
 }
 
 // GetDataOk returns a tuple with the Data field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *MappingProp) GetDataOk() (*MaybeVarProp, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Data, true
+	return o.Data.Get(), o.Data.IsSet()
 }
 
 // SetData sets field value
 func (o *MappingProp) SetData(v MaybeVarProp) {
-	o.Data = v
+	o.Data.Set(&v)
 }
 
 // GetName returns the Name field value
@@ -131,7 +133,7 @@ func (o MappingProp) MarshalJSON() ([]byte, error) {
 
 func (o MappingProp) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["data"] = o.Data
+	toSerialize["data"] = o.Data.Get()
 	toSerialize["name"] = o.Name
 	toSerialize["resolved"] = o.Resolved
 	return toSerialize, nil

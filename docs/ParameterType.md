@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Property** | [**MaybeVarProp**](MaybeVarProp.md) |  | 
+**Property** | [**NullableMaybeVarProp**](MaybeVarProp.md) |  | 
 
 ## Methods
 
 ### NewParameterType
 
-`func NewParameterType(property MaybeVarProp, ) *ParameterType`
+`func NewParameterType(property NullableMaybeVarProp, ) *ParameterType`
 
 NewParameterType instantiates a new ParameterType object
 This constructor will assign default values to properties that have it defined,
@@ -45,6 +45,16 @@ and a boolean to check if the value has been set.
 SetProperty sets Property field to given value.
 
 
+### SetPropertyNil
+
+`func (o *ParameterType) SetPropertyNil(b bool)`
+
+ SetPropertyNil sets the value for Property to be an explicit nil
+
+### UnsetProperty
+`func (o *ParameterType) UnsetProperty()`
+
+UnsetProperty ensures that no value is present for Property, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

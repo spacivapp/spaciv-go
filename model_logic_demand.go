@@ -22,7 +22,7 @@ var _ MappedNullable = &LogicDemand{}
 
 // LogicDemand struct for LogicDemand
 type LogicDemand struct {
-	Amount CalcRuleRef `json:"amount"`
+	Amount NullableCalcRuleRef `json:"amount"`
 	Filters []FilterGroup `json:"filters"`
 }
 
@@ -32,7 +32,7 @@ type _LogicDemand LogicDemand
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewLogicDemand(amount CalcRuleRef, filters []FilterGroup) *LogicDemand {
+func NewLogicDemand(amount NullableCalcRuleRef, filters []FilterGroup) *LogicDemand {
 	this := LogicDemand{}
 	this.Amount = amount
 	this.Filters = filters
@@ -48,27 +48,29 @@ func NewLogicDemandWithDefaults() *LogicDemand {
 }
 
 // GetAmount returns the Amount field value
+// If the value is explicit nil, the zero value for CalcRuleRef will be returned
 func (o *LogicDemand) GetAmount() CalcRuleRef {
-	if o == nil {
+	if o == nil || o.Amount.Get() == nil {
 		var ret CalcRuleRef
 		return ret
 	}
 
-	return o.Amount
+	return *o.Amount.Get()
 }
 
 // GetAmountOk returns a tuple with the Amount field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *LogicDemand) GetAmountOk() (*CalcRuleRef, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Amount, true
+	return o.Amount.Get(), o.Amount.IsSet()
 }
 
 // SetAmount sets field value
 func (o *LogicDemand) SetAmount(v CalcRuleRef) {
-	o.Amount = v
+	o.Amount.Set(&v)
 }
 
 // GetFilters returns the Filters field value
@@ -105,7 +107,7 @@ func (o LogicDemand) MarshalJSON() ([]byte, error) {
 
 func (o LogicDemand) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["amount"] = o.Amount
+	toSerialize["amount"] = o.Amount.Get()
 	toSerialize["filters"] = o.Filters
 	return toSerialize, nil
 }

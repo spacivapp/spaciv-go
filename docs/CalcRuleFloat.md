@@ -4,15 +4,15 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Left** | [**CalcRuleRef**](CalcRuleRef.md) |  | 
+**Left** | [**NullableCalcRuleRef**](CalcRuleRef.md) |  | 
 **Op** | **int32** |  | 
-**Right** | [**CalcRuleRef**](CalcRuleRef.md) |  | 
+**Right** | [**NullableCalcRuleRef**](CalcRuleRef.md) |  | 
 
 ## Methods
 
 ### NewCalcRuleFloat
 
-`func NewCalcRuleFloat(left CalcRuleRef, op int32, right CalcRuleRef, ) *CalcRuleFloat`
+`func NewCalcRuleFloat(left NullableCalcRuleRef, op int32, right NullableCalcRuleRef, ) *CalcRuleFloat`
 
 NewCalcRuleFloat instantiates a new CalcRuleFloat object
 This constructor will assign default values to properties that have it defined,
@@ -47,6 +47,16 @@ and a boolean to check if the value has been set.
 SetLeft sets Left field to given value.
 
 
+### SetLeftNil
+
+`func (o *CalcRuleFloat) SetLeftNil(b bool)`
+
+ SetLeftNil sets the value for Left to be an explicit nil
+
+### UnsetLeft
+`func (o *CalcRuleFloat) UnsetLeft()`
+
+UnsetLeft ensures that no value is present for Left, not even an explicit nil
 ### GetOp
 
 `func (o *CalcRuleFloat) GetOp() int32`
@@ -87,6 +97,16 @@ and a boolean to check if the value has been set.
 SetRight sets Right field to given value.
 
 
+### SetRightNil
+
+`func (o *CalcRuleFloat) SetRightNil(b bool)`
+
+ SetRightNil sets the value for Right to be an explicit nil
+
+### UnsetRight
+`func (o *CalcRuleFloat) UnsetRight()`
+
+UnsetRight ensures that no value is present for Right, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

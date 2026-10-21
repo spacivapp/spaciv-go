@@ -22,7 +22,7 @@ var _ MappedNullable = &TopDownModelProperties{}
 
 // TopDownModelProperties struct for TopDownModelProperties
 type TopDownModelProperties struct {
-	Map []TopDownModelEntryPropertyNodes `json:"map"`
+	Map []TopDownModelEntryPropertyNodesRequest `json:"map"`
 }
 
 type _TopDownModelProperties TopDownModelProperties
@@ -31,7 +31,7 @@ type _TopDownModelProperties TopDownModelProperties
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTopDownModelProperties(map_ []TopDownModelEntryPropertyNodes) *TopDownModelProperties {
+func NewTopDownModelProperties(map_ []TopDownModelEntryPropertyNodesRequest) *TopDownModelProperties {
 	this := TopDownModelProperties{}
 	this.Map = map_
 	return &this
@@ -46,9 +46,9 @@ func NewTopDownModelPropertiesWithDefaults() *TopDownModelProperties {
 }
 
 // GetMap returns the Map field value
-func (o *TopDownModelProperties) GetMap() []TopDownModelEntryPropertyNodes {
+func (o *TopDownModelProperties) GetMap() []TopDownModelEntryPropertyNodesRequest {
 	if o == nil {
-		var ret []TopDownModelEntryPropertyNodes
+		var ret []TopDownModelEntryPropertyNodesRequest
 		return ret
 	}
 
@@ -57,7 +57,7 @@ func (o *TopDownModelProperties) GetMap() []TopDownModelEntryPropertyNodes {
 
 // GetMapOk returns a tuple with the Map field value
 // and a boolean to check if the value has been set.
-func (o *TopDownModelProperties) GetMapOk() ([]TopDownModelEntryPropertyNodes, bool) {
+func (o *TopDownModelProperties) GetMapOk() ([]TopDownModelEntryPropertyNodesRequest, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -65,7 +65,7 @@ func (o *TopDownModelProperties) GetMapOk() ([]TopDownModelEntryPropertyNodes, b
 }
 
 // SetMap sets field value
-func (o *TopDownModelProperties) SetMap(v []TopDownModelEntryPropertyNodes) {
+func (o *TopDownModelProperties) SetMap(v []TopDownModelEntryPropertyNodesRequest) {
 	o.Map = v
 }
 

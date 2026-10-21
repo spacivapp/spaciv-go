@@ -5,14 +5,14 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Basis** | **int32** |  | 
-**Demand** | [**CalcRuleRef**](CalcRuleRef.md) |  | 
-**Supply** | [**CalcRuleRef**](CalcRuleRef.md) |  | 
+**Demand** | [**NullableCalcRuleRef**](CalcRuleRef.md) |  | 
+**Supply** | [**NullableCalcRuleRef**](CalcRuleRef.md) |  | 
 
 ## Methods
 
 ### NewLogicPer
 
-`func NewLogicPer(basis int32, demand CalcRuleRef, supply CalcRuleRef, ) *LogicPer`
+`func NewLogicPer(basis int32, demand NullableCalcRuleRef, supply NullableCalcRuleRef, ) *LogicPer`
 
 NewLogicPer instantiates a new LogicPer object
 This constructor will assign default values to properties that have it defined,
@@ -67,6 +67,16 @@ and a boolean to check if the value has been set.
 SetDemand sets Demand field to given value.
 
 
+### SetDemandNil
+
+`func (o *LogicPer) SetDemandNil(b bool)`
+
+ SetDemandNil sets the value for Demand to be an explicit nil
+
+### UnsetDemand
+`func (o *LogicPer) UnsetDemand()`
+
+UnsetDemand ensures that no value is present for Demand, not even an explicit nil
 ### GetSupply
 
 `func (o *LogicPer) GetSupply() CalcRuleRef`
@@ -87,6 +97,16 @@ and a boolean to check if the value has been set.
 SetSupply sets Supply field to given value.
 
 
+### SetSupplyNil
+
+`func (o *LogicPer) SetSupplyNil(b bool)`
+
+ SetSupplyNil sets the value for Supply to be an explicit nil
+
+### UnsetSupply
+`func (o *LogicPer) UnsetSupply()`
+
+UnsetSupply ensures that no value is present for Supply, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

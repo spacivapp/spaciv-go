@@ -25,7 +25,7 @@ type DatasetChangelogBody struct {
 	Code string `json:"code"`
 	ContributorDescription string `json:"contributorDescription"`
 	ContributorInfo string `json:"contributorInfo"`
-	Data DatasetChangelogData `json:"data"`
+	Data NullableDatasetChangelogData `json:"data"`
 	Description string `json:"description"`
 	InUse bool `json:"inUse"`
 	IsPublic bool `json:"isPublic"`
@@ -42,7 +42,7 @@ type _DatasetChangelogBody DatasetChangelogBody
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDatasetChangelogBody(code string, contributorDescription string, contributorInfo string, data DatasetChangelogData, description string, inUse bool, isPublic bool, name string, published bool, question string, type_ int32, visualisationType string) *DatasetChangelogBody {
+func NewDatasetChangelogBody(code string, contributorDescription string, contributorInfo string, data NullableDatasetChangelogData, description string, inUse bool, isPublic bool, name string, published bool, question string, type_ int32, visualisationType string) *DatasetChangelogBody {
 	this := DatasetChangelogBody{}
 	this.Code = code
 	this.ContributorDescription = contributorDescription
@@ -140,27 +140,29 @@ func (o *DatasetChangelogBody) SetContributorInfo(v string) {
 }
 
 // GetData returns the Data field value
+// If the value is explicit nil, the zero value for DatasetChangelogData will be returned
 func (o *DatasetChangelogBody) GetData() DatasetChangelogData {
-	if o == nil {
+	if o == nil || o.Data.Get() == nil {
 		var ret DatasetChangelogData
 		return ret
 	}
 
-	return o.Data
+	return *o.Data.Get()
 }
 
 // GetDataOk returns a tuple with the Data field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *DatasetChangelogBody) GetDataOk() (*DatasetChangelogData, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Data, true
+	return o.Data.Get(), o.Data.IsSet()
 }
 
 // SetData sets field value
 func (o *DatasetChangelogBody) SetData(v DatasetChangelogData) {
-	o.Data = v
+	o.Data.Set(&v)
 }
 
 // GetDescription returns the Description field value
@@ -368,7 +370,7 @@ func (o DatasetChangelogBody) ToMap() (map[string]interface{}, error) {
 	toSerialize["code"] = o.Code
 	toSerialize["contributorDescription"] = o.ContributorDescription
 	toSerialize["contributorInfo"] = o.ContributorInfo
-	toSerialize["data"] = o.Data
+	toSerialize["data"] = o.Data.Get()
 	toSerialize["description"] = o.Description
 	toSerialize["inUse"] = o.InUse
 	toSerialize["isPublic"] = o.IsPublic

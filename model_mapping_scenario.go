@@ -22,7 +22,7 @@ var _ MappedNullable = &MappingScenario{}
 
 // MappingScenario struct for MappingScenario
 type MappingScenario struct {
-	Data MaybeVarStr `json:"data"`
+	Data NullableMaybeVarStr `json:"data"`
 	Name string `json:"name"`
 	Resolved bool `json:"resolved"`
 }
@@ -33,7 +33,7 @@ type _MappingScenario MappingScenario
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewMappingScenario(data MaybeVarStr, name string, resolved bool) *MappingScenario {
+func NewMappingScenario(data NullableMaybeVarStr, name string, resolved bool) *MappingScenario {
 	this := MappingScenario{}
 	this.Data = data
 	this.Name = name
@@ -50,27 +50,29 @@ func NewMappingScenarioWithDefaults() *MappingScenario {
 }
 
 // GetData returns the Data field value
+// If the value is explicit nil, the zero value for MaybeVarStr will be returned
 func (o *MappingScenario) GetData() MaybeVarStr {
-	if o == nil {
+	if o == nil || o.Data.Get() == nil {
 		var ret MaybeVarStr
 		return ret
 	}
 
-	return o.Data
+	return *o.Data.Get()
 }
 
 // GetDataOk returns a tuple with the Data field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *MappingScenario) GetDataOk() (*MaybeVarStr, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Data, true
+	return o.Data.Get(), o.Data.IsSet()
 }
 
 // SetData sets field value
 func (o *MappingScenario) SetData(v MaybeVarStr) {
-	o.Data = v
+	o.Data.Set(&v)
 }
 
 // GetName returns the Name field value
@@ -131,7 +133,7 @@ func (o MappingScenario) MarshalJSON() ([]byte, error) {
 
 func (o MappingScenario) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["data"] = o.Data
+	toSerialize["data"] = o.Data.Get()
 	toSerialize["name"] = o.Name
 	toSerialize["resolved"] = o.Resolved
 	return toSerialize, nil

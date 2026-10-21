@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Data** | [**DatasetChangelogBody**](DatasetChangelogBody.md) |  | 
+**Data** | [**NullableDatasetChangelogBody**](DatasetChangelogBody.md) |  | 
 **Id** | **string** |  | 
 
 ## Methods
 
 ### NewDatasetRes
 
-`func NewDatasetRes(data DatasetChangelogBody, id string, ) *DatasetRes`
+`func NewDatasetRes(data NullableDatasetChangelogBody, id string, ) *DatasetRes`
 
 NewDatasetRes instantiates a new DatasetRes object
 This constructor will assign default values to properties that have it defined,
@@ -46,6 +46,16 @@ and a boolean to check if the value has been set.
 SetData sets Data field to given value.
 
 
+### SetDataNil
+
+`func (o *DatasetRes) SetDataNil(b bool)`
+
+ SetDataNil sets the value for Data to be an explicit nil
+
+### UnsetData
+`func (o *DatasetRes) UnsetData()`
+
+UnsetData ensures that no value is present for Data, not even an explicit nil
 ### GetId
 
 `func (o *DatasetRes) GetId() string`

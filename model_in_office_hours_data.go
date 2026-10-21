@@ -22,13 +22,13 @@ var _ MappedNullable = &InOfficeHoursData{}
 
 // InOfficeHoursData struct for InOfficeHoursData
 type InOfficeHoursData struct {
-	Friday InOfficeData `json:"friday"`
-	Monday InOfficeData `json:"monday"`
-	Saturday InOfficeData `json:"saturday"`
-	Sunday InOfficeData `json:"sunday"`
-	Thursday InOfficeData `json:"thursday"`
-	Tuesday InOfficeData `json:"tuesday"`
-	Wednesday InOfficeData `json:"wednesday"`
+	Friday NullableInOfficeData `json:"friday"`
+	Monday NullableInOfficeData `json:"monday"`
+	Saturday NullableInOfficeData `json:"saturday"`
+	Sunday NullableInOfficeData `json:"sunday"`
+	Thursday NullableInOfficeData `json:"thursday"`
+	Tuesday NullableInOfficeData `json:"tuesday"`
+	Wednesday NullableInOfficeData `json:"wednesday"`
 }
 
 type _InOfficeHoursData InOfficeHoursData
@@ -37,7 +37,7 @@ type _InOfficeHoursData InOfficeHoursData
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewInOfficeHoursData(friday InOfficeData, monday InOfficeData, saturday InOfficeData, sunday InOfficeData, thursday InOfficeData, tuesday InOfficeData, wednesday InOfficeData) *InOfficeHoursData {
+func NewInOfficeHoursData(friday NullableInOfficeData, monday NullableInOfficeData, saturday NullableInOfficeData, sunday NullableInOfficeData, thursday NullableInOfficeData, tuesday NullableInOfficeData, wednesday NullableInOfficeData) *InOfficeHoursData {
 	this := InOfficeHoursData{}
 	this.Friday = friday
 	this.Monday = monday
@@ -58,171 +58,185 @@ func NewInOfficeHoursDataWithDefaults() *InOfficeHoursData {
 }
 
 // GetFriday returns the Friday field value
+// If the value is explicit nil, the zero value for InOfficeData will be returned
 func (o *InOfficeHoursData) GetFriday() InOfficeData {
-	if o == nil {
+	if o == nil || o.Friday.Get() == nil {
 		var ret InOfficeData
 		return ret
 	}
 
-	return o.Friday
+	return *o.Friday.Get()
 }
 
 // GetFridayOk returns a tuple with the Friday field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *InOfficeHoursData) GetFridayOk() (*InOfficeData, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Friday, true
+	return o.Friday.Get(), o.Friday.IsSet()
 }
 
 // SetFriday sets field value
 func (o *InOfficeHoursData) SetFriday(v InOfficeData) {
-	o.Friday = v
+	o.Friday.Set(&v)
 }
 
 // GetMonday returns the Monday field value
+// If the value is explicit nil, the zero value for InOfficeData will be returned
 func (o *InOfficeHoursData) GetMonday() InOfficeData {
-	if o == nil {
+	if o == nil || o.Monday.Get() == nil {
 		var ret InOfficeData
 		return ret
 	}
 
-	return o.Monday
+	return *o.Monday.Get()
 }
 
 // GetMondayOk returns a tuple with the Monday field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *InOfficeHoursData) GetMondayOk() (*InOfficeData, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Monday, true
+	return o.Monday.Get(), o.Monday.IsSet()
 }
 
 // SetMonday sets field value
 func (o *InOfficeHoursData) SetMonday(v InOfficeData) {
-	o.Monday = v
+	o.Monday.Set(&v)
 }
 
 // GetSaturday returns the Saturday field value
+// If the value is explicit nil, the zero value for InOfficeData will be returned
 func (o *InOfficeHoursData) GetSaturday() InOfficeData {
-	if o == nil {
+	if o == nil || o.Saturday.Get() == nil {
 		var ret InOfficeData
 		return ret
 	}
 
-	return o.Saturday
+	return *o.Saturday.Get()
 }
 
 // GetSaturdayOk returns a tuple with the Saturday field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *InOfficeHoursData) GetSaturdayOk() (*InOfficeData, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Saturday, true
+	return o.Saturday.Get(), o.Saturday.IsSet()
 }
 
 // SetSaturday sets field value
 func (o *InOfficeHoursData) SetSaturday(v InOfficeData) {
-	o.Saturday = v
+	o.Saturday.Set(&v)
 }
 
 // GetSunday returns the Sunday field value
+// If the value is explicit nil, the zero value for InOfficeData will be returned
 func (o *InOfficeHoursData) GetSunday() InOfficeData {
-	if o == nil {
+	if o == nil || o.Sunday.Get() == nil {
 		var ret InOfficeData
 		return ret
 	}
 
-	return o.Sunday
+	return *o.Sunday.Get()
 }
 
 // GetSundayOk returns a tuple with the Sunday field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *InOfficeHoursData) GetSundayOk() (*InOfficeData, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Sunday, true
+	return o.Sunday.Get(), o.Sunday.IsSet()
 }
 
 // SetSunday sets field value
 func (o *InOfficeHoursData) SetSunday(v InOfficeData) {
-	o.Sunday = v
+	o.Sunday.Set(&v)
 }
 
 // GetThursday returns the Thursday field value
+// If the value is explicit nil, the zero value for InOfficeData will be returned
 func (o *InOfficeHoursData) GetThursday() InOfficeData {
-	if o == nil {
+	if o == nil || o.Thursday.Get() == nil {
 		var ret InOfficeData
 		return ret
 	}
 
-	return o.Thursday
+	return *o.Thursday.Get()
 }
 
 // GetThursdayOk returns a tuple with the Thursday field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *InOfficeHoursData) GetThursdayOk() (*InOfficeData, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Thursday, true
+	return o.Thursday.Get(), o.Thursday.IsSet()
 }
 
 // SetThursday sets field value
 func (o *InOfficeHoursData) SetThursday(v InOfficeData) {
-	o.Thursday = v
+	o.Thursday.Set(&v)
 }
 
 // GetTuesday returns the Tuesday field value
+// If the value is explicit nil, the zero value for InOfficeData will be returned
 func (o *InOfficeHoursData) GetTuesday() InOfficeData {
-	if o == nil {
+	if o == nil || o.Tuesday.Get() == nil {
 		var ret InOfficeData
 		return ret
 	}
 
-	return o.Tuesday
+	return *o.Tuesday.Get()
 }
 
 // GetTuesdayOk returns a tuple with the Tuesday field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *InOfficeHoursData) GetTuesdayOk() (*InOfficeData, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Tuesday, true
+	return o.Tuesday.Get(), o.Tuesday.IsSet()
 }
 
 // SetTuesday sets field value
 func (o *InOfficeHoursData) SetTuesday(v InOfficeData) {
-	o.Tuesday = v
+	o.Tuesday.Set(&v)
 }
 
 // GetWednesday returns the Wednesday field value
+// If the value is explicit nil, the zero value for InOfficeData will be returned
 func (o *InOfficeHoursData) GetWednesday() InOfficeData {
-	if o == nil {
+	if o == nil || o.Wednesday.Get() == nil {
 		var ret InOfficeData
 		return ret
 	}
 
-	return o.Wednesday
+	return *o.Wednesday.Get()
 }
 
 // GetWednesdayOk returns a tuple with the Wednesday field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *InOfficeHoursData) GetWednesdayOk() (*InOfficeData, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Wednesday, true
+	return o.Wednesday.Get(), o.Wednesday.IsSet()
 }
 
 // SetWednesday sets field value
 func (o *InOfficeHoursData) SetWednesday(v InOfficeData) {
-	o.Wednesday = v
+	o.Wednesday.Set(&v)
 }
 
 func (o InOfficeHoursData) MarshalJSON() ([]byte, error) {
@@ -235,13 +249,13 @@ func (o InOfficeHoursData) MarshalJSON() ([]byte, error) {
 
 func (o InOfficeHoursData) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["friday"] = o.Friday
-	toSerialize["monday"] = o.Monday
-	toSerialize["saturday"] = o.Saturday
-	toSerialize["sunday"] = o.Sunday
-	toSerialize["thursday"] = o.Thursday
-	toSerialize["tuesday"] = o.Tuesday
-	toSerialize["wednesday"] = o.Wednesday
+	toSerialize["friday"] = o.Friday.Get()
+	toSerialize["monday"] = o.Monday.Get()
+	toSerialize["saturday"] = o.Saturday.Get()
+	toSerialize["sunday"] = o.Sunday.Get()
+	toSerialize["thursday"] = o.Thursday.Get()
+	toSerialize["tuesday"] = o.Tuesday.Get()
+	toSerialize["wednesday"] = o.Wednesday.Get()
 	return toSerialize, nil
 }
 

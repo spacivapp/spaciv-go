@@ -22,7 +22,7 @@ var _ MappedNullable = &ContributionPost{}
 
 // ContributionPost struct for ContributionPost
 type ContributionPost struct {
-	Data Contribution `json:"data"`
+	Data ContributionRequest `json:"data"`
 	Node string `json:"node"`
 	State int32 `json:"state"`
 }
@@ -33,7 +33,7 @@ type _ContributionPost ContributionPost
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewContributionPost(data Contribution, node string, state int32) *ContributionPost {
+func NewContributionPost(data ContributionRequest, node string, state int32) *ContributionPost {
 	this := ContributionPost{}
 	this.Data = data
 	this.Node = node
@@ -50,9 +50,9 @@ func NewContributionPostWithDefaults() *ContributionPost {
 }
 
 // GetData returns the Data field value
-func (o *ContributionPost) GetData() Contribution {
+func (o *ContributionPost) GetData() ContributionRequest {
 	if o == nil {
-		var ret Contribution
+		var ret ContributionRequest
 		return ret
 	}
 
@@ -61,7 +61,7 @@ func (o *ContributionPost) GetData() Contribution {
 
 // GetDataOk returns a tuple with the Data field value
 // and a boolean to check if the value has been set.
-func (o *ContributionPost) GetDataOk() (*Contribution, bool) {
+func (o *ContributionPost) GetDataOk() (*ContributionRequest, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -69,7 +69,7 @@ func (o *ContributionPost) GetDataOk() (*Contribution, bool) {
 }
 
 // SetData sets field value
-func (o *ContributionPost) SetData(v Contribution) {
+func (o *ContributionPost) SetData(v ContributionRequest) {
 	o.Data = v
 }
 

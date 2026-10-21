@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Card** | [**DashboardCard**](DashboardCard.md) |  | 
+**Card** | [**DashboardCardRequest**](DashboardCardRequest.md) |  | 
 **Index** | **int32** |  | 
 
 ## Methods
 
 ### NewDashboardCardUpdate
 
-`func NewDashboardCardUpdate(card DashboardCard, index int32, ) *DashboardCardUpdate`
+`func NewDashboardCardUpdate(card DashboardCardRequest, index int32, ) *DashboardCardUpdate`
 
 NewDashboardCardUpdate instantiates a new DashboardCardUpdate object
 This constructor will assign default values to properties that have it defined,
@@ -28,20 +28,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetCard
 
-`func (o *DashboardCardUpdate) GetCard() DashboardCard`
+`func (o *DashboardCardUpdate) GetCard() DashboardCardRequest`
 
 GetCard returns the Card field if non-nil, zero value otherwise.
 
 ### GetCardOk
 
-`func (o *DashboardCardUpdate) GetCardOk() (*DashboardCard, bool)`
+`func (o *DashboardCardUpdate) GetCardOk() (*DashboardCardRequest, bool)`
 
 GetCardOk returns a tuple with the Card field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetCard
 
-`func (o *DashboardCardUpdate) SetCard(v DashboardCard)`
+`func (o *DashboardCardUpdate) SetCard(v DashboardCardRequest)`
 
 SetCard sets Card field to given value.
 

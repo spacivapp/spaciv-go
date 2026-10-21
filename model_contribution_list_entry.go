@@ -22,7 +22,7 @@ var _ MappedNullable = &ContributionListEntry{}
 
 // ContributionListEntry struct for ContributionListEntry
 type ContributionListEntry struct {
-	ContributionChangelogBody ContributionChangelogBody `json:"contributionChangelogBody"`
+	ContributionChangelogBody NullableContributionChangelogBody `json:"contributionChangelogBody"`
 	Email string `json:"email"`
 	FirstName string `json:"firstName"`
 	Userid string `json:"userid"`
@@ -34,7 +34,7 @@ type _ContributionListEntry ContributionListEntry
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewContributionListEntry(contributionChangelogBody ContributionChangelogBody, email string, firstName string, userid string) *ContributionListEntry {
+func NewContributionListEntry(contributionChangelogBody NullableContributionChangelogBody, email string, firstName string, userid string) *ContributionListEntry {
 	this := ContributionListEntry{}
 	this.ContributionChangelogBody = contributionChangelogBody
 	this.Email = email
@@ -52,27 +52,29 @@ func NewContributionListEntryWithDefaults() *ContributionListEntry {
 }
 
 // GetContributionChangelogBody returns the ContributionChangelogBody field value
+// If the value is explicit nil, the zero value for ContributionChangelogBody will be returned
 func (o *ContributionListEntry) GetContributionChangelogBody() ContributionChangelogBody {
-	if o == nil {
+	if o == nil || o.ContributionChangelogBody.Get() == nil {
 		var ret ContributionChangelogBody
 		return ret
 	}
 
-	return o.ContributionChangelogBody
+	return *o.ContributionChangelogBody.Get()
 }
 
 // GetContributionChangelogBodyOk returns a tuple with the ContributionChangelogBody field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *ContributionListEntry) GetContributionChangelogBodyOk() (*ContributionChangelogBody, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.ContributionChangelogBody, true
+	return o.ContributionChangelogBody.Get(), o.ContributionChangelogBody.IsSet()
 }
 
 // SetContributionChangelogBody sets field value
 func (o *ContributionListEntry) SetContributionChangelogBody(v ContributionChangelogBody) {
-	o.ContributionChangelogBody = v
+	o.ContributionChangelogBody.Set(&v)
 }
 
 // GetEmail returns the Email field value
@@ -157,7 +159,7 @@ func (o ContributionListEntry) MarshalJSON() ([]byte, error) {
 
 func (o ContributionListEntry) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["contributionChangelogBody"] = o.ContributionChangelogBody
+	toSerialize["contributionChangelogBody"] = o.ContributionChangelogBody.Get()
 	toSerialize["email"] = o.Email
 	toSerialize["firstName"] = o.FirstName
 	toSerialize["userid"] = o.Userid

@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Data** | [**map[string]VariableChangelog**](VariableChangelog.md) |  | 
+**Data** | [**map[string]VariableChangelogRequest**](VariableChangelogRequest.md) |  | 
 
 ## Methods
 
 ### NewVariables
 
-`func NewVariables(data map[string]VariableChangelog, ) *Variables`
+`func NewVariables(data map[string]VariableChangelogRequest, ) *Variables`
 
 NewVariables instantiates a new Variables object
 This constructor will assign default values to properties that have it defined,
@@ -27,20 +27,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetData
 
-`func (o *Variables) GetData() map[string]VariableChangelog`
+`func (o *Variables) GetData() map[string]VariableChangelogRequest`
 
 GetData returns the Data field if non-nil, zero value otherwise.
 
 ### GetDataOk
 
-`func (o *Variables) GetDataOk() (*map[string]VariableChangelog, bool)`
+`func (o *Variables) GetDataOk() (*map[string]VariableChangelogRequest, bool)`
 
 GetDataOk returns a tuple with the Data field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetData
 
-`func (o *Variables) SetData(v map[string]VariableChangelog)`
+`func (o *Variables) SetData(v map[string]VariableChangelogRequest)`
 
 SetData sets Data field to given value.
 

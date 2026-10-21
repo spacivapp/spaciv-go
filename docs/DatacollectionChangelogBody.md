@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **AnonymisationProperty** | **string** |  | 
-**AuthenticationMode** | [**DatacollectionAuthentication**](DatacollectionAuthentication.md) |  | 
+**AuthenticationMode** | [**NullableDatacollectionAuthentication**](DatacollectionAuthentication.md) |  | 
 **CompleteMessage** | **string** |  | 
 **Contributors** | [**[]DatacollectionContributor**](DatacollectionContributor.md) |  | 
 **ContributorsUploaded** | **bool** |  | 
@@ -24,7 +24,7 @@ Name | Type | Description | Notes
 
 ### NewDatacollectionChangelogBody
 
-`func NewDatacollectionChangelogBody(anonymisationProperty string, authenticationMode DatacollectionAuthentication, completeMessage string, contributors []DatacollectionContributor, contributorsUploaded bool, description string, end string, inviteMessage string, name string, resendInviteMessage string, start string, status int32, steps []Step, thankYouMessage string, welcomeMessage string, ) *DatacollectionChangelogBody`
+`func NewDatacollectionChangelogBody(anonymisationProperty string, authenticationMode NullableDatacollectionAuthentication, completeMessage string, contributors []DatacollectionContributor, contributorsUploaded bool, description string, end string, inviteMessage string, name string, resendInviteMessage string, start string, status int32, steps []Step, thankYouMessage string, welcomeMessage string, ) *DatacollectionChangelogBody`
 
 NewDatacollectionChangelogBody instantiates a new DatacollectionChangelogBody object
 This constructor will assign default values to properties that have it defined,
@@ -79,6 +79,16 @@ and a boolean to check if the value has been set.
 SetAuthenticationMode sets AuthenticationMode field to given value.
 
 
+### SetAuthenticationModeNil
+
+`func (o *DatacollectionChangelogBody) SetAuthenticationModeNil(b bool)`
+
+ SetAuthenticationModeNil sets the value for AuthenticationMode to be an explicit nil
+
+### UnsetAuthenticationMode
+`func (o *DatacollectionChangelogBody) UnsetAuthenticationMode()`
+
+UnsetAuthenticationMode ensures that no value is present for AuthenticationMode, not even an explicit nil
 ### GetCompleteMessage
 
 `func (o *DatacollectionChangelogBody) GetCompleteMessage() string`

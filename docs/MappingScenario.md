@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Data** | [**MaybeVarStr**](MaybeVarStr.md) |  | 
+**Data** | [**NullableMaybeVarStr**](MaybeVarStr.md) |  | 
 **Name** | **string** |  | 
 **Resolved** | **bool** |  | 
 
@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 
 ### NewMappingScenario
 
-`func NewMappingScenario(data MaybeVarStr, name string, resolved bool, ) *MappingScenario`
+`func NewMappingScenario(data NullableMaybeVarStr, name string, resolved bool, ) *MappingScenario`
 
 NewMappingScenario instantiates a new MappingScenario object
 This constructor will assign default values to properties that have it defined,
@@ -47,6 +47,16 @@ and a boolean to check if the value has been set.
 SetData sets Data field to given value.
 
 
+### SetDataNil
+
+`func (o *MappingScenario) SetDataNil(b bool)`
+
+ SetDataNil sets the value for Data to be an explicit nil
+
+### UnsetData
+`func (o *MappingScenario) UnsetData()`
+
+UnsetData ensures that no value is present for Data, not even an explicit nil
 ### GetName
 
 `func (o *MappingScenario) GetName() string`

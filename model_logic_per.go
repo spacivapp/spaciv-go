@@ -23,8 +23,8 @@ var _ MappedNullable = &LogicPer{}
 // LogicPer struct for LogicPer
 type LogicPer struct {
 	Basis int32 `json:"basis"`
-	Demand CalcRuleRef `json:"demand"`
-	Supply CalcRuleRef `json:"supply"`
+	Demand NullableCalcRuleRef `json:"demand"`
+	Supply NullableCalcRuleRef `json:"supply"`
 }
 
 type _LogicPer LogicPer
@@ -33,7 +33,7 @@ type _LogicPer LogicPer
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewLogicPer(basis int32, demand CalcRuleRef, supply CalcRuleRef) *LogicPer {
+func NewLogicPer(basis int32, demand NullableCalcRuleRef, supply NullableCalcRuleRef) *LogicPer {
 	this := LogicPer{}
 	this.Basis = basis
 	this.Demand = demand
@@ -74,51 +74,55 @@ func (o *LogicPer) SetBasis(v int32) {
 }
 
 // GetDemand returns the Demand field value
+// If the value is explicit nil, the zero value for CalcRuleRef will be returned
 func (o *LogicPer) GetDemand() CalcRuleRef {
-	if o == nil {
+	if o == nil || o.Demand.Get() == nil {
 		var ret CalcRuleRef
 		return ret
 	}
 
-	return o.Demand
+	return *o.Demand.Get()
 }
 
 // GetDemandOk returns a tuple with the Demand field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *LogicPer) GetDemandOk() (*CalcRuleRef, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Demand, true
+	return o.Demand.Get(), o.Demand.IsSet()
 }
 
 // SetDemand sets field value
 func (o *LogicPer) SetDemand(v CalcRuleRef) {
-	o.Demand = v
+	o.Demand.Set(&v)
 }
 
 // GetSupply returns the Supply field value
+// If the value is explicit nil, the zero value for CalcRuleRef will be returned
 func (o *LogicPer) GetSupply() CalcRuleRef {
-	if o == nil {
+	if o == nil || o.Supply.Get() == nil {
 		var ret CalcRuleRef
 		return ret
 	}
 
-	return o.Supply
+	return *o.Supply.Get()
 }
 
 // GetSupplyOk returns a tuple with the Supply field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *LogicPer) GetSupplyOk() (*CalcRuleRef, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Supply, true
+	return o.Supply.Get(), o.Supply.IsSet()
 }
 
 // SetSupply sets field value
 func (o *LogicPer) SetSupply(v CalcRuleRef) {
-	o.Supply = v
+	o.Supply.Set(&v)
 }
 
 func (o LogicPer) MarshalJSON() ([]byte, error) {
@@ -132,8 +136,8 @@ func (o LogicPer) MarshalJSON() ([]byte, error) {
 func (o LogicPer) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["basis"] = o.Basis
-	toSerialize["demand"] = o.Demand
-	toSerialize["supply"] = o.Supply
+	toSerialize["demand"] = o.Demand.Get()
+	toSerialize["supply"] = o.Supply.Get()
 	return toSerialize, nil
 }
 

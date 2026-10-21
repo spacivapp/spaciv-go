@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Data** | [**Contribution**](Contribution.md) |  | 
+**Data** | [**ContributionRequest**](ContributionRequest.md) |  | 
 **Node** | **string** |  | 
 **State** | **int32** |  | 
 
@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 
 ### NewContributionPost
 
-`func NewContributionPost(data Contribution, node string, state int32, ) *ContributionPost`
+`func NewContributionPost(data ContributionRequest, node string, state int32, ) *ContributionPost`
 
 NewContributionPost instantiates a new ContributionPost object
 This constructor will assign default values to properties that have it defined,
@@ -29,20 +29,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetData
 
-`func (o *ContributionPost) GetData() Contribution`
+`func (o *ContributionPost) GetData() ContributionRequest`
 
 GetData returns the Data field if non-nil, zero value otherwise.
 
 ### GetDataOk
 
-`func (o *ContributionPost) GetDataOk() (*Contribution, bool)`
+`func (o *ContributionPost) GetDataOk() (*ContributionRequest, bool)`
 
 GetDataOk returns a tuple with the Data field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetData
 
-`func (o *ContributionPost) SetData(v Contribution)`
+`func (o *ContributionPost) SetData(v ContributionRequest)`
 
 SetData sets Data field to given value.
 

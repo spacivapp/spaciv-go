@@ -22,12 +22,12 @@ var _ MappedNullable = &CalcChildren{}
 
 // CalcChildren struct for CalcChildren
 type CalcChildren struct {
-	Date MaybeVarInt `json:"date"`
+	Date NullableMaybeVarInt `json:"date"`
 	Filters []FilterGroup `json:"filters"`
-	Function MaybeVarFunc `json:"function"`
+	Function NullableMaybeVarFunc `json:"function"`
 	Params map[string]ParameterType `json:"params"`
-	Scenario MaybeVarStr `json:"scenario"`
-	Segment MaybeVarProp `json:"segment"`
+	Scenario NullableMaybeVarStr `json:"scenario"`
+	Segment NullableMaybeVarProp `json:"segment"`
 }
 
 type _CalcChildren CalcChildren
@@ -36,7 +36,7 @@ type _CalcChildren CalcChildren
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCalcChildren(date MaybeVarInt, filters []FilterGroup, function MaybeVarFunc, params map[string]ParameterType, scenario MaybeVarStr, segment MaybeVarProp) *CalcChildren {
+func NewCalcChildren(date NullableMaybeVarInt, filters []FilterGroup, function NullableMaybeVarFunc, params map[string]ParameterType, scenario NullableMaybeVarStr, segment NullableMaybeVarProp) *CalcChildren {
 	this := CalcChildren{}
 	this.Date = date
 	this.Filters = filters
@@ -56,27 +56,29 @@ func NewCalcChildrenWithDefaults() *CalcChildren {
 }
 
 // GetDate returns the Date field value
+// If the value is explicit nil, the zero value for MaybeVarInt will be returned
 func (o *CalcChildren) GetDate() MaybeVarInt {
-	if o == nil {
+	if o == nil || o.Date.Get() == nil {
 		var ret MaybeVarInt
 		return ret
 	}
 
-	return o.Date
+	return *o.Date.Get()
 }
 
 // GetDateOk returns a tuple with the Date field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *CalcChildren) GetDateOk() (*MaybeVarInt, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Date, true
+	return o.Date.Get(), o.Date.IsSet()
 }
 
 // SetDate sets field value
 func (o *CalcChildren) SetDate(v MaybeVarInt) {
-	o.Date = v
+	o.Date.Set(&v)
 }
 
 // GetFilters returns the Filters field value
@@ -104,27 +106,29 @@ func (o *CalcChildren) SetFilters(v []FilterGroup) {
 }
 
 // GetFunction returns the Function field value
+// If the value is explicit nil, the zero value for MaybeVarFunc will be returned
 func (o *CalcChildren) GetFunction() MaybeVarFunc {
-	if o == nil {
+	if o == nil || o.Function.Get() == nil {
 		var ret MaybeVarFunc
 		return ret
 	}
 
-	return o.Function
+	return *o.Function.Get()
 }
 
 // GetFunctionOk returns a tuple with the Function field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *CalcChildren) GetFunctionOk() (*MaybeVarFunc, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Function, true
+	return o.Function.Get(), o.Function.IsSet()
 }
 
 // SetFunction sets field value
 func (o *CalcChildren) SetFunction(v MaybeVarFunc) {
-	o.Function = v
+	o.Function.Set(&v)
 }
 
 // GetParams returns the Params field value
@@ -152,51 +156,55 @@ func (o *CalcChildren) SetParams(v map[string]ParameterType) {
 }
 
 // GetScenario returns the Scenario field value
+// If the value is explicit nil, the zero value for MaybeVarStr will be returned
 func (o *CalcChildren) GetScenario() MaybeVarStr {
-	if o == nil {
+	if o == nil || o.Scenario.Get() == nil {
 		var ret MaybeVarStr
 		return ret
 	}
 
-	return o.Scenario
+	return *o.Scenario.Get()
 }
 
 // GetScenarioOk returns a tuple with the Scenario field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *CalcChildren) GetScenarioOk() (*MaybeVarStr, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Scenario, true
+	return o.Scenario.Get(), o.Scenario.IsSet()
 }
 
 // SetScenario sets field value
 func (o *CalcChildren) SetScenario(v MaybeVarStr) {
-	o.Scenario = v
+	o.Scenario.Set(&v)
 }
 
 // GetSegment returns the Segment field value
+// If the value is explicit nil, the zero value for MaybeVarProp will be returned
 func (o *CalcChildren) GetSegment() MaybeVarProp {
-	if o == nil {
+	if o == nil || o.Segment.Get() == nil {
 		var ret MaybeVarProp
 		return ret
 	}
 
-	return o.Segment
+	return *o.Segment.Get()
 }
 
 // GetSegmentOk returns a tuple with the Segment field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *CalcChildren) GetSegmentOk() (*MaybeVarProp, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Segment, true
+	return o.Segment.Get(), o.Segment.IsSet()
 }
 
 // SetSegment sets field value
 func (o *CalcChildren) SetSegment(v MaybeVarProp) {
-	o.Segment = v
+	o.Segment.Set(&v)
 }
 
 func (o CalcChildren) MarshalJSON() ([]byte, error) {
@@ -209,12 +217,12 @@ func (o CalcChildren) MarshalJSON() ([]byte, error) {
 
 func (o CalcChildren) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["date"] = o.Date
+	toSerialize["date"] = o.Date.Get()
 	toSerialize["filters"] = o.Filters
-	toSerialize["function"] = o.Function
+	toSerialize["function"] = o.Function.Get()
 	toSerialize["params"] = o.Params
-	toSerialize["scenario"] = o.Scenario
-	toSerialize["segment"] = o.Segment
+	toSerialize["scenario"] = o.Scenario.Get()
+	toSerialize["segment"] = o.Segment.Get()
 	return toSerialize, nil
 }
 

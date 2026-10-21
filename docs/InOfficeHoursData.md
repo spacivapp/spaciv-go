@@ -4,19 +4,19 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Friday** | [**InOfficeData**](InOfficeData.md) |  | 
-**Monday** | [**InOfficeData**](InOfficeData.md) |  | 
-**Saturday** | [**InOfficeData**](InOfficeData.md) |  | 
-**Sunday** | [**InOfficeData**](InOfficeData.md) |  | 
-**Thursday** | [**InOfficeData**](InOfficeData.md) |  | 
-**Tuesday** | [**InOfficeData**](InOfficeData.md) |  | 
-**Wednesday** | [**InOfficeData**](InOfficeData.md) |  | 
+**Friday** | [**NullableInOfficeData**](InOfficeData.md) |  | 
+**Monday** | [**NullableInOfficeData**](InOfficeData.md) |  | 
+**Saturday** | [**NullableInOfficeData**](InOfficeData.md) |  | 
+**Sunday** | [**NullableInOfficeData**](InOfficeData.md) |  | 
+**Thursday** | [**NullableInOfficeData**](InOfficeData.md) |  | 
+**Tuesday** | [**NullableInOfficeData**](InOfficeData.md) |  | 
+**Wednesday** | [**NullableInOfficeData**](InOfficeData.md) |  | 
 
 ## Methods
 
 ### NewInOfficeHoursData
 
-`func NewInOfficeHoursData(friday InOfficeData, monday InOfficeData, saturday InOfficeData, sunday InOfficeData, thursday InOfficeData, tuesday InOfficeData, wednesday InOfficeData, ) *InOfficeHoursData`
+`func NewInOfficeHoursData(friday NullableInOfficeData, monday NullableInOfficeData, saturday NullableInOfficeData, sunday NullableInOfficeData, thursday NullableInOfficeData, tuesday NullableInOfficeData, wednesday NullableInOfficeData, ) *InOfficeHoursData`
 
 NewInOfficeHoursData instantiates a new InOfficeHoursData object
 This constructor will assign default values to properties that have it defined,
@@ -51,6 +51,16 @@ and a boolean to check if the value has been set.
 SetFriday sets Friday field to given value.
 
 
+### SetFridayNil
+
+`func (o *InOfficeHoursData) SetFridayNil(b bool)`
+
+ SetFridayNil sets the value for Friday to be an explicit nil
+
+### UnsetFriday
+`func (o *InOfficeHoursData) UnsetFriday()`
+
+UnsetFriday ensures that no value is present for Friday, not even an explicit nil
 ### GetMonday
 
 `func (o *InOfficeHoursData) GetMonday() InOfficeData`
@@ -71,6 +81,16 @@ and a boolean to check if the value has been set.
 SetMonday sets Monday field to given value.
 
 
+### SetMondayNil
+
+`func (o *InOfficeHoursData) SetMondayNil(b bool)`
+
+ SetMondayNil sets the value for Monday to be an explicit nil
+
+### UnsetMonday
+`func (o *InOfficeHoursData) UnsetMonday()`
+
+UnsetMonday ensures that no value is present for Monday, not even an explicit nil
 ### GetSaturday
 
 `func (o *InOfficeHoursData) GetSaturday() InOfficeData`
@@ -91,6 +111,16 @@ and a boolean to check if the value has been set.
 SetSaturday sets Saturday field to given value.
 
 
+### SetSaturdayNil
+
+`func (o *InOfficeHoursData) SetSaturdayNil(b bool)`
+
+ SetSaturdayNil sets the value for Saturday to be an explicit nil
+
+### UnsetSaturday
+`func (o *InOfficeHoursData) UnsetSaturday()`
+
+UnsetSaturday ensures that no value is present for Saturday, not even an explicit nil
 ### GetSunday
 
 `func (o *InOfficeHoursData) GetSunday() InOfficeData`
@@ -111,6 +141,16 @@ and a boolean to check if the value has been set.
 SetSunday sets Sunday field to given value.
 
 
+### SetSundayNil
+
+`func (o *InOfficeHoursData) SetSundayNil(b bool)`
+
+ SetSundayNil sets the value for Sunday to be an explicit nil
+
+### UnsetSunday
+`func (o *InOfficeHoursData) UnsetSunday()`
+
+UnsetSunday ensures that no value is present for Sunday, not even an explicit nil
 ### GetThursday
 
 `func (o *InOfficeHoursData) GetThursday() InOfficeData`
@@ -131,6 +171,16 @@ and a boolean to check if the value has been set.
 SetThursday sets Thursday field to given value.
 
 
+### SetThursdayNil
+
+`func (o *InOfficeHoursData) SetThursdayNil(b bool)`
+
+ SetThursdayNil sets the value for Thursday to be an explicit nil
+
+### UnsetThursday
+`func (o *InOfficeHoursData) UnsetThursday()`
+
+UnsetThursday ensures that no value is present for Thursday, not even an explicit nil
 ### GetTuesday
 
 `func (o *InOfficeHoursData) GetTuesday() InOfficeData`
@@ -151,6 +201,16 @@ and a boolean to check if the value has been set.
 SetTuesday sets Tuesday field to given value.
 
 
+### SetTuesdayNil
+
+`func (o *InOfficeHoursData) SetTuesdayNil(b bool)`
+
+ SetTuesdayNil sets the value for Tuesday to be an explicit nil
+
+### UnsetTuesday
+`func (o *InOfficeHoursData) UnsetTuesday()`
+
+UnsetTuesday ensures that no value is present for Tuesday, not even an explicit nil
 ### GetWednesday
 
 `func (o *InOfficeHoursData) GetWednesday() InOfficeData`
@@ -171,6 +231,16 @@ and a boolean to check if the value has been set.
 SetWednesday sets Wednesday field to given value.
 
 
+### SetWednesdayNil
+
+`func (o *InOfficeHoursData) SetWednesdayNil(b bool)`
+
+ SetWednesdayNil sets the value for Wednesday to be an explicit nil
+
+### UnsetWednesday
+`func (o *InOfficeHoursData) UnsetWednesday()`
+
+UnsetWednesday ensures that no value is present for Wednesday, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

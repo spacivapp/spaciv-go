@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Map** | [**[]TopDownModelEntryPropertyNodes**](TopDownModelEntryPropertyNodes.md) |  | 
+**Map** | [**[]TopDownModelEntryPropertyNodesRequest**](TopDownModelEntryPropertyNodesRequest.md) |  | 
 
 ## Methods
 
 ### NewTopDownModelProperties
 
-`func NewTopDownModelProperties(map_ []TopDownModelEntryPropertyNodes, ) *TopDownModelProperties`
+`func NewTopDownModelProperties(map_ []TopDownModelEntryPropertyNodesRequest, ) *TopDownModelProperties`
 
 NewTopDownModelProperties instantiates a new TopDownModelProperties object
 This constructor will assign default values to properties that have it defined,
@@ -27,20 +27,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetMap
 
-`func (o *TopDownModelProperties) GetMap() []TopDownModelEntryPropertyNodes`
+`func (o *TopDownModelProperties) GetMap() []TopDownModelEntryPropertyNodesRequest`
 
 GetMap returns the Map field if non-nil, zero value otherwise.
 
 ### GetMapOk
 
-`func (o *TopDownModelProperties) GetMapOk() (*[]TopDownModelEntryPropertyNodes, bool)`
+`func (o *TopDownModelProperties) GetMapOk() (*[]TopDownModelEntryPropertyNodesRequest, bool)`
 
 GetMapOk returns a tuple with the Map field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetMap
 
-`func (o *TopDownModelProperties) SetMap(v []TopDownModelEntryPropertyNodes)`
+`func (o *TopDownModelProperties) SetMap(v []TopDownModelEntryPropertyNodesRequest)`
 
 SetMap sets Map field to given value.
 

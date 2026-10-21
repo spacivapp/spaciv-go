@@ -24,7 +24,7 @@ var _ MappedNullable = &PropertyListEntry{}
 type PropertyListEntry struct {
 	BuiltIn bool `json:"builtIn"`
 	Id string `json:"id"`
-	Value PropertyChangelogBody `json:"value"`
+	Value NullablePropertyChangelogBody `json:"value"`
 }
 
 type _PropertyListEntry PropertyListEntry
@@ -33,7 +33,7 @@ type _PropertyListEntry PropertyListEntry
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewPropertyListEntry(builtIn bool, id string, value PropertyChangelogBody) *PropertyListEntry {
+func NewPropertyListEntry(builtIn bool, id string, value NullablePropertyChangelogBody) *PropertyListEntry {
 	this := PropertyListEntry{}
 	this.BuiltIn = builtIn
 	this.Id = id
@@ -98,27 +98,29 @@ func (o *PropertyListEntry) SetId(v string) {
 }
 
 // GetValue returns the Value field value
+// If the value is explicit nil, the zero value for PropertyChangelogBody will be returned
 func (o *PropertyListEntry) GetValue() PropertyChangelogBody {
-	if o == nil {
+	if o == nil || o.Value.Get() == nil {
 		var ret PropertyChangelogBody
 		return ret
 	}
 
-	return o.Value
+	return *o.Value.Get()
 }
 
 // GetValueOk returns a tuple with the Value field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *PropertyListEntry) GetValueOk() (*PropertyChangelogBody, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Value, true
+	return o.Value.Get(), o.Value.IsSet()
 }
 
 // SetValue sets field value
 func (o *PropertyListEntry) SetValue(v PropertyChangelogBody) {
-	o.Value = v
+	o.Value.Set(&v)
 }
 
 func (o PropertyListEntry) MarshalJSON() ([]byte, error) {
@@ -133,7 +135,7 @@ func (o PropertyListEntry) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["builtIn"] = o.BuiltIn
 	toSerialize["id"] = o.Id
-	toSerialize["value"] = o.Value
+	toSerialize["value"] = o.Value.Get()
 	return toSerialize, nil
 }
 

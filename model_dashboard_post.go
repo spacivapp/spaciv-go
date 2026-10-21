@@ -22,7 +22,7 @@ var _ MappedNullable = &DashboardPost{}
 
 // DashboardPost struct for DashboardPost
 type DashboardPost struct {
-	Cards []DashboardCard `json:"cards"`
+	Cards []DashboardCardRequest `json:"cards"`
 	Description string `json:"description"`
 	Id *string `json:"id,omitempty"`
 	Name string `json:"name"`
@@ -34,7 +34,7 @@ type _DashboardPost DashboardPost
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDashboardPost(cards []DashboardCard, description string, name string) *DashboardPost {
+func NewDashboardPost(cards []DashboardCardRequest, description string, name string) *DashboardPost {
 	this := DashboardPost{}
 	this.Cards = cards
 	this.Description = description
@@ -51,9 +51,9 @@ func NewDashboardPostWithDefaults() *DashboardPost {
 }
 
 // GetCards returns the Cards field value
-func (o *DashboardPost) GetCards() []DashboardCard {
+func (o *DashboardPost) GetCards() []DashboardCardRequest {
 	if o == nil {
-		var ret []DashboardCard
+		var ret []DashboardCardRequest
 		return ret
 	}
 
@@ -62,7 +62,7 @@ func (o *DashboardPost) GetCards() []DashboardCard {
 
 // GetCardsOk returns a tuple with the Cards field value
 // and a boolean to check if the value has been set.
-func (o *DashboardPost) GetCardsOk() ([]DashboardCard, bool) {
+func (o *DashboardPost) GetCardsOk() ([]DashboardCardRequest, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -70,7 +70,7 @@ func (o *DashboardPost) GetCardsOk() ([]DashboardCard, bool) {
 }
 
 // SetCards sets field value
-func (o *DashboardPost) SetCards(v []DashboardCard) {
+func (o *DashboardPost) SetCards(v []DashboardCardRequest) {
 	o.Cards = v
 }
 

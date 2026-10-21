@@ -22,9 +22,9 @@ var _ MappedNullable = &CalcRuleFloat{}
 
 // CalcRuleFloat struct for CalcRuleFloat
 type CalcRuleFloat struct {
-	Left CalcRuleRef `json:"left"`
+	Left NullableCalcRuleRef `json:"left"`
 	Op int32 `json:"op"`
-	Right CalcRuleRef `json:"right"`
+	Right NullableCalcRuleRef `json:"right"`
 }
 
 type _CalcRuleFloat CalcRuleFloat
@@ -33,7 +33,7 @@ type _CalcRuleFloat CalcRuleFloat
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCalcRuleFloat(left CalcRuleRef, op int32, right CalcRuleRef) *CalcRuleFloat {
+func NewCalcRuleFloat(left NullableCalcRuleRef, op int32, right NullableCalcRuleRef) *CalcRuleFloat {
 	this := CalcRuleFloat{}
 	this.Left = left
 	this.Op = op
@@ -50,27 +50,29 @@ func NewCalcRuleFloatWithDefaults() *CalcRuleFloat {
 }
 
 // GetLeft returns the Left field value
+// If the value is explicit nil, the zero value for CalcRuleRef will be returned
 func (o *CalcRuleFloat) GetLeft() CalcRuleRef {
-	if o == nil {
+	if o == nil || o.Left.Get() == nil {
 		var ret CalcRuleRef
 		return ret
 	}
 
-	return o.Left
+	return *o.Left.Get()
 }
 
 // GetLeftOk returns a tuple with the Left field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *CalcRuleFloat) GetLeftOk() (*CalcRuleRef, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Left, true
+	return o.Left.Get(), o.Left.IsSet()
 }
 
 // SetLeft sets field value
 func (o *CalcRuleFloat) SetLeft(v CalcRuleRef) {
-	o.Left = v
+	o.Left.Set(&v)
 }
 
 // GetOp returns the Op field value
@@ -98,27 +100,29 @@ func (o *CalcRuleFloat) SetOp(v int32) {
 }
 
 // GetRight returns the Right field value
+// If the value is explicit nil, the zero value for CalcRuleRef will be returned
 func (o *CalcRuleFloat) GetRight() CalcRuleRef {
-	if o == nil {
+	if o == nil || o.Right.Get() == nil {
 		var ret CalcRuleRef
 		return ret
 	}
 
-	return o.Right
+	return *o.Right.Get()
 }
 
 // GetRightOk returns a tuple with the Right field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *CalcRuleFloat) GetRightOk() (*CalcRuleRef, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Right, true
+	return o.Right.Get(), o.Right.IsSet()
 }
 
 // SetRight sets field value
 func (o *CalcRuleFloat) SetRight(v CalcRuleRef) {
-	o.Right = v
+	o.Right.Set(&v)
 }
 
 func (o CalcRuleFloat) MarshalJSON() ([]byte, error) {
@@ -131,9 +135,9 @@ func (o CalcRuleFloat) MarshalJSON() ([]byte, error) {
 
 func (o CalcRuleFloat) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["left"] = o.Left
+	toSerialize["left"] = o.Left.Get()
 	toSerialize["op"] = o.Op
-	toSerialize["right"] = o.Right
+	toSerialize["right"] = o.Right.Get()
 	return toSerialize, nil
 }
 

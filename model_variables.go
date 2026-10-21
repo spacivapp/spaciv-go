@@ -22,7 +22,7 @@ var _ MappedNullable = &Variables{}
 
 // Variables struct for Variables
 type Variables struct {
-	Data map[string]VariableChangelog `json:"data"`
+	Data map[string]VariableChangelogRequest `json:"data"`
 }
 
 type _Variables Variables
@@ -31,7 +31,7 @@ type _Variables Variables
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewVariables(data map[string]VariableChangelog) *Variables {
+func NewVariables(data map[string]VariableChangelogRequest) *Variables {
 	this := Variables{}
 	this.Data = data
 	return &this
@@ -46,9 +46,9 @@ func NewVariablesWithDefaults() *Variables {
 }
 
 // GetData returns the Data field value
-func (o *Variables) GetData() map[string]VariableChangelog {
+func (o *Variables) GetData() map[string]VariableChangelogRequest {
 	if o == nil {
-		var ret map[string]VariableChangelog
+		var ret map[string]VariableChangelogRequest
 		return ret
 	}
 
@@ -57,15 +57,15 @@ func (o *Variables) GetData() map[string]VariableChangelog {
 
 // GetDataOk returns a tuple with the Data field value
 // and a boolean to check if the value has been set.
-func (o *Variables) GetDataOk() (map[string]VariableChangelog, bool) {
+func (o *Variables) GetDataOk() (map[string]VariableChangelogRequest, bool) {
 	if o == nil {
-		return map[string]VariableChangelog{}, false
+		return map[string]VariableChangelogRequest{}, false
 	}
 	return o.Data, true
 }
 
 // SetData sets field value
-func (o *Variables) SetData(v map[string]VariableChangelog) {
+func (o *Variables) SetData(v map[string]VariableChangelogRequest) {
 	o.Data = v
 }
 

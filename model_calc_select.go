@@ -22,8 +22,8 @@ var _ MappedNullable = &CalcSelect{}
 
 // CalcSelect struct for CalcSelect
 type CalcSelect struct {
-	Calc CalcRuleRef `json:"calc"`
-	Object MaybeVarProp `json:"object"`
+	Calc NullableCalcRuleRef `json:"calc"`
+	Object NullableMaybeVarProp `json:"object"`
 }
 
 type _CalcSelect CalcSelect
@@ -32,7 +32,7 @@ type _CalcSelect CalcSelect
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCalcSelect(calc CalcRuleRef, object MaybeVarProp) *CalcSelect {
+func NewCalcSelect(calc NullableCalcRuleRef, object NullableMaybeVarProp) *CalcSelect {
 	this := CalcSelect{}
 	this.Calc = calc
 	this.Object = object
@@ -48,51 +48,55 @@ func NewCalcSelectWithDefaults() *CalcSelect {
 }
 
 // GetCalc returns the Calc field value
+// If the value is explicit nil, the zero value for CalcRuleRef will be returned
 func (o *CalcSelect) GetCalc() CalcRuleRef {
-	if o == nil {
+	if o == nil || o.Calc.Get() == nil {
 		var ret CalcRuleRef
 		return ret
 	}
 
-	return o.Calc
+	return *o.Calc.Get()
 }
 
 // GetCalcOk returns a tuple with the Calc field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *CalcSelect) GetCalcOk() (*CalcRuleRef, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Calc, true
+	return o.Calc.Get(), o.Calc.IsSet()
 }
 
 // SetCalc sets field value
 func (o *CalcSelect) SetCalc(v CalcRuleRef) {
-	o.Calc = v
+	o.Calc.Set(&v)
 }
 
 // GetObject returns the Object field value
+// If the value is explicit nil, the zero value for MaybeVarProp will be returned
 func (o *CalcSelect) GetObject() MaybeVarProp {
-	if o == nil {
+	if o == nil || o.Object.Get() == nil {
 		var ret MaybeVarProp
 		return ret
 	}
 
-	return o.Object
+	return *o.Object.Get()
 }
 
 // GetObjectOk returns a tuple with the Object field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *CalcSelect) GetObjectOk() (*MaybeVarProp, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Object, true
+	return o.Object.Get(), o.Object.IsSet()
 }
 
 // SetObject sets field value
 func (o *CalcSelect) SetObject(v MaybeVarProp) {
-	o.Object = v
+	o.Object.Set(&v)
 }
 
 func (o CalcSelect) MarshalJSON() ([]byte, error) {
@@ -105,8 +109,8 @@ func (o CalcSelect) MarshalJSON() ([]byte, error) {
 
 func (o CalcSelect) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["calc"] = o.Calc
-	toSerialize["object"] = o.Object
+	toSerialize["calc"] = o.Calc.Get()
+	toSerialize["object"] = o.Object.Get()
 	return toSerialize, nil
 }
 

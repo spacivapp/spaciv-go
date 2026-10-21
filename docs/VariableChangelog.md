@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Data** | [**VariableData**](VariableData.md) |  | 
+**Data** | [**NullableVariableData**](VariableData.md) |  | 
 **Name** | **string** |  | 
 
 ## Methods
 
 ### NewVariableChangelog
 
-`func NewVariableChangelog(data VariableData, name string, ) *VariableChangelog`
+`func NewVariableChangelog(data NullableVariableData, name string, ) *VariableChangelog`
 
 NewVariableChangelog instantiates a new VariableChangelog object
 This constructor will assign default values to properties that have it defined,
@@ -46,6 +46,16 @@ and a boolean to check if the value has been set.
 SetData sets Data field to given value.
 
 
+### SetDataNil
+
+`func (o *VariableChangelog) SetDataNil(b bool)`
+
+ SetDataNil sets the value for Data to be an explicit nil
+
+### UnsetData
+`func (o *VariableChangelog) UnsetData()`
+
+UnsetData ensures that no value is present for Data, not even an explicit nil
 ### GetName
 
 `func (o *VariableChangelog) GetName() string`

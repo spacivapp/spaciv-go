@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Amount** | [**CalcRuleRef**](CalcRuleRef.md) |  | 
+**Amount** | [**NullableCalcRuleRef**](CalcRuleRef.md) |  | 
 **Filters** | [**[]FilterGroup**](FilterGroup.md) |  | 
 
 ## Methods
 
 ### NewLogicDemand
 
-`func NewLogicDemand(amount CalcRuleRef, filters []FilterGroup, ) *LogicDemand`
+`func NewLogicDemand(amount NullableCalcRuleRef, filters []FilterGroup, ) *LogicDemand`
 
 NewLogicDemand instantiates a new LogicDemand object
 This constructor will assign default values to properties that have it defined,
@@ -46,6 +46,16 @@ and a boolean to check if the value has been set.
 SetAmount sets Amount field to given value.
 
 
+### SetAmountNil
+
+`func (o *LogicDemand) SetAmountNil(b bool)`
+
+ SetAmountNil sets the value for Amount to be an explicit nil
+
+### UnsetAmount
+`func (o *LogicDemand) UnsetAmount()`
+
+UnsetAmount ensures that no value is present for Amount, not even an explicit nil
 ### GetFilters
 
 `func (o *LogicDemand) GetFilters() []FilterGroup`

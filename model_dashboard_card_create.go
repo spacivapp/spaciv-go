@@ -22,7 +22,7 @@ var _ MappedNullable = &DashboardCardCreate{}
 
 // DashboardCardCreate struct for DashboardCardCreate
 type DashboardCardCreate struct {
-	Card DashboardCard `json:"card"`
+	Card DashboardCardRequest `json:"card"`
 	Index int32 `json:"index"`
 }
 
@@ -32,7 +32,7 @@ type _DashboardCardCreate DashboardCardCreate
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDashboardCardCreate(card DashboardCard, index int32) *DashboardCardCreate {
+func NewDashboardCardCreate(card DashboardCardRequest, index int32) *DashboardCardCreate {
 	this := DashboardCardCreate{}
 	this.Card = card
 	this.Index = index
@@ -48,9 +48,9 @@ func NewDashboardCardCreateWithDefaults() *DashboardCardCreate {
 }
 
 // GetCard returns the Card field value
-func (o *DashboardCardCreate) GetCard() DashboardCard {
+func (o *DashboardCardCreate) GetCard() DashboardCardRequest {
 	if o == nil {
-		var ret DashboardCard
+		var ret DashboardCardRequest
 		return ret
 	}
 
@@ -59,7 +59,7 @@ func (o *DashboardCardCreate) GetCard() DashboardCard {
 
 // GetCardOk returns a tuple with the Card field value
 // and a boolean to check if the value has been set.
-func (o *DashboardCardCreate) GetCardOk() (*DashboardCard, bool) {
+func (o *DashboardCardCreate) GetCardOk() (*DashboardCardRequest, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -67,7 +67,7 @@ func (o *DashboardCardCreate) GetCardOk() (*DashboardCard, bool) {
 }
 
 // SetCard sets field value
-func (o *DashboardCardCreate) SetCard(v DashboardCard) {
+func (o *DashboardCardCreate) SetCard(v DashboardCardRequest) {
 	o.Card = v
 }
 

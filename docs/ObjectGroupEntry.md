@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Data** | [**ObjectGroupEntryChangelogBody**](ObjectGroupEntryChangelogBody.md) |  | 
+**Data** | [**NullableObjectGroupEntryChangelogBody**](ObjectGroupEntryChangelogBody.md) |  | 
 **Id** | **string** |  | 
 
 ## Methods
 
 ### NewObjectGroupEntry
 
-`func NewObjectGroupEntry(data ObjectGroupEntryChangelogBody, id string, ) *ObjectGroupEntry`
+`func NewObjectGroupEntry(data NullableObjectGroupEntryChangelogBody, id string, ) *ObjectGroupEntry`
 
 NewObjectGroupEntry instantiates a new ObjectGroupEntry object
 This constructor will assign default values to properties that have it defined,
@@ -46,6 +46,16 @@ and a boolean to check if the value has been set.
 SetData sets Data field to given value.
 
 
+### SetDataNil
+
+`func (o *ObjectGroupEntry) SetDataNil(b bool)`
+
+ SetDataNil sets the value for Data to be an explicit nil
+
+### UnsetData
+`func (o *ObjectGroupEntry) UnsetData()`
+
+UnsetData ensures that no value is present for Data, not even an explicit nil
 ### GetId
 
 `func (o *ObjectGroupEntry) GetId() string`

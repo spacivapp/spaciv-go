@@ -23,7 +23,7 @@ var _ MappedNullable = &ScenarioListEntry{}
 // ScenarioListEntry struct for ScenarioListEntry
 type ScenarioListEntry struct {
 	Id string `json:"id"`
-	Scenario ScenarioChangelogBody `json:"scenario"`
+	Scenario NullableScenarioChangelogBody `json:"scenario"`
 }
 
 type _ScenarioListEntry ScenarioListEntry
@@ -32,7 +32,7 @@ type _ScenarioListEntry ScenarioListEntry
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewScenarioListEntry(id string, scenario ScenarioChangelogBody) *ScenarioListEntry {
+func NewScenarioListEntry(id string, scenario NullableScenarioChangelogBody) *ScenarioListEntry {
 	this := ScenarioListEntry{}
 	this.Id = id
 	this.Scenario = scenario
@@ -72,27 +72,29 @@ func (o *ScenarioListEntry) SetId(v string) {
 }
 
 // GetScenario returns the Scenario field value
+// If the value is explicit nil, the zero value for ScenarioChangelogBody will be returned
 func (o *ScenarioListEntry) GetScenario() ScenarioChangelogBody {
-	if o == nil {
+	if o == nil || o.Scenario.Get() == nil {
 		var ret ScenarioChangelogBody
 		return ret
 	}
 
-	return o.Scenario
+	return *o.Scenario.Get()
 }
 
 // GetScenarioOk returns a tuple with the Scenario field value
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *ScenarioListEntry) GetScenarioOk() (*ScenarioChangelogBody, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Scenario, true
+	return o.Scenario.Get(), o.Scenario.IsSet()
 }
 
 // SetScenario sets field value
 func (o *ScenarioListEntry) SetScenario(v ScenarioChangelogBody) {
-	o.Scenario = v
+	o.Scenario.Set(&v)
 }
 
 func (o ScenarioListEntry) MarshalJSON() ([]byte, error) {
@@ -106,7 +108,7 @@ func (o ScenarioListEntry) MarshalJSON() ([]byte, error) {
 func (o ScenarioListEntry) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["id"] = o.Id
-	toSerialize["scenario"] = o.Scenario
+	toSerialize["scenario"] = o.Scenario.Get()
 	return toSerialize, nil
 }
 
