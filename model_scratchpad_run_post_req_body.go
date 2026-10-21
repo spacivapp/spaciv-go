@@ -22,10 +22,10 @@ var _ MappedNullable = &ScratchpadRunPostReqBody{}
 
 // ScratchpadRunPostReqBody struct for ScratchpadRunPostReqBody
 type ScratchpadRunPostReqBody struct {
-	// Source files keyed by path. Python needs script.py defining handle(event, ctx) and JavaScript needs script.js exporting handle(event, ctx), as an integration script does, so the code can be saved as one unchanged.
+	// Source files keyed by path. Python needs script.py defining handle(event, ctx), JavaScript needs script.js exporting handle(event, ctx), and Go needs script.go in a non-main package exporting Handle(ctx context.Context, event handler.Event, hc handler.Context) (any, error) from spaciv/handler, as an integration script does, so the code can be saved as one unchanged.
 	Files map[string]string `json:"files"`
 	Input interface{} `json:"input,omitempty"`
-	// python or javascript. Go code has to be saved as a script, which builds it.
+	// python, go or javascript.
 	Language string `json:"language"`
 	// Longest the code may run. Defaults to 30.
 	TimeoutSeconds *int32 `json:"timeoutSeconds,omitempty"`

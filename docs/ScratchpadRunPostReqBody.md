@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Files** | **map[string]string** | Source files keyed by path. Python needs script.py defining handle(event, ctx) and JavaScript needs script.js exporting handle(event, ctx), as an integration script does, so the code can be saved as one unchanged. | 
+**Files** | **map[string]string** | Source files keyed by path. Python needs script.py defining handle(event, ctx), JavaScript needs script.js exporting handle(event, ctx), and Go needs script.go in a non-main package exporting Handle(ctx context.Context, event handler.Event, hc handler.Context) (any, error) from spaciv/handler, as an integration script does, so the code can be saved as one unchanged. | 
 **Input** | Pointer to **interface{}** |  | [optional] 
-**Language** | **string** | python or javascript. Go code has to be saved as a script, which builds it. | 
+**Language** | **string** | python, go or javascript. | 
 **TimeoutSeconds** | Pointer to **int32** | Longest the code may run. Defaults to 30. | [optional] 
 **WaitSeconds** | Pointer to **int32** | Longest to wait for the run to finish before responding. Defaults to 20. | [optional] 
 
