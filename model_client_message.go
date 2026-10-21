@@ -20,6 +20,7 @@ import (
 // ClientMessage - struct for ClientMessage
 type ClientMessage struct {
 	ClientAuthMessage *ClientAuthMessage
+	ClientPresenceMessage *ClientPresenceMessage
 	ClientSubscribeMessage *ClientSubscribeMessage
 	ClientUnsubscribeMessage *ClientUnsubscribeMessage
 }
@@ -28,6 +29,13 @@ type ClientMessage struct {
 func ClientAuthMessageAsClientMessage(v *ClientAuthMessage) ClientMessage {
 	return ClientMessage{
 		ClientAuthMessage: v,
+	}
+}
+
+// ClientPresenceMessageAsClientMessage is a convenience function that returns ClientPresenceMessage wrapped in ClientMessage
+func ClientPresenceMessageAsClientMessage(v *ClientPresenceMessage) ClientMessage {
+	return ClientMessage{
+		ClientPresenceMessage: v,
 	}
 }
 
@@ -67,6 +75,23 @@ func (dst *ClientMessage) UnmarshalJSON(data []byte) error {
 		dst.ClientAuthMessage = nil
 	}
 
+	// try to unmarshal data into ClientPresenceMessage
+	err = newStrictDecoder(data).Decode(&dst.ClientPresenceMessage)
+	if err == nil {
+		jsonClientPresenceMessage, _ := json.Marshal(dst.ClientPresenceMessage)
+		if string(jsonClientPresenceMessage) == "{}" { // empty struct
+			dst.ClientPresenceMessage = nil
+		} else {
+			if err = validator.Validate(dst.ClientPresenceMessage); err != nil {
+				dst.ClientPresenceMessage = nil
+			} else {
+				match++
+			}
+		}
+	} else {
+		dst.ClientPresenceMessage = nil
+	}
+
 	// try to unmarshal data into ClientSubscribeMessage
 	err = newStrictDecoder(data).Decode(&dst.ClientSubscribeMessage)
 	if err == nil {
@@ -104,6 +129,7 @@ func (dst *ClientMessage) UnmarshalJSON(data []byte) error {
 	if match > 1 { // more than 1 match
 		// reset to nil
 		dst.ClientAuthMessage = nil
+		dst.ClientPresenceMessage = nil
 		dst.ClientSubscribeMessage = nil
 		dst.ClientUnsubscribeMessage = nil
 
@@ -119,6 +145,10 @@ func (dst *ClientMessage) UnmarshalJSON(data []byte) error {
 func (src ClientMessage) MarshalJSON() ([]byte, error) {
 	if src.ClientAuthMessage != nil {
 		return json.Marshal(&src.ClientAuthMessage)
+	}
+
+	if src.ClientPresenceMessage != nil {
+		return json.Marshal(&src.ClientPresenceMessage)
 	}
 
 	if src.ClientSubscribeMessage != nil {
@@ -141,6 +171,10 @@ func (obj *ClientMessage) GetActualInstance() (interface{}) {
 		return obj.ClientAuthMessage
 	}
 
+	if obj.ClientPresenceMessage != nil {
+		return obj.ClientPresenceMessage
+	}
+
 	if obj.ClientSubscribeMessage != nil {
 		return obj.ClientSubscribeMessage
 	}
@@ -157,6 +191,10 @@ func (obj *ClientMessage) GetActualInstance() (interface{}) {
 func (obj ClientMessage) GetActualInstanceValue() (interface{}) {
 	if obj.ClientAuthMessage != nil {
 		return *obj.ClientAuthMessage
+	}
+
+	if obj.ClientPresenceMessage != nil {
+		return *obj.ClientPresenceMessage
 	}
 
 	if obj.ClientSubscribeMessage != nil {

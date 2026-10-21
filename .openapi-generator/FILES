@@ -138,6 +138,7 @@ docs/ChangelogOption.md
 docs/ChangelogValueOption.md
 docs/ClientAuthMessage.md
 docs/ClientMessage.md
+docs/ClientPresenceMessage.md
 docs/ClientSubscribeMessage.md
 docs/ClientUnsubscribeMessage.md
 docs/ConfidentialityData.md
@@ -339,6 +340,7 @@ docs/Orphan.md
 docs/OutOfOfficeData.md
 docs/ParameterType.md
 docs/PasswordPutReqBody.md
+docs/PresenceMember.md
 docs/ProjectChangelogBody.md
 docs/ProjectCreateBody.md
 docs/ProjectCreateBodyOneOf.md
@@ -421,6 +423,8 @@ docs/SerializedEvent.md
 docs/ServerChangedMessage.md
 docs/ServerErrorMessage.md
 docs/ServerMessage.md
+docs/ServerPresenceMessage.md
+docs/ServerPresenceSnapshotMessage.md
 docs/ServerResyncMessage.md
 docs/ServerSubscribedMessage.md
 docs/ServiceAPI.md
@@ -575,6 +579,7 @@ model_changelog_option.go
 model_changelog_value_option.go
 model_client_auth_message.go
 model_client_message.go
+model_client_presence_message.go
 model_client_subscribe_message.go
 model_client_unsubscribe_message.go
 model_confidentiality_data.go
@@ -763,6 +768,7 @@ model_orphan.go
 model_out_of_office_data.go
 model_parameter_type.go
 model_password_put_req_body.go
+model_presence_member.go
 model_project_changelog_body.go
 model_project_create_body.go
 model_project_create_body_one_of.go
@@ -840,6 +846,8 @@ model_serialized_event.go
 model_server_changed_message.go
 model_server_error_message.go
 model_server_message.go
+model_server_presence_message.go
+model_server_presence_snapshot_message.go
 model_server_resync_message.go
 model_server_subscribed_message.go
 model_single_select_changelog_data.go

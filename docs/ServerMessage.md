@@ -10,12 +10,15 @@ Name | Type | Description | Notes
 **V** | **int32** |  | 
 **Code** | **string** |  | 
 **Message** | **string** |  | 
+**Event** | **string** |  | 
+**Member** | [**PresenceMember**](PresenceMember.md) |  | 
+**Members** | [**[]PresenceMember**](PresenceMember.md) | Everyone else present on the topic. It replaces what the connection knew, and presence events follow it. | 
 
 ## Methods
 
 ### NewServerMessage
 
-`func NewServerMessage(events []EntityChangedEvent, topic string, type_ string, v int32, code string, message string, ) *ServerMessage`
+`func NewServerMessage(events []EntityChangedEvent, topic string, type_ string, v int32, code string, message string, event string, member PresenceMember, members []PresenceMember, ) *ServerMessage`
 
 NewServerMessage instantiates a new ServerMessage object
 This constructor will assign default values to properties that have it defined,
@@ -148,6 +151,66 @@ and a boolean to check if the value has been set.
 `func (o *ServerMessage) SetMessage(v string)`
 
 SetMessage sets Message field to given value.
+
+
+### GetEvent
+
+`func (o *ServerMessage) GetEvent() string`
+
+GetEvent returns the Event field if non-nil, zero value otherwise.
+
+### GetEventOk
+
+`func (o *ServerMessage) GetEventOk() (*string, bool)`
+
+GetEventOk returns a tuple with the Event field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetEvent
+
+`func (o *ServerMessage) SetEvent(v string)`
+
+SetEvent sets Event field to given value.
+
+
+### GetMember
+
+`func (o *ServerMessage) GetMember() PresenceMember`
+
+GetMember returns the Member field if non-nil, zero value otherwise.
+
+### GetMemberOk
+
+`func (o *ServerMessage) GetMemberOk() (*PresenceMember, bool)`
+
+GetMemberOk returns a tuple with the Member field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetMember
+
+`func (o *ServerMessage) SetMember(v PresenceMember)`
+
+SetMember sets Member field to given value.
+
+
+### GetMembers
+
+`func (o *ServerMessage) GetMembers() []PresenceMember`
+
+GetMembers returns the Members field if non-nil, zero value otherwise.
+
+### GetMembersOk
+
+`func (o *ServerMessage) GetMembersOk() (*[]PresenceMember, bool)`
+
+GetMembersOk returns a tuple with the Members field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetMembers
+
+`func (o *ServerMessage) SetMembers(v []PresenceMember)`
+
+SetMembers sets Members field to given value.
 
 
 

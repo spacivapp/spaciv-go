@@ -10162,6 +10162,7 @@ components:
       discriminator:
         mapping:
           auth: "#/components/schemas/ClientAuthMessage"
+          presence: "#/components/schemas/ClientPresenceMessage"
           subscribe: "#/components/schemas/ClientSubscribeMessage"
           unsubscribe: "#/components/schemas/ClientUnsubscribeMessage"
         propertyName: type
@@ -10169,6 +10170,39 @@ components:
       - $ref: "#/components/schemas/ClientAuthMessage"
       - $ref: "#/components/schemas/ClientSubscribeMessage"
       - $ref: "#/components/schemas/ClientUnsubscribeMessage"
+      - $ref: "#/components/schemas/ClientPresenceMessage"
+    ClientPresenceMessage:
+      additionalProperties: false
+      properties:
+        state:
+          description: "none leaves the topic's presence, as unsubscribing does."
+          enum:
+          - viewing
+          - editing
+          - none
+          type: string
+        target:
+          description: "What on the topic's resource is being viewed or edited, such\
+            \ as a card."
+          maxLength: 256
+          type: string
+        topic:
+          description: A topic this connection has subscribed to; presence on any
+            other topic is ignored.
+          type: string
+        type:
+          enum:
+          - presence
+          type: string
+        v:
+          enum:
+          - 1
+          type: integer
+      required:
+      - state
+      - topic
+      - type
+      - v
     ClientSubscribeMessage:
       additionalProperties: false
       properties:
@@ -14138,6 +14172,29 @@ components:
       required:
       - password
       - token
+    PresenceMember:
+      additionalProperties: {}
+      properties:
+        firstName:
+          type: string
+        id:
+          description: "Identifies one connection, so one user's tabs are separate\
+            \ members."
+        lastName:
+          type: string
+        state:
+          enum:
+          - viewing
+          - editing
+        target:
+          type: string
+        user:
+          format: int64
+          type: integer
+      required:
+      - id
+      - state
+      - user
     ProjectChangelogBody:
       additionalProperties: false
       example:
@@ -17016,6 +17073,8 @@ components:
         mapping:
           changed: "#/components/schemas/ServerChangedMessage"
           error: "#/components/schemas/ServerErrorMessage"
+          presence: "#/components/schemas/ServerPresenceMessage"
+          presence_snapshot: "#/components/schemas/ServerPresenceSnapshotMessage"
           resync: "#/components/schemas/ServerResyncMessage"
           subscribed: "#/components/schemas/ServerSubscribedMessage"
         propertyName: type
@@ -17024,6 +17083,59 @@ components:
       - $ref: "#/components/schemas/ServerSubscribedMessage"
       - $ref: "#/components/schemas/ServerResyncMessage"
       - $ref: "#/components/schemas/ServerErrorMessage"
+      - $ref: "#/components/schemas/ServerPresenceMessage"
+      - $ref: "#/components/schemas/ServerPresenceSnapshotMessage"
+    ServerPresenceMessage:
+      additionalProperties: false
+      properties:
+        event:
+          enum:
+          - join
+          - change
+          - leave
+          type: string
+        member:
+          $ref: "#/components/schemas/PresenceMember"
+        topic:
+          type: string
+        type:
+          enum:
+          - presence
+          type: string
+        v:
+          enum:
+          - 1
+          type: integer
+      required:
+      - event
+      - member
+      - topic
+      - type
+      - v
+    ServerPresenceSnapshotMessage:
+      additionalProperties: false
+      properties:
+        members:
+          description: "Everyone else present on the topic. It replaces what the connection\
+            \ knew, and presence events follow it."
+          items:
+            $ref: "#/components/schemas/PresenceMember"
+          type: array
+        topic:
+          type: string
+        type:
+          enum:
+          - presence_snapshot
+          type: string
+        v:
+          enum:
+          - 1
+          type: integer
+      required:
+      - members
+      - topic
+      - type
+      - v
     ServerResyncMessage:
       additionalProperties: false
       properties:

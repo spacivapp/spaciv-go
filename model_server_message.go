@@ -21,6 +21,8 @@ import (
 type ServerMessage struct {
 	ServerChangedMessage *ServerChangedMessage
 	ServerErrorMessage *ServerErrorMessage
+	ServerPresenceMessage *ServerPresenceMessage
+	ServerPresenceSnapshotMessage *ServerPresenceSnapshotMessage
 	ServerResyncMessage *ServerResyncMessage
 	ServerSubscribedMessage *ServerSubscribedMessage
 }
@@ -36,6 +38,20 @@ func ServerChangedMessageAsServerMessage(v *ServerChangedMessage) ServerMessage 
 func ServerErrorMessageAsServerMessage(v *ServerErrorMessage) ServerMessage {
 	return ServerMessage{
 		ServerErrorMessage: v,
+	}
+}
+
+// ServerPresenceMessageAsServerMessage is a convenience function that returns ServerPresenceMessage wrapped in ServerMessage
+func ServerPresenceMessageAsServerMessage(v *ServerPresenceMessage) ServerMessage {
+	return ServerMessage{
+		ServerPresenceMessage: v,
+	}
+}
+
+// ServerPresenceSnapshotMessageAsServerMessage is a convenience function that returns ServerPresenceSnapshotMessage wrapped in ServerMessage
+func ServerPresenceSnapshotMessageAsServerMessage(v *ServerPresenceSnapshotMessage) ServerMessage {
+	return ServerMessage{
+		ServerPresenceSnapshotMessage: v,
 	}
 }
 
@@ -92,6 +108,40 @@ func (dst *ServerMessage) UnmarshalJSON(data []byte) error {
 		dst.ServerErrorMessage = nil
 	}
 
+	// try to unmarshal data into ServerPresenceMessage
+	err = newStrictDecoder(data).Decode(&dst.ServerPresenceMessage)
+	if err == nil {
+		jsonServerPresenceMessage, _ := json.Marshal(dst.ServerPresenceMessage)
+		if string(jsonServerPresenceMessage) == "{}" { // empty struct
+			dst.ServerPresenceMessage = nil
+		} else {
+			if err = validator.Validate(dst.ServerPresenceMessage); err != nil {
+				dst.ServerPresenceMessage = nil
+			} else {
+				match++
+			}
+		}
+	} else {
+		dst.ServerPresenceMessage = nil
+	}
+
+	// try to unmarshal data into ServerPresenceSnapshotMessage
+	err = newStrictDecoder(data).Decode(&dst.ServerPresenceSnapshotMessage)
+	if err == nil {
+		jsonServerPresenceSnapshotMessage, _ := json.Marshal(dst.ServerPresenceSnapshotMessage)
+		if string(jsonServerPresenceSnapshotMessage) == "{}" { // empty struct
+			dst.ServerPresenceSnapshotMessage = nil
+		} else {
+			if err = validator.Validate(dst.ServerPresenceSnapshotMessage); err != nil {
+				dst.ServerPresenceSnapshotMessage = nil
+			} else {
+				match++
+			}
+		}
+	} else {
+		dst.ServerPresenceSnapshotMessage = nil
+	}
+
 	// try to unmarshal data into ServerResyncMessage
 	err = newStrictDecoder(data).Decode(&dst.ServerResyncMessage)
 	if err == nil {
@@ -130,6 +180,8 @@ func (dst *ServerMessage) UnmarshalJSON(data []byte) error {
 		// reset to nil
 		dst.ServerChangedMessage = nil
 		dst.ServerErrorMessage = nil
+		dst.ServerPresenceMessage = nil
+		dst.ServerPresenceSnapshotMessage = nil
 		dst.ServerResyncMessage = nil
 		dst.ServerSubscribedMessage = nil
 
@@ -149,6 +201,14 @@ func (src ServerMessage) MarshalJSON() ([]byte, error) {
 
 	if src.ServerErrorMessage != nil {
 		return json.Marshal(&src.ServerErrorMessage)
+	}
+
+	if src.ServerPresenceMessage != nil {
+		return json.Marshal(&src.ServerPresenceMessage)
+	}
+
+	if src.ServerPresenceSnapshotMessage != nil {
+		return json.Marshal(&src.ServerPresenceSnapshotMessage)
 	}
 
 	if src.ServerResyncMessage != nil {
@@ -175,6 +235,14 @@ func (obj *ServerMessage) GetActualInstance() (interface{}) {
 		return obj.ServerErrorMessage
 	}
 
+	if obj.ServerPresenceMessage != nil {
+		return obj.ServerPresenceMessage
+	}
+
+	if obj.ServerPresenceSnapshotMessage != nil {
+		return obj.ServerPresenceSnapshotMessage
+	}
+
 	if obj.ServerResyncMessage != nil {
 		return obj.ServerResyncMessage
 	}
@@ -195,6 +263,14 @@ func (obj ServerMessage) GetActualInstanceValue() (interface{}) {
 
 	if obj.ServerErrorMessage != nil {
 		return *obj.ServerErrorMessage
+	}
+
+	if obj.ServerPresenceMessage != nil {
+		return *obj.ServerPresenceMessage
+	}
+
+	if obj.ServerPresenceSnapshotMessage != nil {
+		return *obj.ServerPresenceSnapshotMessage
 	}
 
 	if obj.ServerResyncMessage != nil {
