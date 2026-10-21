@@ -4,18 +4,18 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Code** | Pointer to **string** |  | [optional] 
-**Events** | Pointer to [**[]EntityChangedEvent**](EntityChangedEvent.md) |  | [optional] 
-**Message** | Pointer to **string** |  | [optional] 
-**Topic** | Pointer to **string** |  | [optional] 
+**Events** | [**[]EntityChangedEvent**](EntityChangedEvent.md) |  | 
+**Topic** | **string** |  | 
 **Type** | **string** |  | 
-**V** | **int64** |  | 
+**V** | **int32** |  | 
+**Code** | **string** |  | 
+**Message** | **string** |  | 
 
 ## Methods
 
 ### NewServerMessage
 
-`func NewServerMessage(type_ string, v int64, ) *ServerMessage`
+`func NewServerMessage(events []EntityChangedEvent, topic string, type_ string, v int32, code string, message string, ) *ServerMessage`
 
 NewServerMessage instantiates a new ServerMessage object
 This constructor will assign default values to properties that have it defined,
@@ -29,31 +29,6 @@ will change when the set of required properties is changed
 NewServerMessageWithDefaults instantiates a new ServerMessage object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
-
-### GetCode
-
-`func (o *ServerMessage) GetCode() string`
-
-GetCode returns the Code field if non-nil, zero value otherwise.
-
-### GetCodeOk
-
-`func (o *ServerMessage) GetCodeOk() (*string, bool)`
-
-GetCodeOk returns a tuple with the Code field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetCode
-
-`func (o *ServerMessage) SetCode(v string)`
-
-SetCode sets Code field to given value.
-
-### HasCode
-
-`func (o *ServerMessage) HasCode() bool`
-
-HasCode returns a boolean if a field has been set.
 
 ### GetEvents
 
@@ -74,36 +49,6 @@ and a boolean to check if the value has been set.
 
 SetEvents sets Events field to given value.
 
-### HasEvents
-
-`func (o *ServerMessage) HasEvents() bool`
-
-HasEvents returns a boolean if a field has been set.
-
-### GetMessage
-
-`func (o *ServerMessage) GetMessage() string`
-
-GetMessage returns the Message field if non-nil, zero value otherwise.
-
-### GetMessageOk
-
-`func (o *ServerMessage) GetMessageOk() (*string, bool)`
-
-GetMessageOk returns a tuple with the Message field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetMessage
-
-`func (o *ServerMessage) SetMessage(v string)`
-
-SetMessage sets Message field to given value.
-
-### HasMessage
-
-`func (o *ServerMessage) HasMessage() bool`
-
-HasMessage returns a boolean if a field has been set.
 
 ### GetTopic
 
@@ -124,11 +69,6 @@ and a boolean to check if the value has been set.
 
 SetTopic sets Topic field to given value.
 
-### HasTopic
-
-`func (o *ServerMessage) HasTopic() bool`
-
-HasTopic returns a boolean if a field has been set.
 
 ### GetType
 
@@ -152,22 +92,62 @@ SetType sets Type field to given value.
 
 ### GetV
 
-`func (o *ServerMessage) GetV() int64`
+`func (o *ServerMessage) GetV() int32`
 
 GetV returns the V field if non-nil, zero value otherwise.
 
 ### GetVOk
 
-`func (o *ServerMessage) GetVOk() (*int64, bool)`
+`func (o *ServerMessage) GetVOk() (*int32, bool)`
 
 GetVOk returns a tuple with the V field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetV
 
-`func (o *ServerMessage) SetV(v int64)`
+`func (o *ServerMessage) SetV(v int32)`
 
 SetV sets V field to given value.
+
+
+### GetCode
+
+`func (o *ServerMessage) GetCode() string`
+
+GetCode returns the Code field if non-nil, zero value otherwise.
+
+### GetCodeOk
+
+`func (o *ServerMessage) GetCodeOk() (*string, bool)`
+
+GetCodeOk returns a tuple with the Code field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCode
+
+`func (o *ServerMessage) SetCode(v string)`
+
+SetCode sets Code field to given value.
+
+
+### GetMessage
+
+`func (o *ServerMessage) GetMessage() string`
+
+GetMessage returns the Message field if non-nil, zero value otherwise.
+
+### GetMessageOk
+
+`func (o *ServerMessage) GetMessageOk() (*string, bool)`
+
+GetMessageOk returns a tuple with the Message field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetMessage
+
+`func (o *ServerMessage) SetMessage(v string)`
+
+SetMessage sets Message field to given value.
 
 
 

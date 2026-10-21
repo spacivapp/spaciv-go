@@ -14,297 +14,199 @@ package spaciv
 import (
 	"encoding/json"
 	"fmt"
+	"gopkg.in/validator.v2"
 )
 
-// checks if the ServerMessage type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &ServerMessage{}
-
-// ServerMessage struct for ServerMessage
+// ServerMessage - struct for ServerMessage
 type ServerMessage struct {
-	Code *string `json:"code,omitempty"`
-	Events []EntityChangedEvent `json:"events,omitempty"`
-	Message *string `json:"message,omitempty"`
-	Topic *string `json:"topic,omitempty"`
-	Type string `json:"type"`
-	V int64 `json:"v"`
-	AdditionalProperties map[string]interface{}
+	ServerChangedMessage *ServerChangedMessage
+	ServerErrorMessage *ServerErrorMessage
+	ServerResyncMessage *ServerResyncMessage
+	ServerSubscribedMessage *ServerSubscribedMessage
 }
 
-type _ServerMessage ServerMessage
-
-// NewServerMessage instantiates a new ServerMessage object
-// This constructor will assign default values to properties that have it defined,
-// and makes sure properties required by API are set, but the set of arguments
-// will change when the set of required properties is changed
-func NewServerMessage(type_ string, v int64) *ServerMessage {
-	this := ServerMessage{}
-	this.Type = type_
-	this.V = v
-	return &this
-}
-
-// NewServerMessageWithDefaults instantiates a new ServerMessage object
-// This constructor will only assign default values to properties that have it defined,
-// but it doesn't guarantee that properties required by API are set
-func NewServerMessageWithDefaults() *ServerMessage {
-	this := ServerMessage{}
-	return &this
-}
-
-// GetCode returns the Code field value if set, zero value otherwise.
-func (o *ServerMessage) GetCode() string {
-	if o == nil || IsNil(o.Code) {
-		var ret string
-		return ret
+// ServerChangedMessageAsServerMessage is a convenience function that returns ServerChangedMessage wrapped in ServerMessage
+func ServerChangedMessageAsServerMessage(v *ServerChangedMessage) ServerMessage {
+	return ServerMessage{
+		ServerChangedMessage: v,
 	}
-	return *o.Code
 }
 
-// GetCodeOk returns a tuple with the Code field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *ServerMessage) GetCodeOk() (*string, bool) {
-	if o == nil || IsNil(o.Code) {
-		return nil, false
+// ServerErrorMessageAsServerMessage is a convenience function that returns ServerErrorMessage wrapped in ServerMessage
+func ServerErrorMessageAsServerMessage(v *ServerErrorMessage) ServerMessage {
+	return ServerMessage{
+		ServerErrorMessage: v,
 	}
-	return o.Code, true
 }
 
-// HasCode returns a boolean if a field has been set.
-func (o *ServerMessage) HasCode() bool {
-	if o != nil && !IsNil(o.Code) {
-		return true
+// ServerResyncMessageAsServerMessage is a convenience function that returns ServerResyncMessage wrapped in ServerMessage
+func ServerResyncMessageAsServerMessage(v *ServerResyncMessage) ServerMessage {
+	return ServerMessage{
+		ServerResyncMessage: v,
 	}
-
-	return false
 }
 
-// SetCode gets a reference to the given string and assigns it to the Code field.
-func (o *ServerMessage) SetCode(v string) {
-	o.Code = &v
-}
-
-// GetEvents returns the Events field value if set, zero value otherwise.
-func (o *ServerMessage) GetEvents() []EntityChangedEvent {
-	if o == nil || IsNil(o.Events) {
-		var ret []EntityChangedEvent
-		return ret
+// ServerSubscribedMessageAsServerMessage is a convenience function that returns ServerSubscribedMessage wrapped in ServerMessage
+func ServerSubscribedMessageAsServerMessage(v *ServerSubscribedMessage) ServerMessage {
+	return ServerMessage{
+		ServerSubscribedMessage: v,
 	}
-	return o.Events
 }
 
-// GetEventsOk returns a tuple with the Events field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *ServerMessage) GetEventsOk() ([]EntityChangedEvent, bool) {
-	if o == nil || IsNil(o.Events) {
-		return nil, false
-	}
-	return o.Events, true
-}
 
-// HasEvents returns a boolean if a field has been set.
-func (o *ServerMessage) HasEvents() bool {
-	if o != nil && !IsNil(o.Events) {
-		return true
-	}
-
-	return false
-}
-
-// SetEvents gets a reference to the given []EntityChangedEvent and assigns it to the Events field.
-func (o *ServerMessage) SetEvents(v []EntityChangedEvent) {
-	o.Events = v
-}
-
-// GetMessage returns the Message field value if set, zero value otherwise.
-func (o *ServerMessage) GetMessage() string {
-	if o == nil || IsNil(o.Message) {
-		var ret string
-		return ret
-	}
-	return *o.Message
-}
-
-// GetMessageOk returns a tuple with the Message field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *ServerMessage) GetMessageOk() (*string, bool) {
-	if o == nil || IsNil(o.Message) {
-		return nil, false
-	}
-	return o.Message, true
-}
-
-// HasMessage returns a boolean if a field has been set.
-func (o *ServerMessage) HasMessage() bool {
-	if o != nil && !IsNil(o.Message) {
-		return true
-	}
-
-	return false
-}
-
-// SetMessage gets a reference to the given string and assigns it to the Message field.
-func (o *ServerMessage) SetMessage(v string) {
-	o.Message = &v
-}
-
-// GetTopic returns the Topic field value if set, zero value otherwise.
-func (o *ServerMessage) GetTopic() string {
-	if o == nil || IsNil(o.Topic) {
-		var ret string
-		return ret
-	}
-	return *o.Topic
-}
-
-// GetTopicOk returns a tuple with the Topic field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *ServerMessage) GetTopicOk() (*string, bool) {
-	if o == nil || IsNil(o.Topic) {
-		return nil, false
-	}
-	return o.Topic, true
-}
-
-// HasTopic returns a boolean if a field has been set.
-func (o *ServerMessage) HasTopic() bool {
-	if o != nil && !IsNil(o.Topic) {
-		return true
-	}
-
-	return false
-}
-
-// SetTopic gets a reference to the given string and assigns it to the Topic field.
-func (o *ServerMessage) SetTopic(v string) {
-	o.Topic = &v
-}
-
-// GetType returns the Type field value
-func (o *ServerMessage) GetType() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.Type
-}
-
-// GetTypeOk returns a tuple with the Type field value
-// and a boolean to check if the value has been set.
-func (o *ServerMessage) GetTypeOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Type, true
-}
-
-// SetType sets field value
-func (o *ServerMessage) SetType(v string) {
-	o.Type = v
-}
-
-// GetV returns the V field value
-func (o *ServerMessage) GetV() int64 {
-	if o == nil {
-		var ret int64
-		return ret
-	}
-
-	return o.V
-}
-
-// GetVOk returns a tuple with the V field value
-// and a boolean to check if the value has been set.
-func (o *ServerMessage) GetVOk() (*int64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.V, true
-}
-
-// SetV sets field value
-func (o *ServerMessage) SetV(v int64) {
-	o.V = v
-}
-
-func (o ServerMessage) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
-	if err != nil {
-		return []byte{}, err
-	}
-	return json.Marshal(toSerialize)
-}
-
-func (o ServerMessage) ToMap() (map[string]interface{}, error) {
-	toSerialize := map[string]interface{}{}
-	if !IsNil(o.Code) {
-		toSerialize["code"] = o.Code
-	}
-	if !IsNil(o.Events) {
-		toSerialize["events"] = o.Events
-	}
-	if !IsNil(o.Message) {
-		toSerialize["message"] = o.Message
-	}
-	if !IsNil(o.Topic) {
-		toSerialize["topic"] = o.Topic
-	}
-	toSerialize["type"] = o.Type
-	toSerialize["v"] = o.V
-
-	for key, value := range o.AdditionalProperties {
-		toSerialize[key] = value
-	}
-
-	return toSerialize, nil
-}
-
-func (o *ServerMessage) UnmarshalJSON(data []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"type",
-		"v",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(data, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
+// Unmarshal JSON data into one of the pointers in the struct
+func (dst *ServerMessage) UnmarshalJSON(data []byte) error {
+	var err error
+	match := 0
+	// try to unmarshal data into ServerChangedMessage
+	err = newStrictDecoder(data).Decode(&dst.ServerChangedMessage)
+	if err == nil {
+		jsonServerChangedMessage, _ := json.Marshal(dst.ServerChangedMessage)
+		if string(jsonServerChangedMessage) == "{}" { // empty struct
+			dst.ServerChangedMessage = nil
+		} else {
+			if err = validator.Validate(dst.ServerChangedMessage); err != nil {
+				dst.ServerChangedMessage = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.ServerChangedMessage = nil
 	}
 
-	varServerMessage := _ServerMessage{}
-
-	err = json.Unmarshal(data, &varServerMessage)
-
-	if err != nil {
-		return err
+	// try to unmarshal data into ServerErrorMessage
+	err = newStrictDecoder(data).Decode(&dst.ServerErrorMessage)
+	if err == nil {
+		jsonServerErrorMessage, _ := json.Marshal(dst.ServerErrorMessage)
+		if string(jsonServerErrorMessage) == "{}" { // empty struct
+			dst.ServerErrorMessage = nil
+		} else {
+			if err = validator.Validate(dst.ServerErrorMessage); err != nil {
+				dst.ServerErrorMessage = nil
+			} else {
+				match++
+			}
+		}
+	} else {
+		dst.ServerErrorMessage = nil
 	}
 
-	*o = ServerMessage(varServerMessage)
-
-	additionalProperties := make(map[string]interface{})
-
-	if err = json.Unmarshal(data, &additionalProperties); err == nil {
-		delete(additionalProperties, "code")
-		delete(additionalProperties, "events")
-		delete(additionalProperties, "message")
-		delete(additionalProperties, "topic")
-		delete(additionalProperties, "type")
-		delete(additionalProperties, "v")
-		o.AdditionalProperties = additionalProperties
+	// try to unmarshal data into ServerResyncMessage
+	err = newStrictDecoder(data).Decode(&dst.ServerResyncMessage)
+	if err == nil {
+		jsonServerResyncMessage, _ := json.Marshal(dst.ServerResyncMessage)
+		if string(jsonServerResyncMessage) == "{}" { // empty struct
+			dst.ServerResyncMessage = nil
+		} else {
+			if err = validator.Validate(dst.ServerResyncMessage); err != nil {
+				dst.ServerResyncMessage = nil
+			} else {
+				match++
+			}
+		}
+	} else {
+		dst.ServerResyncMessage = nil
 	}
 
-	return err
+	// try to unmarshal data into ServerSubscribedMessage
+	err = newStrictDecoder(data).Decode(&dst.ServerSubscribedMessage)
+	if err == nil {
+		jsonServerSubscribedMessage, _ := json.Marshal(dst.ServerSubscribedMessage)
+		if string(jsonServerSubscribedMessage) == "{}" { // empty struct
+			dst.ServerSubscribedMessage = nil
+		} else {
+			if err = validator.Validate(dst.ServerSubscribedMessage); err != nil {
+				dst.ServerSubscribedMessage = nil
+			} else {
+				match++
+			}
+		}
+	} else {
+		dst.ServerSubscribedMessage = nil
+	}
+
+	if match > 1 { // more than 1 match
+		// reset to nil
+		dst.ServerChangedMessage = nil
+		dst.ServerErrorMessage = nil
+		dst.ServerResyncMessage = nil
+		dst.ServerSubscribedMessage = nil
+
+		return fmt.Errorf("data matches more than one schema in oneOf(ServerMessage)")
+	} else if match == 1 {
+		return nil // exactly one match
+	} else { // no match
+		return fmt.Errorf("data failed to match schemas in oneOf(ServerMessage)")
+	}
+}
+
+// Marshal data from the first non-nil pointers in the struct to JSON
+func (src ServerMessage) MarshalJSON() ([]byte, error) {
+	if src.ServerChangedMessage != nil {
+		return json.Marshal(&src.ServerChangedMessage)
+	}
+
+	if src.ServerErrorMessage != nil {
+		return json.Marshal(&src.ServerErrorMessage)
+	}
+
+	if src.ServerResyncMessage != nil {
+		return json.Marshal(&src.ServerResyncMessage)
+	}
+
+	if src.ServerSubscribedMessage != nil {
+		return json.Marshal(&src.ServerSubscribedMessage)
+	}
+
+	return nil, nil // no data in oneOf schemas
+}
+
+// Get the actual instance
+func (obj *ServerMessage) GetActualInstance() (interface{}) {
+	if obj == nil {
+		return nil
+	}
+	if obj.ServerChangedMessage != nil {
+		return obj.ServerChangedMessage
+	}
+
+	if obj.ServerErrorMessage != nil {
+		return obj.ServerErrorMessage
+	}
+
+	if obj.ServerResyncMessage != nil {
+		return obj.ServerResyncMessage
+	}
+
+	if obj.ServerSubscribedMessage != nil {
+		return obj.ServerSubscribedMessage
+	}
+
+	// all schemas are nil
+	return nil
+}
+
+// Get the actual instance value
+func (obj ServerMessage) GetActualInstanceValue() (interface{}) {
+	if obj.ServerChangedMessage != nil {
+		return *obj.ServerChangedMessage
+	}
+
+	if obj.ServerErrorMessage != nil {
+		return *obj.ServerErrorMessage
+	}
+
+	if obj.ServerResyncMessage != nil {
+		return *obj.ServerResyncMessage
+	}
+
+	if obj.ServerSubscribedMessage != nil {
+		return *obj.ServerSubscribedMessage
+	}
+
+	// all schemas are nil
+	return nil
 }
 
 type NullableServerMessage struct {

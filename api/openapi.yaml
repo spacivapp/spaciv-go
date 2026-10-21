@@ -10143,29 +10143,74 @@ components:
       - id
       - name
       - value
-    ClientMessage:
+    ClientAuthMessage:
       additionalProperties: {}
       properties:
         token:
-          type: string
+          minLength: 1
+        type:
+          enum:
+          - auth
+        v:
+          enum:
+          - 1
+      required:
+      - token
+      - type
+      - v
+    ClientMessage:
+      discriminator:
+        mapping:
+          auth: "#/components/schemas/ClientAuthMessage"
+          subscribe: "#/components/schemas/ClientSubscribeMessage"
+          unsubscribe: "#/components/schemas/ClientUnsubscribeMessage"
+        propertyName: type
+      oneOf:
+      - $ref: "#/components/schemas/ClientAuthMessage"
+      - $ref: "#/components/schemas/ClientSubscribeMessage"
+      - $ref: "#/components/schemas/ClientUnsubscribeMessage"
+    ClientSubscribeMessage:
+      additionalProperties: false
+      properties:
         topics:
-          description: "Between 1 and 100 topics for subscribe and unsubscribe. A\
-            \ message must fit within 128 KiB as sent, so topics whose JSON encoding\
-            \ is long go in several messages."
+          description: "A message must fit within 128 KiB as sent, so topics whose\
+            \ JSON encoding is long go in several messages."
           items:
             type: string
           maxItems: 100
           minItems: 1
+          type: array
         type:
           enum:
-          - auth
           - subscribe
-          - unsubscribe
+          type: string
         v:
           enum:
           - 1
-          format: int64
+          type: integer
       required:
+      - topics
+      - type
+      - v
+    ClientUnsubscribeMessage:
+      additionalProperties: false
+      properties:
+        topics:
+          items:
+            type: string
+          maxItems: 100
+          minItems: 1
+          type: array
+        type:
+          enum:
+          - unsubscribe
+          type: string
+        v:
+          enum:
+          - 1
+          type: integer
+      required:
+      - topics
       - type
       - v
     ConfidentialityData:
@@ -16920,7 +16965,26 @@ components:
       required:
       - id
       - topic
-    ServerMessage:
+    ServerChangedMessage:
+      additionalProperties: {}
+      properties:
+        events:
+          items:
+            $ref: "#/components/schemas/EntityChangedEvent"
+        topic:
+          type: string
+        type:
+          enum:
+          - changed
+        v:
+          enum:
+          - 1
+      required:
+      - events
+      - topic
+      - type
+      - v
+    ServerErrorMessage:
       additionalProperties: {}
       properties:
         code:
@@ -16930,24 +16994,63 @@ components:
           - not_found
           - too_many_subscriptions
           - unavailable
-        events:
-          items:
-            $ref: "#/components/schemas/EntityChangedEvent"
         message:
           type: string
         topic:
           type: string
         type:
           enum:
-          - changed
-          - subscribed
-          - resync
           - error
         v:
           enum:
           - 1
-          format: int64
       required:
+      - code
+      - message
+      - type
+      - v
+    ServerMessage:
+      discriminator:
+        mapping:
+          changed: "#/components/schemas/ServerChangedMessage"
+          error: "#/components/schemas/ServerErrorMessage"
+          resync: "#/components/schemas/ServerResyncMessage"
+          subscribed: "#/components/schemas/ServerSubscribedMessage"
+        propertyName: type
+      oneOf:
+      - $ref: "#/components/schemas/ServerChangedMessage"
+      - $ref: "#/components/schemas/ServerSubscribedMessage"
+      - $ref: "#/components/schemas/ServerResyncMessage"
+      - $ref: "#/components/schemas/ServerErrorMessage"
+    ServerResyncMessage:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+          - resync
+          type: string
+        v:
+          enum:
+          - 1
+          type: integer
+      required:
+      - type
+      - v
+    ServerSubscribedMessage:
+      additionalProperties: false
+      properties:
+        topic:
+          type: string
+        type:
+          enum:
+          - subscribed
+          type: string
+        v:
+          enum:
+          - 1
+          type: integer
+      required:
+      - topic
       - type
       - v
     SingleSelectChangelogData:

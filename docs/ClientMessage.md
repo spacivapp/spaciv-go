@@ -4,16 +4,16 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Token** | Pointer to **string** |  | [optional] 
-**Topics** | Pointer to **[]string** | Between 1 and 100 topics for subscribe and unsubscribe. A message must fit within 128 KiB as sent, so topics whose JSON encoding is long go in several messages. | [optional] 
+**Token** | **string** |  | 
 **Type** | **string** |  | 
-**V** | **int64** |  | 
+**V** | **int32** |  | 
+**Topics** | **[]string** |  | 
 
 ## Methods
 
 ### NewClientMessage
 
-`func NewClientMessage(type_ string, v int64, ) *ClientMessage`
+`func NewClientMessage(token string, type_ string, v int32, topics []string, ) *ClientMessage`
 
 NewClientMessage instantiates a new ClientMessage object
 This constructor will assign default values to properties that have it defined,
@@ -47,36 +47,6 @@ and a boolean to check if the value has been set.
 
 SetToken sets Token field to given value.
 
-### HasToken
-
-`func (o *ClientMessage) HasToken() bool`
-
-HasToken returns a boolean if a field has been set.
-
-### GetTopics
-
-`func (o *ClientMessage) GetTopics() []string`
-
-GetTopics returns the Topics field if non-nil, zero value otherwise.
-
-### GetTopicsOk
-
-`func (o *ClientMessage) GetTopicsOk() (*[]string, bool)`
-
-GetTopicsOk returns a tuple with the Topics field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetTopics
-
-`func (o *ClientMessage) SetTopics(v []string)`
-
-SetTopics sets Topics field to given value.
-
-### HasTopics
-
-`func (o *ClientMessage) HasTopics() bool`
-
-HasTopics returns a boolean if a field has been set.
 
 ### GetType
 
@@ -100,22 +70,42 @@ SetType sets Type field to given value.
 
 ### GetV
 
-`func (o *ClientMessage) GetV() int64`
+`func (o *ClientMessage) GetV() int32`
 
 GetV returns the V field if non-nil, zero value otherwise.
 
 ### GetVOk
 
-`func (o *ClientMessage) GetVOk() (*int64, bool)`
+`func (o *ClientMessage) GetVOk() (*int32, bool)`
 
 GetVOk returns a tuple with the V field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetV
 
-`func (o *ClientMessage) SetV(v int64)`
+`func (o *ClientMessage) SetV(v int32)`
 
 SetV sets V field to given value.
+
+
+### GetTopics
+
+`func (o *ClientMessage) GetTopics() []string`
+
+GetTopics returns the Topics field if non-nil, zero value otherwise.
+
+### GetTopicsOk
+
+`func (o *ClientMessage) GetTopicsOk() (*[]string, bool)`
+
+GetTopicsOk returns a tuple with the Topics field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetTopics
+
+`func (o *ClientMessage) SetTopics(v []string)`
+
+SetTopics sets Topics field to given value.
 
 
 

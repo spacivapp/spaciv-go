@@ -14,224 +14,161 @@ package spaciv
 import (
 	"encoding/json"
 	"fmt"
+	"gopkg.in/validator.v2"
 )
 
-// checks if the ClientMessage type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &ClientMessage{}
-
-// ClientMessage struct for ClientMessage
+// ClientMessage - struct for ClientMessage
 type ClientMessage struct {
-	Token *string `json:"token,omitempty"`
-	// Between 1 and 100 topics for subscribe and unsubscribe. A message must fit within 128 KiB as sent, so topics whose JSON encoding is long go in several messages.
-	Topics []string `json:"topics,omitempty"`
-	Type string `json:"type"`
-	V int64 `json:"v"`
-	AdditionalProperties map[string]interface{}
+	ClientAuthMessage *ClientAuthMessage
+	ClientSubscribeMessage *ClientSubscribeMessage
+	ClientUnsubscribeMessage *ClientUnsubscribeMessage
 }
 
-type _ClientMessage ClientMessage
-
-// NewClientMessage instantiates a new ClientMessage object
-// This constructor will assign default values to properties that have it defined,
-// and makes sure properties required by API are set, but the set of arguments
-// will change when the set of required properties is changed
-func NewClientMessage(type_ string, v int64) *ClientMessage {
-	this := ClientMessage{}
-	this.Type = type_
-	this.V = v
-	return &this
-}
-
-// NewClientMessageWithDefaults instantiates a new ClientMessage object
-// This constructor will only assign default values to properties that have it defined,
-// but it doesn't guarantee that properties required by API are set
-func NewClientMessageWithDefaults() *ClientMessage {
-	this := ClientMessage{}
-	return &this
-}
-
-// GetToken returns the Token field value if set, zero value otherwise.
-func (o *ClientMessage) GetToken() string {
-	if o == nil || IsNil(o.Token) {
-		var ret string
-		return ret
+// ClientAuthMessageAsClientMessage is a convenience function that returns ClientAuthMessage wrapped in ClientMessage
+func ClientAuthMessageAsClientMessage(v *ClientAuthMessage) ClientMessage {
+	return ClientMessage{
+		ClientAuthMessage: v,
 	}
-	return *o.Token
 }
 
-// GetTokenOk returns a tuple with the Token field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *ClientMessage) GetTokenOk() (*string, bool) {
-	if o == nil || IsNil(o.Token) {
-		return nil, false
+// ClientSubscribeMessageAsClientMessage is a convenience function that returns ClientSubscribeMessage wrapped in ClientMessage
+func ClientSubscribeMessageAsClientMessage(v *ClientSubscribeMessage) ClientMessage {
+	return ClientMessage{
+		ClientSubscribeMessage: v,
 	}
-	return o.Token, true
 }
 
-// HasToken returns a boolean if a field has been set.
-func (o *ClientMessage) HasToken() bool {
-	if o != nil && !IsNil(o.Token) {
-		return true
+// ClientUnsubscribeMessageAsClientMessage is a convenience function that returns ClientUnsubscribeMessage wrapped in ClientMessage
+func ClientUnsubscribeMessageAsClientMessage(v *ClientUnsubscribeMessage) ClientMessage {
+	return ClientMessage{
+		ClientUnsubscribeMessage: v,
 	}
-
-	return false
 }
 
-// SetToken gets a reference to the given string and assigns it to the Token field.
-func (o *ClientMessage) SetToken(v string) {
-	o.Token = &v
-}
 
-// GetTopics returns the Topics field value if set, zero value otherwise.
-func (o *ClientMessage) GetTopics() []string {
-	if o == nil || IsNil(o.Topics) {
-		var ret []string
-		return ret
-	}
-	return o.Topics
-}
-
-// GetTopicsOk returns a tuple with the Topics field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *ClientMessage) GetTopicsOk() ([]string, bool) {
-	if o == nil || IsNil(o.Topics) {
-		return nil, false
-	}
-	return o.Topics, true
-}
-
-// HasTopics returns a boolean if a field has been set.
-func (o *ClientMessage) HasTopics() bool {
-	if o != nil && !IsNil(o.Topics) {
-		return true
-	}
-
-	return false
-}
-
-// SetTopics gets a reference to the given []string and assigns it to the Topics field.
-func (o *ClientMessage) SetTopics(v []string) {
-	o.Topics = v
-}
-
-// GetType returns the Type field value
-func (o *ClientMessage) GetType() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.Type
-}
-
-// GetTypeOk returns a tuple with the Type field value
-// and a boolean to check if the value has been set.
-func (o *ClientMessage) GetTypeOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Type, true
-}
-
-// SetType sets field value
-func (o *ClientMessage) SetType(v string) {
-	o.Type = v
-}
-
-// GetV returns the V field value
-func (o *ClientMessage) GetV() int64 {
-	if o == nil {
-		var ret int64
-		return ret
-	}
-
-	return o.V
-}
-
-// GetVOk returns a tuple with the V field value
-// and a boolean to check if the value has been set.
-func (o *ClientMessage) GetVOk() (*int64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.V, true
-}
-
-// SetV sets field value
-func (o *ClientMessage) SetV(v int64) {
-	o.V = v
-}
-
-func (o ClientMessage) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
-	if err != nil {
-		return []byte{}, err
-	}
-	return json.Marshal(toSerialize)
-}
-
-func (o ClientMessage) ToMap() (map[string]interface{}, error) {
-	toSerialize := map[string]interface{}{}
-	if !IsNil(o.Token) {
-		toSerialize["token"] = o.Token
-	}
-	if !IsNil(o.Topics) {
-		toSerialize["topics"] = o.Topics
-	}
-	toSerialize["type"] = o.Type
-	toSerialize["v"] = o.V
-
-	for key, value := range o.AdditionalProperties {
-		toSerialize[key] = value
-	}
-
-	return toSerialize, nil
-}
-
-func (o *ClientMessage) UnmarshalJSON(data []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"type",
-		"v",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(data, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
+// Unmarshal JSON data into one of the pointers in the struct
+func (dst *ClientMessage) UnmarshalJSON(data []byte) error {
+	var err error
+	match := 0
+	// try to unmarshal data into ClientAuthMessage
+	err = newStrictDecoder(data).Decode(&dst.ClientAuthMessage)
+	if err == nil {
+		jsonClientAuthMessage, _ := json.Marshal(dst.ClientAuthMessage)
+		if string(jsonClientAuthMessage) == "{}" { // empty struct
+			dst.ClientAuthMessage = nil
+		} else {
+			if err = validator.Validate(dst.ClientAuthMessage); err != nil {
+				dst.ClientAuthMessage = nil
+			} else {
+				match++
+			}
 		}
+	} else {
+		dst.ClientAuthMessage = nil
 	}
 
-	varClientMessage := _ClientMessage{}
-
-	err = json.Unmarshal(data, &varClientMessage)
-
-	if err != nil {
-		return err
+	// try to unmarshal data into ClientSubscribeMessage
+	err = newStrictDecoder(data).Decode(&dst.ClientSubscribeMessage)
+	if err == nil {
+		jsonClientSubscribeMessage, _ := json.Marshal(dst.ClientSubscribeMessage)
+		if string(jsonClientSubscribeMessage) == "{}" { // empty struct
+			dst.ClientSubscribeMessage = nil
+		} else {
+			if err = validator.Validate(dst.ClientSubscribeMessage); err != nil {
+				dst.ClientSubscribeMessage = nil
+			} else {
+				match++
+			}
+		}
+	} else {
+		dst.ClientSubscribeMessage = nil
 	}
 
-	*o = ClientMessage(varClientMessage)
-
-	additionalProperties := make(map[string]interface{})
-
-	if err = json.Unmarshal(data, &additionalProperties); err == nil {
-		delete(additionalProperties, "token")
-		delete(additionalProperties, "topics")
-		delete(additionalProperties, "type")
-		delete(additionalProperties, "v")
-		o.AdditionalProperties = additionalProperties
+	// try to unmarshal data into ClientUnsubscribeMessage
+	err = newStrictDecoder(data).Decode(&dst.ClientUnsubscribeMessage)
+	if err == nil {
+		jsonClientUnsubscribeMessage, _ := json.Marshal(dst.ClientUnsubscribeMessage)
+		if string(jsonClientUnsubscribeMessage) == "{}" { // empty struct
+			dst.ClientUnsubscribeMessage = nil
+		} else {
+			if err = validator.Validate(dst.ClientUnsubscribeMessage); err != nil {
+				dst.ClientUnsubscribeMessage = nil
+			} else {
+				match++
+			}
+		}
+	} else {
+		dst.ClientUnsubscribeMessage = nil
 	}
 
-	return err
+	if match > 1 { // more than 1 match
+		// reset to nil
+		dst.ClientAuthMessage = nil
+		dst.ClientSubscribeMessage = nil
+		dst.ClientUnsubscribeMessage = nil
+
+		return fmt.Errorf("data matches more than one schema in oneOf(ClientMessage)")
+	} else if match == 1 {
+		return nil // exactly one match
+	} else { // no match
+		return fmt.Errorf("data failed to match schemas in oneOf(ClientMessage)")
+	}
+}
+
+// Marshal data from the first non-nil pointers in the struct to JSON
+func (src ClientMessage) MarshalJSON() ([]byte, error) {
+	if src.ClientAuthMessage != nil {
+		return json.Marshal(&src.ClientAuthMessage)
+	}
+
+	if src.ClientSubscribeMessage != nil {
+		return json.Marshal(&src.ClientSubscribeMessage)
+	}
+
+	if src.ClientUnsubscribeMessage != nil {
+		return json.Marshal(&src.ClientUnsubscribeMessage)
+	}
+
+	return nil, nil // no data in oneOf schemas
+}
+
+// Get the actual instance
+func (obj *ClientMessage) GetActualInstance() (interface{}) {
+	if obj == nil {
+		return nil
+	}
+	if obj.ClientAuthMessage != nil {
+		return obj.ClientAuthMessage
+	}
+
+	if obj.ClientSubscribeMessage != nil {
+		return obj.ClientSubscribeMessage
+	}
+
+	if obj.ClientUnsubscribeMessage != nil {
+		return obj.ClientUnsubscribeMessage
+	}
+
+	// all schemas are nil
+	return nil
+}
+
+// Get the actual instance value
+func (obj ClientMessage) GetActualInstanceValue() (interface{}) {
+	if obj.ClientAuthMessage != nil {
+		return *obj.ClientAuthMessage
+	}
+
+	if obj.ClientSubscribeMessage != nil {
+		return *obj.ClientSubscribeMessage
+	}
+
+	if obj.ClientUnsubscribeMessage != nil {
+		return *obj.ClientUnsubscribeMessage
+	}
+
+	// all schemas are nil
+	return nil
 }
 
 type NullableClientMessage struct {

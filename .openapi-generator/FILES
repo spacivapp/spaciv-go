@@ -136,7 +136,10 @@ docs/CalcTreeValue.md
 docs/CalcTypeSingleValue.md
 docs/ChangelogOption.md
 docs/ChangelogValueOption.md
+docs/ClientAuthMessage.md
 docs/ClientMessage.md
+docs/ClientSubscribeMessage.md
+docs/ClientUnsubscribeMessage.md
 docs/ConfidentialityData.md
 docs/Contribution.md
 docs/ContributionChangelogBody.md
@@ -415,7 +418,11 @@ docs/SelectObjectsParamsWrapperBody.md
 docs/Selection.md
 docs/SendPasswordPutReqBody.md
 docs/SerializedEvent.md
+docs/ServerChangedMessage.md
+docs/ServerErrorMessage.md
 docs/ServerMessage.md
+docs/ServerResyncMessage.md
+docs/ServerSubscribedMessage.md
 docs/ServiceAPI.md
 docs/SingleSelectChangelogData.md
 docs/SingleSelectContributionData.md
@@ -566,7 +573,10 @@ model_calc_tree_value.go
 model_calc_type_single_value.go
 model_changelog_option.go
 model_changelog_value_option.go
+model_client_auth_message.go
 model_client_message.go
+model_client_subscribe_message.go
+model_client_unsubscribe_message.go
 model_confidentiality_data.go
 model_contribution.go
 model_contribution_changelog_body.go
@@ -827,7 +837,11 @@ model_select_objects_params_wrapper_body.go
 model_selection.go
 model_send_password_put_req_body.go
 model_serialized_event.go
+model_server_changed_message.go
+model_server_error_message.go
 model_server_message.go
+model_server_resync_message.go
+model_server_subscribed_message.go
 model_single_select_changelog_data.go
 model_single_select_contribution_data.go
 model_single_select_data.go
