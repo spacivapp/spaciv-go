@@ -139,7 +139,7 @@ type requestForVariablesDelete struct {
 /*
 Delete Delete an account variable
 
-Deletes an account-level variable. Returns `409` while the variable is referenced by a project override, project filter, dashboard or other entity; each entry of `errors` carries the reference in `value`, or only the count is given when the caller lacks the *View projects* permission. Requires the *Manage my account* permission.
+Deletes an account-level variable. Returns `409` while the variable is referenced by a project override, project filter, dashboard or other entity; each entry of `errors` carries the reference in `value`, or only the count is given when the caller lacks the *View projects* permission. A reference saved while the delete is in progress also fails it with `409`; retry the request. Requires the *Manage my account* permission.
 */
 func (a *VariablesService) Delete(ctx context.Context, id string) error {
 	r := requestForVariablesDelete{
@@ -551,7 +551,7 @@ type requestForVariablesUpdate struct {
 /*
 Update Update an account variable
 
-Updates the name and/or default value of an account-level variable; the new default applies to every project that does not override it. Setting `delete` behaves like `DELETE /v1/variables/{id}`. Changing the variable's type, or deleting it, is rejected with `409` while it is referenced. Changing its data so that an existing project override no longer validates (for example, a narrower number `min`/`max` or a different `step`) is also rejected with `409`, listing the projects with invalid overrides. In both cases the error details list the references when the caller has the *View projects* permission, otherwise only their count. Narrowing `options` so that an existing project override is no longer listed is rejected the same way. Sending `data` replaces the variable's `options` too. Requires the *Manage my account* permission.
+Updates the name and/or default value of an account-level variable; the new default applies to every project that does not override it. Setting `delete` behaves like `DELETE /v1/variables/{id}`. Changing the variable's type, or deleting it, is rejected with `409` while it is referenced. Changing its data so that an existing project override no longer validates (for example, a narrower number `min`/`max` or a different `step`) is also rejected with `409`, listing the projects with invalid overrides. In both cases the error details list the references when the caller has the *View projects* permission, otherwise only their count. Narrowing `options` so that an existing project override is no longer listed is rejected the same way. A reference saved while a type change or delete is in progress fails it with `409`; retry the request. Sending `data` replaces the variable's `options` too. Requires the *Manage my account* permission.
 */
 func (a *VariablesService) Update(ctx context.Context, id string, variablePatch VariablePatch) error {
 	r := requestForVariablesUpdate{

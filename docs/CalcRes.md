@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Axes** | [**[]CalcAxis**](CalcAxis.md) |  | 
+**ColumnDecimalPlaces** | **map[string]int32** |  | 
 **ColumnHexCodes** | **[]string** |  | 
 **Values** | **[]float64** |  | 
 
@@ -12,7 +13,7 @@ Name | Type | Description | Notes
 
 ### NewCalcRes
 
-`func NewCalcRes(axes []CalcAxis, columnHexCodes []string, values []float64, ) *CalcRes`
+`func NewCalcRes(axes []CalcAxis, columnDecimalPlaces map[string]int32, columnHexCodes []string, values []float64, ) *CalcRes`
 
 NewCalcRes instantiates a new CalcRes object
 This constructor will assign default values to properties that have it defined,
@@ -45,6 +46,26 @@ and a boolean to check if the value has been set.
 `func (o *CalcRes) SetAxes(v []CalcAxis)`
 
 SetAxes sets Axes field to given value.
+
+
+### GetColumnDecimalPlaces
+
+`func (o *CalcRes) GetColumnDecimalPlaces() map[string]int32`
+
+GetColumnDecimalPlaces returns the ColumnDecimalPlaces field if non-nil, zero value otherwise.
+
+### GetColumnDecimalPlacesOk
+
+`func (o *CalcRes) GetColumnDecimalPlacesOk() (*map[string]int32, bool)`
+
+GetColumnDecimalPlacesOk returns a tuple with the ColumnDecimalPlaces field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetColumnDecimalPlaces
+
+`func (o *CalcRes) SetColumnDecimalPlaces(v map[string]int32)`
+
+SetColumnDecimalPlaces sets ColumnDecimalPlaces field to given value.
 
 
 ### GetColumnHexCodes

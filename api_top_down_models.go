@@ -352,7 +352,7 @@ type requestForTopDownModelsDuplicate struct {
 /*
 Duplicate Duplicate a top-down model
 
-Creates a full copy of the specified top-down model, including all its entries. The copy is named "Copy of <original name>". Returns the UUID of the new model. Requires the *Edit modification* permission.
+Creates a full copy of the specified top-down model, including all its entries. The copy is named "Copy of <original name>". Returns the UUID of the new model. Returns `409` if an entry references an account variable that does not exist, and `400` if an entry references too many account variables to copy atomically; the partial copy is removed in both cases. Requires the *Edit modification* permission.
 */
 func (a *TopDownModelsService) Duplicate(ctx context.Context, id string) (string, error) {
 	r := requestForTopDownModelsDuplicate{
@@ -908,7 +908,7 @@ type requestForTopDownModelsUpdateEntries struct {
 /*
 UpdateEntries Create or update a top-down model entry
 
-Upserts an entry on the specified top-down model. If an entry with the given ID already exists it is updated; otherwise a new entry is created. Supply the entry's ID in the request body (`id` field). A non-empty `objects` replaces the entry's stored objects and `clearObjects` removes them all; sending both returns `400`. Each `properties.map[].formula` must be a per-object expression: numbers, static property references, the add, subtract, multiply and divide operators, and `condition` (if a comparison or a `has` test, then one expression, else another). With `variable_controls` enabled, formulas may also reference numeric account variables by `account:<id>`; other variable references are rejected. `sumOf`, `select`, unknown operators and references to unknown properties or nodes are rejected with `400` naming the offending field. Returns `404` if the model does not exist. Requires the *Edit modification* permission.
+Upserts an entry on the specified top-down model. If an entry with the given ID already exists it is updated; otherwise a new entry is created. Supply the entry's ID in the request body (`id` field). A non-empty `objects` replaces the entry's stored objects and `clearObjects` removes them all; sending both returns `400`. Each `properties.map[].formula` must be a per-object expression: numbers, static property references, the add, subtract, multiply and divide operators, and `condition` (if a comparison or a `has` test, then one expression, else another). With `variable_controls` enabled, formulas may also reference numeric account variables by `account:<id>`; other variable references are rejected. `sumOf`, `select`, unknown operators and references to unknown properties or nodes are rejected with `400` naming the offending field. Returns `404` if the model does not exist, and `409` if a referenced account variable is deleted or changes type while the entry is being saved; retry the request. Returns `400` if a single save adds references to too many account variables to save atomically. Requires the *Edit modification* permission.
 */
 func (a *TopDownModelsService) UpdateEntries(ctx context.Context, id string, topDownModelEntryUpdate TopDownModelEntryUpdate) error {
 	r := requestForTopDownModelsUpdateEntries{

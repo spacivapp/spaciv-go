@@ -22,11 +22,14 @@ var _ MappedNullable = &CalcListEntryRequest{}
 
 // CalcListEntryRequest struct for CalcListEntryRequest
 type CalcListEntryRequest struct {
+	Date *MaybeVarInt `json:"date,omitempty"`
+	DecimalPlaces *int32 `json:"decimalPlaces,omitempty"`
 	Function MaybeVarFuncRequest `json:"function"`
 	HexCode *string `json:"hexCode,omitempty"`
 	Name string `json:"name"`
 	Params map[string]ParameterTypeRequest `json:"params"`
 	Scenario MaybeVarStr `json:"scenario"`
+	Visualisation *DashboardVisualisationCalcRequest `json:"visualisation,omitempty"`
 }
 
 type _CalcListEntryRequest CalcListEntryRequest
@@ -50,6 +53,70 @@ func NewCalcListEntryRequest(function MaybeVarFuncRequest, name string, params m
 func NewCalcListEntryRequestWithDefaults() *CalcListEntryRequest {
 	this := CalcListEntryRequest{}
 	return &this
+}
+
+// GetDate returns the Date field value if set, zero value otherwise.
+func (o *CalcListEntryRequest) GetDate() MaybeVarInt {
+	if o == nil || IsNil(o.Date) {
+		var ret MaybeVarInt
+		return ret
+	}
+	return *o.Date
+}
+
+// GetDateOk returns a tuple with the Date field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CalcListEntryRequest) GetDateOk() (*MaybeVarInt, bool) {
+	if o == nil || IsNil(o.Date) {
+		return nil, false
+	}
+	return o.Date, true
+}
+
+// HasDate returns a boolean if a field has been set.
+func (o *CalcListEntryRequest) HasDate() bool {
+	if o != nil && !IsNil(o.Date) {
+		return true
+	}
+
+	return false
+}
+
+// SetDate gets a reference to the given MaybeVarInt and assigns it to the Date field.
+func (o *CalcListEntryRequest) SetDate(v MaybeVarInt) {
+	o.Date = &v
+}
+
+// GetDecimalPlaces returns the DecimalPlaces field value if set, zero value otherwise.
+func (o *CalcListEntryRequest) GetDecimalPlaces() int32 {
+	if o == nil || IsNil(o.DecimalPlaces) {
+		var ret int32
+		return ret
+	}
+	return *o.DecimalPlaces
+}
+
+// GetDecimalPlacesOk returns a tuple with the DecimalPlaces field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CalcListEntryRequest) GetDecimalPlacesOk() (*int32, bool) {
+	if o == nil || IsNil(o.DecimalPlaces) {
+		return nil, false
+	}
+	return o.DecimalPlaces, true
+}
+
+// HasDecimalPlaces returns a boolean if a field has been set.
+func (o *CalcListEntryRequest) HasDecimalPlaces() bool {
+	if o != nil && !IsNil(o.DecimalPlaces) {
+		return true
+	}
+
+	return false
+}
+
+// SetDecimalPlaces gets a reference to the given int32 and assigns it to the DecimalPlaces field.
+func (o *CalcListEntryRequest) SetDecimalPlaces(v int32) {
+	o.DecimalPlaces = &v
 }
 
 // GetFunction returns the Function field value
@@ -180,6 +247,38 @@ func (o *CalcListEntryRequest) SetScenario(v MaybeVarStr) {
 	o.Scenario = v
 }
 
+// GetVisualisation returns the Visualisation field value if set, zero value otherwise.
+func (o *CalcListEntryRequest) GetVisualisation() DashboardVisualisationCalcRequest {
+	if o == nil || IsNil(o.Visualisation) {
+		var ret DashboardVisualisationCalcRequest
+		return ret
+	}
+	return *o.Visualisation
+}
+
+// GetVisualisationOk returns a tuple with the Visualisation field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CalcListEntryRequest) GetVisualisationOk() (*DashboardVisualisationCalcRequest, bool) {
+	if o == nil || IsNil(o.Visualisation) {
+		return nil, false
+	}
+	return o.Visualisation, true
+}
+
+// HasVisualisation returns a boolean if a field has been set.
+func (o *CalcListEntryRequest) HasVisualisation() bool {
+	if o != nil && !IsNil(o.Visualisation) {
+		return true
+	}
+
+	return false
+}
+
+// SetVisualisation gets a reference to the given DashboardVisualisationCalcRequest and assigns it to the Visualisation field.
+func (o *CalcListEntryRequest) SetVisualisation(v DashboardVisualisationCalcRequest) {
+	o.Visualisation = &v
+}
+
 func (o CalcListEntryRequest) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -190,6 +289,12 @@ func (o CalcListEntryRequest) MarshalJSON() ([]byte, error) {
 
 func (o CalcListEntryRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Date) {
+		toSerialize["date"] = o.Date
+	}
+	if !IsNil(o.DecimalPlaces) {
+		toSerialize["decimalPlaces"] = o.DecimalPlaces
+	}
 	toSerialize["function"] = o.Function
 	if !IsNil(o.HexCode) {
 		toSerialize["hexCode"] = o.HexCode
@@ -197,6 +302,9 @@ func (o CalcListEntryRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize["name"] = o.Name
 	toSerialize["params"] = o.Params
 	toSerialize["scenario"] = o.Scenario
+	if !IsNil(o.Visualisation) {
+		toSerialize["visualisation"] = o.Visualisation
+	}
 	return toSerialize, nil
 }
 

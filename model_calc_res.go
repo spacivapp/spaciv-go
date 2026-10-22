@@ -23,6 +23,7 @@ var _ MappedNullable = &CalcRes{}
 // CalcRes struct for CalcRes
 type CalcRes struct {
 	Axes []CalcAxis `json:"axes"`
+	ColumnDecimalPlaces map[string]int32 `json:"columnDecimalPlaces"`
 	ColumnHexCodes []string `json:"columnHexCodes"`
 	Values []float64 `json:"values"`
 }
@@ -33,9 +34,10 @@ type _CalcRes CalcRes
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCalcRes(axes []CalcAxis, columnHexCodes []string, values []float64) *CalcRes {
+func NewCalcRes(axes []CalcAxis, columnDecimalPlaces map[string]int32, columnHexCodes []string, values []float64) *CalcRes {
 	this := CalcRes{}
 	this.Axes = axes
+	this.ColumnDecimalPlaces = columnDecimalPlaces
 	this.ColumnHexCodes = columnHexCodes
 	this.Values = values
 	return &this
@@ -71,6 +73,30 @@ func (o *CalcRes) GetAxesOk() ([]CalcAxis, bool) {
 // SetAxes sets field value
 func (o *CalcRes) SetAxes(v []CalcAxis) {
 	o.Axes = v
+}
+
+// GetColumnDecimalPlaces returns the ColumnDecimalPlaces field value
+func (o *CalcRes) GetColumnDecimalPlaces() map[string]int32 {
+	if o == nil {
+		var ret map[string]int32
+		return ret
+	}
+
+	return o.ColumnDecimalPlaces
+}
+
+// GetColumnDecimalPlacesOk returns a tuple with the ColumnDecimalPlaces field value
+// and a boolean to check if the value has been set.
+func (o *CalcRes) GetColumnDecimalPlacesOk() (map[string]int32, bool) {
+	if o == nil {
+		return map[string]int32{}, false
+	}
+	return o.ColumnDecimalPlaces, true
+}
+
+// SetColumnDecimalPlaces sets field value
+func (o *CalcRes) SetColumnDecimalPlaces(v map[string]int32) {
+	o.ColumnDecimalPlaces = v
 }
 
 // GetColumnHexCodes returns the ColumnHexCodes field value
@@ -132,6 +158,7 @@ func (o CalcRes) MarshalJSON() ([]byte, error) {
 func (o CalcRes) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["axes"] = o.Axes
+	toSerialize["columnDecimalPlaces"] = o.ColumnDecimalPlaces
 	toSerialize["columnHexCodes"] = o.ColumnHexCodes
 	toSerialize["values"] = o.Values
 	return toSerialize, nil
@@ -143,6 +170,7 @@ func (o *CalcRes) UnmarshalJSON(data []byte) (err error) {
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"axes",
+		"columnDecimalPlaces",
 		"columnHexCodes",
 		"values",
 	}

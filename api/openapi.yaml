@@ -2978,7 +2978,7 @@ paths:
       description: |-
         Creates a new dashboard for the current project and returns its UUID.
 
-        If a dashboard with the supplied `id` already exists, the call is idempotent: it ensures the dashboard is indexed under the project and returns the existing ID without overwriting its content. The `account` ID is reserved for the account-level dashboard; project-scoped requests supplying it are rejected with 400. Returns `400` when a row-break card has items, a control is missing a variable or duplicates another control on the same card, or a list entry's `hexCode` is not a colour such as `#1f77b4` or `#abc`. Requires the *Edit org model* permission, and the *Variable controls* permission when any card has controls.
+        If a dashboard with the supplied `id` already exists, the call is idempotent: it ensures the dashboard is indexed under the project and returns the existing ID without overwriting its content. The `account` ID is reserved for the account-level dashboard; project-scoped requests supplying it are rejected with 400. Returns `400` when a row-break card has items, a control is missing a variable or duplicates another control on the same card, or a list entry's `hexCode` is not a colour such as `#1f77b4` or `#abc`. Returns `409` if it references an account variable that does not exist, including one deleted while the change is being saved. Returns `400` if a single save adds references to too many account variables to save atomically. Requires the *Edit org model* permission, and the *Variable controls* permission when any card has controls.
       operationId: dashboards_create
       parameters: []
       requestBody:
@@ -3133,7 +3133,10 @@ paths:
         \ indices are silently ignored. Returns `400` when a row-break card has items,\
         \ a control is missing a variable or duplicates another control on the same\
         \ card, or a list entry's `hexCode` is not a colour such as `#1f77b4` or `#abc`.\
-        \ Returns `404` if the dashboard does not exist. Requires the *Edit org model*\
+        \ Returns `404` if the dashboard does not exist. Returns `409` if it references\
+        \ an account variable that does not exist, including one deleted while the\
+        \ change is being saved. Returns `400` if a single save adds references to\
+        \ too many account variables to save atomically. Requires the *Edit org model*\
         \ permission, and the *Variable controls* permission when the update adds,\
         \ removes, reorders or changes a card's controls."
       operationId: dashboards_update-cards
@@ -3170,7 +3173,10 @@ paths:
         \ position. Returns `400` when a row-break card has items, a control is missing\
         \ a variable or duplicates another control on the same card, or a list entry's\
         \ `hexCode` is not a colour such as `#1f77b4` or `#abc`. Returns `404` if\
-        \ the dashboard does not exist. Requires the *Edit org model* permission,\
+        \ the dashboard does not exist. Returns `409` if it references an account\
+        \ variable that does not exist, including one deleted while the change is\
+        \ being saved. Returns `400` if a single save adds references to too many\
+        \ account variables to save atomically. Requires the *Edit org model* permission,\
         \ and the *Variable controls* permission when the card has controls."
       operationId: dashboards_create-cards
       parameters:
@@ -3204,9 +3210,11 @@ paths:
       description: "Copies a dashboard from the current project into a target project\
         \ and returns the new dashboard's UUID. The target project is specified by\
         \ `toProject` in the request body; it may be the same project or a different\
-        \ one within the same account. Requires the *Edit org model* permission, and\
-        \ the *Variable controls* permission when any of the dashboard's cards has\
-        \ controls."
+        \ one within the same account. Returns `409` if it references an account variable\
+        \ that does not exist, including one deleted while the change is being saved.\
+        \ Returns `400` if a single save adds references to too many account variables\
+        \ to save atomically. Requires the *Edit org model* permission, and the *Variable\
+        \ controls* permission when any of the dashboard's cards has controls."
       operationId: dashboards_duplicate
       parameters:
       - explode: false
@@ -5281,11 +5289,14 @@ paths:
         \ the current project. Only fields present in the request body are changed;\
         \ set `keepFilters` to preserve filters when `filters` is sent only for schema\
         \ compatibility. Returns `404` if the project does not exist, and `409` if\
-        \ it keeps changing concurrently; retry the request. Variables keyed `account:<id>`\
-        \ override the value of that account variable for this project; their type,\
-        \ range and `options` come from the account definition; such an override must\
-        \ not set `options` itself and must choose one of the listed values. Other\
-        \ variable IDs must not contain `:`. Requires the *Manage projects* permission."
+        \ it keeps changing concurrently, or if an account variable it overrides is\
+        \ deleted or changes type while it is being saved; retry the request. Returns\
+        \ `400` if a single save adds references to too many account variables to\
+        \ save atomically. Variables keyed `account:<id>` override the value of that\
+        \ account variable for this project; their type, range and `options` come\
+        \ from the account definition; such an override must not set `options` itself\
+        \ and must choose one of the listed values. Other variable IDs must not contain\
+        \ `:`. Requires the *Manage projects* permission."
       operationId: projects_update
       parameters: []
       requestBody:
@@ -5482,7 +5493,11 @@ paths:
         \ own filters reference a property or object group that the mapping leaves\
         \ unmapped. Unless the account has the *Variable controls* permission, controls\
         \ cards are omitted from copied dashboards and inline controls are removed\
-        \ from their visualisation cards. Requires the *Manage projects* permission."
+        \ from their visualisation cards. Returns `409` if the copied project or its\
+        \ dashboards reference an account variable that does not exist, or one it\
+        \ overrides changes type while the project is being created. Returns `400`\
+        \ if a single save adds references to too many account variables to save atomically.\
+        \ Requires the *Manage projects* permission."
       operationId: projects_create
       parameters: []
       requestBody:
@@ -7040,7 +7055,10 @@ paths:
     post:
       description: "Creates a full copy of the specified top-down model, including\
         \ all its entries. The copy is named \"Copy of <original name>\". Returns\
-        \ the UUID of the new model. Requires the *Edit modification* permission."
+        \ the UUID of the new model. Returns `409` if an entry references an account\
+        \ variable that does not exist, and `400` if an entry references too many\
+        \ account variables to copy atomically; the partial copy is removed in both\
+        \ cases. Requires the *Edit modification* permission."
       operationId: top-down-models_duplicate
       parameters:
       - explode: false
@@ -7170,8 +7188,11 @@ paths:
         \ enabled, formulas may also reference numeric account variables by `account:<id>`;\
         \ other variable references are rejected. `sumOf`, `select`, unknown operators\
         \ and references to unknown properties or nodes are rejected with `400` naming\
-        \ the offending field. Returns `404` if the model does not exist. Requires\
-        \ the *Edit modification* permission."
+        \ the offending field. Returns `404` if the model does not exist, and `409`\
+        \ if a referenced account variable is deleted or changes type while the entry\
+        \ is being saved; retry the request. Returns `400` if a single save adds references\
+        \ to too many account variables to save atomically. Requires the *Edit modification*\
+        \ permission."
       operationId: top-down-models_update-entries
       parameters:
       - explode: false
@@ -7660,7 +7681,8 @@ paths:
         \ is referenced by a project override, project filter, dashboard or other\
         \ entity; each entry of `errors` carries the reference in `value`, or only\
         \ the count is given when the caller lacks the *View projects* permission.\
-        \ Requires the *Manage my account* permission."
+        \ A reference saved while the delete is in progress also fails it with `409`;\
+        \ retry the request. Requires the *Manage my account* permission."
       operationId: variables_delete
       parameters:
       - description: "Account variable ID, either qualified (account:<id>) or bare."
@@ -7726,8 +7748,10 @@ paths:
         \ `409`, listing the projects with invalid overrides. In both cases the error\
         \ details list the references when the caller has the *View projects* permission,\
         \ otherwise only their count. Narrowing `options` so that an existing project\
-        \ override is no longer listed is rejected the same way. Sending `data` replaces\
-        \ the variable's `options` too. Requires the *Manage my account* permission."
+        \ override is no longer listed is rejected the same way. A reference saved\
+        \ while a type change or delete is in progress fails it with `409`; retry\
+        \ the request. Sending `data` replaces the variable's `options` too. Requires\
+        \ the *Manage my account* permission."
       operationId: variables_update
       parameters:
       - description: "Account variable ID, either qualified (account:<id>) or bare."
@@ -9939,6 +9963,11 @@ components:
     CalcListEntry:
       additionalProperties: false
       properties:
+        date:
+          $ref: "#/components/schemas/MaybeVarInt"
+        decimalPlaces:
+          format: int32
+          type: integer
         function:
           $ref: "#/components/schemas/MaybeVarFunc"
         hexCode:
@@ -9950,6 +9979,8 @@ components:
             $ref: "#/components/schemas/ParameterType"
         scenario:
           $ref: "#/components/schemas/MaybeVarStr"
+        visualisation:
+          $ref: "#/components/schemas/DashboardVisualisationCalc"
       required:
       - function
       - name
@@ -9958,6 +9989,11 @@ components:
     CalcListEntryRequest:
       additionalProperties: false
       properties:
+        date:
+          $ref: "#/components/schemas/MaybeVarInt"
+        decimalPlaces:
+          format: int32
+          type: integer
         function:
           $ref: "#/components/schemas/MaybeVarFuncRequest"
         hexCode:
@@ -9969,6 +10005,8 @@ components:
             $ref: "#/components/schemas/ParameterTypeRequest"
         scenario:
           $ref: "#/components/schemas/MaybeVarStr"
+        visualisation:
+          $ref: "#/components/schemas/DashboardVisualisationCalcRequest"
       required:
       - function
       - name
@@ -10035,8 +10073,8 @@ components:
       additionalProperties: false
       example:
         values:
-        - 1.4658129805029452
-        - 1.4658129805029452
+        - 5.962133916683182
+        - 5.962133916683182
         axes:
         - members:
           - parent: 6
@@ -10062,6 +10100,8 @@ components:
             id: id
             day: day
           dimension: 0
+        columnDecimalPlaces:
+          key: 1
         columnHexCodes:
         - columnHexCodes
         - columnHexCodes
@@ -10070,6 +10110,10 @@ components:
           items:
             $ref: "#/components/schemas/CalcAxis"
           type: array
+        columnDecimalPlaces:
+          additionalProperties:
+            format: int32
+            type: integer
         columnHexCodes:
           items:
             type: string
@@ -10081,6 +10125,7 @@ components:
           type: array
       required:
       - axes
+      - columnDecimalPlaces
       - columnHexCodes
       - values
     CalcRuleFloat:
@@ -11751,7 +11796,7 @@ components:
         - location: location
           message: message
           value: ""
-        status: 5
+        status: 2
       properties:
         detail:
           description: A human-readable explanation specific to this occurrence of

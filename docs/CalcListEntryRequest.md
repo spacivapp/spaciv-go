@@ -4,11 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**Date** | Pointer to [**MaybeVarInt**](MaybeVarInt.md) |  | [optional] 
+**DecimalPlaces** | Pointer to **int32** |  | [optional] 
 **Function** | [**MaybeVarFuncRequest**](MaybeVarFuncRequest.md) |  | 
 **HexCode** | Pointer to **string** |  | [optional] 
 **Name** | **string** |  | 
 **Params** | [**map[string]ParameterTypeRequest**](ParameterTypeRequest.md) |  | 
 **Scenario** | [**MaybeVarStr**](MaybeVarStr.md) |  | 
+**Visualisation** | Pointer to [**DashboardVisualisationCalcRequest**](DashboardVisualisationCalcRequest.md) |  | [optional] 
 
 ## Methods
 
@@ -28,6 +31,56 @@ will change when the set of required properties is changed
 NewCalcListEntryRequestWithDefaults instantiates a new CalcListEntryRequest object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetDate
+
+`func (o *CalcListEntryRequest) GetDate() MaybeVarInt`
+
+GetDate returns the Date field if non-nil, zero value otherwise.
+
+### GetDateOk
+
+`func (o *CalcListEntryRequest) GetDateOk() (*MaybeVarInt, bool)`
+
+GetDateOk returns a tuple with the Date field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDate
+
+`func (o *CalcListEntryRequest) SetDate(v MaybeVarInt)`
+
+SetDate sets Date field to given value.
+
+### HasDate
+
+`func (o *CalcListEntryRequest) HasDate() bool`
+
+HasDate returns a boolean if a field has been set.
+
+### GetDecimalPlaces
+
+`func (o *CalcListEntryRequest) GetDecimalPlaces() int32`
+
+GetDecimalPlaces returns the DecimalPlaces field if non-nil, zero value otherwise.
+
+### GetDecimalPlacesOk
+
+`func (o *CalcListEntryRequest) GetDecimalPlacesOk() (*int32, bool)`
+
+GetDecimalPlacesOk returns a tuple with the DecimalPlaces field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDecimalPlaces
+
+`func (o *CalcListEntryRequest) SetDecimalPlaces(v int32)`
+
+SetDecimalPlaces sets DecimalPlaces field to given value.
+
+### HasDecimalPlaces
+
+`func (o *CalcListEntryRequest) HasDecimalPlaces() bool`
+
+HasDecimalPlaces returns a boolean if a field has been set.
 
 ### GetFunction
 
@@ -133,6 +186,31 @@ and a boolean to check if the value has been set.
 
 SetScenario sets Scenario field to given value.
 
+
+### GetVisualisation
+
+`func (o *CalcListEntryRequest) GetVisualisation() DashboardVisualisationCalcRequest`
+
+GetVisualisation returns the Visualisation field if non-nil, zero value otherwise.
+
+### GetVisualisationOk
+
+`func (o *CalcListEntryRequest) GetVisualisationOk() (*DashboardVisualisationCalcRequest, bool)`
+
+GetVisualisationOk returns a tuple with the Visualisation field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetVisualisation
+
+`func (o *CalcListEntryRequest) SetVisualisation(v DashboardVisualisationCalcRequest)`
+
+SetVisualisation sets Visualisation field to given value.
+
+### HasVisualisation
+
+`func (o *CalcListEntryRequest) HasVisualisation() bool`
+
+HasVisualisation returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
