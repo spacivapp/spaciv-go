@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Scenarios** | [**ScenarioList**](ScenarioList.md) |  | 
+**Property** | [**MaybeVarProp**](MaybeVarProp.md) |  | 
 
 ## Methods
 
 ### NewCalcSegmentationOneOf2
 
-`func NewCalcSegmentationOneOf2(scenarios ScenarioList, ) *CalcSegmentationOneOf2`
+`func NewCalcSegmentationOneOf2(property MaybeVarProp, ) *CalcSegmentationOneOf2`
 
 NewCalcSegmentationOneOf2 instantiates a new CalcSegmentationOneOf2 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewCalcSegmentationOneOf2WithDefaults instantiates a new CalcSegmentationOneOf2 
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetScenarios
+### GetProperty
 
-`func (o *CalcSegmentationOneOf2) GetScenarios() ScenarioList`
+`func (o *CalcSegmentationOneOf2) GetProperty() MaybeVarProp`
 
-GetScenarios returns the Scenarios field if non-nil, zero value otherwise.
+GetProperty returns the Property field if non-nil, zero value otherwise.
 
-### GetScenariosOk
+### GetPropertyOk
 
-`func (o *CalcSegmentationOneOf2) GetScenariosOk() (*ScenarioList, bool)`
+`func (o *CalcSegmentationOneOf2) GetPropertyOk() (*MaybeVarProp, bool)`
 
-GetScenariosOk returns a tuple with the Scenarios field if it's non-nil, zero value otherwise
+GetPropertyOk returns a tuple with the Property field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetScenarios
+### SetProperty
 
-`func (o *CalcSegmentationOneOf2) SetScenarios(v ScenarioList)`
+`func (o *CalcSegmentationOneOf2) SetProperty(v MaybeVarProp)`
 
-SetScenarios sets Scenarios field to given value.
+SetProperty sets Property field to given value.
 
 
 

@@ -22,7 +22,7 @@ var _ MappedNullable = &CalcSegmentationOneOf2{}
 
 // CalcSegmentationOneOf2 struct for CalcSegmentationOneOf2
 type CalcSegmentationOneOf2 struct {
-	Scenarios ScenarioList `json:"scenarios"`
+	Property MaybeVarProp `json:"property"`
 }
 
 type _CalcSegmentationOneOf2 CalcSegmentationOneOf2
@@ -31,9 +31,9 @@ type _CalcSegmentationOneOf2 CalcSegmentationOneOf2
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCalcSegmentationOneOf2(scenarios ScenarioList) *CalcSegmentationOneOf2 {
+func NewCalcSegmentationOneOf2(property MaybeVarProp) *CalcSegmentationOneOf2 {
 	this := CalcSegmentationOneOf2{}
-	this.Scenarios = scenarios
+	this.Property = property
 	return &this
 }
 
@@ -45,28 +45,28 @@ func NewCalcSegmentationOneOf2WithDefaults() *CalcSegmentationOneOf2 {
 	return &this
 }
 
-// GetScenarios returns the Scenarios field value
-func (o *CalcSegmentationOneOf2) GetScenarios() ScenarioList {
+// GetProperty returns the Property field value
+func (o *CalcSegmentationOneOf2) GetProperty() MaybeVarProp {
 	if o == nil {
-		var ret ScenarioList
+		var ret MaybeVarProp
 		return ret
 	}
 
-	return o.Scenarios
+	return o.Property
 }
 
-// GetScenariosOk returns a tuple with the Scenarios field value
+// GetPropertyOk returns a tuple with the Property field value
 // and a boolean to check if the value has been set.
-func (o *CalcSegmentationOneOf2) GetScenariosOk() (*ScenarioList, bool) {
+func (o *CalcSegmentationOneOf2) GetPropertyOk() (*MaybeVarProp, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Scenarios, true
+	return &o.Property, true
 }
 
-// SetScenarios sets field value
-func (o *CalcSegmentationOneOf2) SetScenarios(v ScenarioList) {
-	o.Scenarios = v
+// SetProperty sets field value
+func (o *CalcSegmentationOneOf2) SetProperty(v MaybeVarProp) {
+	o.Property = v
 }
 
 func (o CalcSegmentationOneOf2) MarshalJSON() ([]byte, error) {
@@ -79,7 +79,7 @@ func (o CalcSegmentationOneOf2) MarshalJSON() ([]byte, error) {
 
 func (o CalcSegmentationOneOf2) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["scenarios"] = o.Scenarios
+	toSerialize["property"] = o.Property
 	return toSerialize, nil
 }
 
@@ -88,7 +88,7 @@ func (o *CalcSegmentationOneOf2) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"scenarios",
+		"property",
 	}
 
 	allProperties := make(map[string]interface{})

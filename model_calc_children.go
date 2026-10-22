@@ -25,9 +25,10 @@ type CalcChildren struct {
 	Date NullableMaybeVarInt `json:"date"`
 	Filters []FilterGroup `json:"filters"`
 	Function NullableMaybeVarFunc `json:"function"`
+	Object map[string]interface{} `json:"object,omitempty"`
 	Params map[string]ParameterType `json:"params"`
 	Scenario NullableMaybeVarStr `json:"scenario"`
-	Segment NullableMaybeVarProp `json:"segment"`
+	Segment *MaybeVarProp `json:"segment,omitempty"`
 }
 
 type _CalcChildren CalcChildren
@@ -36,14 +37,13 @@ type _CalcChildren CalcChildren
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCalcChildren(date NullableMaybeVarInt, filters []FilterGroup, function NullableMaybeVarFunc, params map[string]ParameterType, scenario NullableMaybeVarStr, segment NullableMaybeVarProp) *CalcChildren {
+func NewCalcChildren(date NullableMaybeVarInt, filters []FilterGroup, function NullableMaybeVarFunc, params map[string]ParameterType, scenario NullableMaybeVarStr) *CalcChildren {
 	this := CalcChildren{}
 	this.Date = date
 	this.Filters = filters
 	this.Function = function
 	this.Params = params
 	this.Scenario = scenario
-	this.Segment = segment
 	return &this
 }
 
@@ -131,6 +131,38 @@ func (o *CalcChildren) SetFunction(v MaybeVarFunc) {
 	o.Function.Set(&v)
 }
 
+// GetObject returns the Object field value if set, zero value otherwise.
+func (o *CalcChildren) GetObject() map[string]interface{} {
+	if o == nil || IsNil(o.Object) {
+		var ret map[string]interface{}
+		return ret
+	}
+	return o.Object
+}
+
+// GetObjectOk returns a tuple with the Object field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CalcChildren) GetObjectOk() (map[string]interface{}, bool) {
+	if o == nil || IsNil(o.Object) {
+		return map[string]interface{}{}, false
+	}
+	return o.Object, true
+}
+
+// HasObject returns a boolean if a field has been set.
+func (o *CalcChildren) HasObject() bool {
+	if o != nil && !IsNil(o.Object) {
+		return true
+	}
+
+	return false
+}
+
+// SetObject gets a reference to the given map[string]interface{} and assigns it to the Object field.
+func (o *CalcChildren) SetObject(v map[string]interface{}) {
+	o.Object = v
+}
+
 // GetParams returns the Params field value
 func (o *CalcChildren) GetParams() map[string]ParameterType {
 	if o == nil {
@@ -181,30 +213,36 @@ func (o *CalcChildren) SetScenario(v MaybeVarStr) {
 	o.Scenario.Set(&v)
 }
 
-// GetSegment returns the Segment field value
-// If the value is explicit nil, the zero value for MaybeVarProp will be returned
+// GetSegment returns the Segment field value if set, zero value otherwise.
 func (o *CalcChildren) GetSegment() MaybeVarProp {
-	if o == nil || o.Segment.Get() == nil {
+	if o == nil || IsNil(o.Segment) {
 		var ret MaybeVarProp
 		return ret
 	}
-
-	return *o.Segment.Get()
+	return *o.Segment
 }
 
-// GetSegmentOk returns a tuple with the Segment field value
+// GetSegmentOk returns a tuple with the Segment field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *CalcChildren) GetSegmentOk() (*MaybeVarProp, bool) {
-	if o == nil {
+	if o == nil || IsNil(o.Segment) {
 		return nil, false
 	}
-	return o.Segment.Get(), o.Segment.IsSet()
+	return o.Segment, true
 }
 
-// SetSegment sets field value
+// HasSegment returns a boolean if a field has been set.
+func (o *CalcChildren) HasSegment() bool {
+	if o != nil && !IsNil(o.Segment) {
+		return true
+	}
+
+	return false
+}
+
+// SetSegment gets a reference to the given MaybeVarProp and assigns it to the Segment field.
 func (o *CalcChildren) SetSegment(v MaybeVarProp) {
-	o.Segment.Set(&v)
+	o.Segment = &v
 }
 
 func (o CalcChildren) MarshalJSON() ([]byte, error) {
@@ -220,9 +258,14 @@ func (o CalcChildren) ToMap() (map[string]interface{}, error) {
 	toSerialize["date"] = o.Date.Get()
 	toSerialize["filters"] = o.Filters
 	toSerialize["function"] = o.Function.Get()
+	if !IsNil(o.Object) {
+		toSerialize["object"] = o.Object
+	}
 	toSerialize["params"] = o.Params
 	toSerialize["scenario"] = o.Scenario.Get()
-	toSerialize["segment"] = o.Segment.Get()
+	if !IsNil(o.Segment) {
+		toSerialize["segment"] = o.Segment
+	}
 	return toSerialize, nil
 }
 
@@ -236,7 +279,6 @@ func (o *CalcChildren) UnmarshalJSON(data []byte) (err error) {
 		"function",
 		"params",
 		"scenario",
-		"segment",
 	}
 
 	allProperties := make(map[string]interface{})

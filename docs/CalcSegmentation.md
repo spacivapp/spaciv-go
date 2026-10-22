@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Entries** | [**CalcList**](CalcList.md) |  | 
+**Object** | **map[string]interface{}** |  | 
 **Property** | [**MaybeVarProp**](MaybeVarProp.md) |  | 
 **Scenarios** | [**ScenarioList**](ScenarioList.md) |  | 
 
@@ -12,7 +13,7 @@ Name | Type | Description | Notes
 
 ### NewCalcSegmentation
 
-`func NewCalcSegmentation(entries CalcList, property MaybeVarProp, scenarios ScenarioList, ) *CalcSegmentation`
+`func NewCalcSegmentation(entries CalcList, object map[string]interface{}, property MaybeVarProp, scenarios ScenarioList, ) *CalcSegmentation`
 
 NewCalcSegmentation instantiates a new CalcSegmentation object
 This constructor will assign default values to properties that have it defined,
@@ -45,6 +46,26 @@ and a boolean to check if the value has been set.
 `func (o *CalcSegmentation) SetEntries(v CalcList)`
 
 SetEntries sets Entries field to given value.
+
+
+### GetObject
+
+`func (o *CalcSegmentation) GetObject() map[string]interface{}`
+
+GetObject returns the Object field if non-nil, zero value otherwise.
+
+### GetObjectOk
+
+`func (o *CalcSegmentation) GetObjectOk() (*map[string]interface{}, bool)`
+
+GetObjectOk returns a tuple with the Object field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetObject
+
+`func (o *CalcSegmentation) SetObject(v map[string]interface{})`
+
+SetObject sets Object field to given value.
 
 
 ### GetProperty

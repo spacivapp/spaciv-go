@@ -9573,6 +9573,7 @@ components:
             params:
               key:
                 property: null
+            object: "{}"
         limit: 5
         filters:
         - ands:
@@ -9663,6 +9664,9 @@ components:
           type: array
         function:
           $ref: "#/components/schemas/MaybeVarFunc"
+        object:
+          additionalProperties: false
+          type: object
         params:
           additionalProperties:
             $ref: "#/components/schemas/ParameterType"
@@ -9676,7 +9680,6 @@ components:
       - function
       - params
       - scenario
-      - segment
     CalcChildrenRequest:
       additionalProperties: false
       example:
@@ -9737,6 +9740,7 @@ components:
         params:
           key:
             property: null
+        object: "{}"
       properties:
         date:
           $ref: "#/components/schemas/MaybeVarInt"
@@ -9746,6 +9750,9 @@ components:
           type: array
         function:
           $ref: "#/components/schemas/MaybeVarFuncRequest"
+        object:
+          additionalProperties: false
+          type: object
         params:
           additionalProperties:
             $ref: "#/components/schemas/ParameterTypeRequest"
@@ -9759,7 +9766,6 @@ components:
       - function
       - params
       - scenario
-      - segment
     CalcCompare:
       additionalProperties: false
       properties:
@@ -10102,6 +10108,7 @@ components:
           dimension: 0
         columnDecimalPlaces:
           key: 1
+        truncated: true
         columnHexCodes:
         - columnHexCodes
         - columnHexCodes
@@ -10118,6 +10125,8 @@ components:
           items:
             type: string
           type: array
+        truncated:
+          type: boolean
         values:
           items:
             format: double
@@ -10127,6 +10136,7 @@ components:
       - axes
       - columnDecimalPlaces
       - columnHexCodes
+      - truncated
       - values
     CalcRuleFloat:
       additionalProperties: false
@@ -10179,11 +10189,13 @@ components:
       - $ref: "#/components/schemas/CalcSegmentation_oneOf"
       - $ref: "#/components/schemas/CalcSegmentation_oneOf_1"
       - $ref: "#/components/schemas/CalcSegmentation_oneOf_2"
+      - $ref: "#/components/schemas/CalcSegmentation_oneOf_3"
     CalcSegmentationRequest:
       oneOf:
       - $ref: "#/components/schemas/CalcSegmentationRequest_oneOf"
       - $ref: "#/components/schemas/CalcSegmentation_oneOf_1"
       - $ref: "#/components/schemas/CalcSegmentation_oneOf_2"
+      - $ref: "#/components/schemas/CalcSegmentation_oneOf_3"
     CalcSelect:
       additionalProperties: false
       properties:
@@ -14466,6 +14478,9 @@ components:
           type: array
       required:
       - list
+    ObjectSegmentation:
+      additionalProperties: false
+      type: object
     Options:
       additionalProperties: false
       example:
@@ -15208,6 +15223,7 @@ components:
       oneOf:
       - $ref: "#/components/schemas/PropertySource_oneOf"
       - $ref: "#/components/schemas/CalcSegmentation_oneOf_1"
+      - $ref: "#/components/schemas/CalcSegmentation_oneOf_2"
     ReconcileReport:
       additionalProperties: false
       example:
@@ -19111,11 +19127,18 @@ components:
       - entries
     CalcSegmentation_oneOf_1:
       properties:
+        object:
+          additionalProperties: false
+          type: object
+      required:
+      - object
+    CalcSegmentation_oneOf_2:
+      properties:
         property:
           $ref: "#/components/schemas/MaybeVarProp"
       required:
       - property
-    CalcSegmentation_oneOf_2:
+    CalcSegmentation_oneOf_3:
       properties:
         scenarios:
           $ref: "#/components/schemas/ScenarioList"
@@ -19433,6 +19456,7 @@ components:
           params:
             key:
               property: null
+          object: "{}"
       properties:
         categorisationMix:
           $ref: "#/components/schemas/CalcChildrenRequest"

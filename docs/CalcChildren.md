@@ -7,15 +7,16 @@ Name | Type | Description | Notes
 **Date** | [**NullableMaybeVarInt**](MaybeVarInt.md) |  | 
 **Filters** | [**[]FilterGroup**](FilterGroup.md) |  | 
 **Function** | [**NullableMaybeVarFunc**](MaybeVarFunc.md) |  | 
+**Object** | Pointer to **map[string]interface{}** |  | [optional] 
 **Params** | [**map[string]ParameterType**](ParameterType.md) |  | 
 **Scenario** | [**NullableMaybeVarStr**](MaybeVarStr.md) |  | 
-**Segment** | [**NullableMaybeVarProp**](MaybeVarProp.md) |  | 
+**Segment** | Pointer to [**MaybeVarProp**](MaybeVarProp.md) |  | [optional] 
 
 ## Methods
 
 ### NewCalcChildren
 
-`func NewCalcChildren(date NullableMaybeVarInt, filters []FilterGroup, function NullableMaybeVarFunc, params map[string]ParameterType, scenario NullableMaybeVarStr, segment NullableMaybeVarProp, ) *CalcChildren`
+`func NewCalcChildren(date NullableMaybeVarInt, filters []FilterGroup, function NullableMaybeVarFunc, params map[string]ParameterType, scenario NullableMaybeVarStr, ) *CalcChildren`
 
 NewCalcChildren instantiates a new CalcChildren object
 This constructor will assign default values to properties that have it defined,
@@ -110,6 +111,31 @@ SetFunction sets Function field to given value.
 `func (o *CalcChildren) UnsetFunction()`
 
 UnsetFunction ensures that no value is present for Function, not even an explicit nil
+### GetObject
+
+`func (o *CalcChildren) GetObject() map[string]interface{}`
+
+GetObject returns the Object field if non-nil, zero value otherwise.
+
+### GetObjectOk
+
+`func (o *CalcChildren) GetObjectOk() (*map[string]interface{}, bool)`
+
+GetObjectOk returns a tuple with the Object field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetObject
+
+`func (o *CalcChildren) SetObject(v map[string]interface{})`
+
+SetObject sets Object field to given value.
+
+### HasObject
+
+`func (o *CalcChildren) HasObject() bool`
+
+HasObject returns a boolean if a field has been set.
+
 ### GetParams
 
 `func (o *CalcChildren) GetParams() map[string]ParameterType`
@@ -179,17 +205,12 @@ and a boolean to check if the value has been set.
 
 SetSegment sets Segment field to given value.
 
+### HasSegment
 
-### SetSegmentNil
+`func (o *CalcChildren) HasSegment() bool`
 
-`func (o *CalcChildren) SetSegmentNil(b bool)`
+HasSegment returns a boolean if a field has been set.
 
- SetSegmentNil sets the value for Segment to be an explicit nil
-
-### UnsetSegment
-`func (o *CalcChildren) UnsetSegment()`
-
-UnsetSegment ensures that no value is present for Segment, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

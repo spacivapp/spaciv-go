@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Property** | [**MaybeVarProp**](MaybeVarProp.md) |  | 
+**Object** | **map[string]interface{}** |  | 
 
 ## Methods
 
 ### NewCalcSegmentationOneOf1
 
-`func NewCalcSegmentationOneOf1(property MaybeVarProp, ) *CalcSegmentationOneOf1`
+`func NewCalcSegmentationOneOf1(object map[string]interface{}, ) *CalcSegmentationOneOf1`
 
 NewCalcSegmentationOneOf1 instantiates a new CalcSegmentationOneOf1 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewCalcSegmentationOneOf1WithDefaults instantiates a new CalcSegmentationOneOf1 
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetProperty
+### GetObject
 
-`func (o *CalcSegmentationOneOf1) GetProperty() MaybeVarProp`
+`func (o *CalcSegmentationOneOf1) GetObject() map[string]interface{}`
 
-GetProperty returns the Property field if non-nil, zero value otherwise.
+GetObject returns the Object field if non-nil, zero value otherwise.
 
-### GetPropertyOk
+### GetObjectOk
 
-`func (o *CalcSegmentationOneOf1) GetPropertyOk() (*MaybeVarProp, bool)`
+`func (o *CalcSegmentationOneOf1) GetObjectOk() (*map[string]interface{}, bool)`
 
-GetPropertyOk returns a tuple with the Property field if it's non-nil, zero value otherwise
+GetObjectOk returns a tuple with the Object field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetProperty
+### SetObject
 
-`func (o *CalcSegmentationOneOf1) SetProperty(v MaybeVarProp)`
+`func (o *CalcSegmentationOneOf1) SetObject(v map[string]interface{})`
 
-SetProperty sets Property field to given value.
+SetObject sets Object field to given value.
 
 
 

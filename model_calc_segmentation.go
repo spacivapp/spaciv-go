@@ -22,6 +22,7 @@ type CalcSegmentation struct {
 	CalcSegmentationOneOf *CalcSegmentationOneOf
 	CalcSegmentationOneOf1 *CalcSegmentationOneOf1
 	CalcSegmentationOneOf2 *CalcSegmentationOneOf2
+	CalcSegmentationOneOf3 *CalcSegmentationOneOf3
 }
 
 // CalcSegmentationOneOfAsCalcSegmentation is a convenience function that returns CalcSegmentationOneOf wrapped in CalcSegmentation
@@ -42,6 +43,13 @@ func CalcSegmentationOneOf1AsCalcSegmentation(v *CalcSegmentationOneOf1) CalcSeg
 func CalcSegmentationOneOf2AsCalcSegmentation(v *CalcSegmentationOneOf2) CalcSegmentation {
 	return CalcSegmentation{
 		CalcSegmentationOneOf2: v,
+	}
+}
+
+// CalcSegmentationOneOf3AsCalcSegmentation is a convenience function that returns CalcSegmentationOneOf3 wrapped in CalcSegmentation
+func CalcSegmentationOneOf3AsCalcSegmentation(v *CalcSegmentationOneOf3) CalcSegmentation {
+	return CalcSegmentation{
+		CalcSegmentationOneOf3: v,
 	}
 }
 
@@ -101,11 +109,29 @@ func (dst *CalcSegmentation) UnmarshalJSON(data []byte) error {
 		dst.CalcSegmentationOneOf2 = nil
 	}
 
+	// try to unmarshal data into CalcSegmentationOneOf3
+	err = newStrictDecoder(data).Decode(&dst.CalcSegmentationOneOf3)
+	if err == nil {
+		jsonCalcSegmentationOneOf3, _ := json.Marshal(dst.CalcSegmentationOneOf3)
+		if string(jsonCalcSegmentationOneOf3) == "{}" { // empty struct
+			dst.CalcSegmentationOneOf3 = nil
+		} else {
+			if err = validator.Validate(dst.CalcSegmentationOneOf3); err != nil {
+				dst.CalcSegmentationOneOf3 = nil
+			} else {
+				match++
+			}
+		}
+	} else {
+		dst.CalcSegmentationOneOf3 = nil
+	}
+
 	if match > 1 { // more than 1 match
 		// reset to nil
 		dst.CalcSegmentationOneOf = nil
 		dst.CalcSegmentationOneOf1 = nil
 		dst.CalcSegmentationOneOf2 = nil
+		dst.CalcSegmentationOneOf3 = nil
 
 		return fmt.Errorf("data matches more than one schema in oneOf(CalcSegmentation)")
 	} else if match == 1 {
@@ -129,6 +155,10 @@ func (src CalcSegmentation) MarshalJSON() ([]byte, error) {
 		return json.Marshal(&src.CalcSegmentationOneOf2)
 	}
 
+	if src.CalcSegmentationOneOf3 != nil {
+		return json.Marshal(&src.CalcSegmentationOneOf3)
+	}
+
 	return nil, nil // no data in oneOf schemas
 }
 
@@ -149,6 +179,10 @@ func (obj *CalcSegmentation) GetActualInstance() (interface{}) {
 		return obj.CalcSegmentationOneOf2
 	}
 
+	if obj.CalcSegmentationOneOf3 != nil {
+		return obj.CalcSegmentationOneOf3
+	}
+
 	// all schemas are nil
 	return nil
 }
@@ -165,6 +199,10 @@ func (obj CalcSegmentation) GetActualInstanceValue() (interface{}) {
 
 	if obj.CalcSegmentationOneOf2 != nil {
 		return *obj.CalcSegmentationOneOf2
+	}
+
+	if obj.CalcSegmentationOneOf3 != nil {
+		return *obj.CalcSegmentationOneOf3
 	}
 
 	// all schemas are nil

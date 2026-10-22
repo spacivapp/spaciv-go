@@ -20,6 +20,7 @@ import (
 // PropertySource - struct for PropertySource
 type PropertySource struct {
 	CalcSegmentationOneOf1 *CalcSegmentationOneOf1
+	CalcSegmentationOneOf2 *CalcSegmentationOneOf2
 	PropertySourceOneOf *PropertySourceOneOf
 }
 
@@ -27,6 +28,13 @@ type PropertySource struct {
 func CalcSegmentationOneOf1AsPropertySource(v *CalcSegmentationOneOf1) PropertySource {
 	return PropertySource{
 		CalcSegmentationOneOf1: v,
+	}
+}
+
+// CalcSegmentationOneOf2AsPropertySource is a convenience function that returns CalcSegmentationOneOf2 wrapped in PropertySource
+func CalcSegmentationOneOf2AsPropertySource(v *CalcSegmentationOneOf2) PropertySource {
+	return PropertySource{
+		CalcSegmentationOneOf2: v,
 	}
 }
 
@@ -59,6 +67,23 @@ func (dst *PropertySource) UnmarshalJSON(data []byte) error {
 		dst.CalcSegmentationOneOf1 = nil
 	}
 
+	// try to unmarshal data into CalcSegmentationOneOf2
+	err = newStrictDecoder(data).Decode(&dst.CalcSegmentationOneOf2)
+	if err == nil {
+		jsonCalcSegmentationOneOf2, _ := json.Marshal(dst.CalcSegmentationOneOf2)
+		if string(jsonCalcSegmentationOneOf2) == "{}" { // empty struct
+			dst.CalcSegmentationOneOf2 = nil
+		} else {
+			if err = validator.Validate(dst.CalcSegmentationOneOf2); err != nil {
+				dst.CalcSegmentationOneOf2 = nil
+			} else {
+				match++
+			}
+		}
+	} else {
+		dst.CalcSegmentationOneOf2 = nil
+	}
+
 	// try to unmarshal data into PropertySourceOneOf
 	err = newStrictDecoder(data).Decode(&dst.PropertySourceOneOf)
 	if err == nil {
@@ -79,6 +104,7 @@ func (dst *PropertySource) UnmarshalJSON(data []byte) error {
 	if match > 1 { // more than 1 match
 		// reset to nil
 		dst.CalcSegmentationOneOf1 = nil
+		dst.CalcSegmentationOneOf2 = nil
 		dst.PropertySourceOneOf = nil
 
 		return fmt.Errorf("data matches more than one schema in oneOf(PropertySource)")
@@ -93,6 +119,10 @@ func (dst *PropertySource) UnmarshalJSON(data []byte) error {
 func (src PropertySource) MarshalJSON() ([]byte, error) {
 	if src.CalcSegmentationOneOf1 != nil {
 		return json.Marshal(&src.CalcSegmentationOneOf1)
+	}
+
+	if src.CalcSegmentationOneOf2 != nil {
+		return json.Marshal(&src.CalcSegmentationOneOf2)
 	}
 
 	if src.PropertySourceOneOf != nil {
@@ -111,6 +141,10 @@ func (obj *PropertySource) GetActualInstance() (interface{}) {
 		return obj.CalcSegmentationOneOf1
 	}
 
+	if obj.CalcSegmentationOneOf2 != nil {
+		return obj.CalcSegmentationOneOf2
+	}
+
 	if obj.PropertySourceOneOf != nil {
 		return obj.PropertySourceOneOf
 	}
@@ -123,6 +157,10 @@ func (obj *PropertySource) GetActualInstance() (interface{}) {
 func (obj PropertySource) GetActualInstanceValue() (interface{}) {
 	if obj.CalcSegmentationOneOf1 != nil {
 		return *obj.CalcSegmentationOneOf1
+	}
+
+	if obj.CalcSegmentationOneOf2 != nil {
+		return *obj.CalcSegmentationOneOf2
 	}
 
 	if obj.PropertySourceOneOf != nil {

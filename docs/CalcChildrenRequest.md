@@ -7,15 +7,16 @@ Name | Type | Description | Notes
 **Date** | [**MaybeVarInt**](MaybeVarInt.md) |  | 
 **Filters** | [**[]FilterGroup**](FilterGroup.md) |  | 
 **Function** | [**MaybeVarFuncRequest**](MaybeVarFuncRequest.md) |  | 
+**Object** | Pointer to **map[string]interface{}** |  | [optional] 
 **Params** | [**map[string]ParameterTypeRequest**](ParameterTypeRequest.md) |  | 
 **Scenario** | [**MaybeVarStr**](MaybeVarStr.md) |  | 
-**Segment** | [**MaybeVarProp**](MaybeVarProp.md) |  | 
+**Segment** | Pointer to [**MaybeVarProp**](MaybeVarProp.md) |  | [optional] 
 
 ## Methods
 
 ### NewCalcChildrenRequest
 
-`func NewCalcChildrenRequest(date MaybeVarInt, filters []FilterGroup, function MaybeVarFuncRequest, params map[string]ParameterTypeRequest, scenario MaybeVarStr, segment MaybeVarProp, ) *CalcChildrenRequest`
+`func NewCalcChildrenRequest(date MaybeVarInt, filters []FilterGroup, function MaybeVarFuncRequest, params map[string]ParameterTypeRequest, scenario MaybeVarStr, ) *CalcChildrenRequest`
 
 NewCalcChildrenRequest instantiates a new CalcChildrenRequest object
 This constructor will assign default values to properties that have it defined,
@@ -90,6 +91,31 @@ and a boolean to check if the value has been set.
 SetFunction sets Function field to given value.
 
 
+### GetObject
+
+`func (o *CalcChildrenRequest) GetObject() map[string]interface{}`
+
+GetObject returns the Object field if non-nil, zero value otherwise.
+
+### GetObjectOk
+
+`func (o *CalcChildrenRequest) GetObjectOk() (*map[string]interface{}, bool)`
+
+GetObjectOk returns a tuple with the Object field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetObject
+
+`func (o *CalcChildrenRequest) SetObject(v map[string]interface{})`
+
+SetObject sets Object field to given value.
+
+### HasObject
+
+`func (o *CalcChildrenRequest) HasObject() bool`
+
+HasObject returns a boolean if a field has been set.
+
 ### GetParams
 
 `func (o *CalcChildrenRequest) GetParams() map[string]ParameterTypeRequest`
@@ -149,6 +175,11 @@ and a boolean to check if the value has been set.
 
 SetSegment sets Segment field to given value.
 
+### HasSegment
+
+`func (o *CalcChildrenRequest) HasSegment() bool`
+
+HasSegment returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

@@ -7,13 +7,14 @@ Name | Type | Description | Notes
 **Axes** | [**[]CalcAxis**](CalcAxis.md) |  | 
 **ColumnDecimalPlaces** | **map[string]int32** |  | 
 **ColumnHexCodes** | **[]string** |  | 
+**Truncated** | **bool** |  | 
 **Values** | **[]float64** |  | 
 
 ## Methods
 
 ### NewCalcRes
 
-`func NewCalcRes(axes []CalcAxis, columnDecimalPlaces map[string]int32, columnHexCodes []string, values []float64, ) *CalcRes`
+`func NewCalcRes(axes []CalcAxis, columnDecimalPlaces map[string]int32, columnHexCodes []string, truncated bool, values []float64, ) *CalcRes`
 
 NewCalcRes instantiates a new CalcRes object
 This constructor will assign default values to properties that have it defined,
@@ -86,6 +87,26 @@ and a boolean to check if the value has been set.
 `func (o *CalcRes) SetColumnHexCodes(v []string)`
 
 SetColumnHexCodes sets ColumnHexCodes field to given value.
+
+
+### GetTruncated
+
+`func (o *CalcRes) GetTruncated() bool`
+
+GetTruncated returns the Truncated field if non-nil, zero value otherwise.
+
+### GetTruncatedOk
+
+`func (o *CalcRes) GetTruncatedOk() (*bool, bool)`
+
+GetTruncatedOk returns a tuple with the Truncated field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetTruncated
+
+`func (o *CalcRes) SetTruncated(v bool)`
+
+SetTruncated sets Truncated field to given value.
 
 
 ### GetValues

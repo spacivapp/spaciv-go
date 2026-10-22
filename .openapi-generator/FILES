@@ -137,6 +137,7 @@ docs/CalcSegmentation.md
 docs/CalcSegmentationOneOf.md
 docs/CalcSegmentationOneOf1.md
 docs/CalcSegmentationOneOf2.md
+docs/CalcSegmentationOneOf3.md
 docs/CalcSegmentationRequest.md
 docs/CalcSegmentationRequestOneOf.md
 docs/CalcSelect.md
@@ -618,6 +619,7 @@ model_calc_segmentation.go
 model_calc_segmentation_one_of.go
 model_calc_segmentation_one_of_1.go
 model_calc_segmentation_one_of_2.go
+model_calc_segmentation_one_of_3.go
 model_calc_segmentation_request.go
 model_calc_segmentation_request_one_of.go
 model_calc_select.go

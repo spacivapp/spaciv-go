@@ -25,6 +25,7 @@ type CalcRes struct {
 	Axes []CalcAxis `json:"axes"`
 	ColumnDecimalPlaces map[string]int32 `json:"columnDecimalPlaces"`
 	ColumnHexCodes []string `json:"columnHexCodes"`
+	Truncated bool `json:"truncated"`
 	Values []float64 `json:"values"`
 }
 
@@ -34,11 +35,12 @@ type _CalcRes CalcRes
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCalcRes(axes []CalcAxis, columnDecimalPlaces map[string]int32, columnHexCodes []string, values []float64) *CalcRes {
+func NewCalcRes(axes []CalcAxis, columnDecimalPlaces map[string]int32, columnHexCodes []string, truncated bool, values []float64) *CalcRes {
 	this := CalcRes{}
 	this.Axes = axes
 	this.ColumnDecimalPlaces = columnDecimalPlaces
 	this.ColumnHexCodes = columnHexCodes
+	this.Truncated = truncated
 	this.Values = values
 	return &this
 }
@@ -123,6 +125,30 @@ func (o *CalcRes) SetColumnHexCodes(v []string) {
 	o.ColumnHexCodes = v
 }
 
+// GetTruncated returns the Truncated field value
+func (o *CalcRes) GetTruncated() bool {
+	if o == nil {
+		var ret bool
+		return ret
+	}
+
+	return o.Truncated
+}
+
+// GetTruncatedOk returns a tuple with the Truncated field value
+// and a boolean to check if the value has been set.
+func (o *CalcRes) GetTruncatedOk() (*bool, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Truncated, true
+}
+
+// SetTruncated sets field value
+func (o *CalcRes) SetTruncated(v bool) {
+	o.Truncated = v
+}
+
 // GetValues returns the Values field value
 func (o *CalcRes) GetValues() []float64 {
 	if o == nil {
@@ -160,6 +186,7 @@ func (o CalcRes) ToMap() (map[string]interface{}, error) {
 	toSerialize["axes"] = o.Axes
 	toSerialize["columnDecimalPlaces"] = o.ColumnDecimalPlaces
 	toSerialize["columnHexCodes"] = o.ColumnHexCodes
+	toSerialize["truncated"] = o.Truncated
 	toSerialize["values"] = o.Values
 	return toSerialize, nil
 }
@@ -172,6 +199,7 @@ func (o *CalcRes) UnmarshalJSON(data []byte) (err error) {
 		"axes",
 		"columnDecimalPlaces",
 		"columnHexCodes",
+		"truncated",
 		"values",
 	}
 
