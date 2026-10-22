@@ -319,7 +319,6 @@ Other parameters are passed through a pointer to a apiListRequest struct via the
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **types** | **[]int64** | Filter by property type. Pass one or more numeric type values (e.g. the integer values of the PropertyType enum). When omitted, all types are returned. | 
- **objectTypes** | **[]int64** |  | 
 
 ### Return type
 

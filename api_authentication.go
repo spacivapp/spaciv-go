@@ -993,7 +993,7 @@ type requestForAuthenticationDeleteApiKeys struct {
 /*
 DeleteApiKeys Revoke an API key
 
-Permanently revokes one of the calling user's keys. Access tokens already exchanged for it remain valid until they expire, and the key itself may continue to authenticate for up to a minute while cached resolutions age out. Keys that belong to a script are rejected with 409; delete or re-authorise the script instead.
+Permanently revokes one of the calling user's keys. Access tokens already exchanged for it remain valid until they expire, and the key itself may continue to authenticate for up to a minute while cached resolutions age out. Keys that belong to a script are rejected with 409; delete or re-authorise the script instead. A key that doesn't exist, or was already revoked, answers 404.
 */
 func (a *AuthenticationService) DeleteApiKeys(ctx context.Context, id int64) error {
 	r := requestForAuthenticationDeleteApiKeys{

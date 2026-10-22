@@ -444,13 +444,11 @@ type requestForPropertiesList struct {
 	ctx context.Context
 	ApiService *PropertiesService
 	types *[]int64
-	objectTypes *[]int64
 }
 
 type PropertiesListParams struct {
 	// Filter by property type. Pass one or more numeric type values (e.g. the integer values of the PropertyType enum). When omitted, all types are returned.
 	Types *[]int64
-	ObjectTypes *[]int64
 }
 
 /*
@@ -467,7 +465,6 @@ func (a *PropertiesService) List(ctx context.Context, params *PropertiesListPara
 	}
 	if params != nil {
 		r.types = params.Types
-		r.objectTypes = params.ObjectTypes
 	}
 	result, _, err := a.executeList(r)
 	return result, err
@@ -494,9 +491,6 @@ func (a *PropertiesService) executeList(r requestForPropertiesList) (*PropertyLi
 
 	if r.types != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "types", r.types, "form", "csv")
-	}
-	if r.objectTypes != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "objectTypes", r.objectTypes, "form", "csv")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}

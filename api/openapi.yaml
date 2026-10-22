@@ -1851,7 +1851,8 @@ paths:
         \ already exchanged for it remain valid until they expire, and the key itself\
         \ may continue to authenticate for up to a minute while cached resolutions\
         \ age out. Keys that belong to a script are rejected with 409; delete or re-authorise\
-        \ the script instead."
+        \ the script instead. A key that doesn't exist, or was already revoked, answers\
+        \ 404."
       operationId: authentication_delete-api-keys
       parameters:
       - explode: false
@@ -5542,16 +5543,6 @@ paths:
           description: "Filter by property type. Pass one or more numeric type values\
             \ (e.g. the integer values of the PropertyType enum). When omitted, all\
             \ types are returned."
-          items:
-            format: int64
-            type: integer
-          type: array
-        style: form
-      - explode: false
-        in: query
-        name: objectTypes
-        required: false
-        schema:
           items:
             format: int64
             type: integer
@@ -17969,51 +17960,21 @@ components:
       additionalProperties: false
       example:
         category_lu: category_lu
-        sgw_per_position: 6.84685269835264
-        usa: 8.762042012749001
         code: code
-        wsa: 6.965117697638846
-        usa_per_position: 6.438423552598547
+        display_date_time: display_date_time
         type_lu: type_lu
         description: description
-        usa_per_siw: 3.5571952270680973
+        creation_mode: creation_mode
         type: type
-        sgw_per_siw: 7.457744773683766
+        status_lu: status_lu
         uuid: uuid
         created_datetime: created_datetime
-        sgc: 2.027123023002322
         created_by_user: created_by_user
-        usa_per_attendee: 9.018348186070783
-        sgw_per_attendee: 1.4894159098541704
-        wsa_per_siw: 6.778324963048013
-        sgc_per_attendee: 4.145608029883936
-        sgc_per_siw: 1.2315135367772556
-        siw_per_attendee: 4.965218492984954
-        id: id
-        ofa_per_siw: 9.301444243932576
-        last_modified: last_modified
-        siw: 1.1730742509559433
-        sgw: 1.0246457001441578
-        display_date_time: display_date_time
-        gfa: 0.8008281904610115
-        tiw: 9.965781217890562
-        wsa_per_position: 2.8841621266687802
-        tiw_per_position: 6.683562403749608
-        gfa_per_siw: 5.962133916683182
-        creation_mode: creation_mode
-        sgc_per_position: 7.386281948385884
-        ofa: 5.637376656633329
-        ofa_per_attendee: 2.3021358869347655
-        gfa_per_position: 1.4658129805029452
-        tiw_per_attendee: 9.369310271410669
-        status_lu: status_lu
-        sequence: 3
+        sequence: 0
         space_rule_set_usage: space_rule_set_usage
-        gfa_per_attendee: 6.027456183070403
-        ofa_per_position: 7.061401241503109
-        siw_per_position: 5.025004791520295
         name: name
-        wsa_per_attendee: 1.284659006116532
+        id: id
+        last_modified: last_modified
       properties:
         category_lu:
           type: string
@@ -18029,115 +17990,25 @@ components:
           type: string
         display_date_time:
           type: string
-        gfa:
-          format: double
-          type: number
-        gfa_per_attendee:
-          format: double
-          type: number
-        gfa_per_position:
-          format: double
-          type: number
-        gfa_per_siw:
-          format: double
-          type: number
         id:
           type: string
         last_modified:
           type: string
         name:
           type: string
-        ofa:
-          format: double
-          type: number
-        ofa_per_attendee:
-          format: double
-          type: number
-        ofa_per_position:
-          format: double
-          type: number
-        ofa_per_siw:
-          format: double
-          type: number
         sequence:
           format: int64
           type: integer
-        sgc:
-          format: double
-          type: number
-        sgc_per_attendee:
-          format: double
-          type: number
-        sgc_per_position:
-          format: double
-          type: number
-        sgc_per_siw:
-          format: double
-          type: number
-        sgw:
-          format: double
-          type: number
-        sgw_per_attendee:
-          format: double
-          type: number
-        sgw_per_position:
-          format: double
-          type: number
-        sgw_per_siw:
-          format: double
-          type: number
-        siw:
-          format: double
-          type: number
-        siw_per_attendee:
-          format: double
-          type: number
-        siw_per_position:
-          format: double
-          type: number
         space_rule_set_usage:
           type: string
         status_lu:
           type: string
-        tiw:
-          format: double
-          type: number
-        tiw_per_attendee:
-          format: double
-          type: number
-        tiw_per_position:
-          format: double
-          type: number
         type:
           type: string
         type_lu:
           type: string
-        usa:
-          format: double
-          type: number
-        usa_per_attendee:
-          format: double
-          type: number
-        usa_per_position:
-          format: double
-          type: number
-        usa_per_siw:
-          format: double
-          type: number
         uuid:
           type: string
-        wsa:
-          format: double
-          type: number
-        wsa_per_attendee:
-          format: double
-          type: number
-        wsa_per_position:
-          format: double
-          type: number
-        wsa_per_siw:
-          format: double
-          type: number
       required:
       - category_lu
       - code
@@ -18146,45 +18017,15 @@ components:
       - creation_mode
       - description
       - display_date_time
-      - gfa
-      - gfa_per_attendee
-      - gfa_per_position
-      - gfa_per_siw
       - id
       - last_modified
       - name
-      - ofa
-      - ofa_per_attendee
-      - ofa_per_position
-      - ofa_per_siw
       - sequence
-      - sgc
-      - sgc_per_attendee
-      - sgc_per_position
-      - sgc_per_siw
-      - sgw
-      - sgw_per_attendee
-      - sgw_per_position
-      - sgw_per_siw
-      - siw
-      - siw_per_attendee
-      - siw_per_position
       - space_rule_set_usage
       - status_lu
-      - tiw
-      - tiw_per_attendee
-      - tiw_per_position
       - type
       - type_lu
-      - usa
-      - usa_per_attendee
-      - usa_per_position
-      - usa_per_siw
       - uuid
-      - wsa
-      - wsa_per_attendee
-      - wsa_per_position
-      - wsa_per_siw
     SpaceRulesetPatchResponseWrapperBody:
       additionalProperties: false
       type: object

@@ -29,45 +29,15 @@ type SpaceRulesetListEntry struct {
 	CreationMode string `json:"creation_mode"`
 	Description string `json:"description"`
 	DisplayDateTime string `json:"display_date_time"`
-	Gfa float64 `json:"gfa"`
-	GfaPerAttendee float64 `json:"gfa_per_attendee"`
-	GfaPerPosition float64 `json:"gfa_per_position"`
-	GfaPerSiw float64 `json:"gfa_per_siw"`
 	Id string `json:"id"`
 	LastModified string `json:"last_modified"`
 	Name string `json:"name"`
-	Ofa float64 `json:"ofa"`
-	OfaPerAttendee float64 `json:"ofa_per_attendee"`
-	OfaPerPosition float64 `json:"ofa_per_position"`
-	OfaPerSiw float64 `json:"ofa_per_siw"`
 	Sequence int64 `json:"sequence"`
-	Sgc float64 `json:"sgc"`
-	SgcPerAttendee float64 `json:"sgc_per_attendee"`
-	SgcPerPosition float64 `json:"sgc_per_position"`
-	SgcPerSiw float64 `json:"sgc_per_siw"`
-	Sgw float64 `json:"sgw"`
-	SgwPerAttendee float64 `json:"sgw_per_attendee"`
-	SgwPerPosition float64 `json:"sgw_per_position"`
-	SgwPerSiw float64 `json:"sgw_per_siw"`
-	Siw float64 `json:"siw"`
-	SiwPerAttendee float64 `json:"siw_per_attendee"`
-	SiwPerPosition float64 `json:"siw_per_position"`
 	SpaceRuleSetUsage string `json:"space_rule_set_usage"`
 	StatusLu string `json:"status_lu"`
-	Tiw float64 `json:"tiw"`
-	TiwPerAttendee float64 `json:"tiw_per_attendee"`
-	TiwPerPosition float64 `json:"tiw_per_position"`
 	Type string `json:"type"`
 	TypeLu string `json:"type_lu"`
-	Usa float64 `json:"usa"`
-	UsaPerAttendee float64 `json:"usa_per_attendee"`
-	UsaPerPosition float64 `json:"usa_per_position"`
-	UsaPerSiw float64 `json:"usa_per_siw"`
 	Uuid string `json:"uuid"`
-	Wsa float64 `json:"wsa"`
-	WsaPerAttendee float64 `json:"wsa_per_attendee"`
-	WsaPerPosition float64 `json:"wsa_per_position"`
-	WsaPerSiw float64 `json:"wsa_per_siw"`
 }
 
 type _SpaceRulesetListEntry SpaceRulesetListEntry
@@ -76,7 +46,7 @@ type _SpaceRulesetListEntry SpaceRulesetListEntry
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewSpaceRulesetListEntry(categoryLu string, code string, createdByUser string, createdDatetime string, creationMode string, description string, displayDateTime string, gfa float64, gfaPerAttendee float64, gfaPerPosition float64, gfaPerSiw float64, id string, lastModified string, name string, ofa float64, ofaPerAttendee float64, ofaPerPosition float64, ofaPerSiw float64, sequence int64, sgc float64, sgcPerAttendee float64, sgcPerPosition float64, sgcPerSiw float64, sgw float64, sgwPerAttendee float64, sgwPerPosition float64, sgwPerSiw float64, siw float64, siwPerAttendee float64, siwPerPosition float64, spaceRuleSetUsage string, statusLu string, tiw float64, tiwPerAttendee float64, tiwPerPosition float64, type_ string, typeLu string, usa float64, usaPerAttendee float64, usaPerPosition float64, usaPerSiw float64, uuid string, wsa float64, wsaPerAttendee float64, wsaPerPosition float64, wsaPerSiw float64) *SpaceRulesetListEntry {
+func NewSpaceRulesetListEntry(categoryLu string, code string, createdByUser string, createdDatetime string, creationMode string, description string, displayDateTime string, id string, lastModified string, name string, sequence int64, spaceRuleSetUsage string, statusLu string, type_ string, typeLu string, uuid string) *SpaceRulesetListEntry {
 	this := SpaceRulesetListEntry{}
 	this.CategoryLu = categoryLu
 	this.Code = code
@@ -85,45 +55,15 @@ func NewSpaceRulesetListEntry(categoryLu string, code string, createdByUser stri
 	this.CreationMode = creationMode
 	this.Description = description
 	this.DisplayDateTime = displayDateTime
-	this.Gfa = gfa
-	this.GfaPerAttendee = gfaPerAttendee
-	this.GfaPerPosition = gfaPerPosition
-	this.GfaPerSiw = gfaPerSiw
 	this.Id = id
 	this.LastModified = lastModified
 	this.Name = name
-	this.Ofa = ofa
-	this.OfaPerAttendee = ofaPerAttendee
-	this.OfaPerPosition = ofaPerPosition
-	this.OfaPerSiw = ofaPerSiw
 	this.Sequence = sequence
-	this.Sgc = sgc
-	this.SgcPerAttendee = sgcPerAttendee
-	this.SgcPerPosition = sgcPerPosition
-	this.SgcPerSiw = sgcPerSiw
-	this.Sgw = sgw
-	this.SgwPerAttendee = sgwPerAttendee
-	this.SgwPerPosition = sgwPerPosition
-	this.SgwPerSiw = sgwPerSiw
-	this.Siw = siw
-	this.SiwPerAttendee = siwPerAttendee
-	this.SiwPerPosition = siwPerPosition
 	this.SpaceRuleSetUsage = spaceRuleSetUsage
 	this.StatusLu = statusLu
-	this.Tiw = tiw
-	this.TiwPerAttendee = tiwPerAttendee
-	this.TiwPerPosition = tiwPerPosition
 	this.Type = type_
 	this.TypeLu = typeLu
-	this.Usa = usa
-	this.UsaPerAttendee = usaPerAttendee
-	this.UsaPerPosition = usaPerPosition
-	this.UsaPerSiw = usaPerSiw
 	this.Uuid = uuid
-	this.Wsa = wsa
-	this.WsaPerAttendee = wsaPerAttendee
-	this.WsaPerPosition = wsaPerPosition
-	this.WsaPerSiw = wsaPerSiw
 	return &this
 }
 
@@ -303,102 +243,6 @@ func (o *SpaceRulesetListEntry) SetDisplayDateTime(v string) {
 	o.DisplayDateTime = v
 }
 
-// GetGfa returns the Gfa field value
-func (o *SpaceRulesetListEntry) GetGfa() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.Gfa
-}
-
-// GetGfaOk returns a tuple with the Gfa field value
-// and a boolean to check if the value has been set.
-func (o *SpaceRulesetListEntry) GetGfaOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Gfa, true
-}
-
-// SetGfa sets field value
-func (o *SpaceRulesetListEntry) SetGfa(v float64) {
-	o.Gfa = v
-}
-
-// GetGfaPerAttendee returns the GfaPerAttendee field value
-func (o *SpaceRulesetListEntry) GetGfaPerAttendee() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.GfaPerAttendee
-}
-
-// GetGfaPerAttendeeOk returns a tuple with the GfaPerAttendee field value
-// and a boolean to check if the value has been set.
-func (o *SpaceRulesetListEntry) GetGfaPerAttendeeOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.GfaPerAttendee, true
-}
-
-// SetGfaPerAttendee sets field value
-func (o *SpaceRulesetListEntry) SetGfaPerAttendee(v float64) {
-	o.GfaPerAttendee = v
-}
-
-// GetGfaPerPosition returns the GfaPerPosition field value
-func (o *SpaceRulesetListEntry) GetGfaPerPosition() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.GfaPerPosition
-}
-
-// GetGfaPerPositionOk returns a tuple with the GfaPerPosition field value
-// and a boolean to check if the value has been set.
-func (o *SpaceRulesetListEntry) GetGfaPerPositionOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.GfaPerPosition, true
-}
-
-// SetGfaPerPosition sets field value
-func (o *SpaceRulesetListEntry) SetGfaPerPosition(v float64) {
-	o.GfaPerPosition = v
-}
-
-// GetGfaPerSiw returns the GfaPerSiw field value
-func (o *SpaceRulesetListEntry) GetGfaPerSiw() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.GfaPerSiw
-}
-
-// GetGfaPerSiwOk returns a tuple with the GfaPerSiw field value
-// and a boolean to check if the value has been set.
-func (o *SpaceRulesetListEntry) GetGfaPerSiwOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.GfaPerSiw, true
-}
-
-// SetGfaPerSiw sets field value
-func (o *SpaceRulesetListEntry) SetGfaPerSiw(v float64) {
-	o.GfaPerSiw = v
-}
-
 // GetId returns the Id field value
 func (o *SpaceRulesetListEntry) GetId() string {
 	if o == nil {
@@ -471,102 +315,6 @@ func (o *SpaceRulesetListEntry) SetName(v string) {
 	o.Name = v
 }
 
-// GetOfa returns the Ofa field value
-func (o *SpaceRulesetListEntry) GetOfa() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.Ofa
-}
-
-// GetOfaOk returns a tuple with the Ofa field value
-// and a boolean to check if the value has been set.
-func (o *SpaceRulesetListEntry) GetOfaOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Ofa, true
-}
-
-// SetOfa sets field value
-func (o *SpaceRulesetListEntry) SetOfa(v float64) {
-	o.Ofa = v
-}
-
-// GetOfaPerAttendee returns the OfaPerAttendee field value
-func (o *SpaceRulesetListEntry) GetOfaPerAttendee() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.OfaPerAttendee
-}
-
-// GetOfaPerAttendeeOk returns a tuple with the OfaPerAttendee field value
-// and a boolean to check if the value has been set.
-func (o *SpaceRulesetListEntry) GetOfaPerAttendeeOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.OfaPerAttendee, true
-}
-
-// SetOfaPerAttendee sets field value
-func (o *SpaceRulesetListEntry) SetOfaPerAttendee(v float64) {
-	o.OfaPerAttendee = v
-}
-
-// GetOfaPerPosition returns the OfaPerPosition field value
-func (o *SpaceRulesetListEntry) GetOfaPerPosition() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.OfaPerPosition
-}
-
-// GetOfaPerPositionOk returns a tuple with the OfaPerPosition field value
-// and a boolean to check if the value has been set.
-func (o *SpaceRulesetListEntry) GetOfaPerPositionOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.OfaPerPosition, true
-}
-
-// SetOfaPerPosition sets field value
-func (o *SpaceRulesetListEntry) SetOfaPerPosition(v float64) {
-	o.OfaPerPosition = v
-}
-
-// GetOfaPerSiw returns the OfaPerSiw field value
-func (o *SpaceRulesetListEntry) GetOfaPerSiw() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.OfaPerSiw
-}
-
-// GetOfaPerSiwOk returns a tuple with the OfaPerSiw field value
-// and a boolean to check if the value has been set.
-func (o *SpaceRulesetListEntry) GetOfaPerSiwOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.OfaPerSiw, true
-}
-
-// SetOfaPerSiw sets field value
-func (o *SpaceRulesetListEntry) SetOfaPerSiw(v float64) {
-	o.OfaPerSiw = v
-}
-
 // GetSequence returns the Sequence field value
 func (o *SpaceRulesetListEntry) GetSequence() int64 {
 	if o == nil {
@@ -589,270 +337,6 @@ func (o *SpaceRulesetListEntry) GetSequenceOk() (*int64, bool) {
 // SetSequence sets field value
 func (o *SpaceRulesetListEntry) SetSequence(v int64) {
 	o.Sequence = v
-}
-
-// GetSgc returns the Sgc field value
-func (o *SpaceRulesetListEntry) GetSgc() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.Sgc
-}
-
-// GetSgcOk returns a tuple with the Sgc field value
-// and a boolean to check if the value has been set.
-func (o *SpaceRulesetListEntry) GetSgcOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Sgc, true
-}
-
-// SetSgc sets field value
-func (o *SpaceRulesetListEntry) SetSgc(v float64) {
-	o.Sgc = v
-}
-
-// GetSgcPerAttendee returns the SgcPerAttendee field value
-func (o *SpaceRulesetListEntry) GetSgcPerAttendee() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.SgcPerAttendee
-}
-
-// GetSgcPerAttendeeOk returns a tuple with the SgcPerAttendee field value
-// and a boolean to check if the value has been set.
-func (o *SpaceRulesetListEntry) GetSgcPerAttendeeOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.SgcPerAttendee, true
-}
-
-// SetSgcPerAttendee sets field value
-func (o *SpaceRulesetListEntry) SetSgcPerAttendee(v float64) {
-	o.SgcPerAttendee = v
-}
-
-// GetSgcPerPosition returns the SgcPerPosition field value
-func (o *SpaceRulesetListEntry) GetSgcPerPosition() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.SgcPerPosition
-}
-
-// GetSgcPerPositionOk returns a tuple with the SgcPerPosition field value
-// and a boolean to check if the value has been set.
-func (o *SpaceRulesetListEntry) GetSgcPerPositionOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.SgcPerPosition, true
-}
-
-// SetSgcPerPosition sets field value
-func (o *SpaceRulesetListEntry) SetSgcPerPosition(v float64) {
-	o.SgcPerPosition = v
-}
-
-// GetSgcPerSiw returns the SgcPerSiw field value
-func (o *SpaceRulesetListEntry) GetSgcPerSiw() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.SgcPerSiw
-}
-
-// GetSgcPerSiwOk returns a tuple with the SgcPerSiw field value
-// and a boolean to check if the value has been set.
-func (o *SpaceRulesetListEntry) GetSgcPerSiwOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.SgcPerSiw, true
-}
-
-// SetSgcPerSiw sets field value
-func (o *SpaceRulesetListEntry) SetSgcPerSiw(v float64) {
-	o.SgcPerSiw = v
-}
-
-// GetSgw returns the Sgw field value
-func (o *SpaceRulesetListEntry) GetSgw() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.Sgw
-}
-
-// GetSgwOk returns a tuple with the Sgw field value
-// and a boolean to check if the value has been set.
-func (o *SpaceRulesetListEntry) GetSgwOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Sgw, true
-}
-
-// SetSgw sets field value
-func (o *SpaceRulesetListEntry) SetSgw(v float64) {
-	o.Sgw = v
-}
-
-// GetSgwPerAttendee returns the SgwPerAttendee field value
-func (o *SpaceRulesetListEntry) GetSgwPerAttendee() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.SgwPerAttendee
-}
-
-// GetSgwPerAttendeeOk returns a tuple with the SgwPerAttendee field value
-// and a boolean to check if the value has been set.
-func (o *SpaceRulesetListEntry) GetSgwPerAttendeeOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.SgwPerAttendee, true
-}
-
-// SetSgwPerAttendee sets field value
-func (o *SpaceRulesetListEntry) SetSgwPerAttendee(v float64) {
-	o.SgwPerAttendee = v
-}
-
-// GetSgwPerPosition returns the SgwPerPosition field value
-func (o *SpaceRulesetListEntry) GetSgwPerPosition() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.SgwPerPosition
-}
-
-// GetSgwPerPositionOk returns a tuple with the SgwPerPosition field value
-// and a boolean to check if the value has been set.
-func (o *SpaceRulesetListEntry) GetSgwPerPositionOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.SgwPerPosition, true
-}
-
-// SetSgwPerPosition sets field value
-func (o *SpaceRulesetListEntry) SetSgwPerPosition(v float64) {
-	o.SgwPerPosition = v
-}
-
-// GetSgwPerSiw returns the SgwPerSiw field value
-func (o *SpaceRulesetListEntry) GetSgwPerSiw() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.SgwPerSiw
-}
-
-// GetSgwPerSiwOk returns a tuple with the SgwPerSiw field value
-// and a boolean to check if the value has been set.
-func (o *SpaceRulesetListEntry) GetSgwPerSiwOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.SgwPerSiw, true
-}
-
-// SetSgwPerSiw sets field value
-func (o *SpaceRulesetListEntry) SetSgwPerSiw(v float64) {
-	o.SgwPerSiw = v
-}
-
-// GetSiw returns the Siw field value
-func (o *SpaceRulesetListEntry) GetSiw() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.Siw
-}
-
-// GetSiwOk returns a tuple with the Siw field value
-// and a boolean to check if the value has been set.
-func (o *SpaceRulesetListEntry) GetSiwOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Siw, true
-}
-
-// SetSiw sets field value
-func (o *SpaceRulesetListEntry) SetSiw(v float64) {
-	o.Siw = v
-}
-
-// GetSiwPerAttendee returns the SiwPerAttendee field value
-func (o *SpaceRulesetListEntry) GetSiwPerAttendee() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.SiwPerAttendee
-}
-
-// GetSiwPerAttendeeOk returns a tuple with the SiwPerAttendee field value
-// and a boolean to check if the value has been set.
-func (o *SpaceRulesetListEntry) GetSiwPerAttendeeOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.SiwPerAttendee, true
-}
-
-// SetSiwPerAttendee sets field value
-func (o *SpaceRulesetListEntry) SetSiwPerAttendee(v float64) {
-	o.SiwPerAttendee = v
-}
-
-// GetSiwPerPosition returns the SiwPerPosition field value
-func (o *SpaceRulesetListEntry) GetSiwPerPosition() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.SiwPerPosition
-}
-
-// GetSiwPerPositionOk returns a tuple with the SiwPerPosition field value
-// and a boolean to check if the value has been set.
-func (o *SpaceRulesetListEntry) GetSiwPerPositionOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.SiwPerPosition, true
-}
-
-// SetSiwPerPosition sets field value
-func (o *SpaceRulesetListEntry) SetSiwPerPosition(v float64) {
-	o.SiwPerPosition = v
 }
 
 // GetSpaceRuleSetUsage returns the SpaceRuleSetUsage field value
@@ -903,78 +387,6 @@ func (o *SpaceRulesetListEntry) SetStatusLu(v string) {
 	o.StatusLu = v
 }
 
-// GetTiw returns the Tiw field value
-func (o *SpaceRulesetListEntry) GetTiw() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.Tiw
-}
-
-// GetTiwOk returns a tuple with the Tiw field value
-// and a boolean to check if the value has been set.
-func (o *SpaceRulesetListEntry) GetTiwOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Tiw, true
-}
-
-// SetTiw sets field value
-func (o *SpaceRulesetListEntry) SetTiw(v float64) {
-	o.Tiw = v
-}
-
-// GetTiwPerAttendee returns the TiwPerAttendee field value
-func (o *SpaceRulesetListEntry) GetTiwPerAttendee() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.TiwPerAttendee
-}
-
-// GetTiwPerAttendeeOk returns a tuple with the TiwPerAttendee field value
-// and a boolean to check if the value has been set.
-func (o *SpaceRulesetListEntry) GetTiwPerAttendeeOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.TiwPerAttendee, true
-}
-
-// SetTiwPerAttendee sets field value
-func (o *SpaceRulesetListEntry) SetTiwPerAttendee(v float64) {
-	o.TiwPerAttendee = v
-}
-
-// GetTiwPerPosition returns the TiwPerPosition field value
-func (o *SpaceRulesetListEntry) GetTiwPerPosition() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.TiwPerPosition
-}
-
-// GetTiwPerPositionOk returns a tuple with the TiwPerPosition field value
-// and a boolean to check if the value has been set.
-func (o *SpaceRulesetListEntry) GetTiwPerPositionOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.TiwPerPosition, true
-}
-
-// SetTiwPerPosition sets field value
-func (o *SpaceRulesetListEntry) SetTiwPerPosition(v float64) {
-	o.TiwPerPosition = v
-}
-
 // GetType returns the Type field value
 func (o *SpaceRulesetListEntry) GetType() string {
 	if o == nil {
@@ -1023,102 +435,6 @@ func (o *SpaceRulesetListEntry) SetTypeLu(v string) {
 	o.TypeLu = v
 }
 
-// GetUsa returns the Usa field value
-func (o *SpaceRulesetListEntry) GetUsa() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.Usa
-}
-
-// GetUsaOk returns a tuple with the Usa field value
-// and a boolean to check if the value has been set.
-func (o *SpaceRulesetListEntry) GetUsaOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Usa, true
-}
-
-// SetUsa sets field value
-func (o *SpaceRulesetListEntry) SetUsa(v float64) {
-	o.Usa = v
-}
-
-// GetUsaPerAttendee returns the UsaPerAttendee field value
-func (o *SpaceRulesetListEntry) GetUsaPerAttendee() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.UsaPerAttendee
-}
-
-// GetUsaPerAttendeeOk returns a tuple with the UsaPerAttendee field value
-// and a boolean to check if the value has been set.
-func (o *SpaceRulesetListEntry) GetUsaPerAttendeeOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.UsaPerAttendee, true
-}
-
-// SetUsaPerAttendee sets field value
-func (o *SpaceRulesetListEntry) SetUsaPerAttendee(v float64) {
-	o.UsaPerAttendee = v
-}
-
-// GetUsaPerPosition returns the UsaPerPosition field value
-func (o *SpaceRulesetListEntry) GetUsaPerPosition() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.UsaPerPosition
-}
-
-// GetUsaPerPositionOk returns a tuple with the UsaPerPosition field value
-// and a boolean to check if the value has been set.
-func (o *SpaceRulesetListEntry) GetUsaPerPositionOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.UsaPerPosition, true
-}
-
-// SetUsaPerPosition sets field value
-func (o *SpaceRulesetListEntry) SetUsaPerPosition(v float64) {
-	o.UsaPerPosition = v
-}
-
-// GetUsaPerSiw returns the UsaPerSiw field value
-func (o *SpaceRulesetListEntry) GetUsaPerSiw() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.UsaPerSiw
-}
-
-// GetUsaPerSiwOk returns a tuple with the UsaPerSiw field value
-// and a boolean to check if the value has been set.
-func (o *SpaceRulesetListEntry) GetUsaPerSiwOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.UsaPerSiw, true
-}
-
-// SetUsaPerSiw sets field value
-func (o *SpaceRulesetListEntry) SetUsaPerSiw(v float64) {
-	o.UsaPerSiw = v
-}
-
 // GetUuid returns the Uuid field value
 func (o *SpaceRulesetListEntry) GetUuid() string {
 	if o == nil {
@@ -1143,102 +459,6 @@ func (o *SpaceRulesetListEntry) SetUuid(v string) {
 	o.Uuid = v
 }
 
-// GetWsa returns the Wsa field value
-func (o *SpaceRulesetListEntry) GetWsa() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.Wsa
-}
-
-// GetWsaOk returns a tuple with the Wsa field value
-// and a boolean to check if the value has been set.
-func (o *SpaceRulesetListEntry) GetWsaOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Wsa, true
-}
-
-// SetWsa sets field value
-func (o *SpaceRulesetListEntry) SetWsa(v float64) {
-	o.Wsa = v
-}
-
-// GetWsaPerAttendee returns the WsaPerAttendee field value
-func (o *SpaceRulesetListEntry) GetWsaPerAttendee() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.WsaPerAttendee
-}
-
-// GetWsaPerAttendeeOk returns a tuple with the WsaPerAttendee field value
-// and a boolean to check if the value has been set.
-func (o *SpaceRulesetListEntry) GetWsaPerAttendeeOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.WsaPerAttendee, true
-}
-
-// SetWsaPerAttendee sets field value
-func (o *SpaceRulesetListEntry) SetWsaPerAttendee(v float64) {
-	o.WsaPerAttendee = v
-}
-
-// GetWsaPerPosition returns the WsaPerPosition field value
-func (o *SpaceRulesetListEntry) GetWsaPerPosition() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.WsaPerPosition
-}
-
-// GetWsaPerPositionOk returns a tuple with the WsaPerPosition field value
-// and a boolean to check if the value has been set.
-func (o *SpaceRulesetListEntry) GetWsaPerPositionOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.WsaPerPosition, true
-}
-
-// SetWsaPerPosition sets field value
-func (o *SpaceRulesetListEntry) SetWsaPerPosition(v float64) {
-	o.WsaPerPosition = v
-}
-
-// GetWsaPerSiw returns the WsaPerSiw field value
-func (o *SpaceRulesetListEntry) GetWsaPerSiw() float64 {
-	if o == nil {
-		var ret float64
-		return ret
-	}
-
-	return o.WsaPerSiw
-}
-
-// GetWsaPerSiwOk returns a tuple with the WsaPerSiw field value
-// and a boolean to check if the value has been set.
-func (o *SpaceRulesetListEntry) GetWsaPerSiwOk() (*float64, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.WsaPerSiw, true
-}
-
-// SetWsaPerSiw sets field value
-func (o *SpaceRulesetListEntry) SetWsaPerSiw(v float64) {
-	o.WsaPerSiw = v
-}
-
 func (o SpaceRulesetListEntry) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -1256,45 +476,15 @@ func (o SpaceRulesetListEntry) ToMap() (map[string]interface{}, error) {
 	toSerialize["creation_mode"] = o.CreationMode
 	toSerialize["description"] = o.Description
 	toSerialize["display_date_time"] = o.DisplayDateTime
-	toSerialize["gfa"] = o.Gfa
-	toSerialize["gfa_per_attendee"] = o.GfaPerAttendee
-	toSerialize["gfa_per_position"] = o.GfaPerPosition
-	toSerialize["gfa_per_siw"] = o.GfaPerSiw
 	toSerialize["id"] = o.Id
 	toSerialize["last_modified"] = o.LastModified
 	toSerialize["name"] = o.Name
-	toSerialize["ofa"] = o.Ofa
-	toSerialize["ofa_per_attendee"] = o.OfaPerAttendee
-	toSerialize["ofa_per_position"] = o.OfaPerPosition
-	toSerialize["ofa_per_siw"] = o.OfaPerSiw
 	toSerialize["sequence"] = o.Sequence
-	toSerialize["sgc"] = o.Sgc
-	toSerialize["sgc_per_attendee"] = o.SgcPerAttendee
-	toSerialize["sgc_per_position"] = o.SgcPerPosition
-	toSerialize["sgc_per_siw"] = o.SgcPerSiw
-	toSerialize["sgw"] = o.Sgw
-	toSerialize["sgw_per_attendee"] = o.SgwPerAttendee
-	toSerialize["sgw_per_position"] = o.SgwPerPosition
-	toSerialize["sgw_per_siw"] = o.SgwPerSiw
-	toSerialize["siw"] = o.Siw
-	toSerialize["siw_per_attendee"] = o.SiwPerAttendee
-	toSerialize["siw_per_position"] = o.SiwPerPosition
 	toSerialize["space_rule_set_usage"] = o.SpaceRuleSetUsage
 	toSerialize["status_lu"] = o.StatusLu
-	toSerialize["tiw"] = o.Tiw
-	toSerialize["tiw_per_attendee"] = o.TiwPerAttendee
-	toSerialize["tiw_per_position"] = o.TiwPerPosition
 	toSerialize["type"] = o.Type
 	toSerialize["type_lu"] = o.TypeLu
-	toSerialize["usa"] = o.Usa
-	toSerialize["usa_per_attendee"] = o.UsaPerAttendee
-	toSerialize["usa_per_position"] = o.UsaPerPosition
-	toSerialize["usa_per_siw"] = o.UsaPerSiw
 	toSerialize["uuid"] = o.Uuid
-	toSerialize["wsa"] = o.Wsa
-	toSerialize["wsa_per_attendee"] = o.WsaPerAttendee
-	toSerialize["wsa_per_position"] = o.WsaPerPosition
-	toSerialize["wsa_per_siw"] = o.WsaPerSiw
 	return toSerialize, nil
 }
 
@@ -1310,45 +500,15 @@ func (o *SpaceRulesetListEntry) UnmarshalJSON(data []byte) (err error) {
 		"creation_mode",
 		"description",
 		"display_date_time",
-		"gfa",
-		"gfa_per_attendee",
-		"gfa_per_position",
-		"gfa_per_siw",
 		"id",
 		"last_modified",
 		"name",
-		"ofa",
-		"ofa_per_attendee",
-		"ofa_per_position",
-		"ofa_per_siw",
 		"sequence",
-		"sgc",
-		"sgc_per_attendee",
-		"sgc_per_position",
-		"sgc_per_siw",
-		"sgw",
-		"sgw_per_attendee",
-		"sgw_per_position",
-		"sgw_per_siw",
-		"siw",
-		"siw_per_attendee",
-		"siw_per_position",
 		"space_rule_set_usage",
 		"status_lu",
-		"tiw",
-		"tiw_per_attendee",
-		"tiw_per_position",
 		"type",
 		"type_lu",
-		"usa",
-		"usa_per_attendee",
-		"usa_per_position",
-		"usa_per_siw",
 		"uuid",
-		"wsa",
-		"wsa_per_attendee",
-		"wsa_per_position",
-		"wsa_per_siw",
 	}
 
 	allProperties := make(map[string]interface{})
