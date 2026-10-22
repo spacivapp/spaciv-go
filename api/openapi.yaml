@@ -5715,37 +5715,6 @@ paths:
       tags:
       - Properties
       x-sdk-params: false
-  /v1/reports:
-    post:
-      description: Enqueues a report generation job for the project. The report is
-        generated asynchronously and delivered to the specified email address; the
-        response returns immediately once the job is queued. Requires the *View reports*
-        permission.
-      operationId: reports_create
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ReportParamsWrapperBody"
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                type: string
-          description: OK
-        default:
-          content:
-            application/problem+json:
-              schema:
-                $ref: "#/components/schemas/ErrorModel"
-          description: Error
-      summary: Generate a report
-      tags:
-      - Reports
-      x-sdk-params: false
   /v1/scenarios:
     get:
       description: "Returns all scenarios for the account, sorted alphabetically by\
@@ -15406,21 +15375,6 @@ components:
       - projects
       - variables
       - visualisations
-    ReportParamsWrapperBody:
-      additionalProperties: false
-      example:
-        dashboard: dashboard
-        email: email
-      properties:
-        dashboard:
-          description: ID of the dashboard whose cards are included in the report.
-          type: string
-        email:
-          description: Recipient address for the generated report document.
-          type: string
-      required:
-      - dashboard
-      - email
     ReservedTagInfo:
       additionalProperties: false
       example:

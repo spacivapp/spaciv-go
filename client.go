@@ -92,8 +92,6 @@ type APIClient struct {
 
 	Properties *PropertiesService
 
-	Reports *ReportsService
-
 	Scenarios *ScenariosService
 
 	Scripts *ScriptsService
@@ -146,7 +144,6 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.ObjectGroups = (*ObjectGroupsService)(&c.common)
 	c.Projects = (*ProjectsService)(&c.common)
 	c.Properties = (*PropertiesService)(&c.common)
-	c.Reports = (*ReportsService)(&c.common)
 	c.Scenarios = (*ScenariosService)(&c.common)
 	c.Scripts = (*ScriptsService)(&c.common)
 	c.Service = (*ServiceService)(&c.common)

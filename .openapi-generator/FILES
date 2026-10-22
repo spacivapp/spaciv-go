@@ -24,7 +24,6 @@ api_needs.go
 api_object_groups.go
 api_projects.go
 api_properties.go
-api_reports.go
 api_scenarios.go
 api_scripts.go
 api_service.go
@@ -406,8 +405,6 @@ docs/Reference.md
 docs/ReferencesRes.md
 docs/RelationshipData.md
 docs/RepairFloorplansResBody.md
-docs/ReportParamsWrapperBody.md
-docs/ReportsAPI.md
 docs/ReservedTagInfo.md
 docs/RetriesResBody.md
 docs/RetryBody.md
@@ -874,7 +871,6 @@ model_reference.go
 model_references_res.go
 model_relationship_data.go
 model_repair_floorplans_res_body.go
-model_report_params_wrapper_body.go
 model_reserved_tag_info.go
 model_retries_res_body.go
 model_retry_body.go
