@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Data** | [**map[string]ContributionData**](ContributionData.md) |  | 
+**Answers** | [**map[string]Answer**](Answer.md) |  | 
 
 ## Methods
 
 ### NewContribution
 
-`func NewContribution(data map[string]ContributionData, ) *Contribution`
+`func NewContribution(answers map[string]Answer, ) *Contribution`
 
 NewContribution instantiates a new Contribution object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewContributionWithDefaults instantiates a new Contribution object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetData
+### GetAnswers
 
-`func (o *Contribution) GetData() map[string]ContributionData`
+`func (o *Contribution) GetAnswers() map[string]Answer`
 
-GetData returns the Data field if non-nil, zero value otherwise.
+GetAnswers returns the Answers field if non-nil, zero value otherwise.
 
-### GetDataOk
+### GetAnswersOk
 
-`func (o *Contribution) GetDataOk() (*map[string]ContributionData, bool)`
+`func (o *Contribution) GetAnswersOk() (*map[string]Answer, bool)`
 
-GetDataOk returns a tuple with the Data field if it's non-nil, zero value otherwise
+GetAnswersOk returns a tuple with the Answers field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetData
+### SetAnswers
 
-`func (o *Contribution) SetData(v map[string]ContributionData)`
+`func (o *Contribution) SetAnswers(v map[string]Answer)`
 
-SetData sets Data field to given value.
+SetAnswers sets Answers field to given value.
 
 
 

@@ -13,6 +13,8 @@ package spaciv
 
 import (
 	"encoding/json"
+	"bytes"
+	"fmt"
 )
 
 // checks if the DatasetModify type satisfies the MappedNullable interface at compile time
@@ -20,26 +22,25 @@ var _ MappedNullable = &DatasetModify{}
 
 // DatasetModify struct for DatasetModify
 type DatasetModify struct {
-	VisuaisationType *string `json:"VisuaisationType,omitempty"`
-	Code *string `json:"code,omitempty"`
-	ContributorDescription *string `json:"contributorDescription,omitempty"`
-	ContributorInfo *string `json:"contributorInfo,omitempty"`
-	Data *DatasetData `json:"data,omitempty"`
 	Description *string `json:"description,omitempty"`
-	InUse *bool `json:"inUse,omitempty"`
 	IsPublic *bool `json:"isPublic,omitempty"`
 	Name *string `json:"name,omitempty"`
 	Published *bool `json:"published,omitempty"`
-	Question *string `json:"question,omitempty"`
-	Type *int32 `json:"type,omitempty"`
+	ReplaceSteps bool `json:"replaceSteps"`
+	Steps []QuestionStepRequest `json:"steps"`
+	VisualisationType *string `json:"visualisationType,omitempty"`
 }
+
+type _DatasetModify DatasetModify
 
 // NewDatasetModify instantiates a new DatasetModify object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDatasetModify() *DatasetModify {
+func NewDatasetModify(replaceSteps bool, steps []QuestionStepRequest) *DatasetModify {
 	this := DatasetModify{}
+	this.ReplaceSteps = replaceSteps
+	this.Steps = steps
 	return &this
 }
 
@@ -49,166 +50,6 @@ func NewDatasetModify() *DatasetModify {
 func NewDatasetModifyWithDefaults() *DatasetModify {
 	this := DatasetModify{}
 	return &this
-}
-
-// GetVisuaisationType returns the VisuaisationType field value if set, zero value otherwise.
-func (o *DatasetModify) GetVisuaisationType() string {
-	if o == nil || IsNil(o.VisuaisationType) {
-		var ret string
-		return ret
-	}
-	return *o.VisuaisationType
-}
-
-// GetVisuaisationTypeOk returns a tuple with the VisuaisationType field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *DatasetModify) GetVisuaisationTypeOk() (*string, bool) {
-	if o == nil || IsNil(o.VisuaisationType) {
-		return nil, false
-	}
-	return o.VisuaisationType, true
-}
-
-// HasVisuaisationType returns a boolean if a field has been set.
-func (o *DatasetModify) HasVisuaisationType() bool {
-	if o != nil && !IsNil(o.VisuaisationType) {
-		return true
-	}
-
-	return false
-}
-
-// SetVisuaisationType gets a reference to the given string and assigns it to the VisuaisationType field.
-func (o *DatasetModify) SetVisuaisationType(v string) {
-	o.VisuaisationType = &v
-}
-
-// GetCode returns the Code field value if set, zero value otherwise.
-func (o *DatasetModify) GetCode() string {
-	if o == nil || IsNil(o.Code) {
-		var ret string
-		return ret
-	}
-	return *o.Code
-}
-
-// GetCodeOk returns a tuple with the Code field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *DatasetModify) GetCodeOk() (*string, bool) {
-	if o == nil || IsNil(o.Code) {
-		return nil, false
-	}
-	return o.Code, true
-}
-
-// HasCode returns a boolean if a field has been set.
-func (o *DatasetModify) HasCode() bool {
-	if o != nil && !IsNil(o.Code) {
-		return true
-	}
-
-	return false
-}
-
-// SetCode gets a reference to the given string and assigns it to the Code field.
-func (o *DatasetModify) SetCode(v string) {
-	o.Code = &v
-}
-
-// GetContributorDescription returns the ContributorDescription field value if set, zero value otherwise.
-func (o *DatasetModify) GetContributorDescription() string {
-	if o == nil || IsNil(o.ContributorDescription) {
-		var ret string
-		return ret
-	}
-	return *o.ContributorDescription
-}
-
-// GetContributorDescriptionOk returns a tuple with the ContributorDescription field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *DatasetModify) GetContributorDescriptionOk() (*string, bool) {
-	if o == nil || IsNil(o.ContributorDescription) {
-		return nil, false
-	}
-	return o.ContributorDescription, true
-}
-
-// HasContributorDescription returns a boolean if a field has been set.
-func (o *DatasetModify) HasContributorDescription() bool {
-	if o != nil && !IsNil(o.ContributorDescription) {
-		return true
-	}
-
-	return false
-}
-
-// SetContributorDescription gets a reference to the given string and assigns it to the ContributorDescription field.
-func (o *DatasetModify) SetContributorDescription(v string) {
-	o.ContributorDescription = &v
-}
-
-// GetContributorInfo returns the ContributorInfo field value if set, zero value otherwise.
-func (o *DatasetModify) GetContributorInfo() string {
-	if o == nil || IsNil(o.ContributorInfo) {
-		var ret string
-		return ret
-	}
-	return *o.ContributorInfo
-}
-
-// GetContributorInfoOk returns a tuple with the ContributorInfo field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *DatasetModify) GetContributorInfoOk() (*string, bool) {
-	if o == nil || IsNil(o.ContributorInfo) {
-		return nil, false
-	}
-	return o.ContributorInfo, true
-}
-
-// HasContributorInfo returns a boolean if a field has been set.
-func (o *DatasetModify) HasContributorInfo() bool {
-	if o != nil && !IsNil(o.ContributorInfo) {
-		return true
-	}
-
-	return false
-}
-
-// SetContributorInfo gets a reference to the given string and assigns it to the ContributorInfo field.
-func (o *DatasetModify) SetContributorInfo(v string) {
-	o.ContributorInfo = &v
-}
-
-// GetData returns the Data field value if set, zero value otherwise.
-func (o *DatasetModify) GetData() DatasetData {
-	if o == nil || IsNil(o.Data) {
-		var ret DatasetData
-		return ret
-	}
-	return *o.Data
-}
-
-// GetDataOk returns a tuple with the Data field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *DatasetModify) GetDataOk() (*DatasetData, bool) {
-	if o == nil || IsNil(o.Data) {
-		return nil, false
-	}
-	return o.Data, true
-}
-
-// HasData returns a boolean if a field has been set.
-func (o *DatasetModify) HasData() bool {
-	if o != nil && !IsNil(o.Data) {
-		return true
-	}
-
-	return false
-}
-
-// SetData gets a reference to the given DatasetData and assigns it to the Data field.
-func (o *DatasetModify) SetData(v DatasetData) {
-	o.Data = &v
 }
 
 // GetDescription returns the Description field value if set, zero value otherwise.
@@ -241,38 +82,6 @@ func (o *DatasetModify) HasDescription() bool {
 // SetDescription gets a reference to the given string and assigns it to the Description field.
 func (o *DatasetModify) SetDescription(v string) {
 	o.Description = &v
-}
-
-// GetInUse returns the InUse field value if set, zero value otherwise.
-func (o *DatasetModify) GetInUse() bool {
-	if o == nil || IsNil(o.InUse) {
-		var ret bool
-		return ret
-	}
-	return *o.InUse
-}
-
-// GetInUseOk returns a tuple with the InUse field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *DatasetModify) GetInUseOk() (*bool, bool) {
-	if o == nil || IsNil(o.InUse) {
-		return nil, false
-	}
-	return o.InUse, true
-}
-
-// HasInUse returns a boolean if a field has been set.
-func (o *DatasetModify) HasInUse() bool {
-	if o != nil && !IsNil(o.InUse) {
-		return true
-	}
-
-	return false
-}
-
-// SetInUse gets a reference to the given bool and assigns it to the InUse field.
-func (o *DatasetModify) SetInUse(v bool) {
-	o.InUse = &v
 }
 
 // GetIsPublic returns the IsPublic field value if set, zero value otherwise.
@@ -371,68 +180,84 @@ func (o *DatasetModify) SetPublished(v bool) {
 	o.Published = &v
 }
 
-// GetQuestion returns the Question field value if set, zero value otherwise.
-func (o *DatasetModify) GetQuestion() string {
-	if o == nil || IsNil(o.Question) {
+// GetReplaceSteps returns the ReplaceSteps field value
+func (o *DatasetModify) GetReplaceSteps() bool {
+	if o == nil {
+		var ret bool
+		return ret
+	}
+
+	return o.ReplaceSteps
+}
+
+// GetReplaceStepsOk returns a tuple with the ReplaceSteps field value
+// and a boolean to check if the value has been set.
+func (o *DatasetModify) GetReplaceStepsOk() (*bool, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.ReplaceSteps, true
+}
+
+// SetReplaceSteps sets field value
+func (o *DatasetModify) SetReplaceSteps(v bool) {
+	o.ReplaceSteps = v
+}
+
+// GetSteps returns the Steps field value
+func (o *DatasetModify) GetSteps() []QuestionStepRequest {
+	if o == nil {
+		var ret []QuestionStepRequest
+		return ret
+	}
+
+	return o.Steps
+}
+
+// GetStepsOk returns a tuple with the Steps field value
+// and a boolean to check if the value has been set.
+func (o *DatasetModify) GetStepsOk() ([]QuestionStepRequest, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Steps, true
+}
+
+// SetSteps sets field value
+func (o *DatasetModify) SetSteps(v []QuestionStepRequest) {
+	o.Steps = v
+}
+
+// GetVisualisationType returns the VisualisationType field value if set, zero value otherwise.
+func (o *DatasetModify) GetVisualisationType() string {
+	if o == nil || IsNil(o.VisualisationType) {
 		var ret string
 		return ret
 	}
-	return *o.Question
+	return *o.VisualisationType
 }
 
-// GetQuestionOk returns a tuple with the Question field value if set, nil otherwise
+// GetVisualisationTypeOk returns a tuple with the VisualisationType field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *DatasetModify) GetQuestionOk() (*string, bool) {
-	if o == nil || IsNil(o.Question) {
+func (o *DatasetModify) GetVisualisationTypeOk() (*string, bool) {
+	if o == nil || IsNil(o.VisualisationType) {
 		return nil, false
 	}
-	return o.Question, true
+	return o.VisualisationType, true
 }
 
-// HasQuestion returns a boolean if a field has been set.
-func (o *DatasetModify) HasQuestion() bool {
-	if o != nil && !IsNil(o.Question) {
+// HasVisualisationType returns a boolean if a field has been set.
+func (o *DatasetModify) HasVisualisationType() bool {
+	if o != nil && !IsNil(o.VisualisationType) {
 		return true
 	}
 
 	return false
 }
 
-// SetQuestion gets a reference to the given string and assigns it to the Question field.
-func (o *DatasetModify) SetQuestion(v string) {
-	o.Question = &v
-}
-
-// GetType returns the Type field value if set, zero value otherwise.
-func (o *DatasetModify) GetType() int32 {
-	if o == nil || IsNil(o.Type) {
-		var ret int32
-		return ret
-	}
-	return *o.Type
-}
-
-// GetTypeOk returns a tuple with the Type field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *DatasetModify) GetTypeOk() (*int32, bool) {
-	if o == nil || IsNil(o.Type) {
-		return nil, false
-	}
-	return o.Type, true
-}
-
-// HasType returns a boolean if a field has been set.
-func (o *DatasetModify) HasType() bool {
-	if o != nil && !IsNil(o.Type) {
-		return true
-	}
-
-	return false
-}
-
-// SetType gets a reference to the given int32 and assigns it to the Type field.
-func (o *DatasetModify) SetType(v int32) {
-	o.Type = &v
+// SetVisualisationType gets a reference to the given string and assigns it to the VisualisationType field.
+func (o *DatasetModify) SetVisualisationType(v string) {
+	o.VisualisationType = &v
 }
 
 func (o DatasetModify) MarshalJSON() ([]byte, error) {
@@ -445,26 +270,8 @@ func (o DatasetModify) MarshalJSON() ([]byte, error) {
 
 func (o DatasetModify) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.VisuaisationType) {
-		toSerialize["VisuaisationType"] = o.VisuaisationType
-	}
-	if !IsNil(o.Code) {
-		toSerialize["code"] = o.Code
-	}
-	if !IsNil(o.ContributorDescription) {
-		toSerialize["contributorDescription"] = o.ContributorDescription
-	}
-	if !IsNil(o.ContributorInfo) {
-		toSerialize["contributorInfo"] = o.ContributorInfo
-	}
-	if !IsNil(o.Data) {
-		toSerialize["data"] = o.Data
-	}
 	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
-	}
-	if !IsNil(o.InUse) {
-		toSerialize["inUse"] = o.InUse
 	}
 	if !IsNil(o.IsPublic) {
 		toSerialize["isPublic"] = o.IsPublic
@@ -475,13 +282,50 @@ func (o DatasetModify) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Published) {
 		toSerialize["published"] = o.Published
 	}
-	if !IsNil(o.Question) {
-		toSerialize["question"] = o.Question
-	}
-	if !IsNil(o.Type) {
-		toSerialize["type"] = o.Type
+	toSerialize["replaceSteps"] = o.ReplaceSteps
+	toSerialize["steps"] = o.Steps
+	if !IsNil(o.VisualisationType) {
+		toSerialize["visualisationType"] = o.VisualisationType
 	}
 	return toSerialize, nil
+}
+
+func (o *DatasetModify) UnmarshalJSON(data []byte) (err error) {
+	// This validates that all required properties are included in the JSON object
+	// by unmarshalling the object into a generic map with string keys and checking
+	// that every required field exists as a key in the generic map.
+	requiredProperties := []string{
+		"replaceSteps",
+		"steps",
+	}
+
+	allProperties := make(map[string]interface{})
+
+	err = json.Unmarshal(data, &allProperties)
+
+	if err != nil {
+		return err;
+	}
+
+	for _, requiredProperty := range(requiredProperties) {
+		if _, exists := allProperties[requiredProperty]; !exists {
+			return fmt.Errorf("no value given for required property %v", requiredProperty)
+		}
+	}
+
+	varDatasetModify := _DatasetModify{}
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	err = decoder.Decode(&varDatasetModify)
+
+	if err != nil {
+		return err
+	}
+
+	*o = DatasetModify(varDatasetModify)
+
+	return err
 }
 
 type NullableDatasetModify struct {

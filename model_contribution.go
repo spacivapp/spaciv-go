@@ -22,7 +22,7 @@ var _ MappedNullable = &Contribution{}
 
 // Contribution struct for Contribution
 type Contribution struct {
-	Data map[string]ContributionData `json:"data"`
+	Answers map[string]Answer `json:"answers"`
 }
 
 type _Contribution Contribution
@@ -31,9 +31,9 @@ type _Contribution Contribution
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewContribution(data map[string]ContributionData) *Contribution {
+func NewContribution(answers map[string]Answer) *Contribution {
 	this := Contribution{}
-	this.Data = data
+	this.Answers = answers
 	return &this
 }
 
@@ -45,28 +45,28 @@ func NewContributionWithDefaults() *Contribution {
 	return &this
 }
 
-// GetData returns the Data field value
-func (o *Contribution) GetData() map[string]ContributionData {
+// GetAnswers returns the Answers field value
+func (o *Contribution) GetAnswers() map[string]Answer {
 	if o == nil {
-		var ret map[string]ContributionData
+		var ret map[string]Answer
 		return ret
 	}
 
-	return o.Data
+	return o.Answers
 }
 
-// GetDataOk returns a tuple with the Data field value
+// GetAnswersOk returns a tuple with the Answers field value
 // and a boolean to check if the value has been set.
-func (o *Contribution) GetDataOk() (map[string]ContributionData, bool) {
+func (o *Contribution) GetAnswersOk() (map[string]Answer, bool) {
 	if o == nil {
-		return map[string]ContributionData{}, false
+		return map[string]Answer{}, false
 	}
-	return o.Data, true
+	return o.Answers, true
 }
 
-// SetData sets field value
-func (o *Contribution) SetData(v map[string]ContributionData) {
-	o.Data = v
+// SetAnswers sets field value
+func (o *Contribution) SetAnswers(v map[string]Answer) {
+	o.Answers = v
 }
 
 func (o Contribution) MarshalJSON() ([]byte, error) {
@@ -79,7 +79,7 @@ func (o Contribution) MarshalJSON() ([]byte, error) {
 
 func (o Contribution) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["data"] = o.Data
+	toSerialize["answers"] = o.Answers
 	return toSerialize, nil
 }
 
@@ -88,7 +88,7 @@ func (o *Contribution) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"data",
+		"answers",
 	}
 
 	allProperties := make(map[string]interface{})

@@ -22,7 +22,7 @@ var _ MappedNullable = &EstimationPatch{}
 
 // EstimationPatch struct for EstimationPatch
 type EstimationPatch struct {
-	Data *ContributionRequest `json:"data,omitempty"`
+	Data *Contribution `json:"data,omitempty"`
 	Delete bool `json:"delete"`
 	Description *string `json:"description,omitempty"`
 	Name *string `json:"name,omitempty"`
@@ -51,9 +51,9 @@ func NewEstimationPatchWithDefaults() *EstimationPatch {
 }
 
 // GetData returns the Data field value if set, zero value otherwise.
-func (o *EstimationPatch) GetData() ContributionRequest {
+func (o *EstimationPatch) GetData() Contribution {
 	if o == nil || IsNil(o.Data) {
-		var ret ContributionRequest
+		var ret Contribution
 		return ret
 	}
 	return *o.Data
@@ -61,7 +61,7 @@ func (o *EstimationPatch) GetData() ContributionRequest {
 
 // GetDataOk returns a tuple with the Data field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *EstimationPatch) GetDataOk() (*ContributionRequest, bool) {
+func (o *EstimationPatch) GetDataOk() (*Contribution, bool) {
 	if o == nil || IsNil(o.Data) {
 		return nil, false
 	}
@@ -77,8 +77,8 @@ func (o *EstimationPatch) HasData() bool {
 	return false
 }
 
-// SetData gets a reference to the given ContributionRequest and assigns it to the Data field.
-func (o *EstimationPatch) SetData(v ContributionRequest) {
+// SetData gets a reference to the given Contribution and assigns it to the Data field.
+func (o *EstimationPatch) SetData(v Contribution) {
 	o.Data = &v
 }
 

@@ -39,7 +39,7 @@ type ContributionsCreateDataCollectionsContributionParams struct {
 /*
 CreateDataCollectionsContribution Save a contribution
 
-Saves the contributor's answers and state for a survey contribution. The body carries the current node, answer data, and completion status; for identified surveys, the server records the contributor's anonymisation nodes when the contribution is completed, from the survey's contributor list or, if none was ever uploaded, from the object group named by its authentication mode, and returns `404` if the contribution ID is unknown. Requires the *Edit contribution* permission.
+Saves the contributor's answers and state for a survey contribution. The body carries the current node, the answers keyed by step ID, and completion status; for identified surveys, the server records the contributor's anonymisation nodes when the contribution is completed, from the survey's contributor list or, if none was ever uploaded, from the object group named by its authentication mode, and returns `404` if the contribution ID is unknown. Requires the *Edit contribution* permission.
 */
 func (a *ContributionsService) CreateDataCollectionsContribution(ctx context.Context, id string, contributionPost ContributionPost, params *ContributionsCreateDataCollectionsContributionParams) (map[string]interface{}, error) {
 	r := requestForContributionsCreateDataCollectionsContribution{
@@ -263,7 +263,7 @@ type requestForContributionsGetDataCollectionsContribution struct {
 /*
 GetDataCollectionsContribution Get the caller's contribution for a survey
 
-Returns the authenticated contributor's current contribution for the survey, creating an empty one if none exists yet. For anonymous and public surveys the contribution is keyed to the caller's session rather than their user account. Requires the *View contribution* or *Contribute to public data collection* permission.
+Returns the authenticated contributor's current contribution for the survey, creating one if none exists yet with each answer step at its initial answer. For anonymous and public surveys the contribution is keyed to the caller's session rather than their user account. Requires the *View contribution* or *Contribute to public data collection* permission.
 */
 func (a *ContributionsService) GetDataCollectionsContribution(ctx context.Context, id string) (*GetContributionRes, error) {
 	r := requestForContributionsGetDataCollectionsContribution{

@@ -465,9 +465,9 @@ type requestForInternalCreateAdminRecreateProperties struct {
 }
 
 /*
-CreateAdminRecreateProperties Recreate properties from datasets
+CreateAdminRecreateProperties Recreate properties from the defaults template
 
-Deletes all existing properties for the account and rebuilds them from the account's datasets and the defaults template. Also recreates any top-down-model predictions derived from those datasets. Requires the *Project admin controls* and *Sys admin* permissions.
+Deletes the account's properties and rebuilds them from the defaults template, keeping any property a question reads that the template does not provide. Also recreates the top-down-model predictions. Requires the *Project admin controls* and *Sys admin* permissions.
 */
 func (a *InternalService) CreateAdminRecreateProperties(ctx context.Context) error {
 	r := requestForInternalCreateAdminRecreateProperties{

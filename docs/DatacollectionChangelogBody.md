@@ -13,10 +13,10 @@ Name | Type | Description | Notes
 **End** | **string** |  | 
 **InviteMessage** | **string** |  | 
 **Name** | **string** |  | 
+**Questions** | **[]string** |  | 
 **ResendInviteMessage** | **string** |  | 
 **Start** | **string** |  | 
 **Status** | **int32** |  | 
-**Steps** | [**[]Step**](Step.md) |  | 
 **ThankYouMessage** | **string** |  | 
 **WelcomeMessage** | **string** |  | 
 
@@ -24,7 +24,7 @@ Name | Type | Description | Notes
 
 ### NewDatacollectionChangelogBody
 
-`func NewDatacollectionChangelogBody(anonymisationProperty string, authenticationMode NullableDatacollectionAuthentication, completeMessage string, contributors []DatacollectionContributor, contributorsUploaded bool, description string, end string, inviteMessage string, name string, resendInviteMessage string, start string, status int32, steps []Step, thankYouMessage string, welcomeMessage string, ) *DatacollectionChangelogBody`
+`func NewDatacollectionChangelogBody(anonymisationProperty string, authenticationMode NullableDatacollectionAuthentication, completeMessage string, contributors []DatacollectionContributor, contributorsUploaded bool, description string, end string, inviteMessage string, name string, questions []string, resendInviteMessage string, start string, status int32, thankYouMessage string, welcomeMessage string, ) *DatacollectionChangelogBody`
 
 NewDatacollectionChangelogBody instantiates a new DatacollectionChangelogBody object
 This constructor will assign default values to properties that have it defined,
@@ -229,6 +229,26 @@ and a boolean to check if the value has been set.
 SetName sets Name field to given value.
 
 
+### GetQuestions
+
+`func (o *DatacollectionChangelogBody) GetQuestions() []string`
+
+GetQuestions returns the Questions field if non-nil, zero value otherwise.
+
+### GetQuestionsOk
+
+`func (o *DatacollectionChangelogBody) GetQuestionsOk() (*[]string, bool)`
+
+GetQuestionsOk returns a tuple with the Questions field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetQuestions
+
+`func (o *DatacollectionChangelogBody) SetQuestions(v []string)`
+
+SetQuestions sets Questions field to given value.
+
+
 ### GetResendInviteMessage
 
 `func (o *DatacollectionChangelogBody) GetResendInviteMessage() string`
@@ -287,26 +307,6 @@ and a boolean to check if the value has been set.
 `func (o *DatacollectionChangelogBody) SetStatus(v int32)`
 
 SetStatus sets Status field to given value.
-
-
-### GetSteps
-
-`func (o *DatacollectionChangelogBody) GetSteps() []Step`
-
-GetSteps returns the Steps field if non-nil, zero value otherwise.
-
-### GetStepsOk
-
-`func (o *DatacollectionChangelogBody) GetStepsOk() (*[]Step, bool)`
-
-GetStepsOk returns a tuple with the Steps field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetSteps
-
-`func (o *DatacollectionChangelogBody) SetSteps(v []Step)`
-
-SetSteps sets Steps field to given value.
 
 
 ### GetThankYouMessage

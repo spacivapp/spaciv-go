@@ -25,7 +25,7 @@ type DatacollectionBody struct {
 	AnonymisationProperty *string `json:"anonymisationProperty,omitempty"`
 	AuthenticationMode *DatacollectionAuthentication `json:"authenticationMode,omitempty"`
 	ClearContributors *bool `json:"clearContributors,omitempty"`
-	ClearSteps bool `json:"clearSteps"`
+	ClearQuestions bool `json:"clearQuestions"`
 	CompleteMessage *string `json:"completeMessage,omitempty"`
 	Contributors []DatacollectionContributor `json:"contributors,omitempty"`
 	Delete bool `json:"delete"`
@@ -33,11 +33,11 @@ type DatacollectionBody struct {
 	End *string `json:"end,omitempty"`
 	InviteMessage *string `json:"inviteMessage,omitempty"`
 	Name *string `json:"name,omitempty"`
+	Questions []string `json:"questions"`
 	ResendInviteMessage *string `json:"resendInviteMessage,omitempty"`
 	ResendInvites bool `json:"resendInvites"`
 	Start *string `json:"start,omitempty"`
 	Status *int32 `json:"status,omitempty"`
-	Steps []Step `json:"steps"`
 	ThankYouMessage *string `json:"thankYouMessage,omitempty"`
 	WelcomeMessage *string `json:"welcomeMessage,omitempty"`
 }
@@ -48,12 +48,12 @@ type _DatacollectionBody DatacollectionBody
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDatacollectionBody(clearSteps bool, delete bool, resendInvites bool, steps []Step) *DatacollectionBody {
+func NewDatacollectionBody(clearQuestions bool, delete bool, questions []string, resendInvites bool) *DatacollectionBody {
 	this := DatacollectionBody{}
-	this.ClearSteps = clearSteps
+	this.ClearQuestions = clearQuestions
 	this.Delete = delete
+	this.Questions = questions
 	this.ResendInvites = resendInvites
-	this.Steps = steps
 	return &this
 }
 
@@ -161,28 +161,28 @@ func (o *DatacollectionBody) SetClearContributors(v bool) {
 	o.ClearContributors = &v
 }
 
-// GetClearSteps returns the ClearSteps field value
-func (o *DatacollectionBody) GetClearSteps() bool {
+// GetClearQuestions returns the ClearQuestions field value
+func (o *DatacollectionBody) GetClearQuestions() bool {
 	if o == nil {
 		var ret bool
 		return ret
 	}
 
-	return o.ClearSteps
+	return o.ClearQuestions
 }
 
-// GetClearStepsOk returns a tuple with the ClearSteps field value
+// GetClearQuestionsOk returns a tuple with the ClearQuestions field value
 // and a boolean to check if the value has been set.
-func (o *DatacollectionBody) GetClearStepsOk() (*bool, bool) {
+func (o *DatacollectionBody) GetClearQuestionsOk() (*bool, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.ClearSteps, true
+	return &o.ClearQuestions, true
 }
 
-// SetClearSteps sets field value
-func (o *DatacollectionBody) SetClearSteps(v bool) {
-	o.ClearSteps = v
+// SetClearQuestions sets field value
+func (o *DatacollectionBody) SetClearQuestions(v bool) {
+	o.ClearQuestions = v
 }
 
 // GetCompleteMessage returns the CompleteMessage field value if set, zero value otherwise.
@@ -401,6 +401,30 @@ func (o *DatacollectionBody) SetName(v string) {
 	o.Name = &v
 }
 
+// GetQuestions returns the Questions field value
+func (o *DatacollectionBody) GetQuestions() []string {
+	if o == nil {
+		var ret []string
+		return ret
+	}
+
+	return o.Questions
+}
+
+// GetQuestionsOk returns a tuple with the Questions field value
+// and a boolean to check if the value has been set.
+func (o *DatacollectionBody) GetQuestionsOk() ([]string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Questions, true
+}
+
+// SetQuestions sets field value
+func (o *DatacollectionBody) SetQuestions(v []string) {
+	o.Questions = v
+}
+
 // GetResendInviteMessage returns the ResendInviteMessage field value if set, zero value otherwise.
 func (o *DatacollectionBody) GetResendInviteMessage() string {
 	if o == nil || IsNil(o.ResendInviteMessage) {
@@ -521,30 +545,6 @@ func (o *DatacollectionBody) SetStatus(v int32) {
 	o.Status = &v
 }
 
-// GetSteps returns the Steps field value
-func (o *DatacollectionBody) GetSteps() []Step {
-	if o == nil {
-		var ret []Step
-		return ret
-	}
-
-	return o.Steps
-}
-
-// GetStepsOk returns a tuple with the Steps field value
-// and a boolean to check if the value has been set.
-func (o *DatacollectionBody) GetStepsOk() ([]Step, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return o.Steps, true
-}
-
-// SetSteps sets field value
-func (o *DatacollectionBody) SetSteps(v []Step) {
-	o.Steps = v
-}
-
 // GetThankYouMessage returns the ThankYouMessage field value if set, zero value otherwise.
 func (o *DatacollectionBody) GetThankYouMessage() string {
 	if o == nil || IsNil(o.ThankYouMessage) {
@@ -628,7 +628,7 @@ func (o DatacollectionBody) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ClearContributors) {
 		toSerialize["clearContributors"] = o.ClearContributors
 	}
-	toSerialize["clearSteps"] = o.ClearSteps
+	toSerialize["clearQuestions"] = o.ClearQuestions
 	if !IsNil(o.CompleteMessage) {
 		toSerialize["completeMessage"] = o.CompleteMessage
 	}
@@ -648,6 +648,7 @@ func (o DatacollectionBody) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Name) {
 		toSerialize["name"] = o.Name
 	}
+	toSerialize["questions"] = o.Questions
 	if !IsNil(o.ResendInviteMessage) {
 		toSerialize["resendInviteMessage"] = o.ResendInviteMessage
 	}
@@ -658,7 +659,6 @@ func (o DatacollectionBody) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Status) {
 		toSerialize["status"] = o.Status
 	}
-	toSerialize["steps"] = o.Steps
 	if !IsNil(o.ThankYouMessage) {
 		toSerialize["thankYouMessage"] = o.ThankYouMessage
 	}
@@ -673,10 +673,10 @@ func (o *DatacollectionBody) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"clearSteps",
+		"clearQuestions",
 		"delete",
+		"questions",
 		"resendInvites",
-		"steps",
 	}
 
 	allProperties := make(map[string]interface{})

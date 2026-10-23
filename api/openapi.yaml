@@ -77,7 +77,8 @@ tags:
   name: Top-down models
 - description: Demand estimates derived from a top-down model.
   name: Needs
-- description: Collections of records that supply the numbers behind a model.
+- description: "Questions: reusable sections of survey steps that data collections\
+    \ ask contributors."
   name: Datasets
 - description: "Surveys sent to colleagues to gather demand data, and the links and\
     \ QR codes that open them."
@@ -1632,10 +1633,10 @@ paths:
       x-sdk-params: true
   /v1/admin/recreate-properties:
     post:
-      description: Deletes all existing properties for the account and rebuilds them
-        from the account's datasets and the defaults template. Also recreates any
-        top-down-model predictions derived from those datasets. Requires the *Project
-        admin controls* and *Sys admin* permissions.
+      description: "Deletes the account's properties and rebuilds them from the defaults\
+        \ template, keeping any property a question reads that the template does not\
+        \ provide. Also recreates the top-down-model predictions. Requires the *Project\
+        \ admin controls* and *Sys admin* permissions."
       operationId: internal_create-admin-recreate-properties
       parameters: []
       responses:
@@ -1647,7 +1648,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorModel"
           description: Error
-      summary: Recreate properties from datasets
+      summary: Recreate properties from the defaults template
       tags:
       - Internal
       x-sdk-params: false
@@ -3273,9 +3274,9 @@ paths:
       x-sdk-params: false
     post:
       description: "Creates a new survey in draft status with a placeholder name.\
-        \ Use `PATCH /v1/data-collections/{id}` to configure its name, steps, and\
-        \ authentication mode before distributing it. Requires the *Configure crowd\
-        \ modelling* permission."
+        \ Use `PATCH /v1/data-collections/{id}` to configure its name, questions,\
+        \ and authentication mode before distributing it. Requires the *Configure\
+        \ crowd modelling* permission."
       operationId: data-collection_create
       parameters: []
       responses:
@@ -3362,20 +3363,24 @@ paths:
       - Data collection
       x-sdk-params: false
     patch:
-      description: "Partially updates the survey's name, steps, authentication mode,\
-        \ status, and other configurable fields. Only fields present in the request\
-        \ body are changed. Requires the *Configure crowd modelling* permission. Returns\
-        \ 400 if `anonymisationProperty` names a property that does not exist, or\
-        \ that is not a tree property for email or preferred-channel authentication.\
-        \ Also returns 400 if an already-set anonymisation property or authentication\
-        \ mode is changed, or status is moved back to draft, once the survey has left\
-        \ draft; an empty property or mode may still be set. The object group ID in\
-        \ an email or preferred-channel authentication mode is only locked until contributors\
-        \ have been uploaded. For email or preferred-channel authentication, `contributors`\
-        \ lists each contributor's user ID and their nodes on the anonymisation property;\
-        \ a non-empty list replaces the stored one and `clearContributors` empties\
-        \ it. Sending both returns 400. Switching a draft to anonymous or public authentication\
-        \ clears its contributors. Returns 400 if contributors are uploaded for anonymous\
+      description: "Partially updates the survey's name, questions, authentication\
+        \ mode, status, and other configurable fields. Only fields present in the\
+        \ request body are changed; a non-empty `questions` list replaces the stored\
+        \ one in order and `clearQuestions` empties it. Returns 400 if a question\
+        \ does not exist, two questions share a step ID or ask the same option of\
+        \ a property, or a ranked-picks step has no property to pick from. Requires\
+        \ the *Configure crowd modelling* permission. Returns 400 if `anonymisationProperty`\
+        \ names a property that does not exist, or that is not a tree property for\
+        \ email or preferred-channel authentication. Also returns 400 if an already-set\
+        \ anonymisation property or authentication mode is changed, or status is moved\
+        \ back to draft, once the survey has left draft; an empty property or mode\
+        \ may still be set. The object group ID in an email or preferred-channel authentication\
+        \ mode is only locked until contributors have been uploaded. For email or\
+        \ preferred-channel authentication, `contributors` lists each contributor's\
+        \ user ID and their nodes on the anonymisation property; a non-empty list\
+        \ replaces the stored one and `clearContributors` empties it. Sending both\
+        \ returns 400. Switching a draft to anonymous or public authentication clears\
+        \ its contributors. Returns 400 if contributors are uploaded for anonymous\
         \ or public authentication, if a contributor is listed twice, is not a user\
         \ of the account, or names a node that is not on the anonymisation property,\
         \ if the contributors change or are cleared once the survey has left draft,\
@@ -3418,10 +3423,10 @@ paths:
   /v1/data-collections/{id}/contribution:
     get:
       description: "Returns the authenticated contributor's current contribution for\
-        \ the survey, creating an empty one if none exists yet. For anonymous and\
-        \ public surveys the contribution is keyed to the caller's session rather\
-        \ than their user account. Requires the *View contribution* or *Contribute\
-        \ to public data collection* permission."
+        \ the survey, creating one if none exists yet with each answer step at its\
+        \ initial answer. For anonymous and public surveys the contribution is keyed\
+        \ to the caller's session rather than their user account. Requires the *View\
+        \ contribution* or *Contribute to public data collection* permission."
       operationId: contributions_get-data-collections-contribution
       parameters:
       - explode: false
@@ -3450,10 +3455,10 @@ paths:
       x-sdk-params: false
     post:
       description: "Saves the contributor's answers and state for a survey contribution.\
-        \ The body carries the current node, answer data, and completion status; for\
-        \ identified surveys, the server records the contributor's anonymisation nodes\
-        \ when the contribution is completed, from the survey's contributor list or,\
-        \ if none was ever uploaded, from the object group named by its authentication\
+        \ The body carries the current node, the answers keyed by step ID, and completion\
+        \ status; for identified surveys, the server records the contributor's anonymisation\
+        \ nodes when the contribution is completed, from the survey's contributor\
+        \ list or, if none was ever uploaded, from the object group named by its authentication\
         \ mode, and returns `404` if the contribution ID is unknown. Requires the\
         \ *Edit contribution* permission."
       operationId: contributions_create-data-collections-contribution
@@ -3652,12 +3657,81 @@ paths:
       tags:
       - Contributions
       x-sdk-params: false
+  /v1/dataset-templates:
+    get:
+      description: "Returns the questions of the template account that `POST /v1/dataset-templates/{id}/copy`\
+        \ can copy into the account. Requires the *Edit datasets* permission."
+      operationId: datasets_list-dataset-templates
+      parameters: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetDatasetListRes"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: List template questions
+      tags:
+      - Datasets
+      x-sdk-params: false
+  /v1/dataset-templates/{id}/copy:
+    post:
+      description: "Copies a question from the template account into the account and\
+        \ returns its ID: a new question, or with `restore` the account's own question\
+        \ with the same ID, replaced by the template's. The properties its steps target\
+        \ that the account lacks are copied too; properties it already has are left\
+        \ as they are, and a step's object group is left behind for the account to\
+        \ choose. Returns `404` if the template has no such question, and `400` if\
+        \ a step reads a property neither account has, asks for an option the property\
+        \ it will read lacks, or restoring it would ask an option twice in a data\
+        \ collection using it. Requires the *Edit datasets* and *Edit properties*\
+        \ permissions."
+      operationId: datasets_create-dataset-templates-copy
+      parameters:
+      - description: ID of the template question to copy.
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          description: ID of the template question to copy.
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TemplateCopyParamsWrapperBody"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DatasetAddResponseBody"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Copy a template question
+      tags:
+      - Datasets
+      x-sdk-params: false
   /v1/datasets:
     get:
-      description: "Returns all datasets available to the account, sorted alphabetically\
-        \ by name. Standard (preset) datasets are always included. Custom datasets\
-        \ are returned only to callers with the *View datasets* permission; callers\
-        \ with only *View public datasets* see solely datasets marked as public."
+      description: "Returns every question the account has, sorted alphabetically\
+        \ by name. Callers with only the *View public datasets* permission see solely\
+        \ questions marked as public. Requires the *View datasets* or *View public\
+        \ datasets* permission."
       operationId: datasets_list
       parameters: []
       responses:
@@ -3678,9 +3752,10 @@ paths:
       - Datasets
       x-sdk-params: false
     post:
-      description: Creates a custom dataset for the account and returns its UUID.
-        Also provisions a matching property so the dataset can be used in space rulesets.
-        Requires the *Edit datasets* permission.
+      description: "Creates a question with the given steps and returns its UUID.\
+        \ The properties its steps read, and the options they ask, must already exist;\
+        \ creating a question creates none. Returns `400` on the same step problems\
+        \ as `PATCH /v1/datasets/{id}`. Requires the *Edit datasets* permission."
       operationId: datasets_create
       parameters: []
       requestBody:
@@ -3707,10 +3782,9 @@ paths:
       x-sdk-params: false
   /v1/datasets/{id}:
     delete:
-      description: "Permanently removes the specified custom dataset and its associated\
-        \ property. Returns `400` if the dataset is a standard (preset) dataset, which\
-        \ cannot be deleted, and `409` if its property is the anonymisation property\
-        \ of a live data collection. Requires the *Edit datasets* permission."
+      description: Permanently removes the specified question. The properties its
+        steps read are left alone. Returns `409` if a data collection that has left
+        draft uses the question. Requires the *Edit datasets* permission.
       operationId: datasets_delete
       parameters:
       - explode: false
@@ -3734,10 +3808,11 @@ paths:
       - Datasets
       x-sdk-params: false
     get:
-      description: Returns the dataset identified by `id`. Standard (preset) datasets
-        are visible to any authenticated caller; custom datasets require the *View
-        datasets* permission. Returns `403` if the dataset is private and the caller
-        only holds the *View public datasets* permission.
+      description: "Returns the question identified by `id`: a section of a survey\
+        \ made of steps, each either a content screen or an answer screen over the\
+        \ options of a property. Requires the *View datasets* or *View public datasets*\
+        \ permission; returns `403` if the question is private and the caller only\
+        \ holds *View public datasets*."
       operationId: datasets_get
       parameters:
       - explode: false
@@ -3765,11 +3840,17 @@ paths:
       - Datasets
       x-sdk-params: false
     patch:
-      description: "Updates the metadata and/or configuration of the specified dataset.\
-        \ Only fields supplied in the request body are changed. For select-type datasets,\
-        \ updating the options also re-syncs the associated property. Returns `409`\
-        \ if that property is the anonymisation property of a live data collection\
-        \ and the update would change its tree structure. Requires the *Edit datasets*\
+      description: "Updates the specified question. Only fields supplied in the request\
+        \ body are changed; `steps` replaces every step when `replaceSteps` is true.\
+        \ A question never changes the properties its steps read: change a step's\
+        \ options through the property. Returns `400` if a step has no ID or answer\
+        \ type, repeats another step's ID, depends on a step that is not earlier in\
+        \ the question, sends to the calculation without a property, reads a property\
+        \ the account does not have or an option that property lacks, splits a slider\
+        \ between other than two options, or asks an option another step of the question\
+        \ or of a data collection using it already asks. Returns `409` if replacing\
+        \ the steps would change what a step sends to the calculation while a data\
+        \ collection that has been sent uses the question. Requires the *Edit datasets*\
         \ permission."
       operationId: datasets_update
       parameters:
@@ -4386,13 +4467,13 @@ paths:
       x-sdk-params: true
   /v1/needs/{id}/estimations/{dataset}/{group}/{node}:
     get:
-      description: "Returns the current contribution data for a single entry of a\
-        \ top-down model, expressed in the format expected by the contribution UI.\
-        \ The `dataset` path segment must match the model's `propertyId` and `group`\
-        \ must be `all`. Returns `400` naming the layer, entry and node if the entry\
-        \ holds a modifier whose formula is not a plain number, since estimations\
-        \ can only be expressed as constants. Requires the *View user needs scenarios*\
-        \ permission."
+      description: "Returns the current answer for a single entry of a top-down model,\
+        \ together with the question step that estimates the model's property, so\
+        \ the contribution UI can show that step. The `dataset` path segment must\
+        \ match the model's `propertyId` and `group` must be `all`. Returns `400`\
+        \ naming the layer, entry and node if the entry holds a modifier whose formula\
+        \ is not a plain number, since estimations can only be expressed as constants.\
+        \ Requires the *View user needs scenarios* permission."
       operationId: needs_get-estimations
       parameters:
       - explode: false
@@ -4436,7 +4517,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Contribution"
+                $ref: "#/components/schemas/EstimationRes"
           description: OK
         default:
           content:
@@ -8542,90 +8623,179 @@ components:
       - activeObjectCount
       - objectCount
       - objectCountsCalculating
-    ActivityData:
+    Answer:
       additionalProperties: false
       example:
-        other: 2.3021358869347655
-        collaborateVirtual: 6.027456183070403
-        communicate: 1.4658129805029452
-        projectWork: 7.061401241503109
-        focus: 5.962133916683182
-        collaborate: 0.8008281904610115
-        focusDeep: 5.637376656633329
+        number: 0.8008281904610115
+        other: other
+        selectedByRow:
+          key: selectedByRow
+        ranges:
+          key:
+            start: 1
+            end: 6
+        values:
+          key: 5.962133916683182
+        text: text
+        selected:
+        - selected
+        - selected
       properties:
-        collaborate:
-          format: double
-          type: number
-        collaborateVirtual:
-          format: double
-          type: number
-        communicate:
-          format: double
-          type: number
-        focus:
-          format: double
-          type: number
-        focusDeep:
+        number:
           format: double
           type: number
         other:
-          format: double
-          type: number
-        projectWork:
-          format: double
-          type: number
-      required:
-      - collaborate
-      - collaborateVirtual
-      - communicate
-      - focus
-      - focusDeep
-      - other
-      - projectWork
-    ActivityLocationData:
-      additionalProperties: false
-      properties:
-        collaborateInOffice:
-          format: double
-          type: number
-        collaborateVirtualInOffice:
-          format: double
-          type: number
-        communicateInOffice:
-          format: double
-          type: number
-        focusDeepInOffice:
-          format: double
-          type: number
-        focusInOffice:
-          format: double
-          type: number
-        otherInOffice:
-          format: double
-          type: number
-        projectWorkInOffice:
-          format: double
-          type: number
-      required:
-      - collaborateInOffice
-      - collaborateVirtualInOffice
-      - communicateInOffice
-      - focusDeepInOffice
-      - focusInOffice
-      - otherInOffice
-      - projectWorkInOffice
-    ActivitySpaceModuleData:
-      additionalProperties: false
-      properties:
-        activity:
           type: string
-        data:
+        ranges:
+          additionalProperties:
+            $ref: "#/components/schemas/TimeRange"
+        selected:
+          items:
+            type: string
+          type: array
+        selectedByRow:
+          additionalProperties:
+            type: string
+        text:
+          type: string
+        values:
           additionalProperties:
             format: double
             type: number
       required:
-      - activity
-      - data
+      - number
+      - other
+      - ranges
+      - selected
+      - selectedByRow
+      - text
+      - values
+    AnswerOption:
+      additionalProperties: false
+      properties:
+        follows:
+          type: string
+        help:
+          type: string
+        id:
+          type: string
+        label:
+          type: string
+        name:
+          type: string
+        points:
+          items:
+            $ref: "#/components/schemas/ScalePoint"
+          type: array
+        row:
+          type: string
+        weight:
+          format: double
+          type: number
+      required:
+      - follows
+      - help
+      - id
+      - label
+      - name
+      - points
+      - row
+    AnswerStep:
+      oneOf:
+      - $ref: "#/components/schemas/AnswerStep_oneOf"
+      - $ref: "#/components/schemas/AnswerStep_oneOf_1"
+      - $ref: "#/components/schemas/AnswerStep_oneOf_2"
+      - $ref: "#/components/schemas/AnswerStep_oneOf_3"
+      - $ref: "#/components/schemas/AnswerStep_oneOf_4"
+      - $ref: "#/components/schemas/AnswerStep_oneOf_5"
+      properties:
+        dependency:
+          $ref: "#/components/schemas/StepDependency"
+        description:
+          type: string
+        estimationDefault:
+          $ref: "#/components/schemas/Answer"
+        heading:
+          type: string
+        info:
+          type: string
+        initial:
+          $ref: "#/components/schemas/Answer"
+        inputLabel:
+          type: string
+        objectGroup:
+          type: string
+        options:
+          items:
+            $ref: "#/components/schemas/AnswerOption"
+          type: array
+        property:
+          type: string
+        sendsToCalculation:
+          type: boolean
+        spacedHeading:
+          type: boolean
+      required:
+      - dependency
+      - description
+      - estimationDefault
+      - heading
+      - info
+      - initial
+      - inputLabel
+      - objectGroup
+      - options
+      - property
+      - sendsToCalculation
+      - spacedHeading
+    AnswerStepRequest:
+      oneOf:
+      - $ref: "#/components/schemas/AnswerStep_oneOf"
+      - $ref: "#/components/schemas/AnswerStep_oneOf_1"
+      - $ref: "#/components/schemas/AnswerStep_oneOf_2"
+      - $ref: "#/components/schemas/AnswerStep_oneOf_3"
+      - $ref: "#/components/schemas/AnswerStep_oneOf_4"
+      - $ref: "#/components/schemas/AnswerStep_oneOf_5"
+      properties:
+        dependency:
+          $ref: "#/components/schemas/StepDependency"
+        description:
+          type: string
+        estimationDefault:
+          $ref: "#/components/schemas/Answer"
+        heading:
+          type: string
+        info:
+          type: string
+        initial:
+          $ref: "#/components/schemas/Answer"
+        inputLabel:
+          type: string
+        objectGroup:
+          type: string
+        options:
+          items:
+            $ref: "#/components/schemas/AnswerOption"
+          type: array
+        property:
+          type: string
+        sendsToCalculation:
+          type: boolean
+        spacedHeading:
+          type: boolean
+      required:
+      - dependency
+      - description
+      - estimationDefault
+      - heading
+      - info
+      - initial
+      - inputLabel
+      - objectGroup
+      - options
+      - property
+      - sendsToCalculation
+      - spacedHeading
     ApiKeyPostReqBody:
       additionalProperties: false
       example:
@@ -10356,33 +10526,6 @@ components:
       - function
       - params
       - scenario
-    ChangelogOption:
-      additionalProperties: false
-      example:
-        name: name
-        id: id
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-      required:
-      - id
-      - name
-    ChangelogValueOption:
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        value:
-          format: double
-          type: number
-      required:
-      - id
-      - name
-      - value
     ClientAuthMessage:
       additionalProperties: {}
       properties:
@@ -10487,54 +10630,80 @@ components:
       - topics
       - type
       - v
-    ConfidentialityData:
+    ContentStep:
       additionalProperties: false
       properties:
-        confidentiality:
+        details:
+          type: string
+        detailsHeading:
+          type: string
+        display:
           format: int32
           type: integer
-        data:
+        heading:
+          type: string
+        hideBack:
+          type: boolean
+        image:
+          type: string
+        paragraphs:
           items:
-            format: int32
-            type: integer
+            type: string
           type: array
       required:
-      - confidentiality
-      - data
+      - details
+      - detailsHeading
+      - display
+      - heading
+      - hideBack
+      - image
+      - paragraphs
     Contribution:
       additionalProperties: false
       example:
-        data:
+        answers:
           key:
-            activity:
-              other: 2.3021358869347655
-              collaborateVirtual: 6.027456183070403
-              communicate: 1.4658129805029452
-              projectWork: 7.061401241503109
-              focus: 5.962133916683182
-              collaborate: 0.8008281904610115
-              focusDeep: 5.637376656633329
+            number: 0.8008281904610115
+            other: other
+            selectedByRow:
+              key: selectedByRow
+            ranges:
+              key:
+                start: 1
+                end: 6
+            values:
+              key: 5.962133916683182
+            text: text
+            selected:
+            - selected
+            - selected
       properties:
-        data:
+        answers:
           additionalProperties:
-            $ref: "#/components/schemas/ContributionData"
+            $ref: "#/components/schemas/Answer"
       required:
-      - data
+      - answers
     ContributionChangelogBody:
       additionalProperties: false
       example:
         node: node
         data:
-          data:
+          answers:
             key:
-              activity:
-                other: 2.3021358869347655
-                collaborateVirtual: 6.027456183070403
-                communicate: 1.4658129805029452
-                projectWork: 7.061401241503109
-                focus: 5.962133916683182
-                collaborate: 0.8008281904610115
-                focusDeep: 5.637376656633329
+              number: 0.8008281904610115
+              other: other
+              selectedByRow:
+                key: selectedByRow
+              ranges:
+                key:
+                  start: 1
+                  end: 6
+              values:
+                key: 5.962133916683182
+              text: text
+              selected:
+              - selected
+              - selected
         pooledContributionId: pooledContributionId
         membership:
           nodes:
@@ -10562,50 +10731,6 @@ components:
     ContributionCreateResponseWrapperBody:
       additionalProperties: false
       type: object
-    ContributionData:
-      oneOf:
-      - $ref: "#/components/schemas/ContributionData_oneOf"
-      - $ref: "#/components/schemas/ContributionData_oneOf_1"
-      - $ref: "#/components/schemas/ContributionData_oneOf_2"
-      - $ref: "#/components/schemas/ContributionData_oneOf_3"
-      - $ref: "#/components/schemas/ContributionData_oneOf_4"
-      - $ref: "#/components/schemas/ContributionData_oneOf_5"
-      - $ref: "#/components/schemas/ContributionData_oneOf_6"
-      - $ref: "#/components/schemas/ContributionData_oneOf_7"
-      - $ref: "#/components/schemas/ContributionData_oneOf_8"
-      - $ref: "#/components/schemas/ContributionData_oneOf_9"
-      - $ref: "#/components/schemas/ContributionData_oneOf_10"
-      - $ref: "#/components/schemas/ContributionData_oneOf_11"
-      - $ref: "#/components/schemas/ContributionData_oneOf_12"
-      - $ref: "#/components/schemas/ContributionData_oneOf_13"
-      - $ref: "#/components/schemas/ContributionData_oneOf_14"
-      - $ref: "#/components/schemas/ContributionData_oneOf_15"
-      - $ref: "#/components/schemas/ContributionData_oneOf_16"
-      - $ref: "#/components/schemas/ContributionData_oneOf_17"
-      - $ref: "#/components/schemas/ContributionData_oneOf_18"
-      - $ref: "#/components/schemas/ContributionData_oneOf_19"
-    ContributionDataRequest:
-      oneOf:
-      - $ref: "#/components/schemas/ContributionData_oneOf"
-      - $ref: "#/components/schemas/ContributionData_oneOf_1"
-      - $ref: "#/components/schemas/ContributionData_oneOf_2"
-      - $ref: "#/components/schemas/ContributionData_oneOf_3"
-      - $ref: "#/components/schemas/ContributionData_oneOf_4"
-      - $ref: "#/components/schemas/ContributionData_oneOf_5"
-      - $ref: "#/components/schemas/ContributionData_oneOf_6"
-      - $ref: "#/components/schemas/ContributionData_oneOf_7"
-      - $ref: "#/components/schemas/ContributionDataRequest_oneOf"
-      - $ref: "#/components/schemas/ContributionData_oneOf_9"
-      - $ref: "#/components/schemas/ContributionData_oneOf_10"
-      - $ref: "#/components/schemas/ContributionData_oneOf_11"
-      - $ref: "#/components/schemas/ContributionData_oneOf_12"
-      - $ref: "#/components/schemas/ContributionData_oneOf_13"
-      - $ref: "#/components/schemas/ContributionData_oneOf_14"
-      - $ref: "#/components/schemas/ContributionData_oneOf_15"
-      - $ref: "#/components/schemas/ContributionData_oneOf_16"
-      - $ref: "#/components/schemas/ContributionData_oneOf_17"
-      - $ref: "#/components/schemas/ContributionData_oneOf_18"
-      - $ref: "#/components/schemas/ContributionData_oneOf_19"
     ContributionListEntry:
       additionalProperties: false
       example:
@@ -10613,16 +10738,22 @@ components:
         contributionChangelogBody:
           node: node
           data:
-            data:
+            answers:
               key:
-                activity:
-                  other: 2.3021358869347655
-                  collaborateVirtual: 6.027456183070403
-                  communicate: 1.4658129805029452
-                  projectWork: 7.061401241503109
-                  focus: 5.962133916683182
-                  collaborate: 0.8008281904610115
-                  focusDeep: 5.637376656633329
+                number: 0.8008281904610115
+                other: other
+                selectedByRow:
+                  key: selectedByRow
+                ranges:
+                  key:
+                    start: 1
+                    end: 6
+                values:
+                  key: 5.962133916683182
+                text: text
+                selected:
+                - selected
+                - selected
           pooledContributionId: pooledContributionId
           membership:
             nodes:
@@ -10664,20 +10795,26 @@ components:
       example:
         node: node
         data:
-          data:
+          answers:
             key:
-              activity:
-                other: 2.3021358869347655
-                collaborateVirtual: 6.027456183070403
-                communicate: 1.4658129805029452
-                projectWork: 7.061401241503109
-                focus: 5.962133916683182
-                collaborate: 0.8008281904610115
-                focusDeep: 5.637376656633329
+              number: 0.8008281904610115
+              other: other
+              selectedByRow:
+                key: selectedByRow
+              ranges:
+                key:
+                  start: 1
+                  end: 6
+              values:
+                key: 5.962133916683182
+              text: text
+              selected:
+              - selected
+              - selected
         state: 0
       properties:
         data:
-          $ref: "#/components/schemas/ContributionRequest"
+          $ref: "#/components/schemas/Contribution"
         node:
           type: string
         state:
@@ -10690,25 +10827,6 @@ components:
     ContributionPostResponseWrapperBody:
       additionalProperties: false
       type: object
-    ContributionRequest:
-      additionalProperties: false
-      example:
-        data:
-          key:
-            activity:
-              other: 2.3021358869347655
-              collaborateVirtual: 6.027456183070403
-              communicate: 1.4658129805029452
-              projectWork: 7.061401241503109
-              focus: 5.962133916683182
-              collaborate: 0.8008281904610115
-              focusDeep: 5.637376656633329
-      properties:
-        data:
-          additionalProperties:
-            $ref: "#/components/schemas/ContributionDataRequest"
-      required:
-      - data
     Cookie:
       additionalProperties: false
       properties:
@@ -11213,20 +11331,16 @@ components:
         resendInvites: true
         inviteMessage: inviteMessage
         welcomeMessage: welcomeMessage
+        questions:
+        - questions
+        - questions
         resendInviteMessage: resendInviteMessage
         start: start
         description: description
         thankYouMessage: thankYouMessage
         anonymisationProperty: anonymisationProperty
         delete: true
-        steps:
-        - property: property
-          id: id
-          objectGroup: objectGroup
-        - property: property
-          id: id
-          objectGroup: objectGroup
-        clearSteps: true
+        clearQuestions: true
         completeMessage: completeMessage
         name: name
         clearContributors: true
@@ -11251,7 +11365,7 @@ components:
           $ref: "#/components/schemas/DatacollectionAuthentication"
         clearContributors:
           type: boolean
-        clearSteps:
+        clearQuestions:
           type: boolean
         completeMessage:
           type: string
@@ -11269,6 +11383,10 @@ components:
           type: string
         name:
           type: string
+        questions:
+          items:
+            type: string
+          type: array
         resendInviteMessage:
           type: string
         resendInvites:
@@ -11278,36 +11396,28 @@ components:
         status:
           format: int32
           type: integer
-        steps:
-          items:
-            $ref: "#/components/schemas/Step"
-          type: array
         thankYouMessage:
           type: string
         welcomeMessage:
           type: string
       required:
-      - clearSteps
+      - clearQuestions
       - delete
+      - questions
       - resendInvites
-      - steps
     DatacollectionChangelogBody:
       additionalProperties: false
       example:
         inviteMessage: inviteMessage
         welcomeMessage: welcomeMessage
+        questions:
+        - questions
+        - questions
         resendInviteMessage: resendInviteMessage
         start: start
         description: description
         thankYouMessage: thankYouMessage
         anonymisationProperty: anonymisationProperty
-        steps:
-        - property: property
-          id: id
-          objectGroup: objectGroup
-        - property: property
-          id: id
-          objectGroup: objectGroup
         contributorsUploaded: true
         completeMessage: completeMessage
         name: name
@@ -11346,6 +11456,10 @@ components:
           type: string
         name:
           type: string
+        questions:
+          items:
+            type: string
+          type: array
         resendInviteMessage:
           type: string
         start:
@@ -11353,10 +11467,6 @@ components:
         status:
           format: int32
           type: integer
-        steps:
-          items:
-            $ref: "#/components/schemas/Step"
-          type: array
         thankYouMessage:
           type: string
         welcomeMessage:
@@ -11371,10 +11481,10 @@ components:
       - end
       - inviteMessage
       - name
+      - questions
       - resendInviteMessage
       - start
       - status
-      - steps
       - thankYouMessage
       - welcomeMessage
     DatacollectionContributor:
@@ -11406,171 +11516,104 @@ components:
     DatasetChangelogBody:
       additionalProperties: false
       example:
-        contributorInfo: contributorInfo
         visualisationType: visualisationType
-        contributorDescription: contributorDescription
-        code: code
-        data:
-          customIntro:
-            image: image
-            heading: heading
-            body: body
-        question: question
-        inUse: true
         name: name
         description: description
         isPublic: true
         published: true
-        type: 0
+        steps:
+        - id: id
+        - id: id
       properties:
-        code:
-          type: string
-        contributorDescription:
-          type: string
-        contributorInfo:
-          type: string
-        data:
-          $ref: "#/components/schemas/DatasetChangelogData"
         description:
           type: string
-        inUse:
-          type: boolean
         isPublic:
           type: boolean
         name:
           type: string
         published:
           type: boolean
-        question:
-          type: string
-        type:
-          format: int32
-          type: integer
+        steps:
+          items:
+            $ref: "#/components/schemas/QuestionStep"
+          type: array
         visualisationType:
           type: string
       required:
-      - code
-      - contributorDescription
-      - contributorInfo
-      - data
       - description
-      - inUse
       - isPublic
       - name
       - published
-      - question
-      - type
+      - steps
       - visualisationType
-    DatasetChangelogData:
-      oneOf:
-      - $ref: "#/components/schemas/DatasetChangelogData_oneOf"
-      - $ref: "#/components/schemas/DatasetChangelogData_oneOf_1"
-      - $ref: "#/components/schemas/DatasetChangelogData_oneOf_2"
-      - $ref: "#/components/schemas/DatasetChangelogData_oneOf_3"
-      - $ref: "#/components/schemas/DatasetChangelogData_oneOf_4"
-      - $ref: "#/components/schemas/DatasetChangelogData_oneOf_5"
-      - $ref: "#/components/schemas/DatasetChangelogData_oneOf_6"
-      - $ref: "#/components/schemas/DatasetChangelogData_oneOf_7"
     DatasetCreate:
       additionalProperties: false
       example:
-        data:
-          customIntro:
-            image: image
-            heading: heading
-            body: body
-        name: name
-        description: description
-        type: 0
-      properties:
-        data:
-          $ref: "#/components/schemas/DatasetChangelogData"
-        description:
-          type: string
-        name:
-          type: string
-        type:
-          format: int32
-          type: integer
-      required:
-      - data
-      - name
-      - type
-    DatasetData:
-      oneOf:
-      - $ref: "#/components/schemas/DatasetChangelogData_oneOf"
-      - $ref: "#/components/schemas/DatasetChangelogData_oneOf_1"
-      - $ref: "#/components/schemas/DatasetChangelogData_oneOf_2"
-      - $ref: "#/components/schemas/DatasetData_oneOf"
-      - $ref: "#/components/schemas/DatasetChangelogData_oneOf_4"
-      - $ref: "#/components/schemas/DatasetChangelogData_oneOf_5"
-      - $ref: "#/components/schemas/DatasetData_oneOf_1"
-      - $ref: "#/components/schemas/DatasetData_oneOf_2"
-    DatasetModify:
-      additionalProperties: false
-      example:
-        contributorInfo: contributorInfo
-        contributorDescription: contributorDescription
-        code: code
-        data:
-          customIntro:
-            image: image
-            heading: heading
-            body: body
-        question: question
-        inUse: true
         name: name
         description: description
         isPublic: true
-        VisuaisationType: VisuaisationType
-        published: true
-        type: 0
+        steps:
+        - id: id
+        - id: id
       properties:
-        VisuaisationType:
-          type: string
-        code:
-          type: string
-        contributorDescription:
-          type: string
-        contributorInfo:
-          type: string
-        data:
-          $ref: "#/components/schemas/DatasetData"
         description:
           type: string
-        inUse:
+        isPublic:
           type: boolean
+        name:
+          type: string
+        steps:
+          items:
+            $ref: "#/components/schemas/QuestionStepRequest"
+          type: array
+      required:
+      - isPublic
+      - name
+      - steps
+    DatasetModify:
+      additionalProperties: false
+      example:
+        visualisationType: visualisationType
+        replaceSteps: true
+        name: name
+        description: description
+        isPublic: true
+        published: true
+        steps:
+        - id: id
+        - id: id
+      properties:
+        description:
+          type: string
         isPublic:
           type: boolean
         name:
           type: string
         published:
           type: boolean
-        question:
+        replaceSteps:
+          type: boolean
+        steps:
+          items:
+            $ref: "#/components/schemas/QuestionStepRequest"
+          type: array
+        visualisationType:
           type: string
-        type:
-          format: int32
-          type: integer
+      required:
+      - replaceSteps
+      - steps
     DatasetRes:
       additionalProperties: false
       example:
         data:
-          contributorInfo: contributorInfo
           visualisationType: visualisationType
-          contributorDescription: contributorDescription
-          code: code
-          data:
-            customIntro:
-              image: image
-              heading: heading
-              body: body
-          question: question
-          inUse: true
           name: name
           description: description
           isPublic: true
           published: true
-          type: 0
+          steps:
+          - id: id
+          - id: id
         id: id
       properties:
         data:
@@ -11581,25 +11624,6 @@ components:
       - data
       - id
     DatasetUpdateResponseWrapperBody:
-      additionalProperties: false
-      type: object
-    DaysOffData:
-      additionalProperties: false
-      properties:
-        daysHoliday:
-          format: double
-          type: number
-        daysOther:
-          format: double
-          type: number
-        daysSick:
-          format: double
-          type: number
-      required:
-      - daysHoliday
-      - daysOther
-      - daysSick
-    DefaultDatasetData:
       additionalProperties: false
       type: object
     Directory:
@@ -11833,23 +11857,29 @@ components:
       additionalProperties: false
       example:
         data:
-          data:
+          answers:
             key:
-              activity:
-                other: 2.3021358869347655
-                collaborateVirtual: 6.027456183070403
-                communicate: 1.4658129805029452
-                projectWork: 7.061401241503109
-                focus: 5.962133916683182
-                collaborate: 0.8008281904610115
-                focusDeep: 5.637376656633329
+              number: 0.8008281904610115
+              other: other
+              selectedByRow:
+                key: selectedByRow
+              ranges:
+                key:
+                  start: 1
+                  end: 6
+              values:
+                key: 5.962133916683182
+              text: text
+              selected:
+              - selected
+              - selected
         name: name
         description: description
         delete: true
         setDefault: true
       properties:
         data:
-          $ref: "#/components/schemas/ContributionRequest"
+          $ref: "#/components/schemas/Contribution"
         delete:
           type: boolean
         description:
@@ -11861,6 +11891,34 @@ components:
       required:
       - delete
       - setDefault
+    EstimationRes:
+      additionalProperties: false
+      example:
+        answer:
+          number: 0.8008281904610115
+          other: other
+          selectedByRow:
+            key: selectedByRow
+          ranges:
+            key:
+              start: 1
+              end: 6
+          values:
+            key: 5.962133916683182
+          text: text
+          selected:
+          - selected
+          - selected
+        step:
+          id: id
+      properties:
+        answer:
+          $ref: "#/components/schemas/Answer"
+        step:
+          $ref: "#/components/schemas/QuestionStep"
+      required:
+      - answer
+      - step
     FeatureGroup:
       additionalProperties: false
       example:
@@ -12438,6 +12496,14 @@ components:
           type: array
       required:
       - points
+    FreeTextType:
+      additionalProperties: false
+      properties:
+        maxLength:
+          format: int32
+          type: integer
+      required:
+      - maxLength
     GetContributionListRes:
       additionalProperties: false
       example:
@@ -12446,16 +12512,22 @@ components:
           contributionChangelogBody:
             node: node
             data:
-              data:
+              answers:
                 key:
-                  activity:
-                    other: 2.3021358869347655
-                    collaborateVirtual: 6.027456183070403
-                    communicate: 1.4658129805029452
-                    projectWork: 7.061401241503109
-                    focus: 5.962133916683182
-                    collaborate: 0.8008281904610115
-                    focusDeep: 5.637376656633329
+                  number: 0.8008281904610115
+                  other: other
+                  selectedByRow:
+                    key: selectedByRow
+                  ranges:
+                    key:
+                      start: 1
+                      end: 6
+                  values:
+                    key: 5.962133916683182
+                  text: text
+                  selected:
+                  - selected
+                  - selected
             pooledContributionId: pooledContributionId
             membership:
               nodes:
@@ -12468,16 +12540,22 @@ components:
           contributionChangelogBody:
             node: node
             data:
-              data:
+              answers:
                 key:
-                  activity:
-                    other: 2.3021358869347655
-                    collaborateVirtual: 6.027456183070403
-                    communicate: 1.4658129805029452
-                    projectWork: 7.061401241503109
-                    focus: 5.962133916683182
-                    collaborate: 0.8008281904610115
-                    focusDeep: 5.637376656633329
+                  number: 0.8008281904610115
+                  other: other
+                  selectedByRow:
+                    key: selectedByRow
+                  ranges:
+                    key:
+                      start: 1
+                      end: 6
+                  values:
+                    key: 5.962133916683182
+                  text: text
+                  selected:
+                  - selected
+                  - selected
             pooledContributionId: pooledContributionId
             membership:
               nodes:
@@ -12500,17 +12578,23 @@ components:
         node: node
         isAnonymous: true
         data:
-          data:
+          answers:
             key:
-              activity:
-                other: 2.3021358869347655
-                collaborateVirtual: 6.027456183070403
-                communicate: 1.4658129805029452
-                projectWork: 7.061401241503109
-                focus: 5.962133916683182
-                collaborate: 0.8008281904610115
-                focusDeep: 5.637376656633329
-        state: 9
+              number: 0.8008281904610115
+              other: other
+              selectedByRow:
+                key: selectedByRow
+              ranges:
+                key:
+                  start: 1
+                  end: 6
+              values:
+                key: 5.962133916683182
+              text: text
+              selected:
+              - selected
+              - selected
+        state: 5
       properties:
         contributionId:
           type: string
@@ -12541,18 +12625,14 @@ components:
           datacollection:
             inviteMessage: inviteMessage
             welcomeMessage: welcomeMessage
+            questions:
+            - questions
+            - questions
             resendInviteMessage: resendInviteMessage
             start: start
             description: description
             thankYouMessage: thankYouMessage
             anonymisationProperty: anonymisationProperty
-            steps:
-            - property: property
-              id: id
-              objectGroup: objectGroup
-            - property: property
-              id: id
-              objectGroup: objectGroup
             contributorsUploaded: true
             completeMessage: completeMessage
             name: name
@@ -12578,18 +12658,14 @@ components:
           datacollection:
             inviteMessage: inviteMessage
             welcomeMessage: welcomeMessage
+            questions:
+            - questions
+            - questions
             resendInviteMessage: resendInviteMessage
             start: start
             description: description
             thankYouMessage: thankYouMessage
             anonymisationProperty: anonymisationProperty
-            steps:
-            - property: property
-              id: id
-              objectGroup: objectGroup
-            - property: property
-              id: id
-              objectGroup: objectGroup
             contributorsUploaded: true
             completeMessage: completeMessage
             name: name
@@ -12625,18 +12701,14 @@ components:
         datacollection:
           inviteMessage: inviteMessage
           welcomeMessage: welcomeMessage
+          questions:
+          - questions
+          - questions
           resendInviteMessage: resendInviteMessage
           start: start
           description: description
           thankYouMessage: thankYouMessage
           anonymisationProperty: anonymisationProperty
-          steps:
-          - property: property
-            id: id
-            objectGroup: objectGroup
-          - property: property
-            id: id
-            objectGroup: objectGroup
           contributorsUploaded: true
           completeMessage: completeMessage
           name: name
@@ -12683,40 +12755,24 @@ components:
       example:
         list:
         - data:
-            contributorInfo: contributorInfo
             visualisationType: visualisationType
-            contributorDescription: contributorDescription
-            code: code
-            data:
-              customIntro:
-                image: image
-                heading: heading
-                body: body
-            question: question
-            inUse: true
             name: name
             description: description
             isPublic: true
             published: true
-            type: 0
+            steps:
+            - id: id
+            - id: id
           id: id
         - data:
-            contributorInfo: contributorInfo
             visualisationType: visualisationType
-            contributorDescription: contributorDescription
-            code: code
-            data:
-              customIntro:
-                image: image
-                heading: heading
-                body: body
-            question: question
-            inUse: true
             name: name
             description: description
             isPublic: true
             published: true
-            type: 0
+            steps:
+            - id: id
+            - id: id
           id: id
       properties:
         list:
@@ -13083,100 +13139,6 @@ components:
       - firstName
       - lastName
       - role
-    InOfficeData:
-      additionalProperties: false
-      properties:
-        end:
-          format: int32
-          type: integer
-        start:
-          format: int32
-          type: integer
-      required:
-      - end
-      - start
-    InOfficeDaysData:
-      additionalProperties: false
-      properties:
-        friday:
-          format: double
-          type: number
-        monday:
-          format: double
-          type: number
-        saturday:
-          format: double
-          type: number
-        sunday:
-          format: double
-          type: number
-        thursday:
-          format: double
-          type: number
-        tuesday:
-          format: double
-          type: number
-        wednesday:
-          format: double
-          type: number
-      required:
-      - friday
-      - monday
-      - saturday
-      - sunday
-      - thursday
-      - tuesday
-      - wednesday
-    InOfficeHoursData:
-      additionalProperties: false
-      properties:
-        friday:
-          $ref: "#/components/schemas/InOfficeData"
-        monday:
-          $ref: "#/components/schemas/InOfficeData"
-        saturday:
-          $ref: "#/components/schemas/InOfficeData"
-        sunday:
-          $ref: "#/components/schemas/InOfficeData"
-        thursday:
-          $ref: "#/components/schemas/InOfficeData"
-        tuesday:
-          $ref: "#/components/schemas/InOfficeData"
-        wednesday:
-          $ref: "#/components/schemas/InOfficeData"
-      required:
-      - friday
-      - monday
-      - saturday
-      - sunday
-      - thursday
-      - tuesday
-      - wednesday
-    InOfficeHoursDataRequest:
-      additionalProperties: false
-      properties:
-        friday:
-          $ref: "#/components/schemas/InOfficeData"
-        monday:
-          $ref: "#/components/schemas/InOfficeData"
-        saturday:
-          $ref: "#/components/schemas/InOfficeData"
-        sunday:
-          $ref: "#/components/schemas/InOfficeData"
-        thursday:
-          $ref: "#/components/schemas/InOfficeData"
-        tuesday:
-          $ref: "#/components/schemas/InOfficeData"
-        wednesday:
-          $ref: "#/components/schemas/InOfficeData"
-      required:
-      - friday
-      - monday
-      - saturday
-      - sunday
-      - thursday
-      - tuesday
-      - wednesday
     IntegrationCreateSlackParamsWrapperBody:
       additionalProperties: false
       example:
@@ -13188,23 +13150,6 @@ components:
           type: string
       required:
       - code
-    IntroData:
-      additionalProperties: false
-      example:
-        image: image
-        heading: heading
-        body: body
-      properties:
-        body:
-          type: string
-        heading:
-          type: string
-        image:
-          type: string
-      required:
-      - body
-      - heading
-      - image
     InvalidModifierFormulaDetail:
       additionalProperties: false
       example:
@@ -13483,14 +13428,6 @@ components:
       - termsConditions
       - title
       - userId
-    LocationData:
-      additionalProperties: false
-      properties:
-        atTheOffice:
-          format: double
-          type: number
-      required:
-      - atTheOffice
     LogicAssignment:
       example:
         property: property
@@ -14081,46 +14018,6 @@ components:
       oneOf:
       - $ref: "#/components/schemas/MaybeVarStr_oneOf"
       - $ref: "#/components/schemas/CalcRuleRef_oneOf_6"
-    MeetingDetailsData:
-      additionalProperties: false
-      properties:
-        formalInformal:
-          format: double
-          type: number
-        hybridInPerson:
-          format: double
-          type: number
-        scheduledUnscheduled:
-          format: double
-          type: number
-      required:
-      - formalInformal
-      - hybridInPerson
-      - scheduledUnscheduled
-    MeetingSizeData:
-      additionalProperties: false
-      properties:
-        collaboarate11To15:
-          format: double
-          type: number
-        collaborate16Plus:
-          format: double
-          type: number
-        collaborate2:
-          format: double
-          type: number
-        collaborate3To5:
-          format: double
-          type: number
-        collaborate6To10:
-          format: double
-          type: number
-      required:
-      - collaboarate11To15
-      - collaborate16Plus
-      - collaborate2
-      - collaborate3To5
-      - collaborate6To10
     MetaVersionResponse:
       additionalProperties: false
       example:
@@ -14164,58 +14061,17 @@ components:
           type: string
       required:
       - object
-    MultiSelectChangelogData:
+    NumberType:
       additionalProperties: false
       properties:
-        allowOthers:
-          type: boolean
-        maxSelections:
+        display:
           format: int32
           type: integer
-        minSelections:
-          format: int32
-          type: integer
-        options:
-          items:
-            $ref: "#/components/schemas/ChangelogOption"
-          type: array
-      required:
-      - allowOthers
-      - maxSelections
-      - minSelections
-      - options
-    MultiSelectContributionData:
-      additionalProperties: false
-      properties:
-        otherValue:
+        node:
           type: string
-        selected:
-          items:
-            type: string
-          type: array
       required:
-      - otherValue
-      - selected
-    MultiSelectData:
-      additionalProperties: false
-      properties:
-        allowOthers:
-          type: boolean
-        maxSelections:
-          format: int32
-          type: integer
-        minSelections:
-          format: int32
-          type: integer
-        options:
-          items:
-            $ref: "#/components/schemas/ChangelogOption"
-          type: array
-      required:
-      - allowOthers
-      - maxSelections
-      - minSelections
-      - options
+      - display
+      - node
     Object:
       additionalProperties: false
       example:
@@ -14527,34 +14383,6 @@ components:
       - fileId
       - lastModified
       - size
-    OutOfOfficeData:
-      additionalProperties: false
-      properties:
-        atACustomerLocation:
-          format: double
-          type: number
-        atAnotherCompanyLocation:
-          format: double
-          type: number
-        atHome:
-          format: double
-          type: number
-        atOtherLocation:
-          format: double
-          type: number
-        atPublicLocation:
-          format: double
-          type: number
-        inTransit:
-          format: double
-          type: number
-      required:
-      - atACustomerLocation
-      - atAnotherCompanyLocation
-      - atHome
-      - atOtherLocation
-      - atPublicLocation
-      - inTransit
     ParameterType:
       additionalProperties: false
       properties:
@@ -15216,6 +15044,42 @@ components:
       - $ref: "#/components/schemas/PropertySource_oneOf"
       - $ref: "#/components/schemas/CalcSegmentation_oneOf_1"
       - $ref: "#/components/schemas/CalcSegmentation_oneOf_2"
+    QuestionStep:
+      example:
+        id: id
+      oneOf:
+      - $ref: "#/components/schemas/QuestionStep_oneOf"
+      - $ref: "#/components/schemas/QuestionStep_oneOf_1"
+      properties:
+        id:
+          type: string
+      required:
+      - id
+    QuestionStepRequest:
+      example:
+        id: id
+      oneOf:
+      - $ref: "#/components/schemas/QuestionStepRequest_oneOf"
+      - $ref: "#/components/schemas/QuestionStep_oneOf_1"
+      properties:
+        id:
+          type: string
+      required:
+      - id
+    RankedPicksType:
+      additionalProperties: false
+      properties:
+        notConfigured:
+          type: string
+        picks:
+          format: int32
+          type: integer
+        placeholder:
+          type: string
+      required:
+      - notConfigured
+      - picks
+      - placeholder
     ReconcileReport:
       additionalProperties: false
       example:
@@ -15390,19 +15254,6 @@ components:
           type: array
       required:
       - references
-    RelationshipData:
-      additionalProperties: false
-      properties:
-        first:
-          type: string
-        second:
-          type: string
-        third:
-          type: string
-      required:
-      - first
-      - second
-      - third
     RepairFloorplansResBody:
       additionalProperties: false
       example:
@@ -15501,16 +15352,17 @@ components:
       - event
       - retryTimestamp
       - timestamp
-    RoleTagsData:
+    ScalePoint:
       additionalProperties: false
       properties:
-        roleTags:
-          items:
-            format: int64
-            type: integer
-          type: array
+        label:
+          type: string
+        value:
+          format: double
+          type: number
       required:
-      - roleTags
+      - label
+      - value
     ScenarioChangelogBody:
       additionalProperties: false
       example:
@@ -17389,6 +17241,42 @@ components:
           type: array
       required:
       - filters
+    SelectType:
+      additionalProperties: false
+      properties:
+        allowOther:
+          type: boolean
+        display:
+          format: int32
+          type: integer
+        maxSelections:
+          format: int32
+          type: integer
+        minSelections:
+          format: int32
+          type: integer
+        multiple:
+          type: boolean
+        otherLabel:
+          type: string
+        otherOption:
+          type: string
+        rows:
+          items:
+            $ref: "#/components/schemas/AnswerOption"
+          type: array
+        wrap:
+          type: boolean
+      required:
+      - allowOther
+      - display
+      - maxSelections
+      - minSelections
+      - multiple
+      - otherLabel
+      - otherOption
+      - rows
+      - wrap
     Selection:
       additionalProperties: false
       example:
@@ -17595,70 +17483,6 @@ components:
       - topic
       - type
       - v
-    SingleSelectChangelogData:
-      additionalProperties: false
-      properties:
-        options:
-          items:
-            $ref: "#/components/schemas/ChangelogValueOption"
-          type: array
-      required:
-      - options
-    SingleSelectContributionData:
-      additionalProperties: false
-      properties:
-        otherValue:
-          type: string
-        selected:
-          type: string
-      required:
-      - otherValue
-      - selected
-    SingleSelectData:
-      additionalProperties: false
-      properties:
-        options:
-          items:
-            $ref: "#/components/schemas/ChangelogValueOption"
-          type: array
-      required:
-      - options
-    SingleSelectListChangelogData:
-      additionalProperties: false
-      properties:
-        categories:
-          items:
-            $ref: "#/components/schemas/ChangelogOption"
-          type: array
-        options:
-          items:
-            $ref: "#/components/schemas/ChangelogValueOption"
-          type: array
-      required:
-      - categories
-      - options
-    SingleSelectListContributionData:
-      additionalProperties: false
-      properties:
-        data:
-          additionalProperties:
-            type: string
-      required:
-      - data
-    SingleSelectListData:
-      additionalProperties: false
-      properties:
-        categories:
-          items:
-            $ref: "#/components/schemas/ChangelogOption"
-          type: array
-        options:
-          items:
-            $ref: "#/components/schemas/ChangelogValueOption"
-          type: array
-      required:
-      - categories
-      - options
     SpaceRuleSet:
       additionalProperties: false
       example:
@@ -18058,21 +17882,17 @@ components:
         type:
           description: "Ruleset type: \"Standard\", \"Amenity\", or \"Advanced\"."
           type: string
-    Step:
+    StepDependency:
       additionalProperties: false
-      example:
-        property: property
-        id: id
-        objectGroup: objectGroup
       properties:
-        id:
-          type: string
-        objectGroup:
-          type: string
-        property:
+        kind:
+          format: int32
+          type: integer
+        step:
           type: string
       required:
-      - id
+      - kind
+      - step
     SysAdminUpdateFeatureGroupsParamsWrapperBody:
       additionalProperties: false
       example:
@@ -18129,6 +17949,40 @@ components:
       required:
       - reserved
       - tags
+    TemplateCopyParamsWrapperBody:
+      additionalProperties: false
+      example:
+        restore: true
+      properties:
+        restore:
+          description: "Copy over the account's question with the same ID, to restore\
+            \ it, instead of adding a new question."
+          type: boolean
+      required:
+      - restore
+    TimeRange:
+      additionalProperties: false
+      example:
+        start: 1
+        end: 6
+      properties:
+        end:
+          format: int32
+          type: integer
+        start:
+          format: int32
+          type: integer
+      required:
+      - end
+      - start
+    TimeRangesType:
+      additionalProperties: false
+      properties:
+        slotMinutes:
+          format: int32
+          type: integer
+      required:
+      - slotMinutes
     TopDownModelChangelogBody:
       additionalProperties: false
       example:
@@ -18601,6 +18455,32 @@ components:
       required:
       - acceptTerms
       - email
+    ValuePerOptionType:
+      additionalProperties: false
+      properties:
+        display:
+          format: int32
+          type: integer
+        points:
+          items:
+            $ref: "#/components/schemas/ScalePoint"
+          type: array
+        remainingLabel:
+          type: string
+        skippable:
+          type: boolean
+        sumsToOne:
+          type: boolean
+        votes:
+          format: int32
+          type: integer
+      required:
+      - display
+      - points
+      - remainingLabel
+      - skippable
+      - sumsToOne
+      - votes
     VariableChangelog:
       additionalProperties: false
       example:
@@ -18889,6 +18769,42 @@ components:
       - $ref: "#/components/schemas/AccountOIDCProviderPatch_not_not_anyOf"
       - $ref: "#/components/schemas/AccountOIDCProviderPatch_not_not_anyOf_1"
       - $ref: "#/components/schemas/AccountOIDCProviderPatch_not_not_anyOf_2"
+    AnswerStep_oneOf:
+      properties:
+        freeText:
+          $ref: "#/components/schemas/FreeTextType"
+      required:
+      - freeText
+    AnswerStep_oneOf_1:
+      properties:
+        number:
+          $ref: "#/components/schemas/NumberType"
+      required:
+      - number
+    AnswerStep_oneOf_2:
+      properties:
+        rankedPicks:
+          $ref: "#/components/schemas/RankedPicksType"
+      required:
+      - rankedPicks
+    AnswerStep_oneOf_3:
+      properties:
+        select:
+          $ref: "#/components/schemas/SelectType"
+      required:
+      - select
+    AnswerStep_oneOf_4:
+      properties:
+        timeRanges:
+          $ref: "#/components/schemas/TimeRangesType"
+      required:
+      - timeRanges
+    AnswerStep_oneOf_5:
+      properties:
+        valuePerOption:
+          $ref: "#/components/schemas/ValuePerOptionType"
+      required:
+      - valuePerOption
     CalcRuleRef_oneOf:
       example:
         attr:
@@ -19016,143 +18932,6 @@ components:
           $ref: "#/components/schemas/CalcCompareRequest"
       required:
       - compare
-    ContributionData_oneOf:
-      example:
-        activity:
-          other: 2.3021358869347655
-          collaborateVirtual: 6.027456183070403
-          communicate: 1.4658129805029452
-          projectWork: 7.061401241503109
-          focus: 5.962133916683182
-          collaborate: 0.8008281904610115
-          focusDeep: 5.637376656633329
-      properties:
-        activity:
-          $ref: "#/components/schemas/ActivityData"
-      required:
-      - activity
-    ContributionData_oneOf_1:
-      properties:
-        activityLocation:
-          $ref: "#/components/schemas/ActivityLocationData"
-      required:
-      - activityLocation
-    ContributionData_oneOf_2:
-      properties:
-        activitySpaceModule:
-          $ref: "#/components/schemas/ActivitySpaceModuleData"
-      required:
-      - activitySpaceModule
-    ContributionData_oneOf_3:
-      properties:
-        additionalInfo:
-          type: string
-      required:
-      - additionalInfo
-    ContributionData_oneOf_4:
-      properties:
-        confidentiality:
-          $ref: "#/components/schemas/ConfidentialityData"
-      required:
-      - confidentiality
-    ContributionData_oneOf_5:
-      properties:
-        daysOff:
-          $ref: "#/components/schemas/DaysOffData"
-      required:
-      - daysOff
-    ContributionData_oneOf_6:
-      properties:
-        freeText:
-          type: string
-      required:
-      - freeText
-    ContributionData_oneOf_7:
-      properties:
-        inOfficeDays:
-          $ref: "#/components/schemas/InOfficeDaysData"
-      required:
-      - inOfficeDays
-    ContributionData_oneOf_8:
-      properties:
-        inOfficeHours:
-          $ref: "#/components/schemas/InOfficeHoursData"
-      required:
-      - inOfficeHours
-    ContributionData_oneOf_9:
-      properties:
-        location:
-          $ref: "#/components/schemas/LocationData"
-      required:
-      - location
-    ContributionData_oneOf_10:
-      properties:
-        meetingDetails:
-          $ref: "#/components/schemas/MeetingDetailsData"
-      required:
-      - meetingDetails
-    ContributionData_oneOf_11:
-      properties:
-        meetingSize:
-          $ref: "#/components/schemas/MeetingSizeData"
-      required:
-      - meetingSize
-    ContributionData_oneOf_12:
-      properties:
-        multiSelect:
-          $ref: "#/components/schemas/MultiSelectContributionData"
-      required:
-      - multiSelect
-    ContributionData_oneOf_13:
-      properties:
-        outOfOffice:
-          $ref: "#/components/schemas/OutOfOfficeData"
-      required:
-      - outOfOffice
-    ContributionData_oneOf_14:
-      properties:
-        rating:
-          format: double
-          type: number
-      required:
-      - rating
-    ContributionData_oneOf_15:
-      properties:
-        relationship:
-          $ref: "#/components/schemas/RelationshipData"
-      required:
-      - relationship
-    ContributionData_oneOf_16:
-      properties:
-        roleTags:
-          $ref: "#/components/schemas/RoleTagsData"
-      required:
-      - roleTags
-    ContributionData_oneOf_17:
-      properties:
-        singleSelect:
-          $ref: "#/components/schemas/SingleSelectContributionData"
-      required:
-      - singleSelect
-    ContributionData_oneOf_18:
-      properties:
-        singleSelectList:
-          $ref: "#/components/schemas/SingleSelectListContributionData"
-      required:
-      - singleSelectList
-    ContributionData_oneOf_19:
-      properties:
-        workingtime:
-          format: double
-          type: number
-      required:
-      - workingtime
-    ContributionDataRequest_oneOf:
-      properties:
-        inOfficeHours:
-          $ref: "#/components/schemas/InOfficeHoursDataRequest"
-      required:
-      - inOfficeHours
     DashboardCardItem_oneOf:
       example:
         control:
@@ -19367,81 +19146,6 @@ components:
           $ref: "#/components/schemas/AuthenticationPublic"
       required:
       - public
-    DatasetChangelogData_oneOf:
-      example:
-        customIntro:
-          image: image
-          heading: heading
-          body: body
-      properties:
-        customIntro:
-          $ref: "#/components/schemas/IntroData"
-      required:
-      - customIntro
-    DatasetChangelogData_oneOf_1:
-      properties:
-        freeText:
-          additionalProperties: false
-          type: object
-      required:
-      - freeText
-    DatasetChangelogData_oneOf_2:
-      properties:
-        intro:
-          additionalProperties: false
-          type: object
-      required:
-      - intro
-    DatasetChangelogData_oneOf_3:
-      properties:
-        multiSelect:
-          $ref: "#/components/schemas/MultiSelectChangelogData"
-      required:
-      - multiSelect
-    DatasetChangelogData_oneOf_4:
-      properties:
-        preset:
-          additionalProperties: false
-          type: object
-      required:
-      - preset
-    DatasetChangelogData_oneOf_5:
-      properties:
-        rating:
-          additionalProperties: false
-          type: object
-      required:
-      - rating
-    DatasetChangelogData_oneOf_6:
-      properties:
-        singleSelect:
-          $ref: "#/components/schemas/SingleSelectChangelogData"
-      required:
-      - singleSelect
-    DatasetChangelogData_oneOf_7:
-      properties:
-        singleSelectList:
-          $ref: "#/components/schemas/SingleSelectListChangelogData"
-      required:
-      - singleSelectList
-    DatasetData_oneOf:
-      properties:
-        multiSelect:
-          $ref: "#/components/schemas/MultiSelectData"
-      required:
-      - multiSelect
-    DatasetData_oneOf_1:
-      properties:
-        singleSelect:
-          $ref: "#/components/schemas/SingleSelectData"
-      required:
-      - singleSelect
-    DatasetData_oneOf_2:
-      properties:
-        singleSelectList:
-          $ref: "#/components/schemas/SingleSelectListData"
-      required:
-      - singleSelectList
     EntryPatch_properties_value:
       description: "The nodes a property resolves to, or `null` to remove the property\
         \ from the entry."
@@ -19556,6 +19260,24 @@ components:
           type: string
       required:
       - floorplan
+    QuestionStep_oneOf:
+      properties:
+        answer:
+          $ref: "#/components/schemas/AnswerStep"
+      required:
+      - answer
+    QuestionStep_oneOf_1:
+      properties:
+        content:
+          $ref: "#/components/schemas/ContentStep"
+      required:
+      - content
+    QuestionStepRequest_oneOf:
+      properties:
+        answer:
+          $ref: "#/components/schemas/AnswerStepRequest"
+      required:
+      - answer
     VariableData_oneOf:
       properties:
         calcRule:

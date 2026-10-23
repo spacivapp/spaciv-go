@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 **AnonymisationProperty** | Pointer to **string** |  | [optional] 
 **AuthenticationMode** | Pointer to [**DatacollectionAuthentication**](DatacollectionAuthentication.md) |  | [optional] 
 **ClearContributors** | Pointer to **bool** |  | [optional] 
-**ClearSteps** | **bool** |  | 
+**ClearQuestions** | **bool** |  | 
 **CompleteMessage** | Pointer to **string** |  | [optional] 
 **Contributors** | Pointer to [**[]DatacollectionContributor**](DatacollectionContributor.md) |  | [optional] 
 **Delete** | **bool** |  | 
@@ -15,11 +15,11 @@ Name | Type | Description | Notes
 **End** | Pointer to **string** |  | [optional] 
 **InviteMessage** | Pointer to **string** |  | [optional] 
 **Name** | Pointer to **string** |  | [optional] 
+**Questions** | **[]string** |  | 
 **ResendInviteMessage** | Pointer to **string** |  | [optional] 
 **ResendInvites** | **bool** |  | 
 **Start** | Pointer to **string** |  | [optional] 
 **Status** | Pointer to **int32** |  | [optional] 
-**Steps** | [**[]Step**](Step.md) |  | 
 **ThankYouMessage** | Pointer to **string** |  | [optional] 
 **WelcomeMessage** | Pointer to **string** |  | [optional] 
 
@@ -27,7 +27,7 @@ Name | Type | Description | Notes
 
 ### NewDatacollectionBody
 
-`func NewDatacollectionBody(clearSteps bool, delete bool, resendInvites bool, steps []Step, ) *DatacollectionBody`
+`func NewDatacollectionBody(clearQuestions bool, delete bool, questions []string, resendInvites bool, ) *DatacollectionBody`
 
 NewDatacollectionBody instantiates a new DatacollectionBody object
 This constructor will assign default values to properties that have it defined,
@@ -117,24 +117,24 @@ SetClearContributors sets ClearContributors field to given value.
 
 HasClearContributors returns a boolean if a field has been set.
 
-### GetClearSteps
+### GetClearQuestions
 
-`func (o *DatacollectionBody) GetClearSteps() bool`
+`func (o *DatacollectionBody) GetClearQuestions() bool`
 
-GetClearSteps returns the ClearSteps field if non-nil, zero value otherwise.
+GetClearQuestions returns the ClearQuestions field if non-nil, zero value otherwise.
 
-### GetClearStepsOk
+### GetClearQuestionsOk
 
-`func (o *DatacollectionBody) GetClearStepsOk() (*bool, bool)`
+`func (o *DatacollectionBody) GetClearQuestionsOk() (*bool, bool)`
 
-GetClearStepsOk returns a tuple with the ClearSteps field if it's non-nil, zero value otherwise
+GetClearQuestionsOk returns a tuple with the ClearQuestions field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetClearSteps
+### SetClearQuestions
 
-`func (o *DatacollectionBody) SetClearSteps(v bool)`
+`func (o *DatacollectionBody) SetClearQuestions(v bool)`
 
-SetClearSteps sets ClearSteps field to given value.
+SetClearQuestions sets ClearQuestions field to given value.
 
 
 ### GetCompleteMessage
@@ -307,6 +307,26 @@ SetName sets Name field to given value.
 
 HasName returns a boolean if a field has been set.
 
+### GetQuestions
+
+`func (o *DatacollectionBody) GetQuestions() []string`
+
+GetQuestions returns the Questions field if non-nil, zero value otherwise.
+
+### GetQuestionsOk
+
+`func (o *DatacollectionBody) GetQuestionsOk() (*[]string, bool)`
+
+GetQuestionsOk returns a tuple with the Questions field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetQuestions
+
+`func (o *DatacollectionBody) SetQuestions(v []string)`
+
+SetQuestions sets Questions field to given value.
+
+
 ### GetResendInviteMessage
 
 `func (o *DatacollectionBody) GetResendInviteMessage() string`
@@ -401,26 +421,6 @@ SetStatus sets Status field to given value.
 `func (o *DatacollectionBody) HasStatus() bool`
 
 HasStatus returns a boolean if a field has been set.
-
-### GetSteps
-
-`func (o *DatacollectionBody) GetSteps() []Step`
-
-GetSteps returns the Steps field if non-nil, zero value otherwise.
-
-### GetStepsOk
-
-`func (o *DatacollectionBody) GetStepsOk() (*[]Step, bool)`
-
-GetStepsOk returns a tuple with the Steps field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetSteps
-
-`func (o *DatacollectionBody) SetSteps(v []Step)`
-
-SetSteps sets Steps field to given value.
-
 
 ### GetThankYouMessage
 

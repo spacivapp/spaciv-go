@@ -32,7 +32,7 @@ type requestForDatasetsCreate struct {
 /*
 Create Create a dataset
 
-Creates a custom dataset for the account and returns its UUID. Also provisions a matching property so the dataset can be used in space rulesets. Requires the *Edit datasets* permission.
+Creates a question with the given steps and returns its UUID. The properties its steps read, and the options they ask, must already exist; creating a question creates none. Returns `400` on the same step problems as `PATCH /v1/datasets/{id}`. Requires the *Edit datasets* permission.
 */
 func (a *DatasetsService) Create(ctx context.Context, datasetCreate DatasetCreate) (*DatasetAddResponseBody, error) {
 	r := requestForDatasetsCreate{
@@ -130,6 +130,119 @@ func (a *DatasetsService) executeCreate(r requestForDatasetsCreate) (*DatasetAdd
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type requestForDatasetsCreateDatasetTemplatesCopy struct {
+	ctx context.Context
+	ApiService *DatasetsService
+	id string
+	templateCopyParamsWrapperBody *TemplateCopyParamsWrapperBody
+}
+
+/*
+CreateDatasetTemplatesCopy Copy a template question
+
+Copies a question from the template account into the account and returns its ID: a new question, or with `restore` the account's own question with the same ID, replaced by the template's. The properties its steps target that the account lacks are copied too; properties it already has are left as they are, and a step's object group is left behind for the account to choose. Returns `404` if the template has no such question, and `400` if a step reads a property neither account has, asks for an option the property it will read lacks, or restoring it would ask an option twice in a data collection using it. Requires the *Edit datasets* and *Edit properties* permissions.
+*/
+func (a *DatasetsService) CreateDatasetTemplatesCopy(ctx context.Context, id string, templateCopyParamsWrapperBody TemplateCopyParamsWrapperBody) (*DatasetAddResponseBody, error) {
+	r := requestForDatasetsCreateDatasetTemplatesCopy{
+		ApiService: a,
+		ctx: ctx,
+		id: id,
+		templateCopyParamsWrapperBody: &templateCopyParamsWrapperBody,
+	}
+	result, _, err := a.executeCreateDatasetTemplatesCopy(r)
+	return result, err
+}
+
+func (a *DatasetsService) executeCreateDatasetTemplatesCopy(r requestForDatasetsCreateDatasetTemplatesCopy) (*DatasetAddResponseBody, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *DatasetAddResponseBody
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DatasetsAPIService.CreateDatasetTemplatesCopy")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/dataset-templates/{id}/copy"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.templateCopyParamsWrapperBody == nil {
+		return localVarReturnValue, nil, reportError("templateCopyParamsWrapperBody is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.templateCopyParamsWrapperBody
+	if r.ctx != nil {
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "DatasetsAPIService.CreateDatasetTemplatesCopy")
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type requestForDatasetsDelete struct {
 	ctx context.Context
 	ApiService *DatasetsService
@@ -139,7 +252,7 @@ type requestForDatasetsDelete struct {
 /*
 Delete Delete a dataset
 
-Permanently removes the specified custom dataset and its associated property. Returns `400` if the dataset is a standard (preset) dataset, which cannot be deleted, and `409` if its property is the anonymisation property of a live data collection. Requires the *Edit datasets* permission.
+Permanently removes the specified question. The properties its steps read are left alone. Returns `409` if a data collection that has left draft uses the question. Requires the *Edit datasets* permission.
 */
 func (a *DatasetsService) Delete(ctx context.Context, id string) error {
 	r := requestForDatasetsDelete{
@@ -235,7 +348,7 @@ type requestForDatasetsGet struct {
 /*
 Get Get a dataset
 
-Returns the dataset identified by `id`. Standard (preset) datasets are visible to any authenticated caller; custom datasets require the *View datasets* permission. Returns `403` if the dataset is private and the caller only holds the *View public datasets* permission.
+Returns the question identified by `id`: a section of a survey made of steps, each either a content screen or an answer screen over the options of a property. Requires the *View datasets* or *View public datasets* permission; returns `403` if the question is private and the caller only holds *View public datasets*.
 */
 func (a *DatasetsService) Get(ctx context.Context, id string) (*DatasetChangelogBody, error) {
 	r := requestForDatasetsGet{
@@ -340,7 +453,7 @@ type requestForDatasetsList struct {
 /*
 List List datasets
 
-Returns all datasets available to the account, sorted alphabetically by name. Standard (preset) datasets are always included. Custom datasets are returned only to callers with the *View datasets* permission; callers with only *View public datasets* see solely datasets marked as public.
+Returns every question the account has, sorted alphabetically by name. Callers with only the *View public datasets* permission see solely questions marked as public. Requires the *View datasets* or *View public datasets* permission.
 */
 func (a *DatasetsService) List(ctx context.Context) (*GetDatasetListRes, error) {
 	r := requestForDatasetsList{
@@ -435,6 +548,109 @@ func (a *DatasetsService) executeList(r requestForDatasetsList) (*GetDatasetList
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type requestForDatasetsListDatasetTemplates struct {
+	ctx context.Context
+	ApiService *DatasetsService
+}
+
+/*
+ListDatasetTemplates List template questions
+
+Returns the questions of the template account that `POST /v1/dataset-templates/{id}/copy` can copy into the account. Requires the *Edit datasets* permission.
+*/
+func (a *DatasetsService) ListDatasetTemplates(ctx context.Context) (*GetDatasetListRes, error) {
+	r := requestForDatasetsListDatasetTemplates{
+		ApiService: a,
+		ctx: ctx,
+	}
+	result, _, err := a.executeListDatasetTemplates(r)
+	return result, err
+}
+
+func (a *DatasetsService) executeListDatasetTemplates(r requestForDatasetsListDatasetTemplates) (*GetDatasetListRes, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *GetDatasetListRes
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DatasetsAPIService.ListDatasetTemplates")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/dataset-templates"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ctx != nil {
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "DatasetsAPIService.ListDatasetTemplates")
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type requestForDatasetsUpdate struct {
 	ctx context.Context
 	ApiService *DatasetsService
@@ -445,7 +661,7 @@ type requestForDatasetsUpdate struct {
 /*
 Update Update a dataset
 
-Updates the metadata and/or configuration of the specified dataset. Only fields supplied in the request body are changed. For select-type datasets, updating the options also re-syncs the associated property. Returns `409` if that property is the anonymisation property of a live data collection and the update would change its tree structure. Requires the *Edit datasets* permission.
+Updates the specified question. Only fields supplied in the request body are changed; `steps` replaces every step when `replaceSteps` is true. A question never changes the properties its steps read: change a step's options through the property. Returns `400` if a step has no ID or answer type, repeats another step's ID, depends on a step that is not earlier in the question, sends to the calculation without a property, reads a property the account does not have or an option that property lacks, splits a slider between other than two options, or asks an option another step of the question or of a data collection using it already asks. Returns `409` if replacing the steps would change what a step sends to the calculation while a data collection that has been sent uses the question. Requires the *Edit datasets* permission.
 */
 func (a *DatasetsService) Update(ctx context.Context, id string, datasetModify DatasetModify) (map[string]interface{}, error) {
 	r := requestForDatasetsUpdate{

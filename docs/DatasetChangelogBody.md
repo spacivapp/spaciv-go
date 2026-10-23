@@ -4,24 +4,18 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Code** | **string** |  | 
-**ContributorDescription** | **string** |  | 
-**ContributorInfo** | **string** |  | 
-**Data** | [**NullableDatasetChangelogData**](DatasetChangelogData.md) |  | 
 **Description** | **string** |  | 
-**InUse** | **bool** |  | 
 **IsPublic** | **bool** |  | 
 **Name** | **string** |  | 
 **Published** | **bool** |  | 
-**Question** | **string** |  | 
-**Type** | **int32** |  | 
+**Steps** | [**[]QuestionStep**](QuestionStep.md) |  | 
 **VisualisationType** | **string** |  | 
 
 ## Methods
 
 ### NewDatasetChangelogBody
 
-`func NewDatasetChangelogBody(code string, contributorDescription string, contributorInfo string, data NullableDatasetChangelogData, description string, inUse bool, isPublic bool, name string, published bool, question string, type_ int32, visualisationType string, ) *DatasetChangelogBody`
+`func NewDatasetChangelogBody(description string, isPublic bool, name string, published bool, steps []QuestionStep, visualisationType string, ) *DatasetChangelogBody`
 
 NewDatasetChangelogBody instantiates a new DatasetChangelogBody object
 This constructor will assign default values to properties that have it defined,
@@ -36,96 +30,6 @@ NewDatasetChangelogBodyWithDefaults instantiates a new DatasetChangelogBody obje
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetCode
-
-`func (o *DatasetChangelogBody) GetCode() string`
-
-GetCode returns the Code field if non-nil, zero value otherwise.
-
-### GetCodeOk
-
-`func (o *DatasetChangelogBody) GetCodeOk() (*string, bool)`
-
-GetCodeOk returns a tuple with the Code field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetCode
-
-`func (o *DatasetChangelogBody) SetCode(v string)`
-
-SetCode sets Code field to given value.
-
-
-### GetContributorDescription
-
-`func (o *DatasetChangelogBody) GetContributorDescription() string`
-
-GetContributorDescription returns the ContributorDescription field if non-nil, zero value otherwise.
-
-### GetContributorDescriptionOk
-
-`func (o *DatasetChangelogBody) GetContributorDescriptionOk() (*string, bool)`
-
-GetContributorDescriptionOk returns a tuple with the ContributorDescription field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetContributorDescription
-
-`func (o *DatasetChangelogBody) SetContributorDescription(v string)`
-
-SetContributorDescription sets ContributorDescription field to given value.
-
-
-### GetContributorInfo
-
-`func (o *DatasetChangelogBody) GetContributorInfo() string`
-
-GetContributorInfo returns the ContributorInfo field if non-nil, zero value otherwise.
-
-### GetContributorInfoOk
-
-`func (o *DatasetChangelogBody) GetContributorInfoOk() (*string, bool)`
-
-GetContributorInfoOk returns a tuple with the ContributorInfo field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetContributorInfo
-
-`func (o *DatasetChangelogBody) SetContributorInfo(v string)`
-
-SetContributorInfo sets ContributorInfo field to given value.
-
-
-### GetData
-
-`func (o *DatasetChangelogBody) GetData() DatasetChangelogData`
-
-GetData returns the Data field if non-nil, zero value otherwise.
-
-### GetDataOk
-
-`func (o *DatasetChangelogBody) GetDataOk() (*DatasetChangelogData, bool)`
-
-GetDataOk returns a tuple with the Data field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetData
-
-`func (o *DatasetChangelogBody) SetData(v DatasetChangelogData)`
-
-SetData sets Data field to given value.
-
-
-### SetDataNil
-
-`func (o *DatasetChangelogBody) SetDataNil(b bool)`
-
- SetDataNil sets the value for Data to be an explicit nil
-
-### UnsetData
-`func (o *DatasetChangelogBody) UnsetData()`
-
-UnsetData ensures that no value is present for Data, not even an explicit nil
 ### GetDescription
 
 `func (o *DatasetChangelogBody) GetDescription() string`
@@ -144,26 +48,6 @@ and a boolean to check if the value has been set.
 `func (o *DatasetChangelogBody) SetDescription(v string)`
 
 SetDescription sets Description field to given value.
-
-
-### GetInUse
-
-`func (o *DatasetChangelogBody) GetInUse() bool`
-
-GetInUse returns the InUse field if non-nil, zero value otherwise.
-
-### GetInUseOk
-
-`func (o *DatasetChangelogBody) GetInUseOk() (*bool, bool)`
-
-GetInUseOk returns a tuple with the InUse field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetInUse
-
-`func (o *DatasetChangelogBody) SetInUse(v bool)`
-
-SetInUse sets InUse field to given value.
 
 
 ### GetIsPublic
@@ -226,44 +110,24 @@ and a boolean to check if the value has been set.
 SetPublished sets Published field to given value.
 
 
-### GetQuestion
+### GetSteps
 
-`func (o *DatasetChangelogBody) GetQuestion() string`
+`func (o *DatasetChangelogBody) GetSteps() []QuestionStep`
 
-GetQuestion returns the Question field if non-nil, zero value otherwise.
+GetSteps returns the Steps field if non-nil, zero value otherwise.
 
-### GetQuestionOk
+### GetStepsOk
 
-`func (o *DatasetChangelogBody) GetQuestionOk() (*string, bool)`
+`func (o *DatasetChangelogBody) GetStepsOk() (*[]QuestionStep, bool)`
 
-GetQuestionOk returns a tuple with the Question field if it's non-nil, zero value otherwise
+GetStepsOk returns a tuple with the Steps field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetQuestion
+### SetSteps
 
-`func (o *DatasetChangelogBody) SetQuestion(v string)`
+`func (o *DatasetChangelogBody) SetSteps(v []QuestionStep)`
 
-SetQuestion sets Question field to given value.
-
-
-### GetType
-
-`func (o *DatasetChangelogBody) GetType() int32`
-
-GetType returns the Type field if non-nil, zero value otherwise.
-
-### GetTypeOk
-
-`func (o *DatasetChangelogBody) GetTypeOk() (*int32, bool)`
-
-GetTypeOk returns a tuple with the Type field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetType
-
-`func (o *DatasetChangelogBody) SetType(v int32)`
-
-SetType sets Type field to given value.
+SetSteps sets Steps field to given value.
 
 
 ### GetVisualisationType

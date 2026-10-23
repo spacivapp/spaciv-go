@@ -4,16 +4,16 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Data** | [**DatasetChangelogData**](DatasetChangelogData.md) |  | 
 **Description** | Pointer to **string** |  | [optional] 
+**IsPublic** | **bool** |  | 
 **Name** | **string** |  | 
-**Type** | **int32** |  | 
+**Steps** | [**[]QuestionStepRequest**](QuestionStepRequest.md) |  | 
 
 ## Methods
 
 ### NewDatasetCreate
 
-`func NewDatasetCreate(data DatasetChangelogData, name string, type_ int32, ) *DatasetCreate`
+`func NewDatasetCreate(isPublic bool, name string, steps []QuestionStepRequest, ) *DatasetCreate`
 
 NewDatasetCreate instantiates a new DatasetCreate object
 This constructor will assign default values to properties that have it defined,
@@ -27,26 +27,6 @@ will change when the set of required properties is changed
 NewDatasetCreateWithDefaults instantiates a new DatasetCreate object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
-
-### GetData
-
-`func (o *DatasetCreate) GetData() DatasetChangelogData`
-
-GetData returns the Data field if non-nil, zero value otherwise.
-
-### GetDataOk
-
-`func (o *DatasetCreate) GetDataOk() (*DatasetChangelogData, bool)`
-
-GetDataOk returns a tuple with the Data field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetData
-
-`func (o *DatasetCreate) SetData(v DatasetChangelogData)`
-
-SetData sets Data field to given value.
-
 
 ### GetDescription
 
@@ -73,6 +53,26 @@ SetDescription sets Description field to given value.
 
 HasDescription returns a boolean if a field has been set.
 
+### GetIsPublic
+
+`func (o *DatasetCreate) GetIsPublic() bool`
+
+GetIsPublic returns the IsPublic field if non-nil, zero value otherwise.
+
+### GetIsPublicOk
+
+`func (o *DatasetCreate) GetIsPublicOk() (*bool, bool)`
+
+GetIsPublicOk returns a tuple with the IsPublic field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetIsPublic
+
+`func (o *DatasetCreate) SetIsPublic(v bool)`
+
+SetIsPublic sets IsPublic field to given value.
+
+
 ### GetName
 
 `func (o *DatasetCreate) GetName() string`
@@ -93,24 +93,24 @@ and a boolean to check if the value has been set.
 SetName sets Name field to given value.
 
 
-### GetType
+### GetSteps
 
-`func (o *DatasetCreate) GetType() int32`
+`func (o *DatasetCreate) GetSteps() []QuestionStepRequest`
 
-GetType returns the Type field if non-nil, zero value otherwise.
+GetSteps returns the Steps field if non-nil, zero value otherwise.
 
-### GetTypeOk
+### GetStepsOk
 
-`func (o *DatasetCreate) GetTypeOk() (*int32, bool)`
+`func (o *DatasetCreate) GetStepsOk() (*[]QuestionStepRequest, bool)`
 
-GetTypeOk returns a tuple with the Type field if it's non-nil, zero value otherwise
+GetStepsOk returns a tuple with the Steps field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetType
+### SetSteps
 
-`func (o *DatasetCreate) SetType(v int32)`
+`func (o *DatasetCreate) SetSteps(v []QuestionStepRequest)`
 
-SetType sets Type field to given value.
+SetSteps sets Steps field to given value.
 
 
 

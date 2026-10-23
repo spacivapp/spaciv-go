@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 ## GetEstimations
 
-> Contribution GetEstimations(ctx, id, dataset, group, node)
+> EstimationRes GetEstimations(ctx, id, dataset, group, node)
 
 Get a need estimation
 
@@ -69,7 +69,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**Contribution**](Contribution.md)
+[**EstimationRes**](EstimationRes.md)
 
 ### Authorization
 

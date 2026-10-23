@@ -4,24 +4,19 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**VisuaisationType** | Pointer to **string** |  | [optional] 
-**Code** | Pointer to **string** |  | [optional] 
-**ContributorDescription** | Pointer to **string** |  | [optional] 
-**ContributorInfo** | Pointer to **string** |  | [optional] 
-**Data** | Pointer to [**DatasetData**](DatasetData.md) |  | [optional] 
 **Description** | Pointer to **string** |  | [optional] 
-**InUse** | Pointer to **bool** |  | [optional] 
 **IsPublic** | Pointer to **bool** |  | [optional] 
 **Name** | Pointer to **string** |  | [optional] 
 **Published** | Pointer to **bool** |  | [optional] 
-**Question** | Pointer to **string** |  | [optional] 
-**Type** | Pointer to **int32** |  | [optional] 
+**ReplaceSteps** | **bool** |  | 
+**Steps** | [**[]QuestionStepRequest**](QuestionStepRequest.md) |  | 
+**VisualisationType** | Pointer to **string** |  | [optional] 
 
 ## Methods
 
 ### NewDatasetModify
 
-`func NewDatasetModify() *DatasetModify`
+`func NewDatasetModify(replaceSteps bool, steps []QuestionStepRequest, ) *DatasetModify`
 
 NewDatasetModify instantiates a new DatasetModify object
 This constructor will assign default values to properties that have it defined,
@@ -35,131 +30,6 @@ will change when the set of required properties is changed
 NewDatasetModifyWithDefaults instantiates a new DatasetModify object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
-
-### GetVisuaisationType
-
-`func (o *DatasetModify) GetVisuaisationType() string`
-
-GetVisuaisationType returns the VisuaisationType field if non-nil, zero value otherwise.
-
-### GetVisuaisationTypeOk
-
-`func (o *DatasetModify) GetVisuaisationTypeOk() (*string, bool)`
-
-GetVisuaisationTypeOk returns a tuple with the VisuaisationType field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetVisuaisationType
-
-`func (o *DatasetModify) SetVisuaisationType(v string)`
-
-SetVisuaisationType sets VisuaisationType field to given value.
-
-### HasVisuaisationType
-
-`func (o *DatasetModify) HasVisuaisationType() bool`
-
-HasVisuaisationType returns a boolean if a field has been set.
-
-### GetCode
-
-`func (o *DatasetModify) GetCode() string`
-
-GetCode returns the Code field if non-nil, zero value otherwise.
-
-### GetCodeOk
-
-`func (o *DatasetModify) GetCodeOk() (*string, bool)`
-
-GetCodeOk returns a tuple with the Code field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetCode
-
-`func (o *DatasetModify) SetCode(v string)`
-
-SetCode sets Code field to given value.
-
-### HasCode
-
-`func (o *DatasetModify) HasCode() bool`
-
-HasCode returns a boolean if a field has been set.
-
-### GetContributorDescription
-
-`func (o *DatasetModify) GetContributorDescription() string`
-
-GetContributorDescription returns the ContributorDescription field if non-nil, zero value otherwise.
-
-### GetContributorDescriptionOk
-
-`func (o *DatasetModify) GetContributorDescriptionOk() (*string, bool)`
-
-GetContributorDescriptionOk returns a tuple with the ContributorDescription field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetContributorDescription
-
-`func (o *DatasetModify) SetContributorDescription(v string)`
-
-SetContributorDescription sets ContributorDescription field to given value.
-
-### HasContributorDescription
-
-`func (o *DatasetModify) HasContributorDescription() bool`
-
-HasContributorDescription returns a boolean if a field has been set.
-
-### GetContributorInfo
-
-`func (o *DatasetModify) GetContributorInfo() string`
-
-GetContributorInfo returns the ContributorInfo field if non-nil, zero value otherwise.
-
-### GetContributorInfoOk
-
-`func (o *DatasetModify) GetContributorInfoOk() (*string, bool)`
-
-GetContributorInfoOk returns a tuple with the ContributorInfo field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetContributorInfo
-
-`func (o *DatasetModify) SetContributorInfo(v string)`
-
-SetContributorInfo sets ContributorInfo field to given value.
-
-### HasContributorInfo
-
-`func (o *DatasetModify) HasContributorInfo() bool`
-
-HasContributorInfo returns a boolean if a field has been set.
-
-### GetData
-
-`func (o *DatasetModify) GetData() DatasetData`
-
-GetData returns the Data field if non-nil, zero value otherwise.
-
-### GetDataOk
-
-`func (o *DatasetModify) GetDataOk() (*DatasetData, bool)`
-
-GetDataOk returns a tuple with the Data field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetData
-
-`func (o *DatasetModify) SetData(v DatasetData)`
-
-SetData sets Data field to given value.
-
-### HasData
-
-`func (o *DatasetModify) HasData() bool`
-
-HasData returns a boolean if a field has been set.
 
 ### GetDescription
 
@@ -185,31 +55,6 @@ SetDescription sets Description field to given value.
 `func (o *DatasetModify) HasDescription() bool`
 
 HasDescription returns a boolean if a field has been set.
-
-### GetInUse
-
-`func (o *DatasetModify) GetInUse() bool`
-
-GetInUse returns the InUse field if non-nil, zero value otherwise.
-
-### GetInUseOk
-
-`func (o *DatasetModify) GetInUseOk() (*bool, bool)`
-
-GetInUseOk returns a tuple with the InUse field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetInUse
-
-`func (o *DatasetModify) SetInUse(v bool)`
-
-SetInUse sets InUse field to given value.
-
-### HasInUse
-
-`func (o *DatasetModify) HasInUse() bool`
-
-HasInUse returns a boolean if a field has been set.
 
 ### GetIsPublic
 
@@ -286,55 +131,70 @@ SetPublished sets Published field to given value.
 
 HasPublished returns a boolean if a field has been set.
 
-### GetQuestion
+### GetReplaceSteps
 
-`func (o *DatasetModify) GetQuestion() string`
+`func (o *DatasetModify) GetReplaceSteps() bool`
 
-GetQuestion returns the Question field if non-nil, zero value otherwise.
+GetReplaceSteps returns the ReplaceSteps field if non-nil, zero value otherwise.
 
-### GetQuestionOk
+### GetReplaceStepsOk
 
-`func (o *DatasetModify) GetQuestionOk() (*string, bool)`
+`func (o *DatasetModify) GetReplaceStepsOk() (*bool, bool)`
 
-GetQuestionOk returns a tuple with the Question field if it's non-nil, zero value otherwise
+GetReplaceStepsOk returns a tuple with the ReplaceSteps field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetQuestion
+### SetReplaceSteps
 
-`func (o *DatasetModify) SetQuestion(v string)`
+`func (o *DatasetModify) SetReplaceSteps(v bool)`
 
-SetQuestion sets Question field to given value.
+SetReplaceSteps sets ReplaceSteps field to given value.
 
-### HasQuestion
 
-`func (o *DatasetModify) HasQuestion() bool`
+### GetSteps
 
-HasQuestion returns a boolean if a field has been set.
+`func (o *DatasetModify) GetSteps() []QuestionStepRequest`
 
-### GetType
+GetSteps returns the Steps field if non-nil, zero value otherwise.
 
-`func (o *DatasetModify) GetType() int32`
+### GetStepsOk
 
-GetType returns the Type field if non-nil, zero value otherwise.
+`func (o *DatasetModify) GetStepsOk() (*[]QuestionStepRequest, bool)`
 
-### GetTypeOk
-
-`func (o *DatasetModify) GetTypeOk() (*int32, bool)`
-
-GetTypeOk returns a tuple with the Type field if it's non-nil, zero value otherwise
+GetStepsOk returns a tuple with the Steps field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetType
+### SetSteps
 
-`func (o *DatasetModify) SetType(v int32)`
+`func (o *DatasetModify) SetSteps(v []QuestionStepRequest)`
 
-SetType sets Type field to given value.
+SetSteps sets Steps field to given value.
 
-### HasType
 
-`func (o *DatasetModify) HasType() bool`
+### GetVisualisationType
 
-HasType returns a boolean if a field has been set.
+`func (o *DatasetModify) GetVisualisationType() string`
+
+GetVisualisationType returns the VisualisationType field if non-nil, zero value otherwise.
+
+### GetVisualisationTypeOk
+
+`func (o *DatasetModify) GetVisualisationTypeOk() (*string, bool)`
+
+GetVisualisationTypeOk returns a tuple with the VisualisationType field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetVisualisationType
+
+`func (o *DatasetModify) SetVisualisationType(v string)`
+
+SetVisualisationType sets VisualisationType field to given value.
+
+### HasVisualisationType
+
+`func (o *DatasetModify) HasVisualisationType() bool`
+
+HasVisualisationType returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

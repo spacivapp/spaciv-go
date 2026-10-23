@@ -35,9 +35,9 @@ type requestForNeedsGetEstimations struct {
 /*
 GetEstimations Get a need estimation
 
-Returns the current contribution data for a single entry of a top-down model, expressed in the format expected by the contribution UI. The `dataset` path segment must match the model's `propertyId` and `group` must be `all`. Returns `400` naming the layer, entry and node if the entry holds a modifier whose formula is not a plain number, since estimations can only be expressed as constants. Requires the *View user needs scenarios* permission.
+Returns the current answer for a single entry of a top-down model, together with the question step that estimates the model's property, so the contribution UI can show that step. The `dataset` path segment must match the model's `propertyId` and `group` must be `all`. Returns `400` naming the layer, entry and node if the entry holds a modifier whose formula is not a plain number, since estimations can only be expressed as constants. Requires the *View user needs scenarios* permission.
 */
-func (a *NeedsService) GetEstimations(ctx context.Context, id string, dataset string, group string, node string) (*Contribution, error) {
+func (a *NeedsService) GetEstimations(ctx context.Context, id string, dataset string, group string, node string) (*EstimationRes, error) {
 	r := requestForNeedsGetEstimations{
 		ApiService: a,
 		ctx: ctx,
@@ -50,12 +50,12 @@ func (a *NeedsService) GetEstimations(ctx context.Context, id string, dataset st
 	return result, err
 }
 
-func (a *NeedsService) executeGetEstimations(r requestForNeedsGetEstimations) (*Contribution, *http.Response, error) {
+func (a *NeedsService) executeGetEstimations(r requestForNeedsGetEstimations) (*EstimationRes, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *Contribution
+		localVarReturnValue  *EstimationRes
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "NeedsAPIService.GetEstimations")

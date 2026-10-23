@@ -5,9 +5,11 @@ All URIs are relative to *https://api.spaciv.com*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**Create**](DatasetsAPI.md#Create) | **Post** /v1/datasets | Create a dataset
+[**CreateDatasetTemplatesCopy**](DatasetsAPI.md#CreateDatasetTemplatesCopy) | **Post** /v1/dataset-templates/{id}/copy | Copy a template question
 [**Delete**](DatasetsAPI.md#Delete) | **Delete** /v1/datasets/{id} | Delete a dataset
 [**Get**](DatasetsAPI.md#Get) | **Get** /v1/datasets/{id} | Get a dataset
 [**List**](DatasetsAPI.md#List) | **Get** /v1/datasets | List datasets
+[**ListDatasetTemplates**](DatasetsAPI.md#ListDatasetTemplates) | **Get** /v1/dataset-templates | List template questions
 [**Update**](DatasetsAPI.md#Update) | **Patch** /v1/datasets/{id} | Update a dataset
 
 
@@ -56,6 +58,75 @@ Other parameters are passed through a pointer to a apiCreateRequest struct via t
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **datasetCreate** | [**DatasetCreate**](DatasetCreate.md) |  | 
+
+### Return type
+
+[**DatasetAddResponseBody**](DatasetAddResponseBody.md)
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## CreateDatasetTemplatesCopy
+
+> DatasetAddResponseBody CreateDatasetTemplatesCopy(ctx, id, templateCopyParamsWrapperBody)
+
+Copy a template question
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+	id :=  // string | ID of the template question to copy.
+	templateCopyParamsWrapperBody :=  // TemplateCopyParamsWrapperBody | 
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.Datasets.CreateDatasetTemplatesCopy(context.Background(), id, templateCopyParamsWrapperBody)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `Datasets.CreateDatasetTemplatesCopy`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `Datasets.CreateDatasetTemplatesCopy`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**id** | **string** | ID of the template question to copy. | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiCreateDatasetTemplatesCopyRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+ **templateCopyParamsWrapperBody** | [**TemplateCopyParamsWrapperBody**](TemplateCopyParamsWrapperBody.md) |  | 
 
 ### Return type
 
@@ -246,6 +317,64 @@ This endpoint does not need any parameter.
 ### Other Parameters
 
 Other parameters are passed through a pointer to a apiListRequest struct via the builder pattern
+
+
+### Return type
+
+[**GetDatasetListRes**](GetDatasetListRes.md)
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## ListDatasetTemplates
+
+> GetDatasetListRes ListDatasetTemplates(ctx)
+
+List template questions
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.Datasets.ListDatasetTemplates(context.Background())
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `Datasets.ListDatasetTemplates`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `Datasets.ListDatasetTemplates`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+This endpoint does not need any parameter.
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiListDatasetTemplatesRequest struct via the builder pattern
 
 
 ### Return type

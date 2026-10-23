@@ -22,17 +22,11 @@ var _ MappedNullable = &DatasetChangelogBody{}
 
 // DatasetChangelogBody struct for DatasetChangelogBody
 type DatasetChangelogBody struct {
-	Code string `json:"code"`
-	ContributorDescription string `json:"contributorDescription"`
-	ContributorInfo string `json:"contributorInfo"`
-	Data NullableDatasetChangelogData `json:"data"`
 	Description string `json:"description"`
-	InUse bool `json:"inUse"`
 	IsPublic bool `json:"isPublic"`
 	Name string `json:"name"`
 	Published bool `json:"published"`
-	Question string `json:"question"`
-	Type int32 `json:"type"`
+	Steps []QuestionStep `json:"steps"`
 	VisualisationType string `json:"visualisationType"`
 }
 
@@ -42,19 +36,13 @@ type _DatasetChangelogBody DatasetChangelogBody
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDatasetChangelogBody(code string, contributorDescription string, contributorInfo string, data NullableDatasetChangelogData, description string, inUse bool, isPublic bool, name string, published bool, question string, type_ int32, visualisationType string) *DatasetChangelogBody {
+func NewDatasetChangelogBody(description string, isPublic bool, name string, published bool, steps []QuestionStep, visualisationType string) *DatasetChangelogBody {
 	this := DatasetChangelogBody{}
-	this.Code = code
-	this.ContributorDescription = contributorDescription
-	this.ContributorInfo = contributorInfo
-	this.Data = data
 	this.Description = description
-	this.InUse = inUse
 	this.IsPublic = isPublic
 	this.Name = name
 	this.Published = published
-	this.Question = question
-	this.Type = type_
+	this.Steps = steps
 	this.VisualisationType = visualisationType
 	return &this
 }
@@ -65,104 +53,6 @@ func NewDatasetChangelogBody(code string, contributorDescription string, contrib
 func NewDatasetChangelogBodyWithDefaults() *DatasetChangelogBody {
 	this := DatasetChangelogBody{}
 	return &this
-}
-
-// GetCode returns the Code field value
-func (o *DatasetChangelogBody) GetCode() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.Code
-}
-
-// GetCodeOk returns a tuple with the Code field value
-// and a boolean to check if the value has been set.
-func (o *DatasetChangelogBody) GetCodeOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Code, true
-}
-
-// SetCode sets field value
-func (o *DatasetChangelogBody) SetCode(v string) {
-	o.Code = v
-}
-
-// GetContributorDescription returns the ContributorDescription field value
-func (o *DatasetChangelogBody) GetContributorDescription() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.ContributorDescription
-}
-
-// GetContributorDescriptionOk returns a tuple with the ContributorDescription field value
-// and a boolean to check if the value has been set.
-func (o *DatasetChangelogBody) GetContributorDescriptionOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.ContributorDescription, true
-}
-
-// SetContributorDescription sets field value
-func (o *DatasetChangelogBody) SetContributorDescription(v string) {
-	o.ContributorDescription = v
-}
-
-// GetContributorInfo returns the ContributorInfo field value
-func (o *DatasetChangelogBody) GetContributorInfo() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.ContributorInfo
-}
-
-// GetContributorInfoOk returns a tuple with the ContributorInfo field value
-// and a boolean to check if the value has been set.
-func (o *DatasetChangelogBody) GetContributorInfoOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.ContributorInfo, true
-}
-
-// SetContributorInfo sets field value
-func (o *DatasetChangelogBody) SetContributorInfo(v string) {
-	o.ContributorInfo = v
-}
-
-// GetData returns the Data field value
-// If the value is explicit nil, the zero value for DatasetChangelogData will be returned
-func (o *DatasetChangelogBody) GetData() DatasetChangelogData {
-	if o == nil || o.Data.Get() == nil {
-		var ret DatasetChangelogData
-		return ret
-	}
-
-	return *o.Data.Get()
-}
-
-// GetDataOk returns a tuple with the Data field value
-// and a boolean to check if the value has been set.
-// NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *DatasetChangelogBody) GetDataOk() (*DatasetChangelogData, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return o.Data.Get(), o.Data.IsSet()
-}
-
-// SetData sets field value
-func (o *DatasetChangelogBody) SetData(v DatasetChangelogData) {
-	o.Data.Set(&v)
 }
 
 // GetDescription returns the Description field value
@@ -187,30 +77,6 @@ func (o *DatasetChangelogBody) GetDescriptionOk() (*string, bool) {
 // SetDescription sets field value
 func (o *DatasetChangelogBody) SetDescription(v string) {
 	o.Description = v
-}
-
-// GetInUse returns the InUse field value
-func (o *DatasetChangelogBody) GetInUse() bool {
-	if o == nil {
-		var ret bool
-		return ret
-	}
-
-	return o.InUse
-}
-
-// GetInUseOk returns a tuple with the InUse field value
-// and a boolean to check if the value has been set.
-func (o *DatasetChangelogBody) GetInUseOk() (*bool, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.InUse, true
-}
-
-// SetInUse sets field value
-func (o *DatasetChangelogBody) SetInUse(v bool) {
-	o.InUse = v
 }
 
 // GetIsPublic returns the IsPublic field value
@@ -285,52 +151,28 @@ func (o *DatasetChangelogBody) SetPublished(v bool) {
 	o.Published = v
 }
 
-// GetQuestion returns the Question field value
-func (o *DatasetChangelogBody) GetQuestion() string {
+// GetSteps returns the Steps field value
+func (o *DatasetChangelogBody) GetSteps() []QuestionStep {
 	if o == nil {
-		var ret string
+		var ret []QuestionStep
 		return ret
 	}
 
-	return o.Question
+	return o.Steps
 }
 
-// GetQuestionOk returns a tuple with the Question field value
+// GetStepsOk returns a tuple with the Steps field value
 // and a boolean to check if the value has been set.
-func (o *DatasetChangelogBody) GetQuestionOk() (*string, bool) {
+func (o *DatasetChangelogBody) GetStepsOk() ([]QuestionStep, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Question, true
+	return o.Steps, true
 }
 
-// SetQuestion sets field value
-func (o *DatasetChangelogBody) SetQuestion(v string) {
-	o.Question = v
-}
-
-// GetType returns the Type field value
-func (o *DatasetChangelogBody) GetType() int32 {
-	if o == nil {
-		var ret int32
-		return ret
-	}
-
-	return o.Type
-}
-
-// GetTypeOk returns a tuple with the Type field value
-// and a boolean to check if the value has been set.
-func (o *DatasetChangelogBody) GetTypeOk() (*int32, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Type, true
-}
-
-// SetType sets field value
-func (o *DatasetChangelogBody) SetType(v int32) {
-	o.Type = v
+// SetSteps sets field value
+func (o *DatasetChangelogBody) SetSteps(v []QuestionStep) {
+	o.Steps = v
 }
 
 // GetVisualisationType returns the VisualisationType field value
@@ -367,17 +209,11 @@ func (o DatasetChangelogBody) MarshalJSON() ([]byte, error) {
 
 func (o DatasetChangelogBody) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["code"] = o.Code
-	toSerialize["contributorDescription"] = o.ContributorDescription
-	toSerialize["contributorInfo"] = o.ContributorInfo
-	toSerialize["data"] = o.Data.Get()
 	toSerialize["description"] = o.Description
-	toSerialize["inUse"] = o.InUse
 	toSerialize["isPublic"] = o.IsPublic
 	toSerialize["name"] = o.Name
 	toSerialize["published"] = o.Published
-	toSerialize["question"] = o.Question
-	toSerialize["type"] = o.Type
+	toSerialize["steps"] = o.Steps
 	toSerialize["visualisationType"] = o.VisualisationType
 	return toSerialize, nil
 }
@@ -387,17 +223,11 @@ func (o *DatasetChangelogBody) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"code",
-		"contributorDescription",
-		"contributorInfo",
-		"data",
 		"description",
-		"inUse",
 		"isPublic",
 		"name",
 		"published",
-		"question",
-		"type",
+		"steps",
 		"visualisationType",
 	}
 

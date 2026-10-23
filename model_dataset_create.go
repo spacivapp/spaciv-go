@@ -22,10 +22,10 @@ var _ MappedNullable = &DatasetCreate{}
 
 // DatasetCreate struct for DatasetCreate
 type DatasetCreate struct {
-	Data DatasetChangelogData `json:"data"`
 	Description *string `json:"description,omitempty"`
+	IsPublic bool `json:"isPublic"`
 	Name string `json:"name"`
-	Type int32 `json:"type"`
+	Steps []QuestionStepRequest `json:"steps"`
 }
 
 type _DatasetCreate DatasetCreate
@@ -34,11 +34,11 @@ type _DatasetCreate DatasetCreate
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDatasetCreate(data DatasetChangelogData, name string, type_ int32) *DatasetCreate {
+func NewDatasetCreate(isPublic bool, name string, steps []QuestionStepRequest) *DatasetCreate {
 	this := DatasetCreate{}
-	this.Data = data
+	this.IsPublic = isPublic
 	this.Name = name
-	this.Type = type_
+	this.Steps = steps
 	return &this
 }
 
@@ -48,30 +48,6 @@ func NewDatasetCreate(data DatasetChangelogData, name string, type_ int32) *Data
 func NewDatasetCreateWithDefaults() *DatasetCreate {
 	this := DatasetCreate{}
 	return &this
-}
-
-// GetData returns the Data field value
-func (o *DatasetCreate) GetData() DatasetChangelogData {
-	if o == nil {
-		var ret DatasetChangelogData
-		return ret
-	}
-
-	return o.Data
-}
-
-// GetDataOk returns a tuple with the Data field value
-// and a boolean to check if the value has been set.
-func (o *DatasetCreate) GetDataOk() (*DatasetChangelogData, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Data, true
-}
-
-// SetData sets field value
-func (o *DatasetCreate) SetData(v DatasetChangelogData) {
-	o.Data = v
 }
 
 // GetDescription returns the Description field value if set, zero value otherwise.
@@ -106,6 +82,30 @@ func (o *DatasetCreate) SetDescription(v string) {
 	o.Description = &v
 }
 
+// GetIsPublic returns the IsPublic field value
+func (o *DatasetCreate) GetIsPublic() bool {
+	if o == nil {
+		var ret bool
+		return ret
+	}
+
+	return o.IsPublic
+}
+
+// GetIsPublicOk returns a tuple with the IsPublic field value
+// and a boolean to check if the value has been set.
+func (o *DatasetCreate) GetIsPublicOk() (*bool, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.IsPublic, true
+}
+
+// SetIsPublic sets field value
+func (o *DatasetCreate) SetIsPublic(v bool) {
+	o.IsPublic = v
+}
+
 // GetName returns the Name field value
 func (o *DatasetCreate) GetName() string {
 	if o == nil {
@@ -130,28 +130,28 @@ func (o *DatasetCreate) SetName(v string) {
 	o.Name = v
 }
 
-// GetType returns the Type field value
-func (o *DatasetCreate) GetType() int32 {
+// GetSteps returns the Steps field value
+func (o *DatasetCreate) GetSteps() []QuestionStepRequest {
 	if o == nil {
-		var ret int32
+		var ret []QuestionStepRequest
 		return ret
 	}
 
-	return o.Type
+	return o.Steps
 }
 
-// GetTypeOk returns a tuple with the Type field value
+// GetStepsOk returns a tuple with the Steps field value
 // and a boolean to check if the value has been set.
-func (o *DatasetCreate) GetTypeOk() (*int32, bool) {
+func (o *DatasetCreate) GetStepsOk() ([]QuestionStepRequest, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Type, true
+	return o.Steps, true
 }
 
-// SetType sets field value
-func (o *DatasetCreate) SetType(v int32) {
-	o.Type = v
+// SetSteps sets field value
+func (o *DatasetCreate) SetSteps(v []QuestionStepRequest) {
+	o.Steps = v
 }
 
 func (o DatasetCreate) MarshalJSON() ([]byte, error) {
@@ -164,12 +164,12 @@ func (o DatasetCreate) MarshalJSON() ([]byte, error) {
 
 func (o DatasetCreate) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["data"] = o.Data
 	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
+	toSerialize["isPublic"] = o.IsPublic
 	toSerialize["name"] = o.Name
-	toSerialize["type"] = o.Type
+	toSerialize["steps"] = o.Steps
 	return toSerialize, nil
 }
 
@@ -178,9 +178,9 @@ func (o *DatasetCreate) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"data",
+		"isPublic",
 		"name",
-		"type",
+		"steps",
 	}
 
 	allProperties := make(map[string]interface{})

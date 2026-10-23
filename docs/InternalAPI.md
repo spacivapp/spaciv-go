@@ -8,7 +8,7 @@ Method | HTTP request | Description
 [**CreateAdminFlushDeadLetters**](InternalAPI.md#CreateAdminFlushDeadLetters) | **Post** /v1/admin/flush-dead-letters | Flush dead-letter events
 [**CreateAdminPopulate**](InternalAPI.md#CreateAdminPopulate) | **Post** /v1/admin/populate | Populate account from template
 [**CreateAdminReconcileFileStorage**](InternalAPI.md#CreateAdminReconcileFileStorage) | **Post** /v1/admin/reconcile-file-storage | Reconcile account file storage
-[**CreateAdminRecreateProperties**](InternalAPI.md#CreateAdminRecreateProperties) | **Post** /v1/admin/recreate-properties | Recreate properties from datasets
+[**CreateAdminRecreateProperties**](InternalAPI.md#CreateAdminRecreateProperties) | **Post** /v1/admin/recreate-properties | Recreate properties from the defaults template
 [**CreateAdminRepairFloorplanReferences**](InternalAPI.md#CreateAdminRepairFloorplanReferences) | **Post** /v1/admin/repair-floorplan-references | Repair floorplan references
 [**CreateAdminRetries**](InternalAPI.md#CreateAdminRetries) | **Post** /v1/admin/retries | List pending retries
 [**CreateAdminUpdateFeatureGroups**](InternalAPI.md#CreateAdminUpdateFeatureGroups) | **Post** /v1/admin/update-feature-groups | Update a feature flag group assignment
@@ -265,7 +265,7 @@ Name | Type | Description  | Notes
 
 > CreateAdminRecreateProperties(ctx)
 
-Recreate properties from datasets
+Recreate properties from the defaults template
 
 
 

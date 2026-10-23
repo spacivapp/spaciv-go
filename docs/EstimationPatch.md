@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Data** | Pointer to [**ContributionRequest**](ContributionRequest.md) |  | [optional] 
+**Data** | Pointer to [**Contribution**](Contribution.md) |  | [optional] 
 **Delete** | **bool** |  | 
 **Description** | Pointer to **string** |  | [optional] 
 **Name** | Pointer to **string** |  | [optional] 
@@ -31,20 +31,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetData
 
-`func (o *EstimationPatch) GetData() ContributionRequest`
+`func (o *EstimationPatch) GetData() Contribution`
 
 GetData returns the Data field if non-nil, zero value otherwise.
 
 ### GetDataOk
 
-`func (o *EstimationPatch) GetDataOk() (*ContributionRequest, bool)`
+`func (o *EstimationPatch) GetDataOk() (*Contribution, bool)`
 
 GetDataOk returns a tuple with the Data field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetData
 
-`func (o *EstimationPatch) SetData(v ContributionRequest)`
+`func (o *EstimationPatch) SetData(v Contribution)`
 
 SetData sets Data field to given value.
 

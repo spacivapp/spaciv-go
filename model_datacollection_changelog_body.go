@@ -31,10 +31,10 @@ type DatacollectionChangelogBody struct {
 	End string `json:"end"`
 	InviteMessage string `json:"inviteMessage"`
 	Name string `json:"name"`
+	Questions []string `json:"questions"`
 	ResendInviteMessage string `json:"resendInviteMessage"`
 	Start string `json:"start"`
 	Status int32 `json:"status"`
-	Steps []Step `json:"steps"`
 	ThankYouMessage string `json:"thankYouMessage"`
 	WelcomeMessage string `json:"welcomeMessage"`
 }
@@ -45,7 +45,7 @@ type _DatacollectionChangelogBody DatacollectionChangelogBody
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDatacollectionChangelogBody(anonymisationProperty string, authenticationMode NullableDatacollectionAuthentication, completeMessage string, contributors []DatacollectionContributor, contributorsUploaded bool, description string, end string, inviteMessage string, name string, resendInviteMessage string, start string, status int32, steps []Step, thankYouMessage string, welcomeMessage string) *DatacollectionChangelogBody {
+func NewDatacollectionChangelogBody(anonymisationProperty string, authenticationMode NullableDatacollectionAuthentication, completeMessage string, contributors []DatacollectionContributor, contributorsUploaded bool, description string, end string, inviteMessage string, name string, questions []string, resendInviteMessage string, start string, status int32, thankYouMessage string, welcomeMessage string) *DatacollectionChangelogBody {
 	this := DatacollectionChangelogBody{}
 	this.AnonymisationProperty = anonymisationProperty
 	this.AuthenticationMode = authenticationMode
@@ -56,10 +56,10 @@ func NewDatacollectionChangelogBody(anonymisationProperty string, authentication
 	this.End = end
 	this.InviteMessage = inviteMessage
 	this.Name = name
+	this.Questions = questions
 	this.ResendInviteMessage = resendInviteMessage
 	this.Start = start
 	this.Status = status
-	this.Steps = steps
 	this.ThankYouMessage = thankYouMessage
 	this.WelcomeMessage = welcomeMessage
 	return &this
@@ -291,6 +291,30 @@ func (o *DatacollectionChangelogBody) SetName(v string) {
 	o.Name = v
 }
 
+// GetQuestions returns the Questions field value
+func (o *DatacollectionChangelogBody) GetQuestions() []string {
+	if o == nil {
+		var ret []string
+		return ret
+	}
+
+	return o.Questions
+}
+
+// GetQuestionsOk returns a tuple with the Questions field value
+// and a boolean to check if the value has been set.
+func (o *DatacollectionChangelogBody) GetQuestionsOk() ([]string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Questions, true
+}
+
+// SetQuestions sets field value
+func (o *DatacollectionChangelogBody) SetQuestions(v []string) {
+	o.Questions = v
+}
+
 // GetResendInviteMessage returns the ResendInviteMessage field value
 func (o *DatacollectionChangelogBody) GetResendInviteMessage() string {
 	if o == nil {
@@ -363,30 +387,6 @@ func (o *DatacollectionChangelogBody) SetStatus(v int32) {
 	o.Status = v
 }
 
-// GetSteps returns the Steps field value
-func (o *DatacollectionChangelogBody) GetSteps() []Step {
-	if o == nil {
-		var ret []Step
-		return ret
-	}
-
-	return o.Steps
-}
-
-// GetStepsOk returns a tuple with the Steps field value
-// and a boolean to check if the value has been set.
-func (o *DatacollectionChangelogBody) GetStepsOk() ([]Step, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return o.Steps, true
-}
-
-// SetSteps sets field value
-func (o *DatacollectionChangelogBody) SetSteps(v []Step) {
-	o.Steps = v
-}
-
 // GetThankYouMessage returns the ThankYouMessage field value
 func (o *DatacollectionChangelogBody) GetThankYouMessage() string {
 	if o == nil {
@@ -454,10 +454,10 @@ func (o DatacollectionChangelogBody) ToMap() (map[string]interface{}, error) {
 	toSerialize["end"] = o.End
 	toSerialize["inviteMessage"] = o.InviteMessage
 	toSerialize["name"] = o.Name
+	toSerialize["questions"] = o.Questions
 	toSerialize["resendInviteMessage"] = o.ResendInviteMessage
 	toSerialize["start"] = o.Start
 	toSerialize["status"] = o.Status
-	toSerialize["steps"] = o.Steps
 	toSerialize["thankYouMessage"] = o.ThankYouMessage
 	toSerialize["welcomeMessage"] = o.WelcomeMessage
 	return toSerialize, nil
@@ -477,10 +477,10 @@ func (o *DatacollectionChangelogBody) UnmarshalJSON(data []byte) (err error) {
 		"end",
 		"inviteMessage",
 		"name",
+		"questions",
 		"resendInviteMessage",
 		"start",
 		"status",
-		"steps",
 		"thankYouMessage",
 		"welcomeMessage",
 	}
