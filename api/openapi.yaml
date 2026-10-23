@@ -1757,7 +1757,12 @@ paths:
         \ the `kind` and the accompanying detail object to identify what needs fixing.\
         \ A `variableOverrides` value outside the variable's range, step or `options`\
         \ is rejected with `400` and `kind` `variable_type_mismatch`; `options` sent\
-        \ inside an override are ignored. Requires the *View ideal space* permission."
+        \ inside an override are ignored. A result shows at most 500 objects or segments\
+        \ and 5000 tree nodes; a cut result has `truncated` set and `truncations`\
+        \ listing each thing that was cut: `1` objects (narrow the filters), `2` segments\
+        \ (segment by a node further down the property, or by a smaller group), `3`\
+        \ tree nodes (start the tree from a lower node). Requires the *View ideal\
+        \ space* permission."
       operationId: analysis_create-analyse
       parameters: []
       requestBody:
@@ -10058,7 +10063,7 @@ components:
           value: ""
         missingObject:
           object: object
-        status: 5
+        status: 2
       properties:
         detail:
           description: A human-readable explanation specific to this occurrence of
@@ -10280,8 +10285,8 @@ components:
       additionalProperties: false
       example:
         values:
-        - 5.962133916683182
-        - 5.962133916683182
+        - 5.637376656633329
+        - 5.637376656633329
         axes:
         - members:
           - parent: 6
@@ -10310,6 +10315,9 @@ components:
         columnDecimalPlaces:
           key: 1
         truncated: true
+        truncations:
+        - 5
+        - 5
         columnHexCodes:
         - columnHexCodes
         - columnHexCodes
@@ -10328,6 +10336,15 @@ components:
           type: array
         truncated:
           type: boolean
+        truncations:
+          items:
+            enum:
+            - 1
+            - 2
+            - 3
+            format: int32
+            type: integer
+          type: array
         values:
           items:
             format: double
@@ -10338,6 +10355,7 @@ components:
       - columnDecimalPlaces
       - columnHexCodes
       - truncated
+      - truncations
       - values
     CalcRuleFloat:
       additionalProperties: false
@@ -11863,7 +11881,7 @@ components:
         - location: location
           message: message
           value: ""
-        status: 2
+        status: 7
       properties:
         detail:
           description: A human-readable explanation specific to this occurrence of

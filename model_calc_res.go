@@ -26,6 +26,7 @@ type CalcRes struct {
 	ColumnDecimalPlaces map[string]int32 `json:"columnDecimalPlaces"`
 	ColumnHexCodes []string `json:"columnHexCodes"`
 	Truncated bool `json:"truncated"`
+	Truncations []int32 `json:"truncations"`
 	Values []float64 `json:"values"`
 }
 
@@ -35,12 +36,13 @@ type _CalcRes CalcRes
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCalcRes(axes []CalcAxis, columnDecimalPlaces map[string]int32, columnHexCodes []string, truncated bool, values []float64) *CalcRes {
+func NewCalcRes(axes []CalcAxis, columnDecimalPlaces map[string]int32, columnHexCodes []string, truncated bool, truncations []int32, values []float64) *CalcRes {
 	this := CalcRes{}
 	this.Axes = axes
 	this.ColumnDecimalPlaces = columnDecimalPlaces
 	this.ColumnHexCodes = columnHexCodes
 	this.Truncated = truncated
+	this.Truncations = truncations
 	this.Values = values
 	return &this
 }
@@ -149,6 +151,30 @@ func (o *CalcRes) SetTruncated(v bool) {
 	o.Truncated = v
 }
 
+// GetTruncations returns the Truncations field value
+func (o *CalcRes) GetTruncations() []int32 {
+	if o == nil {
+		var ret []int32
+		return ret
+	}
+
+	return o.Truncations
+}
+
+// GetTruncationsOk returns a tuple with the Truncations field value
+// and a boolean to check if the value has been set.
+func (o *CalcRes) GetTruncationsOk() ([]int32, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Truncations, true
+}
+
+// SetTruncations sets field value
+func (o *CalcRes) SetTruncations(v []int32) {
+	o.Truncations = v
+}
+
 // GetValues returns the Values field value
 func (o *CalcRes) GetValues() []float64 {
 	if o == nil {
@@ -187,6 +213,7 @@ func (o CalcRes) ToMap() (map[string]interface{}, error) {
 	toSerialize["columnDecimalPlaces"] = o.ColumnDecimalPlaces
 	toSerialize["columnHexCodes"] = o.ColumnHexCodes
 	toSerialize["truncated"] = o.Truncated
+	toSerialize["truncations"] = o.Truncations
 	toSerialize["values"] = o.Values
 	return toSerialize, nil
 }
@@ -200,6 +227,7 @@ func (o *CalcRes) UnmarshalJSON(data []byte) (err error) {
 		"columnDecimalPlaces",
 		"columnHexCodes",
 		"truncated",
+		"truncations",
 		"values",
 	}
 
