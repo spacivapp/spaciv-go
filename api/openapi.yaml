@@ -8872,8 +8872,9 @@ components:
         text:
           type: string
         toolCallId:
-          description: Id of the tool call an action message (kind 2) stands for.
-            Empty on every other message.
+          description: "Id of the tool call an action message (kind 2) stands for,\
+            \ or whose failure a tool_failed error message (kind 3) reports. Empty\
+            \ on every other message."
           type: string
       required:
       - attachments

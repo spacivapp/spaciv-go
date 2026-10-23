@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 **Role** | **string** |  | 
 **SubsessionId** | **string** | Id of the conversation a run_subsession action message (kind 2) started, which is polled like any other conversation to follow the subsession&#39;s own steps. It is not found until the subsession has started. Empty on every other message. | 
 **Text** | **string** |  | 
-**ToolCallId** | **string** | Id of the tool call an action message (kind 2) stands for. Empty on every other message. | 
+**ToolCallId** | **string** | Id of the tool call an action message (kind 2) stands for, or whose failure a tool_failed error message (kind 3) reports. Empty on every other message. | 
 
 ## Methods
 
