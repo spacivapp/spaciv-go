@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **Failure** | Pointer to [**AssistantConversationFailureBody**](AssistantConversationFailureBody.md) |  | [optional] 
 **FinishedToolCallIds** | **[]string** | Tool calls whose results, failed or not, were recorded after the since cursor, by the toolCallId of their action message. A call that succeeded has no message of its own, so this is how a client tells a finished action from one still running. A later poll can list a call again. | 
 **Messages** | [**[]AssistantChatPollMessage**](AssistantChatPollMessage.md) |  | 
+**ScriptRuns** | [**[]AssistantChatPollScriptRun**](AssistantChatPollScriptRun.md) | The scratchpad run each run_script call returned, for calls whose results were recorded after the since cursor. Only a call that started its run is listed, including one whose wait for the run then failed: one that only waited on a run by its ID is not. The run, its code and its output are read from GET /v1/scripts/scratchpad/runs/{runId} by the user who started it, while it is kept. A later poll can list a call again. | 
 **Status** | **string** |  | 
 **SubsessionSteps** | **int64** | While a subsession is running, how many messages it has recorded so far, which grows with each of its steps even when it calls the same tool again. Zero when no subsession is running, including once it has ended and before the turn has recorded its result. | 
 **SubsessionTool** | **string** | While a subsession is running, the tool it is running now. Empty while it is thinking, and when no subsession is running. The running subsession is the run_subsession action whose toolCallId is not yet among the finished tool calls. | 
@@ -16,7 +17,7 @@ Name | Type | Description | Notes
 
 ### NewAssistantChatPollBody
 
-`func NewAssistantChatPollBody(actions []AssistantChatPollAction, finishedToolCallIds []string, messages []AssistantChatPollMessage, status string, subsessionSteps int64, subsessionTool string, ) *AssistantChatPollBody`
+`func NewAssistantChatPollBody(actions []AssistantChatPollAction, finishedToolCallIds []string, messages []AssistantChatPollMessage, scriptRuns []AssistantChatPollScriptRun, status string, subsessionSteps int64, subsessionTool string, ) *AssistantChatPollBody`
 
 NewAssistantChatPollBody instantiates a new AssistantChatPollBody object
 This constructor will assign default values to properties that have it defined,
@@ -114,6 +115,26 @@ and a boolean to check if the value has been set.
 `func (o *AssistantChatPollBody) SetMessages(v []AssistantChatPollMessage)`
 
 SetMessages sets Messages field to given value.
+
+
+### GetScriptRuns
+
+`func (o *AssistantChatPollBody) GetScriptRuns() []AssistantChatPollScriptRun`
+
+GetScriptRuns returns the ScriptRuns field if non-nil, zero value otherwise.
+
+### GetScriptRunsOk
+
+`func (o *AssistantChatPollBody) GetScriptRunsOk() (*[]AssistantChatPollScriptRun, bool)`
+
+GetScriptRunsOk returns a tuple with the ScriptRuns field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetScriptRuns
+
+`func (o *AssistantChatPollBody) SetScriptRuns(v []AssistantChatPollScriptRun)`
+
+SetScriptRuns sets ScriptRuns field to given value.
 
 
 ### GetStatus

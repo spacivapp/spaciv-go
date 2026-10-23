@@ -27,6 +27,8 @@ type ScratchpadOutput struct {
 	// Files the handler wrote to its output directory.
 	Files []ScratchpadOutputFile `json:"files"`
 	Result interface{} `json:"result,omitempty"`
+	// The handler's return value as the JSON text it returned, digit for digit, for a client whose JSON parser would round a large number in result. Absent when result is.
+	ResultJson *string `json:"resultJson,omitempty"`
 	Stderr string `json:"stderr"`
 	// Set when stderr was longer than the 256 KiB kept.
 	StderrTruncated bool `json:"stderrTruncated"`
@@ -148,6 +150,38 @@ func (o *ScratchpadOutput) SetResult(v interface{}) {
 	o.Result = v
 }
 
+// GetResultJson returns the ResultJson field value if set, zero value otherwise.
+func (o *ScratchpadOutput) GetResultJson() string {
+	if o == nil || IsNil(o.ResultJson) {
+		var ret string
+		return ret
+	}
+	return *o.ResultJson
+}
+
+// GetResultJsonOk returns a tuple with the ResultJson field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScratchpadOutput) GetResultJsonOk() (*string, bool) {
+	if o == nil || IsNil(o.ResultJson) {
+		return nil, false
+	}
+	return o.ResultJson, true
+}
+
+// HasResultJson returns a boolean if a field has been set.
+func (o *ScratchpadOutput) HasResultJson() bool {
+	if o != nil && !IsNil(o.ResultJson) {
+		return true
+	}
+
+	return false
+}
+
+// SetResultJson gets a reference to the given string and assigns it to the ResultJson field.
+func (o *ScratchpadOutput) SetResultJson(v string) {
+	o.ResultJson = &v
+}
+
 // GetStderr returns the Stderr field value
 func (o *ScratchpadOutput) GetStderr() string {
 	if o == nil {
@@ -260,6 +294,9 @@ func (o ScratchpadOutput) ToMap() (map[string]interface{}, error) {
 	toSerialize["files"] = o.Files
 	if o.Result != nil {
 		toSerialize["result"] = o.Result
+	}
+	if !IsNil(o.ResultJson) {
+		toSerialize["resultJson"] = o.ResultJson
 	}
 	toSerialize["stderr"] = o.Stderr
 	toSerialize["stderrTruncated"] = o.StderrTruncated

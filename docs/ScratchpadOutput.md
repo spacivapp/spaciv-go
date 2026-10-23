@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **Error** | Pointer to **string** | Why some of the output could not be collected, for example because it was over a limit. | [optional] 
 **Files** | [**[]ScratchpadOutputFile**](ScratchpadOutputFile.md) | Files the handler wrote to its output directory. | 
 **Result** | Pointer to **interface{}** |  | [optional] 
+**ResultJson** | Pointer to **string** | The handler&#39;s return value as the JSON text it returned, digit for digit, for a client whose JSON parser would round a large number in result. Absent when result is. | [optional] 
 **Stderr** | **string** |  | 
 **StderrTruncated** | **bool** | Set when stderr was longer than the 256 KiB kept. | 
 **Stdout** | **string** |  | 
@@ -111,6 +112,31 @@ HasResult returns a boolean if a field has been set.
 `func (o *ScratchpadOutput) UnsetResult()`
 
 UnsetResult ensures that no value is present for Result, not even an explicit nil
+### GetResultJson
+
+`func (o *ScratchpadOutput) GetResultJson() string`
+
+GetResultJson returns the ResultJson field if non-nil, zero value otherwise.
+
+### GetResultJsonOk
+
+`func (o *ScratchpadOutput) GetResultJsonOk() (*string, bool)`
+
+GetResultJsonOk returns a tuple with the ResultJson field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetResultJson
+
+`func (o *ScratchpadOutput) SetResultJson(v string)`
+
+SetResultJson sets ResultJson field to given value.
+
+### HasResultJson
+
+`func (o *ScratchpadOutput) HasResultJson() bool`
+
+HasResultJson returns a boolean if a field has been set.
+
 ### GetStderr
 
 `func (o *ScratchpadOutput) GetStderr() string`

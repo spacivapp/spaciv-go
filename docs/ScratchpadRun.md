@@ -14,6 +14,7 @@ Name | Type | Description | Notes
 **Message** | Pointer to **string** |  | [optional] 
 **Output** | Pointer to [**ScratchpadOutput**](ScratchpadOutput.md) | What the run produced. Absent while it is in progress. | [optional] 
 **QueuedAt** | Pointer to **time.Time** |  | [optional] 
+**Settled** | **bool** | Whether this record of the run is final. A run&#39;s outcome is returned as soon as its sandbox reports it, but until its sandbox has exited, when this becomes true, its status and timings are provisional: a reported success can still end as killed or error. | 
 **StartedAt** | Pointer to **time.Time** |  | [optional] 
 **StartupMs** | Pointer to **int64** | How long the sandbox took to start. | [optional] 
 **Status** | **string** | queued or running while the run is in progress, then success, error, timeout, killed or quota_exceeded. | 
@@ -24,7 +25,7 @@ Name | Type | Description | Notes
 
 ### NewScratchpadRun
 
-`func NewScratchpadRun(exitCode int32, files map[string]string, id string, language string, status string, timeoutSeconds int32, warm bool, ) *ScratchpadRun`
+`func NewScratchpadRun(exitCode int32, files map[string]string, id string, language string, settled bool, status string, timeoutSeconds int32, warm bool, ) *ScratchpadRun`
 
 NewScratchpadRun instantiates a new ScratchpadRun object
 This constructor will assign default values to properties that have it defined,
@@ -268,6 +269,26 @@ SetQueuedAt sets QueuedAt field to given value.
 `func (o *ScratchpadRun) HasQueuedAt() bool`
 
 HasQueuedAt returns a boolean if a field has been set.
+
+### GetSettled
+
+`func (o *ScratchpadRun) GetSettled() bool`
+
+GetSettled returns the Settled field if non-nil, zero value otherwise.
+
+### GetSettledOk
+
+`func (o *ScratchpadRun) GetSettledOk() (*bool, bool)`
+
+GetSettledOk returns a tuple with the Settled field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetSettled
+
+`func (o *ScratchpadRun) SetSettled(v bool)`
+
+SetSettled sets Settled field to given value.
+
 
 ### GetStartedAt
 

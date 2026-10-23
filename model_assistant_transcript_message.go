@@ -33,6 +33,8 @@ type AssistantTranscriptMessage struct {
 	Reason string `json:"reason"`
 	RequestId string `json:"requestId"`
 	Role string `json:"role"`
+	// For a run_script tool message, the scratchpad run it returned, as a poll lists it in scriptRuns. Empty on every other message.
+	ScriptRunId string `json:"scriptRunId"`
 	// For a tool message, the result the assistant was given.
 	Text string `json:"text"`
 	// The id of the tool call a tool message is the result of.
@@ -47,7 +49,7 @@ type _AssistantTranscriptMessage AssistantTranscriptMessage
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAssistantTranscriptMessage(attachments []AssistantChatPollAttachment, createdAt string, failed bool, id string, reason string, requestId string, role string, text string, toolCallId string, toolCalls []AssistantTranscriptToolCall) *AssistantTranscriptMessage {
+func NewAssistantTranscriptMessage(attachments []AssistantChatPollAttachment, createdAt string, failed bool, id string, reason string, requestId string, role string, scriptRunId string, text string, toolCallId string, toolCalls []AssistantTranscriptToolCall) *AssistantTranscriptMessage {
 	this := AssistantTranscriptMessage{}
 	this.Attachments = attachments
 	this.CreatedAt = createdAt
@@ -56,6 +58,7 @@ func NewAssistantTranscriptMessage(attachments []AssistantChatPollAttachment, cr
 	this.Reason = reason
 	this.RequestId = requestId
 	this.Role = role
+	this.ScriptRunId = scriptRunId
 	this.Text = text
 	this.ToolCallId = toolCallId
 	this.ToolCalls = toolCalls
@@ -238,6 +241,30 @@ func (o *AssistantTranscriptMessage) SetRole(v string) {
 	o.Role = v
 }
 
+// GetScriptRunId returns the ScriptRunId field value
+func (o *AssistantTranscriptMessage) GetScriptRunId() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.ScriptRunId
+}
+
+// GetScriptRunIdOk returns a tuple with the ScriptRunId field value
+// and a boolean to check if the value has been set.
+func (o *AssistantTranscriptMessage) GetScriptRunIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.ScriptRunId, true
+}
+
+// SetScriptRunId sets field value
+func (o *AssistantTranscriptMessage) SetScriptRunId(v string) {
+	o.ScriptRunId = v
+}
+
 // GetText returns the Text field value
 func (o *AssistantTranscriptMessage) GetText() string {
 	if o == nil {
@@ -327,6 +354,7 @@ func (o AssistantTranscriptMessage) ToMap() (map[string]interface{}, error) {
 	toSerialize["reason"] = o.Reason
 	toSerialize["requestId"] = o.RequestId
 	toSerialize["role"] = o.Role
+	toSerialize["scriptRunId"] = o.ScriptRunId
 	toSerialize["text"] = o.Text
 	toSerialize["toolCallId"] = o.ToolCallId
 	toSerialize["toolCalls"] = o.ToolCalls
@@ -345,6 +373,7 @@ func (o *AssistantTranscriptMessage) UnmarshalJSON(data []byte) (err error) {
 		"reason",
 		"requestId",
 		"role",
+		"scriptRunId",
 		"text",
 		"toolCallId",
 		"toolCalls",

@@ -8899,6 +8899,11 @@ components:
     AssistantChatPollBody:
       additionalProperties: false
       example:
+        scriptRuns:
+        - toolCallId: toolCallId
+          runId: runId
+        - toolCallId: toolCallId
+          runId: runId
         subsessionTool: subsessionTool
         finishedToolCallIds:
         - finishedToolCallIds
@@ -8970,6 +8975,17 @@ components:
           items:
             $ref: "#/components/schemas/AssistantChatPollMessage"
           type: array
+        scriptRuns:
+          description: "The scratchpad run each run_script call returned, for calls\
+            \ whose results were recorded after the since cursor. Only a call that\
+            \ started its run is listed, including one whose wait for the run then\
+            \ failed: one that only waited on a run by its ID is not. The run, its\
+            \ code and its output are read from GET /v1/scripts/scratchpad/runs/{runId}\
+            \ by the user who started it, while it is kept. A later poll can list\
+            \ a call again."
+          items:
+            $ref: "#/components/schemas/AssistantChatPollScriptRun"
+          type: array
         status:
           type: string
         subsessionSteps:
@@ -8989,6 +9005,7 @@ components:
       - actions
       - finishedToolCallIds
       - messages
+      - scriptRuns
       - status
       - subsessionSteps
       - subsessionTool
@@ -9056,6 +9073,20 @@ components:
       - role
       - subsessionId
       - text
+      - toolCallId
+    AssistantChatPollScriptRun:
+      additionalProperties: false
+      example:
+        toolCallId: toolCallId
+        runId: runId
+      properties:
+        runId:
+          type: string
+        toolCallId:
+          description: The toolCallId of the run_script action message.
+          type: string
+      required:
+      - runId
       - toolCallId
     AssistantChatReq:
       additionalProperties: false
@@ -9261,6 +9292,7 @@ components:
             fileId: fileId
           role: user
           toolCallId: toolCallId
+          scriptRunId: scriptRunId
           requestId: requestId
           failed: true
           id: id
@@ -9285,6 +9317,7 @@ components:
             fileId: fileId
           role: user
           toolCallId: toolCallId
+          scriptRunId: scriptRunId
           requestId: requestId
           failed: true
           id: id
@@ -9349,6 +9382,7 @@ components:
           fileId: fileId
         role: user
         toolCallId: toolCallId
+        scriptRunId: scriptRunId
         requestId: requestId
         failed: true
         id: id
@@ -9388,6 +9422,10 @@ components:
           - tool
           - notice
           type: string
+        scriptRunId:
+          description: "For a run_script tool message, the scratchpad run it returned,\
+            \ as a poll lists it in scriptRuns. Empty on every other message."
+          type: string
         text:
           description: "For a tool message, the result the assistant was given."
           type: string
@@ -9408,6 +9446,7 @@ components:
       - reason
       - requestId
       - role
+      - scriptRunId
       - text
       - toolCallId
       - toolCalls
@@ -15612,6 +15651,7 @@ components:
       additionalProperties: false
       example:
         result: ""
+        resultJson: resultJson
         stdout: stdout
         stderrTruncated: true
         stdoutTruncated: true
@@ -15635,6 +15675,11 @@ components:
             $ref: "#/components/schemas/ScratchpadOutputFile"
           type: array
         result: {}
+        resultJson:
+          description: "The handler's return value as the JSON text it returned, digit\
+            \ for digit, for a client whose JSON parser would round a large number\
+            \ in result. Absent when result is."
+          type: string
         stderr:
           type: string
         stderrTruncated:
@@ -15672,6 +15717,7 @@ components:
     ScratchpadRun:
       additionalProperties: false
       example:
+        settled: true
         startupMs: 1
         startedAt: 2000-01-23T04:56:07.000+00:00
         language: python
@@ -15679,6 +15725,7 @@ components:
         expiresAt: 2000-01-23T04:56:07.000+00:00
         output:
           result: ""
+          resultJson: resultJson
           stdout: stdout
           stderrTruncated: true
           stdoutTruncated: true
@@ -15734,6 +15781,12 @@ components:
         queuedAt:
           format: date-time
           type: string
+        settled:
+          description: "Whether this record of the run is final. A run's outcome is\
+            \ returned as soon as its sandbox reports it, but until its sandbox has\
+            \ exited, when this becomes true, its status and timings are provisional:\
+            \ a reported success can still end as killed or error."
+          type: boolean
         startedAt:
           format: date-time
           type: string
@@ -15756,6 +15809,7 @@ components:
       - files
       - id
       - language
+      - settled
       - status
       - timeoutSeconds
       - warm

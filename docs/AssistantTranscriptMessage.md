@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **Reason** | **string** | Why a notice was given, as the id a poll shows it with. | 
 **RequestId** | **string** |  | 
 **Role** | **string** |  | 
+**ScriptRunId** | **string** | For a run_script tool message, the scratchpad run it returned, as a poll lists it in scriptRuns. Empty on every other message. | 
 **Text** | **string** | For a tool message, the result the assistant was given. | 
 **ToolCallId** | **string** | The id of the tool call a tool message is the result of. | 
 **ToolCalls** | [**[]AssistantTranscriptToolCall**](AssistantTranscriptToolCall.md) | The tools an assistant message called. Empty on every other message. | 
@@ -19,7 +20,7 @@ Name | Type | Description | Notes
 
 ### NewAssistantTranscriptMessage
 
-`func NewAssistantTranscriptMessage(attachments []AssistantChatPollAttachment, createdAt string, failed bool, id string, reason string, requestId string, role string, text string, toolCallId string, toolCalls []AssistantTranscriptToolCall, ) *AssistantTranscriptMessage`
+`func NewAssistantTranscriptMessage(attachments []AssistantChatPollAttachment, createdAt string, failed bool, id string, reason string, requestId string, role string, scriptRunId string, text string, toolCallId string, toolCalls []AssistantTranscriptToolCall, ) *AssistantTranscriptMessage`
 
 NewAssistantTranscriptMessage instantiates a new AssistantTranscriptMessage object
 This constructor will assign default values to properties that have it defined,
@@ -172,6 +173,26 @@ and a boolean to check if the value has been set.
 `func (o *AssistantTranscriptMessage) SetRole(v string)`
 
 SetRole sets Role field to given value.
+
+
+### GetScriptRunId
+
+`func (o *AssistantTranscriptMessage) GetScriptRunId() string`
+
+GetScriptRunId returns the ScriptRunId field if non-nil, zero value otherwise.
+
+### GetScriptRunIdOk
+
+`func (o *AssistantTranscriptMessage) GetScriptRunIdOk() (*string, bool)`
+
+GetScriptRunIdOk returns a tuple with the ScriptRunId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetScriptRunId
+
+`func (o *AssistantTranscriptMessage) SetScriptRunId(v string)`
+
+SetScriptRunId sets ScriptRunId field to given value.
 
 
 ### GetText

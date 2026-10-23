@@ -36,6 +36,8 @@ type ScratchpadRun struct {
 	// What the run produced. Absent while it is in progress.
 	Output *ScratchpadOutput `json:"output,omitempty"`
 	QueuedAt *time.Time `json:"queuedAt,omitempty"`
+	// Whether this record of the run is final. A run's outcome is returned as soon as its sandbox reports it, but until its sandbox has exited, when this becomes true, its status and timings are provisional: a reported success can still end as killed or error.
+	Settled bool `json:"settled"`
 	StartedAt *time.Time `json:"startedAt,omitempty"`
 	// How long the sandbox took to start.
 	StartupMs *int64 `json:"startupMs,omitempty"`
@@ -52,12 +54,13 @@ type _ScratchpadRun ScratchpadRun
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewScratchpadRun(exitCode int32, files map[string]string, id string, language string, status string, timeoutSeconds int32, warm bool) *ScratchpadRun {
+func NewScratchpadRun(exitCode int32, files map[string]string, id string, language string, settled bool, status string, timeoutSeconds int32, warm bool) *ScratchpadRun {
 	this := ScratchpadRun{}
 	this.ExitCode = exitCode
 	this.Files = files
 	this.Id = id
 	this.Language = language
+	this.Settled = settled
 	this.Status = status
 	this.TimeoutSeconds = timeoutSeconds
 	this.Warm = warm
@@ -360,6 +363,30 @@ func (o *ScratchpadRun) SetQueuedAt(v time.Time) {
 	o.QueuedAt = &v
 }
 
+// GetSettled returns the Settled field value
+func (o *ScratchpadRun) GetSettled() bool {
+	if o == nil {
+		var ret bool
+		return ret
+	}
+
+	return o.Settled
+}
+
+// GetSettledOk returns a tuple with the Settled field value
+// and a boolean to check if the value has been set.
+func (o *ScratchpadRun) GetSettledOk() (*bool, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Settled, true
+}
+
+// SetSettled sets field value
+func (o *ScratchpadRun) SetSettled(v bool) {
+	o.Settled = v
+}
+
 // GetStartedAt returns the StartedAt field value if set, zero value otherwise.
 func (o *ScratchpadRun) GetStartedAt() time.Time {
 	if o == nil || IsNil(o.StartedAt) {
@@ -528,6 +555,7 @@ func (o ScratchpadRun) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.QueuedAt) {
 		toSerialize["queuedAt"] = o.QueuedAt
 	}
+	toSerialize["settled"] = o.Settled
 	if !IsNil(o.StartedAt) {
 		toSerialize["startedAt"] = o.StartedAt
 	}
@@ -549,6 +577,7 @@ func (o *ScratchpadRun) UnmarshalJSON(data []byte) (err error) {
 		"files",
 		"id",
 		"language",
+		"settled",
 		"status",
 		"timeoutSeconds",
 		"warm",
