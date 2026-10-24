@@ -24,8 +24,10 @@ var _ MappedNullable = &AccountTextFilePostBody{}
 type AccountTextFilePostBody struct {
 	// Name of the new file. Its extension chooses its type. At most 255 bytes after normalising to Unicode NFC. Must not contain a forward slash or a backslash, and must not be . or ..
 	Name string `json:"name"`
-	// Identifier of the directory to create the file in. Leave it out to create it at the root.
+	// Identifier of the directory to create the file in. Leave it and parentPath out to create it at the root.
 	ParentId *string `json:"parentId,omitempty"`
+	// Path of the directory to create the file in, such as Leases/2026. Cannot be given with parentId.
+	ParentPath *string `json:"parentPath,omitempty"`
 }
 
 type _AccountTextFilePostBody AccountTextFilePostBody
@@ -104,6 +106,38 @@ func (o *AccountTextFilePostBody) SetParentId(v string) {
 	o.ParentId = &v
 }
 
+// GetParentPath returns the ParentPath field value if set, zero value otherwise.
+func (o *AccountTextFilePostBody) GetParentPath() string {
+	if o == nil || IsNil(o.ParentPath) {
+		var ret string
+		return ret
+	}
+	return *o.ParentPath
+}
+
+// GetParentPathOk returns a tuple with the ParentPath field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AccountTextFilePostBody) GetParentPathOk() (*string, bool) {
+	if o == nil || IsNil(o.ParentPath) {
+		return nil, false
+	}
+	return o.ParentPath, true
+}
+
+// HasParentPath returns a boolean if a field has been set.
+func (o *AccountTextFilePostBody) HasParentPath() bool {
+	if o != nil && !IsNil(o.ParentPath) {
+		return true
+	}
+
+	return false
+}
+
+// SetParentPath gets a reference to the given string and assigns it to the ParentPath field.
+func (o *AccountTextFilePostBody) SetParentPath(v string) {
+	o.ParentPath = &v
+}
+
 func (o AccountTextFilePostBody) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -117,6 +151,9 @@ func (o AccountTextFilePostBody) ToMap() (map[string]interface{}, error) {
 	toSerialize["name"] = o.Name
 	if !IsNil(o.ParentId) {
 		toSerialize["parentId"] = o.ParentId
+	}
+	if !IsNil(o.ParentPath) {
+		toSerialize["parentPath"] = o.ParentPath
 	}
 	return toSerialize, nil
 }

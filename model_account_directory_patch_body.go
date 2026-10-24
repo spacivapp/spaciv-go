@@ -26,6 +26,8 @@ type AccountDirectoryPatchBody struct {
 	Name *string `json:"name,omitempty"`
 	// Identifier of the directory to move this one into, or an empty string to move it to the root.
 	ParentId *string `json:"parentId,omitempty"`
+	// Path of the directory to move this one into, such as Leases/2026, or / to move it to the root. Cannot be given with parentId.
+	ParentPath *string `json:"parentPath,omitempty"`
 	// Tags to remove from the directory. Removing a tag the directory does not have changes nothing.
 	RemoveTags []string `json:"removeTags,omitempty"`
 }
@@ -143,6 +145,38 @@ func (o *AccountDirectoryPatchBody) SetParentId(v string) {
 	o.ParentId = &v
 }
 
+// GetParentPath returns the ParentPath field value if set, zero value otherwise.
+func (o *AccountDirectoryPatchBody) GetParentPath() string {
+	if o == nil || IsNil(o.ParentPath) {
+		var ret string
+		return ret
+	}
+	return *o.ParentPath
+}
+
+// GetParentPathOk returns a tuple with the ParentPath field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AccountDirectoryPatchBody) GetParentPathOk() (*string, bool) {
+	if o == nil || IsNil(o.ParentPath) {
+		return nil, false
+	}
+	return o.ParentPath, true
+}
+
+// HasParentPath returns a boolean if a field has been set.
+func (o *AccountDirectoryPatchBody) HasParentPath() bool {
+	if o != nil && !IsNil(o.ParentPath) {
+		return true
+	}
+
+	return false
+}
+
+// SetParentPath gets a reference to the given string and assigns it to the ParentPath field.
+func (o *AccountDirectoryPatchBody) SetParentPath(v string) {
+	o.ParentPath = &v
+}
+
 // GetRemoveTags returns the RemoveTags field value if set, zero value otherwise.
 func (o *AccountDirectoryPatchBody) GetRemoveTags() []string {
 	if o == nil || IsNil(o.RemoveTags) {
@@ -193,6 +227,9 @@ func (o AccountDirectoryPatchBody) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.ParentId) {
 		toSerialize["parentId"] = o.ParentId
+	}
+	if !IsNil(o.ParentPath) {
+		toSerialize["parentPath"] = o.ParentPath
 	}
 	if !IsNil(o.RemoveTags) {
 		toSerialize["removeTags"] = o.RemoveTags

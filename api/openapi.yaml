@@ -318,7 +318,7 @@ paths:
       x-sdk-params: true
     post:
       description: |-
-        Creates a directory to organise the files stored against the account, at the root or inside another directory, and returns it. Directories can be nested at most 8 deep. The name is normalised to Unicode NFC, and names are unique within a directory among its files and directories, compared exactly: a name already taken there by a file or a directory is rejected with 409. Returns 404 if the account has no directory with the given `parentId`.
+        Creates a directory to organise the files stored against the account, at the root or inside another directory, and returns it. Directories can be nested at most 8 deep. The name is normalised to Unicode NFC, and names are unique within a directory among its files and directories, compared exactly: a name already taken there by a file or a directory is rejected with 409. Returns 404 if the account has no directory with the given `parentId` or at the given `parentPath`, and 400 if both are given.
 
         A directory takes up none of the account's storage quota. Requires the *Edit file storage* permission.
       operationId: files_create-account-directories
@@ -382,7 +382,7 @@ paths:
       x-sdk-params: false
     patch:
       description: |-
-        Changes a directory's name, moves it into another directory, changes its tags, or any of these, and returns the updated directory. Give `name`, `parentId`, `addTags`, `removeTags` or any of them; a body with none is rejected with 400. Everything inside the directory moves with it and keeps its identifier, so anything referencing those files keeps working. A rename or move and a tag change made in one request are saved, and audited, one after the other.
+        Changes a directory's name, moves it into another directory, changes its tags, or any of these, and returns the updated directory. Give `name`, `parentId` or `parentPath`, `addTags`, `removeTags` or any of them; a body with none is rejected with 400, and so is one with both `parentId` and `parentPath`. Everything inside the directory moves with it and keeps its identifier, so anything referencing those files keeps working. A rename or move and a tag change made in one request are saved, and audited, one after the other.
 
         The name is normalised to Unicode NFC, and names are unique within a directory among its files and directories, compared exactly: a name already taken in the destination by a file or another directory, whether by a rename or a move, is rejected with 409. Moving a directory into itself or into a directory inside it, or so that something inside it would be nested more than 8 deep, is rejected with 400.
 
@@ -390,7 +390,7 @@ paths:
 
         Some tags are reserved: they give an item a meaning Spaciv acts on, and `GET /v1/account/file-tags` lists them. `skill` marks a directory as a skill. Adding or removing a reserved tag, or renaming, moving, retagging or deleting a directory that has one, needs the permission that tag requires (*Manage my account* for `skill`), and so does any change to a directory inside one that has it, at any depth, including moving it into or out of one; otherwise the request is rejected with 403. A reserved tag may check the directory it is on, when it is added and whenever the directory or anything inside it changes, and record what it finds in `tagProblems` rather than refusing the change.
 
-        Returns 404 if the account has no directory with this identifier, or none with the given `parentId`. Any other 409 means the account's directories changed during the request, and the request can be retried. Requires the *Edit file storage* permission.
+        Returns 404 if the account has no directory with this identifier, or none with the given `parentId` or at the given `parentPath`. Any other 409 means the account's directories changed during the request, and the request can be retried. Requires the *Edit file storage* permission.
       operationId: files_update-account-directories
       parameters:
       - explode: false
@@ -485,13 +485,13 @@ paths:
   /v1/account/files:
     get:
       description: |-
-        Without `parent` or `tag`, returns a page of every file stored against the account, whatever directory it is in, most recently uploaded first. Files belonging to other accounts are never returned.
+        Without `parent`, `path` or `tag`, returns a page of every file stored against the account, whatever directory it is in, most recently uploaded first. Files belonging to other accounts are never returned.
 
-        With `parent`, returns a page of what is directly inside that directory, or inside the root when `parent` is `root`: its directories in `directories`, most recently created first, then its files in `files`, most recently uploaded first. Returns 404 if the account has no directory with that identifier.
+        With `parent` or `path`, returns a page of what is directly inside that directory, or inside the root when `parent` is `root` or `path` is `/`: its directories in `directories`, most recently created first, then its files in `files`, most recently uploaded first. Returns 404 if the account has no directory with that identifier or at that path.
 
-        With `tag`, returns a page of the files and directories that have that tag, wherever they are: the files in `files` and the directories in `directories`, each most recently created first. The contents of a tagged directory are not included unless they have the tag themselves. Giving both `parent` and `tag` is rejected with 400, and so is a tag that is not at most 32 letters, digits and hyphens.
+        With `tag`, returns a page of the files and directories that have that tag, wherever they are: the files in `files` and the directories in `directories`, each most recently created first. The contents of a tagged directory are not included unless they have the tag themselves. Giving more than one of `parent`, `path` and `tag` is rejected with 400, and so is a tag that is not at most 32 letters, digits and hyphens.
 
-        When `nextCursor` is present there are more items to fetch; pass it back as `cursor`, with the same `parent` or `tag`, to retrieve the following page. A page may come back shorter than `limit` while still having a `nextCursor`, and may have neither files nor directories.
+        When `nextCursor` is present there are more items to fetch; pass it back as `cursor`, with the same `parent`, `path` or `tag`, to retrieve the following page. A page may come back shorter than `limit` while still having a `nextCursor`, and may have neither files nor directories.
 
         A file that has just been uploaded, moved, renamed or tagged may not show its change here immediately, so clients should apply the record returned by the upload or update operation to their list rather than refetching. Requires the *View file storage* permission.
       operationId: files_list-account-files
@@ -510,21 +510,21 @@ paths:
           type: integer
         style: form
       - description: "Opaque pagination cursor returned as nextCursor by a previous\
-          \ response. A cursor is only valid for the account, and the parent or tag,\
-          \ it was issued for."
+          \ response. A cursor is only valid for the account, and the parent, path\
+          \ or tag, it was issued for."
         explode: false
         in: query
         name: cursor
         required: false
         schema:
           description: "Opaque pagination cursor returned as nextCursor by a previous\
-            \ response. A cursor is only valid for the account, and the parent or\
-            \ tag, it was issued for."
+            \ response. A cursor is only valid for the account, and the parent, path\
+            \ or tag, it was issued for."
           type: string
         style: form
       - description: "List only what is directly inside this directory: a directory\
           \ identifier, or root for the root. Leave it out to list every file of the\
-          \ account, whatever directory it is in. Cannot be given with tag."
+          \ account, whatever directory it is in. Cannot be given with path or tag."
         explode: false
         in: query
         name: parent
@@ -532,18 +532,36 @@ paths:
         schema:
           description: "List only what is directly inside this directory: a directory\
             \ identifier, or root for the root. Leave it out to list every file of\
-            \ the account, whatever directory it is in. Cannot be given with tag."
+            \ the account, whatever directory it is in. Cannot be given with path\
+            \ or tag."
+          type: string
+        style: form
+      - description: "List only what is directly inside the directory at this path,\
+          \ such as Leases/2026, or / for the root. Names are matched exactly, case\
+          \ included, after normalising to Unicode NFC. Cannot be given with parent\
+          \ or tag."
+        explode: false
+        in: query
+        name: path
+        required: false
+        schema:
+          description: "List only what is directly inside the directory at this path,\
+            \ such as Leases/2026, or / for the root. Names are matched exactly, case\
+            \ included, after normalising to Unicode NFC. Cannot be given with parent\
+            \ or tag."
           type: string
         style: form
       - description: "List only the files and directories with this tag, wherever\
-          \ they are. Matched without regard to case. Cannot be given with parent."
+          \ they are. Matched without regard to case. Cannot be given with parent\
+          \ or path."
         explode: false
         in: query
         name: tag
         required: false
         schema:
           description: "List only the files and directories with this tag, wherever\
-            \ they are. Matched without regard to case. Cannot be given with parent."
+            \ they are. Matched without regard to case. Cannot be given with parent\
+            \ or path."
           type: string
         style: form
       responses:
@@ -565,7 +583,7 @@ paths:
       x-sdk-params: true
     post:
       description: |-
-        Stores a file against the account and returns the record describing it. Send the request as `multipart/form-data` with a single file field named `file`, and optionally a `parentId` field naming the directory to store it in; without one the file goes in the root, and a `parentId` the account has no directory for is rejected with 404. The uploaded file's name, normalised to Unicode NFC, becomes the record's `name`, so it must be non-empty and free of `/` and `\`; a name over 255 bytes is shortened to fit, keeping its extension. Names are unique within a directory among its files and directories, compared exactly, so `Report.pdf` and `report.pdf` can sit side by side: when the name is already taken there, the file is stored under the lowest free numbered name instead, such as `image (2).png`, with the number before the extension, and the response's `name` is the name it was stored under. Any media type is accepted; `mimeType` is detected from the file's contents rather than from its name or the type the client declared. Maximum file size is 25 MiB, and uploads are rejected if a virus scan fails.
+        Stores a file against the account and returns the record describing it. Send the request as `multipart/form-data` with a single file field named `file`, and optionally a `parentPath` field giving the path of the directory to store it in, such as `Leases/2026`, or a `parentId` field giving its identifier; without either the file goes in the root. Giving both is rejected with 400, and a directory the account does not have with 404. The uploaded file's name, normalised to Unicode NFC, becomes the record's `name`, so it must be non-empty, free of `/` and `\`, and not `.` or `..`; a name over 255 bytes is shortened to fit, keeping its extension. Names are unique within a directory among its files and directories, compared exactly, so `Report.pdf` and `report.pdf` can sit side by side: when the name is already taken there, the file is stored under the lowest free numbered name instead, such as `image (2).png`, with the number before the extension, and the response's `name` is the name it was stored under. Any media type is accepted; `mimeType` is detected from the file's contents rather than from its name or the type the client declared. Maximum file size is 25 MiB, and uploads are rejected if a virus scan fails.
 
         The files stored against an account may total at most 1 GiB. An upload that would take the account past that is rejected with 413 and no file is added to the account, though the uploaded bytes may briefly remain in storage until they are cleaned up; deleting files frees their space. A 409 means concurrent uploads kept changing the account's usage or taking the names it tried, and the upload can be retried as it stands.
 
@@ -631,15 +649,15 @@ paths:
       x-sdk-params: false
     patch:
       description: |-
-        Changes the display name of a file stored against the account, moves it into another directory, changes its tags, or any of these, and returns the updated record. Give `name`, `parentId`, `addTags`, `removeTags` or any of them; a body with none is rejected with 400. The stored content, media type, size and identifier are untouched, so anything already referencing the file keeps working. A rename or move and a tag change made in one request are saved, and audited, one after the other.
+        Changes the display name of a file stored against the account, moves it into another directory, changes its tags, or any of these, and returns the updated record. Give `name`, `parentId` or `parentPath`, `addTags`, `removeTags` or any of them; a body with none is rejected with 400, and so is one with both `parentId` and `parentPath`. The stored content, media type, size and identifier are untouched, so anything already referencing the file keeps working. A rename or move and a tag change made in one request are saved, and audited, one after the other.
 
-        The name is normalised to Unicode NFC, and names are unique within a directory among its files and directories, compared exactly. Giving a `name` already taken in the destination is rejected with 409. A move that gives only `parentId` never fails for its name: if the file's name is taken in the destination, it is stored under the lowest free numbered name instead, such as `lease (2).pdf`, and a name normalising makes longer than 255 bytes is shortened to fit; the response's `name` is the name it now has.
+        The name is normalised to Unicode NFC, and names are unique within a directory among its files and directories, compared exactly. Giving a `name` already taken in the destination is rejected with 409. A move that gives only `parentId` or `parentPath` never fails for its name: if the file's name is taken in the destination, it is stored under the lowest free numbered name instead, such as `lease (2).pdf`, and a name normalising makes longer than 255 bytes is shortened to fit; the response's `name` is the name it now has.
 
         Tags are added and removed as given, without replacing the file's other tags, so two people tagging the same file at once do not undo each other's changes. A tag cannot be both added and removed in one request.
 
         Some tags are reserved: they give an item a meaning Spaciv acts on, and `GET /v1/account/file-tags` lists them. A reserved tag can only be added to the kinds of item it applies to, so `skill` on a file is rejected with 400. Adding or removing a reserved tag, or renaming, moving, retagging or deleting an item that has one, needs the permission that tag requires (*Manage my account* for `skill`), and so does any change to a file inside a directory that has one, at any depth, including moving the file into or out of it; otherwise the request is rejected with 403. A reserved tag may check the item it is on, when it is added and after the item changes, and record what it finds in `tagProblems` rather than refusing the change.
 
-        The identifier must be one returned by the upload or list operations; a malformed identifier is rejected with 400. Returns 404 if the account has no file with this identifier, or no directory with the given `parentId`. Any other 409 means the file changed during the request, and the request can be retried as it stands. Requires the *Edit file storage* permission.
+        The identifier must be one returned by the upload or list operations; a malformed identifier is rejected with 400. Returns 404 if the account has no file with this identifier, or no directory with the given `parentId` or at the given `parentPath`. Any other 409 means the file changed during the request, and the request can be retried as it stands. Requires the *Edit file storage* permission.
       operationId: files_update-account-files
       parameters:
       - explode: false
@@ -790,6 +808,281 @@ paths:
                 $ref: "#/components/schemas/ErrorModel"
           description: Error
       summary: Replace an account file's content
+      tags:
+      - Files
+      x-sdk-params: true
+  /v1/account/files/by-path:
+    delete:
+      description: "Permanently deletes the file, or the empty directory, at a path,\
+        \ as `DELETE /v1/account/files/{id}` or `DELETE /v1/account/directories/{id}`\
+        \ would. A directory that still holds anything is rejected with 409. A path\
+        \ is the `path` its record returns. A path with an empty name, or a name that\
+        \ is `.` or `..`, is rejected with 400; paths are never resolved relative\
+        \ to anything. Unlike the operations by identifier, a path with nothing at\
+        \ it returns 404, and so does a retry after a failed attempt that already\
+        \ removed the item: treat that 404 as deleted. Requires the *Edit file storage*\
+        \ permission."
+      operationId: files_delete-account-files-by-path
+      parameters:
+      - description: "Path of the file or directory: the names of the directories\
+          \ it is in, from the root, then its own name, separated by /, such as Leases/2026/lease.pdf.\
+          \ Names are matched exactly, case included, after normalising to Unicode\
+          \ NFC. A leading or trailing / is ignored. URL-encode it as any other query\
+          \ value."
+        explode: false
+        in: query
+        name: path
+        required: true
+        schema:
+          description: "Path of the file or directory: the names of the directories\
+            \ it is in, from the root, then its own name, separated by /, such as\
+            \ Leases/2026/lease.pdf. Names are matched exactly, case included, after\
+            \ normalising to Unicode NFC. A leading or trailing / is ignored. URL-encode\
+            \ it as any other query value."
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountFileByPathDeleteResponseWrapperBody"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Delete the file or directory at a path
+      tags:
+      - Files
+      x-sdk-params: true
+    get:
+      description: "Returns the file or the directory at a path in the account's files:\
+        \ a file's record in `file`, or a directory in `directory`. A path is the\
+        \ `path` its record returns. A path with an empty name, or a name that is\
+        \ `.` or `..`, is rejected with 400; paths are never resolved relative to\
+        \ anything. The root itself is not a directory record, so `/` is rejected\
+        \ with 400; list what is in it with `GET /v1/account/files?path=/`. Returns\
+        \ 404 if nothing is at the path. Requires the *View file storage* permission."
+      operationId: files_get-account-files-by-path
+      parameters:
+      - description: "Path of the file or directory: the names of the directories\
+          \ it is in, from the root, then its own name, separated by /, such as Leases/2026/lease.pdf.\
+          \ Names are matched exactly, case included, after normalising to Unicode\
+          \ NFC. A leading or trailing / is ignored. URL-encode it as any other query\
+          \ value."
+        explode: false
+        in: query
+        name: path
+        required: true
+        schema:
+          description: "Path of the file or directory: the names of the directories\
+            \ it is in, from the root, then its own name, separated by /, such as\
+            \ Leases/2026/lease.pdf. Names are matched exactly, case included, after\
+            \ normalising to Unicode NFC. A leading or trailing / is ignored. URL-encode\
+            \ it as any other query value."
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PathItem"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Get the file or directory at a path
+      tags:
+      - Files
+      x-sdk-params: true
+    patch:
+      description: "Changes the file or directory at a path in the same way as `PATCH\
+        \ /v1/account/files/{id}` or `PATCH /v1/account/directories/{id}`, with the\
+        \ destination given as `parentPath`, and returns it in `file` or `directory`\
+        \ with its new `path`. Its identifier does not change, so anything referencing\
+        \ it, or anything inside a directory, keeps working. A path is the `path`\
+        \ its record returns. A path with an empty name, or a name that is `.` or\
+        \ `..`, is rejected with 400; paths are never resolved relative to anything.\
+        \ Returns 404 if nothing is at the path, or no directory is at `parentPath`.\
+        \ The rules for names, tags and reserved tags, and the other errors, are those\
+        \ of the operation by identifier. Requires the *Edit file storage* permission."
+      operationId: files_update-account-files-by-path
+      parameters:
+      - description: "Path of the file or directory to change, such as Leases/2026/lease.pdf.\
+          \ Names are matched exactly, case included, after normalising to Unicode\
+          \ NFC. A leading or trailing / is ignored. URL-encode it as any other query\
+          \ value."
+        explode: false
+        in: query
+        name: path
+        required: true
+        schema:
+          description: "Path of the file or directory to change, such as Leases/2026/lease.pdf.\
+            \ Names are matched exactly, case included, after normalising to Unicode\
+            \ NFC. A leading or trailing / is ignored. URL-encode it as any other\
+            \ query value."
+          type: string
+        style: form
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AccountFileByPathPatchBody"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PathItem"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: "Rename, move or tag the file or directory at a path"
+      tags:
+      - Files
+      x-sdk-params: true
+  /v1/account/files/by-path/content:
+    get:
+      description: "Returns the stored bytes of the file at a path, as `GET /v1/account/files/{id}/content`\
+        \ does, from the user content host only and with the same headers and `ETag`.\
+        \ A path is the `path` its record returns. A path with an empty name, or a\
+        \ name that is `.` or `..`, is rejected with 400; paths are never resolved\
+        \ relative to anything. Returns 404 if no file is at the path, including when\
+        \ a directory is. Requires the *View file storage* permission."
+      operationId: files_get-account-files-by-path-content
+      parameters:
+      - description: "Path of the file, such as Leases/2026/lease.pdf. Names are matched\
+          \ exactly, case included, after normalising to Unicode NFC. A leading /\
+          \ is ignored. URL-encode it as any other query value."
+        explode: false
+        in: query
+        name: path
+        required: true
+        schema:
+          description: "Path of the file, such as Leases/2026/lease.pdf. Names are\
+            \ matched exactly, case included, after normalising to Unicode NFC. A\
+            \ leading / is ignored. URL-encode it as any other query value."
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: OK
+          headers:
+            Content-Disposition:
+              explode: false
+              schema:
+                type: string
+              style: simple
+            Content-Security-Policy:
+              explode: false
+              schema:
+                type: string
+              style: simple
+            Content-Type:
+              explode: false
+              schema:
+                type: string
+              style: simple
+            ETag:
+              explode: false
+              schema:
+                type: string
+              style: simple
+            X-Content-Type-Options:
+              explode: false
+              schema:
+                type: string
+              style: simple
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      servers:
+      - description: Production
+        url: https://usercontent.spaciv.com
+      - description: Local development
+        url: http://localhost:8090
+      summary: Download the account file at a path
+      tags:
+      - Files
+      x-sdk-params: true
+    put:
+      description: "Replaces the stored bytes of the file at a path, as `PUT /v1/account/files/{id}/content`\
+        \ does, with the same `multipart/form-data` body, `If-Match` and errors. A\
+        \ path is the `path` its record returns. A path with an empty name, or a name\
+        \ that is `.` or `..`, is rejected with 400; paths are never resolved relative\
+        \ to anything. Returns 404 if no file is at the path, including when a directory\
+        \ is. Requires the *Edit file storage* permission."
+      operationId: files_update-account-files-by-path-content
+      parameters:
+      - description: "Path of the file, such as Leases/2026/lease.pdf. Names are matched\
+          \ exactly, case included, after normalising to Unicode NFC. A leading /\
+          \ is ignored. URL-encode it as any other query value."
+        explode: false
+        in: query
+        name: path
+        required: true
+        schema:
+          description: "Path of the file, such as Leases/2026/lease.pdf. Names are\
+            \ matched exactly, case included, after normalising to Unicode NFC. A\
+            \ leading / is ignored. URL-encode it as any other query value."
+          type: string
+        style: form
+      - description: The ETag returned when the file's content was read. The content
+          is replaced only if it has not changed since.
+        explode: false
+        in: header
+        name: If-Match
+        required: true
+        schema:
+          description: The ETag returned when the file's content was read. The content
+            is replaced only if it has not changed since.
+          type: string
+        style: simple
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/files_create_account_files_request"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Record"
+          description: OK
+          headers:
+            ETag:
+              explode: false
+              schema:
+                type: string
+              style: simple
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Replace the content of the account file at a path
       tags:
       - Files
       x-sdk-params: true
@@ -1204,7 +1497,7 @@ paths:
       description: |-
         Creates an empty file to write in, at the root or inside another directory, and returns its record. The file is always text, and the name's extension, compared ignoring case, chooses its type: `.md` gives `text/markdown; charset=utf-8`, `.py` `text/x-python; charset=utf-8`, `.js` `text/javascript; charset=utf-8`, `.ts` `text/x-typescript; charset=utf-8` and `.go` `text/x-go; charset=utf-8`. Any other name, with or without an extension, gives `text/plain; charset=utf-8`. The file keeps that type when its content is replaced, as long as the new content is detected as plain text. Write the file's content by replacing it, with the `ETag` its content is read with.
 
-        The name is normalised to Unicode NFC, and names are unique within a directory among its files and directories, compared exactly: a name already taken there is rejected with 409 rather than numbered, as an upload's would be. Returns 404 if the account has no directory with the given `parentId`. The file counts towards the account's 1 GiB storage quota like an upload, and is rejected with 413 when the account is already past it. Requires the *Edit file storage* permission.
+        The name is normalised to Unicode NFC, and names are unique within a directory among its files and directories, compared exactly: a name already taken there is rejected with 409 rather than numbered, as an upload's would be. Returns 404 if the account has no directory with the given `parentId` or at the given `parentPath`, and 400 if both are given. The file counts towards the account's 1 GiB storage quota like an upload, and is rejected with 413 when the account is already past it. Requires the *Edit file storage* permission.
       operationId: files_create-account-text-files
       parameters: []
       requestBody:
@@ -8192,6 +8485,7 @@ components:
         - addTags
         - addTags
         - addTags
+        parentPath: parentPath
         removeTags:
         - removeTags
         - removeTags
@@ -8219,6 +8513,10 @@ components:
           description: "Identifier of the directory to move this one into, or an empty\
             \ string to move it to the root."
           type: string
+        parentPath:
+          description: "Path of the directory to move this one into, such as Leases/2026,\
+            \ or / to move it to the root. Cannot be given with parentId."
+          type: string
         removeTags:
           description: Tags to remove from the directory. Removing a tag the directory
             does not have changes nothing.
@@ -8229,6 +8527,7 @@ components:
     AccountDirectoryPostBody:
       additionalProperties: false
       example:
+        parentPath: parentPath
         name: name
         parentId: parentId
       properties:
@@ -8240,7 +8539,11 @@ components:
           type: string
         parentId:
           description: Identifier of the directory to create this one in. Leave it
-            out to create it at the root.
+            and parentPath out to create it at the root.
+          type: string
+        parentPath:
+          description: "Path of the directory to create this one in, such as Leases/2026.\
+            \ Cannot be given with parentId."
           type: string
       required:
       - name
@@ -8255,6 +8558,52 @@ components:
           type: string
       required:
       - name
+    AccountFileByPathDeleteResponseWrapperBody:
+      additionalProperties: false
+      type: object
+    AccountFileByPathPatchBody:
+      additionalProperties: false
+      example:
+        addTags:
+        - addTags
+        - addTags
+        - addTags
+        - addTags
+        - addTags
+        parentPath: parentPath
+        removeTags:
+        - removeTags
+        - removeTags
+        - removeTags
+        - removeTags
+        - removeTags
+        name: name
+      properties:
+        addTags:
+          description: "Tags to add. Each is lowercased and must then be at most 32\
+            \ letters, digits and hyphens, starting with a letter or digit. A file\
+            \ or directory can have at most 20 tags."
+          items:
+            type: string
+          maxItems: 20
+          type: array
+        name:
+          description: "New name for the file or directory. At most 255 bytes after\
+            \ normalising to Unicode NFC. Must not contain a forward slash or a backslash,\
+            \ and must not be . or .."
+          minLength: 1
+          type: string
+        parentPath:
+          description: "Path of the directory to move the file or directory into,\
+            \ or / to move it to the root."
+          type: string
+        removeTags:
+          description: Tags to remove. Removing a tag the item does not have changes
+            nothing.
+          items:
+            type: string
+          maxItems: 20
+          type: array
     AccountFileDeleteResponseWrapperBody:
       additionalProperties: false
       type: object
@@ -8267,6 +8616,7 @@ components:
         - addTags
         - addTags
         - addTags
+        parentPath: parentPath
         removeTags:
         - removeTags
         - removeTags
@@ -8285,13 +8635,18 @@ components:
           maxItems: 20
           type: array
         name:
-          description: New display name for the file. At most 255 bytes after normalising
-            to Unicode NFC. Must not contain a forward slash or a backslash.
+          description: "New display name for the file. At most 255 bytes after normalising\
+            \ to Unicode NFC. Must not contain a forward slash or a backslash, and\
+            \ must not be . or .."
           minLength: 1
           type: string
         parentId:
           description: "Identifier of the directory to move the file into, or an empty\
             \ string to move it to the root."
+          type: string
+        parentPath:
+          description: "Path of the directory to move the file into, such as Leases/2026,\
+            \ or / to move it to the root. Cannot be given with parentId."
           type: string
         removeTags:
           description: Tags to remove from the file. Removing a tag the file does
@@ -8588,6 +8943,7 @@ components:
     AccountTextFilePostBody:
       additionalProperties: false
       example:
+        parentPath: parentPath
         name: name
         parentId: parentId
       properties:
@@ -8599,7 +8955,11 @@ components:
           type: string
         parentId:
           description: Identifier of the directory to create the file in. Leave it
-            out to create it at the root.
+            and parentPath out to create it at the root.
+          type: string
+        parentPath:
+          description: "Path of the directory to create the file in, such as Leases/2026.\
+            \ Cannot be given with parentId."
           type: string
       required:
       - name
@@ -11687,6 +12047,7 @@ components:
       additionalProperties: false
       example:
         createdAt: 2000-01-23T04:56:07.000+00:00
+        path: path
         createdBy: 0
         name: name
         id: id
@@ -11719,6 +12080,12 @@ components:
           description: Identifier of the directory this one is in. Absent for a directory
             at the root.
           type: string
+        path:
+          description: "Where the directory is: the names of the directories it is\
+            \ in, from the root, then its own name, separated by /, such as Leases/2026.\
+            \ It changes when the directory or one it is in is renamed or moved; the\
+            \ identifier does not."
+          type: string
         tagProblems:
           additionalProperties:
             items:
@@ -11736,12 +12103,14 @@ components:
       - createdBy
       - id
       - name
+      - path
     DirectoryPage:
       additionalProperties: false
       example:
         nextCursor: nextCursor
         directories:
         - createdAt: 2000-01-23T04:56:07.000+00:00
+          path: path
           createdBy: 0
           name: name
           id: id
@@ -11754,6 +12123,7 @@ components:
           - tags
           - tags
         - createdAt: 2000-01-23T04:56:07.000+00:00
+          path: path
           createdBy: 0
           name: name
           id: id
@@ -13353,6 +13723,7 @@ components:
         nextCursor: nextCursor
         directories:
         - createdAt: 2000-01-23T04:56:07.000+00:00
+          path: path
           createdBy: 0
           name: name
           id: id
@@ -13365,6 +13736,7 @@ components:
           - tags
           - tags
         - createdAt: 2000-01-23T04:56:07.000+00:00
+          path: path
           createdBy: 0
           name: name
           id: id
@@ -13378,6 +13750,7 @@ components:
           - tags
         files:
         - createdAt: 2000-01-23T04:56:07.000+00:00
+          path: path
           size: 0
           quarantinedAt: 2000-01-23T04:56:07.000+00:00
           quarantineSignature: quarantineSignature
@@ -13394,6 +13767,7 @@ components:
           - tags
           - tags
         - createdAt: 2000-01-23T04:56:07.000+00:00
+          path: path
           size: 0
           quarantinedAt: 2000-01-23T04:56:07.000+00:00
           quarantineSignature: quarantineSignature
@@ -14469,6 +14843,46 @@ components:
       required:
       - password
       - token
+    PathItem:
+      additionalProperties: false
+      example:
+        file:
+          createdAt: 2000-01-23T04:56:07.000+00:00
+          path: path
+          size: 0
+          quarantinedAt: 2000-01-23T04:56:07.000+00:00
+          quarantineSignature: quarantineSignature
+          name: name
+          id: id
+          mimeType: mimeType
+          tagProblems:
+            key:
+            - tagProblems
+            - tagProblems
+          uploadedBy: 6
+          parentId: parentId
+          tags:
+          - tags
+          - tags
+        directory:
+          createdAt: 2000-01-23T04:56:07.000+00:00
+          path: path
+          createdBy: 0
+          name: name
+          id: id
+          tagProblems:
+            key:
+            - tagProblems
+            - tagProblems
+          parentId: parentId
+          tags:
+          - tags
+          - tags
+      properties:
+        directory:
+          $ref: "#/components/schemas/Directory"
+        file:
+          $ref: "#/components/schemas/Record"
     PresenceMember:
       additionalProperties: {}
       properties:
@@ -15187,6 +15601,7 @@ components:
       additionalProperties: false
       example:
         createdAt: 2000-01-23T04:56:07.000+00:00
+        path: path
         size: 0
         quarantinedAt: 2000-01-23T04:56:07.000+00:00
         quarantineSignature: quarantineSignature
@@ -15226,6 +15641,12 @@ components:
           description: Identifier of the directory the file is in. Absent for a file
             at the root.
           type: string
+        path:
+          description: "Where the file is: the names of the directories it is in,\
+            \ from the root, then its own name, separated by /, such as Leases/2026/lease.pdf.\
+            \ It changes when the file or a directory it is in is renamed or moved;\
+            \ the identifier does not."
+          type: string
         quarantineSignature:
           description: Name of the virus signature the file matched when it was quarantined.
           type: string
@@ -15260,6 +15681,7 @@ components:
       - id
       - mimeType
       - name
+      - path
       - size
       - uploadedBy
     Reference:

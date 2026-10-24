@@ -9,12 +9,17 @@ Method | HTTP request | Description
 [**CreateAccountTextFiles**](FilesAPI.md#CreateAccountTextFiles) | **Post** /v1/account/text-files | Create an empty text file in the account&#39;s files
 [**DeleteAccountDirectories**](FilesAPI.md#DeleteAccountDirectories) | **Delete** /v1/account/directories/{id} | Delete a directory
 [**DeleteAccountFiles**](FilesAPI.md#DeleteAccountFiles) | **Delete** /v1/account/files/{id} | Delete an account file
+[**DeleteAccountFilesByPath**](FilesAPI.md#DeleteAccountFilesByPath) | **Delete** /v1/account/files/by-path | Delete the file or directory at a path
+[**GetAccountFilesByPath**](FilesAPI.md#GetAccountFilesByPath) | **Get** /v1/account/files/by-path | Get the file or directory at a path
+[**GetAccountFilesByPathContent**](FilesAPI.md#GetAccountFilesByPathContent) | **Get** /v1/account/files/by-path/content | Download the account file at a path
 [**GetAccountFilesContent**](FilesAPI.md#GetAccountFilesContent) | **Get** /v1/account/files/{id}/content | Download an account file
 [**ListAccountDirectories**](FilesAPI.md#ListAccountDirectories) | **Get** /v1/account/directories | List the account&#39;s directories
 [**ListAccountFileTags**](FilesAPI.md#ListAccountFileTags) | **Get** /v1/account/file-tags | List the account&#39;s file and directory tags
 [**ListAccountFiles**](FilesAPI.md#ListAccountFiles) | **Get** /v1/account/files | List the account&#39;s files
 [**UpdateAccountDirectories**](FilesAPI.md#UpdateAccountDirectories) | **Patch** /v1/account/directories/{id} | Rename, move or tag a directory
 [**UpdateAccountFiles**](FilesAPI.md#UpdateAccountFiles) | **Patch** /v1/account/files/{id} | Rename, move or tag an account file
+[**UpdateAccountFilesByPath**](FilesAPI.md#UpdateAccountFilesByPath) | **Patch** /v1/account/files/by-path | Rename, move or tag the file or directory at a path
+[**UpdateAccountFilesByPathContent**](FilesAPI.md#UpdateAccountFilesByPathContent) | **Put** /v1/account/files/by-path/content | Replace the content of the account file at a path
 [**UpdateAccountFilesContent**](FilesAPI.md#UpdateAccountFilesContent) | **Put** /v1/account/files/{id}/content | Replace an account file&#39;s content
 
 
@@ -342,6 +347,192 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
+## DeleteAccountFilesByPath
+
+> map[string]interface{} DeleteAccountFilesByPath(ctx, params)
+
+Delete the file or directory at a path
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.Files.DeleteAccountFilesByPath(context.Background(), nil)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `Files.DeleteAccountFilesByPath`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `Files.DeleteAccountFilesByPath`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiDeleteAccountFilesByPathRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **path** | **string** | Path of the file or directory: the names of the directories it is in, from the root, then its own name, separated by /, such as Leases/2026/lease.pdf. Names are matched exactly, case included, after normalising to Unicode NFC. A leading or trailing / is ignored. URL-encode it as any other query value. | 
+
+### Return type
+
+**map[string]interface{}**
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## GetAccountFilesByPath
+
+> PathItem GetAccountFilesByPath(ctx, params)
+
+Get the file or directory at a path
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.Files.GetAccountFilesByPath(context.Background(), nil)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `Files.GetAccountFilesByPath`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `Files.GetAccountFilesByPath`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetAccountFilesByPathRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **path** | **string** | Path of the file or directory: the names of the directories it is in, from the root, then its own name, separated by /, such as Leases/2026/lease.pdf. Names are matched exactly, case included, after normalising to Unicode NFC. A leading or trailing / is ignored. URL-encode it as any other query value. | 
+
+### Return type
+
+[**PathItem**](PathItem.md)
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## GetAccountFilesByPathContent
+
+> string GetAccountFilesByPathContent(ctx, params)
+
+Download the account file at a path
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.Files.GetAccountFilesByPathContent(context.Background(), nil)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `Files.GetAccountFilesByPathContent`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `Files.GetAccountFilesByPathContent`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetAccountFilesByPathContentRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **path** | **string** | Path of the file, such as Leases/2026/lease.pdf. Names are matched exactly, case included, after normalising to Unicode NFC. A leading / is ignored. URL-encode it as any other query value. | 
+
+### Return type
+
+**string**
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## GetAccountFilesContent
 
 > string GetAccountFilesContent(ctx, id)
@@ -573,9 +764,10 @@ Other parameters are passed through a pointer to a apiListAccountFilesRequest st
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **limit** | **int32** | Maximum number of files to return in this page. | [default to 50]
- **cursor** | **string** | Opaque pagination cursor returned as nextCursor by a previous response. A cursor is only valid for the account, and the parent or tag, it was issued for. | 
- **parent** | **string** | List only what is directly inside this directory: a directory identifier, or root for the root. Leave it out to list every file of the account, whatever directory it is in. Cannot be given with tag. | 
- **tag** | **string** | List only the files and directories with this tag, wherever they are. Matched without regard to case. Cannot be given with parent. | 
+ **cursor** | **string** | Opaque pagination cursor returned as nextCursor by a previous response. A cursor is only valid for the account, and the parent, path or tag, it was issued for. | 
+ **parent** | **string** | List only what is directly inside this directory: a directory identifier, or root for the root. Leave it out to list every file of the account, whatever directory it is in. Cannot be given with path or tag. | 
+ **path** | **string** | List only what is directly inside the directory at this path, such as Leases/2026, or / for the root. Names are matched exactly, case included, after normalising to Unicode NFC. Cannot be given with parent or tag. | 
+ **tag** | **string** | List only the files and directories with this tag, wherever they are. Matched without regard to case. Cannot be given with parent or path. | 
 
 ### Return type
 
@@ -726,6 +918,135 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## UpdateAccountFilesByPath
+
+> PathItem UpdateAccountFilesByPath(ctx, accountFileByPathPatchBody, params)
+
+Rename, move or tag the file or directory at a path
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+	accountFileByPathPatchBody :=  // AccountFileByPathPatchBody | 
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.Files.UpdateAccountFilesByPath(context.Background(), accountFileByPathPatchBody, nil)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `Files.UpdateAccountFilesByPath`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `Files.UpdateAccountFilesByPath`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiUpdateAccountFilesByPathRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **path** | **string** | Path of the file or directory to change, such as Leases/2026/lease.pdf. Names are matched exactly, case included, after normalising to Unicode NFC. A leading or trailing / is ignored. URL-encode it as any other query value. | 
+ **accountFileByPathPatchBody** | [**AccountFileByPathPatchBody**](AccountFileByPathPatchBody.md) |  | 
+
+### Return type
+
+[**PathItem**](PathItem.md)
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## UpdateAccountFilesByPathContent
+
+> Record UpdateAccountFilesByPathContent(ctx, params)
+
+Replace the content of the account file at a path
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.Files.UpdateAccountFilesByPathContent(context.Background(), nil)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `Files.UpdateAccountFilesByPathContent`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `Files.UpdateAccountFilesByPathContent`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiUpdateAccountFilesByPathContentRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **path** | **string** | Path of the file, such as Leases/2026/lease.pdf. Names are matched exactly, case included, after normalising to Unicode NFC. A leading / is ignored. URL-encode it as any other query value. | 
+ **ifMatch** | **string** | The ETag returned when the file&#39;s content was read. The content is replaced only if it has not changed since. | 
+ **filename** | ***os.File** | filename of the file being uploaded | 
+ **name** | **string** | general purpose name for multipart form value | 
+
+### Return type
+
+[**Record**](Record.md)
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: multipart/form-data
 - **Accept**: application/json, application/problem+json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)

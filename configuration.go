@@ -90,7 +90,7 @@ type Configuration struct {
 func NewConfiguration() *Configuration {
 	cfg := &Configuration{
 		DefaultHeader:    make(map[string]string),
-		UserAgent:        "OpenAPI-Generator/0.3.2/go",
+		UserAgent:        "OpenAPI-Generator/0.3.3/go",
 		Debug:            false,
 		Servers:          ServerConfigurations{
 			{
@@ -134,6 +134,16 @@ func NewConfiguration() *Configuration {
 				},
 			},
 			"BrandingAPIService.GetLogo": {
+				{
+					URL: "https://usercontent.spaciv.com",
+					Description: "Production",
+				},
+				{
+					URL: "http://localhost:8090",
+					Description: "Local development",
+				},
+			},
+			"FilesAPIService.GetAccountFilesByPathContent": {
 				{
 					URL: "https://usercontent.spaciv.com",
 					Description: "Production",

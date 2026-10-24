@@ -5,8 +5,9 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **AddTags** | Pointer to **[]string** | Tags to add to the file. Each is lowercased and must then be at most 32 letters, digits and hyphens, starting with a letter or digit. A file can have at most 20 tags. | [optional] 
-**Name** | Pointer to **string** | New display name for the file. At most 255 bytes after normalising to Unicode NFC. Must not contain a forward slash or a backslash. | [optional] 
+**Name** | Pointer to **string** | New display name for the file. At most 255 bytes after normalising to Unicode NFC. Must not contain a forward slash or a backslash, and must not be . or .. | [optional] 
 **ParentId** | Pointer to **string** | Identifier of the directory to move the file into, or an empty string to move it to the root. | [optional] 
+**ParentPath** | Pointer to **string** | Path of the directory to move the file into, such as Leases/2026, or / to move it to the root. Cannot be given with parentId. | [optional] 
 **RemoveTags** | Pointer to **[]string** | Tags to remove from the file. Removing a tag the file does not have changes nothing. | [optional] 
 
 ## Methods
@@ -102,6 +103,31 @@ SetParentId sets ParentId field to given value.
 `func (o *AccountFilePatchBody) HasParentId() bool`
 
 HasParentId returns a boolean if a field has been set.
+
+### GetParentPath
+
+`func (o *AccountFilePatchBody) GetParentPath() string`
+
+GetParentPath returns the ParentPath field if non-nil, zero value otherwise.
+
+### GetParentPathOk
+
+`func (o *AccountFilePatchBody) GetParentPathOk() (*string, bool)`
+
+GetParentPathOk returns a tuple with the ParentPath field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetParentPath
+
+`func (o *AccountFilePatchBody) SetParentPath(v string)`
+
+SetParentPath sets ParentPath field to given value.
+
+### HasParentPath
+
+`func (o *AccountFilePatchBody) HasParentPath() bool`
+
+HasParentPath returns a boolean if a field has been set.
 
 ### GetRemoveTags
 

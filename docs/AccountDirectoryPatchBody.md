@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **AddTags** | Pointer to **[]string** | Tags to add to the directory. Each is lowercased and must then be at most 32 letters, digits and hyphens, starting with a letter or digit. A directory can have at most 20 tags. | [optional] 
 **Name** | Pointer to **string** | New display name for the directory. At most 255 bytes after normalising to Unicode NFC. Must not contain a forward slash or a backslash, and must not be . or .. | [optional] 
 **ParentId** | Pointer to **string** | Identifier of the directory to move this one into, or an empty string to move it to the root. | [optional] 
+**ParentPath** | Pointer to **string** | Path of the directory to move this one into, such as Leases/2026, or / to move it to the root. Cannot be given with parentId. | [optional] 
 **RemoveTags** | Pointer to **[]string** | Tags to remove from the directory. Removing a tag the directory does not have changes nothing. | [optional] 
 
 ## Methods
@@ -102,6 +103,31 @@ SetParentId sets ParentId field to given value.
 `func (o *AccountDirectoryPatchBody) HasParentId() bool`
 
 HasParentId returns a boolean if a field has been set.
+
+### GetParentPath
+
+`func (o *AccountDirectoryPatchBody) GetParentPath() string`
+
+GetParentPath returns the ParentPath field if non-nil, zero value otherwise.
+
+### GetParentPathOk
+
+`func (o *AccountDirectoryPatchBody) GetParentPathOk() (*string, bool)`
+
+GetParentPathOk returns a tuple with the ParentPath field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetParentPath
+
+`func (o *AccountDirectoryPatchBody) SetParentPath(v string)`
+
+SetParentPath sets ParentPath field to given value.
+
+### HasParentPath
+
+`func (o *AccountDirectoryPatchBody) HasParentPath() bool`
+
+HasParentPath returns a boolean if a field has been set.
 
 ### GetRemoveTags
 

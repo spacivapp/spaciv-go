@@ -5,7 +5,8 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Name** | **string** | Display name of the directory. At most 255 bytes after normalising to Unicode NFC. Must not contain a forward slash or a backslash, and must not be . or .. | 
-**ParentId** | Pointer to **string** | Identifier of the directory to create this one in. Leave it out to create it at the root. | [optional] 
+**ParentId** | Pointer to **string** | Identifier of the directory to create this one in. Leave it and parentPath out to create it at the root. | [optional] 
+**ParentPath** | Pointer to **string** | Path of the directory to create this one in, such as Leases/2026. Cannot be given with parentId. | [optional] 
 
 ## Methods
 
@@ -70,6 +71,31 @@ SetParentId sets ParentId field to given value.
 `func (o *AccountDirectoryPostBody) HasParentId() bool`
 
 HasParentId returns a boolean if a field has been set.
+
+### GetParentPath
+
+`func (o *AccountDirectoryPostBody) GetParentPath() string`
+
+GetParentPath returns the ParentPath field if non-nil, zero value otherwise.
+
+### GetParentPathOk
+
+`func (o *AccountDirectoryPostBody) GetParentPathOk() (*string, bool)`
+
+GetParentPathOk returns a tuple with the ParentPath field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetParentPath
+
+`func (o *AccountDirectoryPostBody) SetParentPath(v string)`
+
+SetParentPath sets ParentPath field to given value.
+
+### HasParentPath
+
+`func (o *AccountDirectoryPostBody) HasParentPath() bool`
+
+HasParentPath returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

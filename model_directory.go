@@ -33,6 +33,8 @@ type Directory struct {
 	Name string `json:"name"`
 	// Identifier of the directory this one is in. Absent for a directory at the root.
 	ParentId *string `json:"parentId,omitempty"`
+	// Where the directory is: the names of the directories it is in, from the root, then its own name, separated by /, such as Leases/2026. It changes when the directory or one it is in is renamed or moved; the identifier does not.
+	Path string `json:"path"`
 	// Problems found with the directory by its reserved tags' checks, by tag. Absent when there are none.
 	TagProblems map[string][]string `json:"tagProblems,omitempty"`
 	// The directory's tags, in alphabetical order. Absent when the directory has none.
@@ -45,12 +47,13 @@ type _Directory Directory
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDirectory(createdAt time.Time, createdBy int64, id string, name string) *Directory {
+func NewDirectory(createdAt time.Time, createdBy int64, id string, name string, path string) *Directory {
 	this := Directory{}
 	this.CreatedAt = createdAt
 	this.CreatedBy = createdBy
 	this.Id = id
 	this.Name = name
+	this.Path = path
 	return &this
 }
 
@@ -190,6 +193,30 @@ func (o *Directory) SetParentId(v string) {
 	o.ParentId = &v
 }
 
+// GetPath returns the Path field value
+func (o *Directory) GetPath() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.Path
+}
+
+// GetPathOk returns a tuple with the Path field value
+// and a boolean to check if the value has been set.
+func (o *Directory) GetPathOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Path, true
+}
+
+// SetPath sets field value
+func (o *Directory) SetPath(v string) {
+	o.Path = v
+}
+
 // GetTagProblems returns the TagProblems field value if set, zero value otherwise.
 func (o *Directory) GetTagProblems() map[string][]string {
 	if o == nil || IsNil(o.TagProblems) {
@@ -271,6 +298,7 @@ func (o Directory) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ParentId) {
 		toSerialize["parentId"] = o.ParentId
 	}
+	toSerialize["path"] = o.Path
 	if !IsNil(o.TagProblems) {
 		toSerialize["tagProblems"] = o.TagProblems
 	}
@@ -289,6 +317,7 @@ func (o *Directory) UnmarshalJSON(data []byte) (err error) {
 		"createdBy",
 		"id",
 		"name",
+		"path",
 	}
 
 	allProperties := make(map[string]interface{})

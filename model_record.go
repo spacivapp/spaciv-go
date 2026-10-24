@@ -33,6 +33,8 @@ type Record struct {
 	Name string `json:"name"`
 	// Identifier of the directory the file is in. Absent for a file at the root.
 	ParentId *string `json:"parentId,omitempty"`
+	// Where the file is: the names of the directories it is in, from the root, then its own name, separated by /, such as Leases/2026/lease.pdf. It changes when the file or a directory it is in is renamed or moved; the identifier does not.
+	Path string `json:"path"`
 	// Name of the virus signature the file matched when it was quarantined.
 	QuarantineSignature *string `json:"quarantineSignature,omitempty"`
 	// When a rescan found the file matching a virus signature (RFC 3339). A quarantined file cannot be downloaded, but it can still be renamed or deleted.
@@ -53,12 +55,13 @@ type _Record Record
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRecord(createdAt time.Time, id string, mimeType string, name string, size int64, uploadedBy int64) *Record {
+func NewRecord(createdAt time.Time, id string, mimeType string, name string, path string, size int64, uploadedBy int64) *Record {
 	this := Record{}
 	this.CreatedAt = createdAt
 	this.Id = id
 	this.MimeType = mimeType
 	this.Name = name
+	this.Path = path
 	this.Size = size
 	this.UploadedBy = uploadedBy
 	return &this
@@ -198,6 +201,30 @@ func (o *Record) HasParentId() bool {
 // SetParentId gets a reference to the given string and assigns it to the ParentId field.
 func (o *Record) SetParentId(v string) {
 	o.ParentId = &v
+}
+
+// GetPath returns the Path field value
+func (o *Record) GetPath() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.Path
+}
+
+// GetPathOk returns a tuple with the Path field value
+// and a boolean to check if the value has been set.
+func (o *Record) GetPathOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Path, true
+}
+
+// SetPath sets field value
+func (o *Record) SetPath(v string) {
+	o.Path = v
 }
 
 // GetQuarantineSignature returns the QuarantineSignature field value if set, zero value otherwise.
@@ -393,6 +420,7 @@ func (o Record) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ParentId) {
 		toSerialize["parentId"] = o.ParentId
 	}
+	toSerialize["path"] = o.Path
 	if !IsNil(o.QuarantineSignature) {
 		toSerialize["quarantineSignature"] = o.QuarantineSignature
 	}
@@ -419,6 +447,7 @@ func (o *Record) UnmarshalJSON(data []byte) (err error) {
 		"id",
 		"mimeType",
 		"name",
+		"path",
 		"size",
 		"uploadedBy",
 	}

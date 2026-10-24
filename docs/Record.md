@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **MimeType** | **string** | Media type detected from the file&#39;s contents when they were last stored, rather than from its name or the type the client declared. A file created empty in the app takes its type from its extension, such as text/markdown; charset&#x3D;utf-8 for .md, and keeps it while its contents are detected as plain text. | 
 **Name** | **string** | Display name of the file, taken from the uploaded file name and changeable afterwards. Nothing else in the same directory has the same name, compared exactly and after normalising to Unicode NFC. | 
 **ParentId** | Pointer to **string** | Identifier of the directory the file is in. Absent for a file at the root. | [optional] 
+**Path** | **string** | Where the file is: the names of the directories it is in, from the root, then its own name, separated by /, such as Leases/2026/lease.pdf. It changes when the file or a directory it is in is renamed or moved; the identifier does not. | 
 **QuarantineSignature** | Pointer to **string** | Name of the virus signature the file matched when it was quarantined. | [optional] 
 **QuarantinedAt** | Pointer to **time.Time** | When a rescan found the file matching a virus signature (RFC 3339). A quarantined file cannot be downloaded, but it can still be renamed or deleted. | [optional] 
 **Size** | **int64** | Size of the stored file in bytes. | 
@@ -20,7 +21,7 @@ Name | Type | Description | Notes
 
 ### NewRecord
 
-`func NewRecord(createdAt time.Time, id string, mimeType string, name string, size int64, uploadedBy int64, ) *Record`
+`func NewRecord(createdAt time.Time, id string, mimeType string, name string, path string, size int64, uploadedBy int64, ) *Record`
 
 NewRecord instantiates a new Record object
 This constructor will assign default values to properties that have it defined,
@@ -139,6 +140,26 @@ SetParentId sets ParentId field to given value.
 `func (o *Record) HasParentId() bool`
 
 HasParentId returns a boolean if a field has been set.
+
+### GetPath
+
+`func (o *Record) GetPath() string`
+
+GetPath returns the Path field if non-nil, zero value otherwise.
+
+### GetPathOk
+
+`func (o *Record) GetPathOk() (*string, bool)`
+
+GetPathOk returns a tuple with the Path field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPath
+
+`func (o *Record) SetPath(v string)`
+
+SetPath sets Path field to given value.
+
 
 ### GetQuarantineSignature
 

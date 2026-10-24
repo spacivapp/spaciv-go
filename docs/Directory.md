@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **Id** | **string** | Opaque identifier of the directory. | 
 **Name** | **string** | Display name of the directory. Nothing else in the same parent has the same name, compared exactly and after normalising to Unicode NFC. | 
 **ParentId** | Pointer to **string** | Identifier of the directory this one is in. Absent for a directory at the root. | [optional] 
+**Path** | **string** | Where the directory is: the names of the directories it is in, from the root, then its own name, separated by /, such as Leases/2026. It changes when the directory or one it is in is renamed or moved; the identifier does not. | 
 **TagProblems** | Pointer to **map[string][]string** | Problems found with the directory by its reserved tags&#39; checks, by tag. Absent when there are none. | [optional] 
 **Tags** | Pointer to **[]string** | The directory&#39;s tags, in alphabetical order. Absent when the directory has none. | [optional] 
 
@@ -16,7 +17,7 @@ Name | Type | Description | Notes
 
 ### NewDirectory
 
-`func NewDirectory(createdAt time.Time, createdBy int64, id string, name string, ) *Directory`
+`func NewDirectory(createdAt time.Time, createdBy int64, id string, name string, path string, ) *Directory`
 
 NewDirectory instantiates a new Directory object
 This constructor will assign default values to properties that have it defined,
@@ -135,6 +136,26 @@ SetParentId sets ParentId field to given value.
 `func (o *Directory) HasParentId() bool`
 
 HasParentId returns a boolean if a field has been set.
+
+### GetPath
+
+`func (o *Directory) GetPath() string`
+
+GetPath returns the Path field if non-nil, zero value otherwise.
+
+### GetPathOk
+
+`func (o *Directory) GetPathOk() (*string, bool)`
+
+GetPathOk returns a tuple with the Path field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPath
+
+`func (o *Directory) SetPath(v string)`
+
+SetPath sets Path field to given value.
+
 
 ### GetTagProblems
 
