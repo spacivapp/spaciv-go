@@ -23,6 +23,8 @@ var _ MappedNullable = &AssistantChatPollBody{}
 // AssistantChatPollBody struct for AssistantChatPollBody
 type AssistantChatPollBody struct {
 	Actions []AssistantChatPollAction `json:"actions"`
+	// What tool calls whose results were recorded after the since cursor asked the user to confirm. A tool never carries it out itself: the app shows it, and carries it out with the user's own request if they confirm. A later poll can list a call again.
+	Confirmations []AssistantChatPollConfirmation `json:"confirmations"`
 	Failure *AssistantConversationFailureBody `json:"failure,omitempty"`
 	// Tool calls whose results, failed or not, were recorded after the since cursor, by the toolCallId of their action message. A call that succeeded has no message of its own, so this is how a client tells a finished action from one still running. A later poll can list a call again.
 	FinishedToolCallIds []string `json:"finishedToolCallIds"`
@@ -42,9 +44,10 @@ type _AssistantChatPollBody AssistantChatPollBody
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAssistantChatPollBody(actions []AssistantChatPollAction, finishedToolCallIds []string, messages []AssistantChatPollMessage, scriptRuns []AssistantChatPollScriptRun, status string, subsessionSteps int64, subsessionTool string) *AssistantChatPollBody {
+func NewAssistantChatPollBody(actions []AssistantChatPollAction, confirmations []AssistantChatPollConfirmation, finishedToolCallIds []string, messages []AssistantChatPollMessage, scriptRuns []AssistantChatPollScriptRun, status string, subsessionSteps int64, subsessionTool string) *AssistantChatPollBody {
 	this := AssistantChatPollBody{}
 	this.Actions = actions
+	this.Confirmations = confirmations
 	this.FinishedToolCallIds = finishedToolCallIds
 	this.Messages = messages
 	this.ScriptRuns = scriptRuns
@@ -84,6 +87,30 @@ func (o *AssistantChatPollBody) GetActionsOk() ([]AssistantChatPollAction, bool)
 // SetActions sets field value
 func (o *AssistantChatPollBody) SetActions(v []AssistantChatPollAction) {
 	o.Actions = v
+}
+
+// GetConfirmations returns the Confirmations field value
+func (o *AssistantChatPollBody) GetConfirmations() []AssistantChatPollConfirmation {
+	if o == nil {
+		var ret []AssistantChatPollConfirmation
+		return ret
+	}
+
+	return o.Confirmations
+}
+
+// GetConfirmationsOk returns a tuple with the Confirmations field value
+// and a boolean to check if the value has been set.
+func (o *AssistantChatPollBody) GetConfirmationsOk() ([]AssistantChatPollConfirmation, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Confirmations, true
+}
+
+// SetConfirmations sets field value
+func (o *AssistantChatPollBody) SetConfirmations(v []AssistantChatPollConfirmation) {
+	o.Confirmations = v
 }
 
 // GetFailure returns the Failure field value if set, zero value otherwise.
@@ -273,6 +300,7 @@ func (o AssistantChatPollBody) MarshalJSON() ([]byte, error) {
 func (o AssistantChatPollBody) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["actions"] = o.Actions
+	toSerialize["confirmations"] = o.Confirmations
 	if !IsNil(o.Failure) {
 		toSerialize["failure"] = o.Failure
 	}
@@ -291,6 +319,7 @@ func (o *AssistantChatPollBody) UnmarshalJSON(data []byte) (err error) {
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"actions",
+		"confirmations",
 		"finishedToolCallIds",
 		"messages",
 		"scriptRuns",

@@ -78,6 +78,7 @@ docs/AssistantChatContext.md
 docs/AssistantChatPollAction.md
 docs/AssistantChatPollAttachment.md
 docs/AssistantChatPollBody.md
+docs/AssistantChatPollConfirmation.md
 docs/AssistantChatPollMessage.md
 docs/AssistantChatPollScriptRun.md
 docs/AssistantChatReq.md
@@ -530,6 +531,7 @@ model_assistant_chat_context.go
 model_assistant_chat_poll_action.go
 model_assistant_chat_poll_attachment.go
 model_assistant_chat_poll_body.go
+model_assistant_chat_poll_confirmation.go
 model_assistant_chat_poll_message.go
 model_assistant_chat_poll_script_run.go
 model_assistant_chat_req.go

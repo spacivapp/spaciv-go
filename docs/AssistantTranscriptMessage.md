@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Attachments** | [**[]AssistantChatPollAttachment**](AssistantChatPollAttachment.md) | Files attached to a user message. Empty on every other message. | 
+**Confirmation** | Pointer to [**AssistantChatPollConfirmation**](AssistantChatPollConfirmation.md) | For a tool message, what the tool asked the user to confirm, as a poll lists it in confirmations. Absent on every other message. | [optional] 
 **CreatedAt** | **string** |  | 
 **Failed** | **bool** | Whether the tool call a tool message answers failed: the tool refused it, returned an error, or was not available. | 
 **Id** | **string** | The message&#39;s index in the conversation. A poll&#39;s message ids start with it. | 
@@ -54,6 +55,31 @@ and a boolean to check if the value has been set.
 
 SetAttachments sets Attachments field to given value.
 
+
+### GetConfirmation
+
+`func (o *AssistantTranscriptMessage) GetConfirmation() AssistantChatPollConfirmation`
+
+GetConfirmation returns the Confirmation field if non-nil, zero value otherwise.
+
+### GetConfirmationOk
+
+`func (o *AssistantTranscriptMessage) GetConfirmationOk() (*AssistantChatPollConfirmation, bool)`
+
+GetConfirmationOk returns a tuple with the Confirmation field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetConfirmation
+
+`func (o *AssistantTranscriptMessage) SetConfirmation(v AssistantChatPollConfirmation)`
+
+SetConfirmation sets Confirmation field to given value.
+
+### HasConfirmation
+
+`func (o *AssistantTranscriptMessage) HasConfirmation() bool`
+
+HasConfirmation returns a boolean if a field has been set.
 
 ### GetCreatedAt
 

@@ -692,6 +692,8 @@ ListEntries List entries of a top-down model
 Returns entries belonging to the specified top-down model, along with the total entry count. Each entry describes a cohort of people and the property values assigned to them.
 
 Paging is optional: omitting `limit`, or passing 0, returns every entry from `start`. Requires the *View modification* permission.
+
+Returns `404` if the model does not exist or belongs to a different account.
 */
 func (a *TopDownModelsService) ListEntries(ctx context.Context, id string, params *TopDownModelsListEntriesParams) (*GetTopDownModelEntriesRes, error) {
 	r := requestForTopDownModelsListEntries{

@@ -1684,7 +1684,7 @@ type requestForScriptsUpdateSecrets struct {
 /*
 UpdateSecrets Set script secrets
 
-Adds, replaces or removes the script's secrets; secrets not named are left unchanged. Values are write-only and are never returned; the response has the script's new `revision`. When someone other than the key's owner sets secrets, the script's API key is replaced with one acting as them. Names must be upper-case environment variable names and must not start with `SPACIV_`, which is reserved for the values Spaciv provides. Requires the *Manage my account* permission.
+Adds, replaces or removes the script's secrets; secrets not named are left unchanged. Values are write-only and are never returned; the response has the script's new `revision`. Pass `revision` to have the secrets set only on the version of the script that was read. A script that had already changed is rejected with `409` and nothing is set. A change to its code, settings or secrets made while the secrets were being set is reported with `409` too, but the secrets have then been set. After either, read the script again before changing anything else. When someone other than the key's owner sets secrets, the script's API key is replaced with one acting as them. Names must be upper-case environment variable names and must not start with `SPACIV_`, which is reserved for the values Spaciv provides. Requires the *Manage my account* permission.
 */
 func (a *ScriptsService) UpdateSecrets(ctx context.Context, id string, scriptSecretsReqBody ScriptSecretsReqBody) (*ScriptSecretsResBody, error) {
 	r := requestForScriptsUpdateSecrets{

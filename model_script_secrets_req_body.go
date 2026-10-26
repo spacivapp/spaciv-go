@@ -22,6 +22,8 @@ var _ MappedNullable = &ScriptSecretsReqBody{}
 type ScriptSecretsReqBody struct {
 	// Names of secrets to delete.
 	Remove []string `json:"remove,omitempty"`
+	// The revision last read. When given, a different current revision is rejected with 409 and nothing is set, and a change to the script's code or settings while the secrets are being set is reported with 409 after they are set; either way, read the script again before changing anything else. Omit it to set the secrets whatever the revision.
+	Revision *int64 `json:"revision,omitempty"`
 	// Secrets to add or replace, keyed by environment variable name.
 	Set map[string]string `json:"set,omitempty"`
 }
@@ -75,6 +77,38 @@ func (o *ScriptSecretsReqBody) SetRemove(v []string) {
 	o.Remove = v
 }
 
+// GetRevision returns the Revision field value if set, zero value otherwise.
+func (o *ScriptSecretsReqBody) GetRevision() int64 {
+	if o == nil || IsNil(o.Revision) {
+		var ret int64
+		return ret
+	}
+	return *o.Revision
+}
+
+// GetRevisionOk returns a tuple with the Revision field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScriptSecretsReqBody) GetRevisionOk() (*int64, bool) {
+	if o == nil || IsNil(o.Revision) {
+		return nil, false
+	}
+	return o.Revision, true
+}
+
+// HasRevision returns a boolean if a field has been set.
+func (o *ScriptSecretsReqBody) HasRevision() bool {
+	if o != nil && !IsNil(o.Revision) {
+		return true
+	}
+
+	return false
+}
+
+// SetRevision gets a reference to the given int64 and assigns it to the Revision field.
+func (o *ScriptSecretsReqBody) SetRevision(v int64) {
+	o.Revision = &v
+}
+
 // GetSet returns the Set field value if set, zero value otherwise.
 func (o *ScriptSecretsReqBody) GetSet() map[string]string {
 	if o == nil || IsNil(o.Set) {
@@ -119,6 +153,9 @@ func (o ScriptSecretsReqBody) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	if !IsNil(o.Remove) {
 		toSerialize["remove"] = o.Remove
+	}
+	if !IsNil(o.Revision) {
+		toSerialize["revision"] = o.Revision
 	}
 	if !IsNil(o.Set) {
 		toSerialize["set"] = o.Set

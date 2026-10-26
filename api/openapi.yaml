@@ -6673,7 +6673,12 @@ paths:
     put:
       description: "Adds, replaces or removes the script's secrets; secrets not named\
         \ are left unchanged. Values are write-only and are never returned; the response\
-        \ has the script's new `revision`. When someone other than the key's owner\
+        \ has the script's new `revision`. Pass `revision` to have the secrets set\
+        \ only on the version of the script that was read. A script that had already\
+        \ changed is rejected with `409` and nothing is set. A change to its code,\
+        \ settings or secrets made while the secrets were being set is reported with\
+        \ `409` too, but the secrets have then been set. After either, read the script\
+        \ again before changing anything else. When someone other than the key's owner\
         \ sets secrets, the script's API key is replaced with one acting as them.\
         \ Names must be upper-case environment variable names and must not start with\
         \ `SPACIV_`, which is reserved for the values Spaciv provides. Requires the\
@@ -7484,6 +7489,8 @@ paths:
         Returns entries belonging to the specified top-down model, along with the total entry count. Each entry describes a cohort of people and the property values assigned to them.
 
         Paging is optional: omitting `limit`, or passing 0, returns every entry from `start`. Requires the *View modification* permission.
+
+        Returns `404` if the model does not exist or belongs to a different account.
       operationId: top-down-models_list-entries
       parameters:
       - explode: false
@@ -9303,6 +9310,13 @@ components:
           id: id
           subsessionId: subsessionId
           text: text
+        confirmations:
+        - toolCallId: toolCallId
+          payload: payload
+          type: type
+        - toolCallId: toolCallId
+          payload: payload
+          type: type
         actions:
         - payload: payload
           type: type
@@ -9313,6 +9327,14 @@ components:
         actions:
           items:
             $ref: "#/components/schemas/AssistantChatPollAction"
+          type: array
+        confirmations:
+          description: "What tool calls whose results were recorded after the since\
+            \ cursor asked the user to confirm. A tool never carries it out itself:\
+            \ the app shows it, and carries it out with the user's own request if\
+            \ they confirm. A later poll can list a call again."
+          items:
+            $ref: "#/components/schemas/AssistantChatPollConfirmation"
           type: array
         failure:
           $ref: "#/components/schemas/AssistantConversationFailureBody"
@@ -9357,12 +9379,47 @@ components:
           type: string
       required:
       - actions
+      - confirmations
       - finishedToolCallIds
       - messages
       - scriptRuns
       - status
       - subsessionSteps
       - subsessionTool
+    AssistantChatPollConfirmation:
+      additionalProperties: false
+      example:
+        toolCallId: toolCallId
+        payload: payload
+        type: type
+      properties:
+        payload:
+          description: The type's JSON body.
+          type: string
+        toolCallId:
+          description: The toolCallId of the action message that asked for it.
+          type: string
+        type:
+          description: "What is to be confirmed, which says what payload holds. create_script:\
+            \ create a script, with the user confirming its name and description,\
+            \ from payload {name, description, source, project, schedule, webhook,\
+            \ enabled, secretNames}, where source is {accountFiles: {language, directoryPath,\
+            \ files, manifest}}, whose files map each of the script's file paths,\
+            \ and manifest the dependency manifest, to an account file whose content\
+            \ it takes; the settings after source are optional, project is the project\
+            \ the script acts in, and secretNames are secrets whose values the user\
+            \ enters. update_script: change a script, from payload {scriptId, name,\
+            \ revision, changes}, where changes holds only what changes, with the\
+            \ same fields and meanings as create_script's payload, a project of 0\
+            \ removing the project and a schedule with an empty cron removing the\
+            \ schedule, and revision is the one the change was proposed against. delete_script:\
+            \ delete a script, from payload {scriptId, name}. Clients ignore types\
+            \ they do not know."
+          type: string
+      required:
+      - payload
+      - toolCallId
+      - type
     AssistantChatPollMessage:
       additionalProperties: false
       example:
@@ -9648,6 +9705,10 @@ components:
           toolCallId: toolCallId
           scriptRunId: scriptRunId
           requestId: requestId
+          confirmation:
+            toolCallId: toolCallId
+            payload: payload
+            type: type
           failed: true
           id: id
           text: text
@@ -9673,6 +9734,10 @@ components:
           toolCallId: toolCallId
           scriptRunId: scriptRunId
           requestId: requestId
+          confirmation:
+            toolCallId: toolCallId
+            payload: payload
+            type: type
           failed: true
           id: id
           text: text
@@ -9738,6 +9803,10 @@ components:
         toolCallId: toolCallId
         scriptRunId: scriptRunId
         requestId: requestId
+        confirmation:
+          toolCallId: toolCallId
+          payload: payload
+          type: type
         failed: true
         id: id
         text: text
@@ -9754,6 +9823,8 @@ components:
           items:
             $ref: "#/components/schemas/AssistantChatPollAttachment"
           type: array
+        confirmation:
+          $ref: "#/components/schemas/AssistantChatPollConfirmation"
         createdAt:
           type: string
         failed:
@@ -17382,12 +17453,22 @@ components:
         remove:
         - remove
         - remove
+        revision: 1
       properties:
         remove:
           description: Names of secrets to delete.
           items:
             type: string
           type: array
+        revision:
+          description: "The revision last read. When given, a different current revision\
+            \ is rejected with 409 and nothing is set, and a change to the script's\
+            \ code or settings while the secrets are being set is reported with 409\
+            \ after they are set; either way, read the script again before changing\
+            \ anything else. Omit it to set the secrets whatever the revision."
+          format: int64
+          minimum: 1
+          type: integer
         set:
           additionalProperties:
             type: string

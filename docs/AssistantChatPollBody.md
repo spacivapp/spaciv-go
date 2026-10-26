@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Actions** | [**[]AssistantChatPollAction**](AssistantChatPollAction.md) |  | 
+**Confirmations** | [**[]AssistantChatPollConfirmation**](AssistantChatPollConfirmation.md) | What tool calls whose results were recorded after the since cursor asked the user to confirm. A tool never carries it out itself: the app shows it, and carries it out with the user&#39;s own request if they confirm. A later poll can list a call again. | 
 **Failure** | Pointer to [**AssistantConversationFailureBody**](AssistantConversationFailureBody.md) |  | [optional] 
 **FinishedToolCallIds** | **[]string** | Tool calls whose results, failed or not, were recorded after the since cursor, by the toolCallId of their action message. A call that succeeded has no message of its own, so this is how a client tells a finished action from one still running. A later poll can list a call again. | 
 **Messages** | [**[]AssistantChatPollMessage**](AssistantChatPollMessage.md) |  | 
@@ -17,7 +18,7 @@ Name | Type | Description | Notes
 
 ### NewAssistantChatPollBody
 
-`func NewAssistantChatPollBody(actions []AssistantChatPollAction, finishedToolCallIds []string, messages []AssistantChatPollMessage, scriptRuns []AssistantChatPollScriptRun, status string, subsessionSteps int64, subsessionTool string, ) *AssistantChatPollBody`
+`func NewAssistantChatPollBody(actions []AssistantChatPollAction, confirmations []AssistantChatPollConfirmation, finishedToolCallIds []string, messages []AssistantChatPollMessage, scriptRuns []AssistantChatPollScriptRun, status string, subsessionSteps int64, subsessionTool string, ) *AssistantChatPollBody`
 
 NewAssistantChatPollBody instantiates a new AssistantChatPollBody object
 This constructor will assign default values to properties that have it defined,
@@ -50,6 +51,26 @@ and a boolean to check if the value has been set.
 `func (o *AssistantChatPollBody) SetActions(v []AssistantChatPollAction)`
 
 SetActions sets Actions field to given value.
+
+
+### GetConfirmations
+
+`func (o *AssistantChatPollBody) GetConfirmations() []AssistantChatPollConfirmation`
+
+GetConfirmations returns the Confirmations field if non-nil, zero value otherwise.
+
+### GetConfirmationsOk
+
+`func (o *AssistantChatPollBody) GetConfirmationsOk() (*[]AssistantChatPollConfirmation, bool)`
+
+GetConfirmationsOk returns a tuple with the Confirmations field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetConfirmations
+
+`func (o *AssistantChatPollBody) SetConfirmations(v []AssistantChatPollConfirmation)`
+
+SetConfirmations sets Confirmations field to given value.
 
 
 ### GetFailure

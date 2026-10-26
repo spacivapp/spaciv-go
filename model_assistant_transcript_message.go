@@ -24,6 +24,8 @@ var _ MappedNullable = &AssistantTranscriptMessage{}
 type AssistantTranscriptMessage struct {
 	// Files attached to a user message. Empty on every other message.
 	Attachments []AssistantChatPollAttachment `json:"attachments"`
+	// For a tool message, what the tool asked the user to confirm, as a poll lists it in confirmations. Absent on every other message.
+	Confirmation *AssistantChatPollConfirmation `json:"confirmation,omitempty"`
 	CreatedAt string `json:"createdAt"`
 	// Whether the tool call a tool message answers failed: the tool refused it, returned an error, or was not available.
 	Failed bool `json:"failed"`
@@ -95,6 +97,38 @@ func (o *AssistantTranscriptMessage) GetAttachmentsOk() ([]AssistantChatPollAtta
 // SetAttachments sets field value
 func (o *AssistantTranscriptMessage) SetAttachments(v []AssistantChatPollAttachment) {
 	o.Attachments = v
+}
+
+// GetConfirmation returns the Confirmation field value if set, zero value otherwise.
+func (o *AssistantTranscriptMessage) GetConfirmation() AssistantChatPollConfirmation {
+	if o == nil || IsNil(o.Confirmation) {
+		var ret AssistantChatPollConfirmation
+		return ret
+	}
+	return *o.Confirmation
+}
+
+// GetConfirmationOk returns a tuple with the Confirmation field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AssistantTranscriptMessage) GetConfirmationOk() (*AssistantChatPollConfirmation, bool) {
+	if o == nil || IsNil(o.Confirmation) {
+		return nil, false
+	}
+	return o.Confirmation, true
+}
+
+// HasConfirmation returns a boolean if a field has been set.
+func (o *AssistantTranscriptMessage) HasConfirmation() bool {
+	if o != nil && !IsNil(o.Confirmation) {
+		return true
+	}
+
+	return false
+}
+
+// SetConfirmation gets a reference to the given AssistantChatPollConfirmation and assigns it to the Confirmation field.
+func (o *AssistantTranscriptMessage) SetConfirmation(v AssistantChatPollConfirmation) {
+	o.Confirmation = &v
 }
 
 // GetCreatedAt returns the CreatedAt field value
@@ -348,6 +382,9 @@ func (o AssistantTranscriptMessage) MarshalJSON() ([]byte, error) {
 func (o AssistantTranscriptMessage) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["attachments"] = o.Attachments
+	if !IsNil(o.Confirmation) {
+		toSerialize["confirmation"] = o.Confirmation
+	}
 	toSerialize["createdAt"] = o.CreatedAt
 	toSerialize["failed"] = o.Failed
 	toSerialize["id"] = o.Id
