@@ -13,8 +13,6 @@ package spaciv
 
 import (
 	"encoding/json"
-	"bytes"
-	"fmt"
 )
 
 // checks if the DashboardCardDelete type satisfies the MappedNullable interface at compile time
@@ -22,18 +20,16 @@ var _ MappedNullable = &DashboardCardDelete{}
 
 // DashboardCardDelete struct for DashboardCardDelete
 type DashboardCardDelete struct {
-	Index int32 `json:"index"`
+	CardId *string `json:"cardId,omitempty"`
+	Index *int32 `json:"index,omitempty"`
 }
-
-type _DashboardCardDelete DashboardCardDelete
 
 // NewDashboardCardDelete instantiates a new DashboardCardDelete object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDashboardCardDelete(index int32) *DashboardCardDelete {
+func NewDashboardCardDelete() *DashboardCardDelete {
 	this := DashboardCardDelete{}
-	this.Index = index
 	return &this
 }
 
@@ -45,28 +41,68 @@ func NewDashboardCardDeleteWithDefaults() *DashboardCardDelete {
 	return &this
 }
 
-// GetIndex returns the Index field value
+// GetCardId returns the CardId field value if set, zero value otherwise.
+func (o *DashboardCardDelete) GetCardId() string {
+	if o == nil || IsNil(o.CardId) {
+		var ret string
+		return ret
+	}
+	return *o.CardId
+}
+
+// GetCardIdOk returns a tuple with the CardId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DashboardCardDelete) GetCardIdOk() (*string, bool) {
+	if o == nil || IsNil(o.CardId) {
+		return nil, false
+	}
+	return o.CardId, true
+}
+
+// HasCardId returns a boolean if a field has been set.
+func (o *DashboardCardDelete) HasCardId() bool {
+	if o != nil && !IsNil(o.CardId) {
+		return true
+	}
+
+	return false
+}
+
+// SetCardId gets a reference to the given string and assigns it to the CardId field.
+func (o *DashboardCardDelete) SetCardId(v string) {
+	o.CardId = &v
+}
+
+// GetIndex returns the Index field value if set, zero value otherwise.
 func (o *DashboardCardDelete) GetIndex() int32 {
-	if o == nil {
+	if o == nil || IsNil(o.Index) {
 		var ret int32
 		return ret
 	}
-
-	return o.Index
+	return *o.Index
 }
 
-// GetIndexOk returns a tuple with the Index field value
+// GetIndexOk returns a tuple with the Index field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardCardDelete) GetIndexOk() (*int32, bool) {
-	if o == nil {
+	if o == nil || IsNil(o.Index) {
 		return nil, false
 	}
-	return &o.Index, true
+	return o.Index, true
 }
 
-// SetIndex sets field value
+// HasIndex returns a boolean if a field has been set.
+func (o *DashboardCardDelete) HasIndex() bool {
+	if o != nil && !IsNil(o.Index) {
+		return true
+	}
+
+	return false
+}
+
+// SetIndex gets a reference to the given int32 and assigns it to the Index field.
 func (o *DashboardCardDelete) SetIndex(v int32) {
-	o.Index = v
+	o.Index = &v
 }
 
 func (o DashboardCardDelete) MarshalJSON() ([]byte, error) {
@@ -79,45 +115,13 @@ func (o DashboardCardDelete) MarshalJSON() ([]byte, error) {
 
 func (o DashboardCardDelete) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["index"] = o.Index
+	if !IsNil(o.CardId) {
+		toSerialize["cardId"] = o.CardId
+	}
+	if !IsNil(o.Index) {
+		toSerialize["index"] = o.Index
+	}
 	return toSerialize, nil
-}
-
-func (o *DashboardCardDelete) UnmarshalJSON(data []byte) (err error) {
-	// This validates that all required properties are included in the JSON object
-	// by unmarshalling the object into a generic map with string keys and checking
-	// that every required field exists as a key in the generic map.
-	requiredProperties := []string{
-		"index",
-	}
-
-	allProperties := make(map[string]interface{})
-
-	err = json.Unmarshal(data, &allProperties)
-
-	if err != nil {
-		return err;
-	}
-
-	for _, requiredProperty := range(requiredProperties) {
-		if _, exists := allProperties[requiredProperty]; !exists {
-			return fmt.Errorf("no value given for required property %v", requiredProperty)
-		}
-	}
-
-	varDashboardCardDelete := _DashboardCardDelete{}
-
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDashboardCardDelete)
-
-	if err != nil {
-		return err
-	}
-
-	*o = DashboardCardDelete(varDashboardCardDelete)
-
-	return err
 }
 
 type NullableDashboardCardDelete struct {

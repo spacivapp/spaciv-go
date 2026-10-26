@@ -4,14 +4,15 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**AfterCardId** | Pointer to **string** |  | [optional] 
 **Card** | [**DashboardCardRequest**](DashboardCardRequest.md) |  | 
-**Index** | **int32** |  | 
+**Index** | Pointer to **int32** |  | [optional] 
 
 ## Methods
 
 ### NewDashboardCardCreate
 
-`func NewDashboardCardCreate(card DashboardCardRequest, index int32, ) *DashboardCardCreate`
+`func NewDashboardCardCreate(card DashboardCardRequest, ) *DashboardCardCreate`
 
 NewDashboardCardCreate instantiates a new DashboardCardCreate object
 This constructor will assign default values to properties that have it defined,
@@ -25,6 +26,31 @@ will change when the set of required properties is changed
 NewDashboardCardCreateWithDefaults instantiates a new DashboardCardCreate object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetAfterCardId
+
+`func (o *DashboardCardCreate) GetAfterCardId() string`
+
+GetAfterCardId returns the AfterCardId field if non-nil, zero value otherwise.
+
+### GetAfterCardIdOk
+
+`func (o *DashboardCardCreate) GetAfterCardIdOk() (*string, bool)`
+
+GetAfterCardIdOk returns a tuple with the AfterCardId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetAfterCardId
+
+`func (o *DashboardCardCreate) SetAfterCardId(v string)`
+
+SetAfterCardId sets AfterCardId field to given value.
+
+### HasAfterCardId
+
+`func (o *DashboardCardCreate) HasAfterCardId() bool`
+
+HasAfterCardId returns a boolean if a field has been set.
 
 ### GetCard
 
@@ -65,6 +91,11 @@ and a boolean to check if the value has been set.
 
 SetIndex sets Index field to given value.
 
+### HasIndex
+
+`func (o *DashboardCardCreate) HasIndex() bool`
+
+HasIndex returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

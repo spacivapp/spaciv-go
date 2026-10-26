@@ -23,7 +23,8 @@ var _ MappedNullable = &DashboardCardUpdate{}
 // DashboardCardUpdate struct for DashboardCardUpdate
 type DashboardCardUpdate struct {
 	Card DashboardCardRequest `json:"card"`
-	Index int32 `json:"index"`
+	CardId *string `json:"cardId,omitempty"`
+	Index *int32 `json:"index,omitempty"`
 }
 
 type _DashboardCardUpdate DashboardCardUpdate
@@ -32,10 +33,9 @@ type _DashboardCardUpdate DashboardCardUpdate
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDashboardCardUpdate(card DashboardCardRequest, index int32) *DashboardCardUpdate {
+func NewDashboardCardUpdate(card DashboardCardRequest) *DashboardCardUpdate {
 	this := DashboardCardUpdate{}
 	this.Card = card
-	this.Index = index
 	return &this
 }
 
@@ -71,28 +71,68 @@ func (o *DashboardCardUpdate) SetCard(v DashboardCardRequest) {
 	o.Card = v
 }
 
-// GetIndex returns the Index field value
+// GetCardId returns the CardId field value if set, zero value otherwise.
+func (o *DashboardCardUpdate) GetCardId() string {
+	if o == nil || IsNil(o.CardId) {
+		var ret string
+		return ret
+	}
+	return *o.CardId
+}
+
+// GetCardIdOk returns a tuple with the CardId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DashboardCardUpdate) GetCardIdOk() (*string, bool) {
+	if o == nil || IsNil(o.CardId) {
+		return nil, false
+	}
+	return o.CardId, true
+}
+
+// HasCardId returns a boolean if a field has been set.
+func (o *DashboardCardUpdate) HasCardId() bool {
+	if o != nil && !IsNil(o.CardId) {
+		return true
+	}
+
+	return false
+}
+
+// SetCardId gets a reference to the given string and assigns it to the CardId field.
+func (o *DashboardCardUpdate) SetCardId(v string) {
+	o.CardId = &v
+}
+
+// GetIndex returns the Index field value if set, zero value otherwise.
 func (o *DashboardCardUpdate) GetIndex() int32 {
-	if o == nil {
+	if o == nil || IsNil(o.Index) {
 		var ret int32
 		return ret
 	}
-
-	return o.Index
+	return *o.Index
 }
 
-// GetIndexOk returns a tuple with the Index field value
+// GetIndexOk returns a tuple with the Index field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardCardUpdate) GetIndexOk() (*int32, bool) {
-	if o == nil {
+	if o == nil || IsNil(o.Index) {
 		return nil, false
 	}
-	return &o.Index, true
+	return o.Index, true
 }
 
-// SetIndex sets field value
+// HasIndex returns a boolean if a field has been set.
+func (o *DashboardCardUpdate) HasIndex() bool {
+	if o != nil && !IsNil(o.Index) {
+		return true
+	}
+
+	return false
+}
+
+// SetIndex gets a reference to the given int32 and assigns it to the Index field.
 func (o *DashboardCardUpdate) SetIndex(v int32) {
-	o.Index = v
+	o.Index = &v
 }
 
 func (o DashboardCardUpdate) MarshalJSON() ([]byte, error) {
@@ -106,7 +146,12 @@ func (o DashboardCardUpdate) MarshalJSON() ([]byte, error) {
 func (o DashboardCardUpdate) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["card"] = o.Card
-	toSerialize["index"] = o.Index
+	if !IsNil(o.CardId) {
+		toSerialize["cardId"] = o.CardId
+	}
+	if !IsNil(o.Index) {
+		toSerialize["index"] = o.Index
+	}
 	return toSerialize, nil
 }
 
@@ -116,7 +161,6 @@ func (o *DashboardCardUpdate) UnmarshalJSON(data []byte) (err error) {
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"card",
-		"index",
 	}
 
 	allProperties := make(map[string]interface{})

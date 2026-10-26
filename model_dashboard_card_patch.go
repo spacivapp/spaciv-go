@@ -22,6 +22,7 @@ type DashboardCardPatch struct {
 	DashboardCardPatchOneOf *DashboardCardPatchOneOf
 	DashboardCardPatchOneOf1 *DashboardCardPatchOneOf1
 	DashboardCardPatchOneOf2 *DashboardCardPatchOneOf2
+	DashboardCardPatchOneOf3 *DashboardCardPatchOneOf3
 }
 
 // DashboardCardPatchOneOfAsDashboardCardPatch is a convenience function that returns DashboardCardPatchOneOf wrapped in DashboardCardPatch
@@ -42,6 +43,13 @@ func DashboardCardPatchOneOf1AsDashboardCardPatch(v *DashboardCardPatchOneOf1) D
 func DashboardCardPatchOneOf2AsDashboardCardPatch(v *DashboardCardPatchOneOf2) DashboardCardPatch {
 	return DashboardCardPatch{
 		DashboardCardPatchOneOf2: v,
+	}
+}
+
+// DashboardCardPatchOneOf3AsDashboardCardPatch is a convenience function that returns DashboardCardPatchOneOf3 wrapped in DashboardCardPatch
+func DashboardCardPatchOneOf3AsDashboardCardPatch(v *DashboardCardPatchOneOf3) DashboardCardPatch {
+	return DashboardCardPatch{
+		DashboardCardPatchOneOf3: v,
 	}
 }
 
@@ -101,11 +109,29 @@ func (dst *DashboardCardPatch) UnmarshalJSON(data []byte) error {
 		dst.DashboardCardPatchOneOf2 = nil
 	}
 
+	// try to unmarshal data into DashboardCardPatchOneOf3
+	err = newStrictDecoder(data).Decode(&dst.DashboardCardPatchOneOf3)
+	if err == nil {
+		jsonDashboardCardPatchOneOf3, _ := json.Marshal(dst.DashboardCardPatchOneOf3)
+		if string(jsonDashboardCardPatchOneOf3) == "{}" { // empty struct
+			dst.DashboardCardPatchOneOf3 = nil
+		} else {
+			if err = validator.Validate(dst.DashboardCardPatchOneOf3); err != nil {
+				dst.DashboardCardPatchOneOf3 = nil
+			} else {
+				match++
+			}
+		}
+	} else {
+		dst.DashboardCardPatchOneOf3 = nil
+	}
+
 	if match > 1 { // more than 1 match
 		// reset to nil
 		dst.DashboardCardPatchOneOf = nil
 		dst.DashboardCardPatchOneOf1 = nil
 		dst.DashboardCardPatchOneOf2 = nil
+		dst.DashboardCardPatchOneOf3 = nil
 
 		return fmt.Errorf("data matches more than one schema in oneOf(DashboardCardPatch)")
 	} else if match == 1 {
@@ -129,6 +155,10 @@ func (src DashboardCardPatch) MarshalJSON() ([]byte, error) {
 		return json.Marshal(&src.DashboardCardPatchOneOf2)
 	}
 
+	if src.DashboardCardPatchOneOf3 != nil {
+		return json.Marshal(&src.DashboardCardPatchOneOf3)
+	}
+
 	return nil, nil // no data in oneOf schemas
 }
 
@@ -149,6 +179,10 @@ func (obj *DashboardCardPatch) GetActualInstance() (interface{}) {
 		return obj.DashboardCardPatchOneOf2
 	}
 
+	if obj.DashboardCardPatchOneOf3 != nil {
+		return obj.DashboardCardPatchOneOf3
+	}
+
 	// all schemas are nil
 	return nil
 }
@@ -165,6 +199,10 @@ func (obj DashboardCardPatch) GetActualInstanceValue() (interface{}) {
 
 	if obj.DashboardCardPatchOneOf2 != nil {
 		return *obj.DashboardCardPatchOneOf2
+	}
+
+	if obj.DashboardCardPatchOneOf3 != nil {
+		return *obj.DashboardCardPatchOneOf3
 	}
 
 	// all schemas are nil

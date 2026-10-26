@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Description** | **string** |  | 
+**Id** | Pointer to **string** | The card&#39;s stable id, unique within its dashboard. Assigned by the server when omitted; on update the card keeps the id it already has. | [optional] 
 **Items** | Pointer to [**[]DashboardCardItemRequest**](DashboardCardItemRequest.md) | The card&#39;s visualisations and controls, in display order. Each item sets exactly one of &#x60;visualisation&#x60; or &#x60;control&#x60;. A card cannot have two controls bound to the same variable, and a row-break card has no items. | [optional] 
 **Kind** | Pointer to **int32** | &#x60;0&#x60; is a card of items and &#x60;1&#x60; a row break. | [optional] 
 **Name** | **string** |  | 
@@ -48,6 +49,31 @@ and a boolean to check if the value has been set.
 
 SetDescription sets Description field to given value.
 
+
+### GetId
+
+`func (o *DashboardCardRequest) GetId() string`
+
+GetId returns the Id field if non-nil, zero value otherwise.
+
+### GetIdOk
+
+`func (o *DashboardCardRequest) GetIdOk() (*string, bool)`
+
+GetIdOk returns a tuple with the Id field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetId
+
+`func (o *DashboardCardRequest) SetId(v string)`
+
+SetId sets Id field to given value.
+
+### HasId
+
+`func (o *DashboardCardRequest) HasId() bool`
+
+HasId returns a boolean if a field has been set.
 
 ### GetItems
 

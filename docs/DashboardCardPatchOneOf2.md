@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**UpdateCard** | [**DashboardCardUpdate**](DashboardCardUpdate.md) |  | 
+**ReorderCard** | [**DashboardCardMove**](DashboardCardMove.md) |  | 
 
 ## Methods
 
 ### NewDashboardCardPatchOneOf2
 
-`func NewDashboardCardPatchOneOf2(updateCard DashboardCardUpdate, ) *DashboardCardPatchOneOf2`
+`func NewDashboardCardPatchOneOf2(reorderCard DashboardCardMove, ) *DashboardCardPatchOneOf2`
 
 NewDashboardCardPatchOneOf2 instantiates a new DashboardCardPatchOneOf2 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewDashboardCardPatchOneOf2WithDefaults instantiates a new DashboardCardPatchOne
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetUpdateCard
+### GetReorderCard
 
-`func (o *DashboardCardPatchOneOf2) GetUpdateCard() DashboardCardUpdate`
+`func (o *DashboardCardPatchOneOf2) GetReorderCard() DashboardCardMove`
 
-GetUpdateCard returns the UpdateCard field if non-nil, zero value otherwise.
+GetReorderCard returns the ReorderCard field if non-nil, zero value otherwise.
 
-### GetUpdateCardOk
+### GetReorderCardOk
 
-`func (o *DashboardCardPatchOneOf2) GetUpdateCardOk() (*DashboardCardUpdate, bool)`
+`func (o *DashboardCardPatchOneOf2) GetReorderCardOk() (*DashboardCardMove, bool)`
 
-GetUpdateCardOk returns a tuple with the UpdateCard field if it's non-nil, zero value otherwise
+GetReorderCardOk returns a tuple with the ReorderCard field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetUpdateCard
+### SetReorderCard
 
-`func (o *DashboardCardPatchOneOf2) SetUpdateCard(v DashboardCardUpdate)`
+`func (o *DashboardCardPatchOneOf2) SetReorderCard(v DashboardCardMove)`
 
-SetUpdateCard sets UpdateCard field to given value.
+SetReorderCard sets ReorderCard field to given value.
 
 
 

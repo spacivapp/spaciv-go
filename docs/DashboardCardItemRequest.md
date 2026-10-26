@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**Id** | Pointer to **string** | The item&#39;s stable id, unique within its card. Assigned by the server when omitted. | [optional] 
 **Control** | [**DashboardControl**](DashboardControl.md) |  | 
 **Visualisation** | [**DashboardVisualisationCalcRequest**](DashboardVisualisationCalcRequest.md) |  | 
 
@@ -25,6 +26,31 @@ will change when the set of required properties is changed
 NewDashboardCardItemRequestWithDefaults instantiates a new DashboardCardItemRequest object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetId
+
+`func (o *DashboardCardItemRequest) GetId() string`
+
+GetId returns the Id field if non-nil, zero value otherwise.
+
+### GetIdOk
+
+`func (o *DashboardCardItemRequest) GetIdOk() (*string, bool)`
+
+GetIdOk returns a tuple with the Id field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetId
+
+`func (o *DashboardCardItemRequest) SetId(v string)`
+
+SetId sets Id field to given value.
+
+### HasId
+
+`func (o *DashboardCardItemRequest) HasId() bool`
+
+HasId returns a boolean if a field has been set.
 
 ### GetControl
 

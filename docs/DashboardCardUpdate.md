@@ -5,13 +5,14 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Card** | [**DashboardCardRequest**](DashboardCardRequest.md) |  | 
-**Index** | **int32** |  | 
+**CardId** | Pointer to **string** |  | [optional] 
+**Index** | Pointer to **int32** |  | [optional] 
 
 ## Methods
 
 ### NewDashboardCardUpdate
 
-`func NewDashboardCardUpdate(card DashboardCardRequest, index int32, ) *DashboardCardUpdate`
+`func NewDashboardCardUpdate(card DashboardCardRequest, ) *DashboardCardUpdate`
 
 NewDashboardCardUpdate instantiates a new DashboardCardUpdate object
 This constructor will assign default values to properties that have it defined,
@@ -46,6 +47,31 @@ and a boolean to check if the value has been set.
 SetCard sets Card field to given value.
 
 
+### GetCardId
+
+`func (o *DashboardCardUpdate) GetCardId() string`
+
+GetCardId returns the CardId field if non-nil, zero value otherwise.
+
+### GetCardIdOk
+
+`func (o *DashboardCardUpdate) GetCardIdOk() (*string, bool)`
+
+GetCardIdOk returns a tuple with the CardId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCardId
+
+`func (o *DashboardCardUpdate) SetCardId(v string)`
+
+SetCardId sets CardId field to given value.
+
+### HasCardId
+
+`func (o *DashboardCardUpdate) HasCardId() bool`
+
+HasCardId returns a boolean if a field has been set.
+
 ### GetIndex
 
 `func (o *DashboardCardUpdate) GetIndex() int32`
@@ -65,6 +91,11 @@ and a boolean to check if the value has been set.
 
 SetIndex sets Index field to given value.
 
+### HasIndex
+
+`func (o *DashboardCardUpdate) HasIndex() bool`
+
+HasIndex returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

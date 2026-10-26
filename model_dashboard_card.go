@@ -23,6 +23,8 @@ var _ MappedNullable = &DashboardCard{}
 // DashboardCard struct for DashboardCard
 type DashboardCard struct {
 	Description string `json:"description"`
+	// The card's stable id, unique within its dashboard. Assigned by the server when omitted; on update the card keeps the id it already has.
+	Id *string `json:"id,omitempty"`
 	// The card's visualisations and controls, in display order. Each item sets exactly one of `visualisation` or `control`. A card cannot have two controls bound to the same variable, and a row-break card has no items.
 	Items []DashboardCardItem `json:"items,omitempty"`
 	// `0` is a card of items and `1` a row break.
@@ -75,6 +77,38 @@ func (o *DashboardCard) GetDescriptionOk() (*string, bool) {
 // SetDescription sets field value
 func (o *DashboardCard) SetDescription(v string) {
 	o.Description = v
+}
+
+// GetId returns the Id field value if set, zero value otherwise.
+func (o *DashboardCard) GetId() string {
+	if o == nil || IsNil(o.Id) {
+		var ret string
+		return ret
+	}
+	return *o.Id
+}
+
+// GetIdOk returns a tuple with the Id field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DashboardCard) GetIdOk() (*string, bool) {
+	if o == nil || IsNil(o.Id) {
+		return nil, false
+	}
+	return o.Id, true
+}
+
+// HasId returns a boolean if a field has been set.
+func (o *DashboardCard) HasId() bool {
+	if o != nil && !IsNil(o.Id) {
+		return true
+	}
+
+	return false
+}
+
+// SetId gets a reference to the given string and assigns it to the Id field.
+func (o *DashboardCard) SetId(v string) {
+	o.Id = &v
 }
 
 // GetItems returns the Items field value if set, zero value otherwise.
@@ -200,6 +234,9 @@ func (o DashboardCard) MarshalJSON() ([]byte, error) {
 func (o DashboardCard) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["description"] = o.Description
+	if !IsNil(o.Id) {
+		toSerialize["id"] = o.Id
+	}
 	if !IsNil(o.Items) {
 		toSerialize["items"] = o.Items
 	}

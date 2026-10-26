@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ReorderCard** | [**DashboardCardMove**](DashboardCardMove.md) |  | 
+**MoveCardAfter** | [**DashboardCardMoveAfter**](DashboardCardMoveAfter.md) |  | 
 
 ## Methods
 
 ### NewDashboardCardPatchOneOf1
 
-`func NewDashboardCardPatchOneOf1(reorderCard DashboardCardMove, ) *DashboardCardPatchOneOf1`
+`func NewDashboardCardPatchOneOf1(moveCardAfter DashboardCardMoveAfter, ) *DashboardCardPatchOneOf1`
 
 NewDashboardCardPatchOneOf1 instantiates a new DashboardCardPatchOneOf1 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewDashboardCardPatchOneOf1WithDefaults instantiates a new DashboardCardPatchOne
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetReorderCard
+### GetMoveCardAfter
 
-`func (o *DashboardCardPatchOneOf1) GetReorderCard() DashboardCardMove`
+`func (o *DashboardCardPatchOneOf1) GetMoveCardAfter() DashboardCardMoveAfter`
 
-GetReorderCard returns the ReorderCard field if non-nil, zero value otherwise.
+GetMoveCardAfter returns the MoveCardAfter field if non-nil, zero value otherwise.
 
-### GetReorderCardOk
+### GetMoveCardAfterOk
 
-`func (o *DashboardCardPatchOneOf1) GetReorderCardOk() (*DashboardCardMove, bool)`
+`func (o *DashboardCardPatchOneOf1) GetMoveCardAfterOk() (*DashboardCardMoveAfter, bool)`
 
-GetReorderCardOk returns a tuple with the ReorderCard field if it's non-nil, zero value otherwise
+GetMoveCardAfterOk returns a tuple with the MoveCardAfter field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetReorderCard
+### SetMoveCardAfter
 
-`func (o *DashboardCardPatchOneOf1) SetReorderCard(v DashboardCardMove)`
+`func (o *DashboardCardPatchOneOf1) SetMoveCardAfter(v DashboardCardMoveAfter)`
 
-SetReorderCard sets ReorderCard field to given value.
+SetMoveCardAfter sets MoveCardAfter field to given value.
 
 
 

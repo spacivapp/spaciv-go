@@ -34,7 +34,7 @@ Create Create a dashboard
 
 Creates a new dashboard for the current project and returns its UUID.
 
-If a dashboard with the supplied `id` already exists, the call is idempotent: it ensures the dashboard is indexed under the project and returns the existing ID without overwriting its content. The `account` ID is reserved for the account-level dashboard; project-scoped requests supplying it are rejected with 400. Returns `400` when a row-break card has items, a control is missing a variable or duplicates another control on the same card, or a list entry's `hexCode` is not a colour such as `#1f77b4` or `#abc`. Returns `409` if it references an account variable that does not exist, including one deleted while the change is being saved. Returns `400` if a single save adds references to too many account variables to save atomically. Requires the *Edit org model* permission, and the *Variable controls* permission when any card has controls.
+If a dashboard with the supplied `id` already exists, the call is idempotent: it ensures the dashboard is indexed under the project and returns the existing ID without overwriting its content. The `account` ID is reserved for the account-level dashboard; project-scoped requests supplying it are rejected with 400. Returns `400` when two cards share an id, two items on a card share an id, an id is longer than 64 characters, a row-break card has items, a control is missing a variable or duplicates another control on the same card, or a list entry's `hexCode` is not a colour such as `#1f77b4` or `#abc`. Returns `409` if it references an account variable that does not exist, including one deleted while the change is being saved. Returns `400` if a single save adds references to too many account variables to save atomically. Requires the *Edit org model* permission, and the *Variable controls* permission when any card has controls.
 */
 func (a *DashboardsService) Create(ctx context.Context, dashboardPost DashboardPost) (string, error) {
 	r := requestForDashboardsCreate{
@@ -142,7 +142,11 @@ type requestForDashboardsCreateCards struct {
 /*
 CreateCards Add a card to a dashboard
 
-Inserts a new card at the given zero-based `index` position in the dashboard's card list. Cards already at that position and beyond are shifted down. If `index` is out of range it is clamped to the nearest valid position. Returns `400` when a row-break card has items, a control is missing a variable or duplicates another control on the same card, or a list entry's `hexCode` is not a colour such as `#1f77b4` or `#abc`. Returns `404` if the dashboard does not exist. Returns `409` if it references an account variable that does not exist, including one deleted while the change is being saved. Returns `400` if a single save adds references to too many account variables to save atomically. Requires the *Edit org model* permission, and the *Variable controls* permission when the card has controls.
+Inserts a new card just after the card `afterCardId`, or at the start when `afterCardId` is empty. Cards already at that position and beyond are shifted down. Set `card.id` to choose the new card's id; otherwise one is assigned. Returns `409` if `afterCardId` is not on the dashboard or a card with `card.id` already is.
+
+Deprecated, and removed in a later release: without `afterCardId`, the card is inserted at the zero-based `index`, clamped to the nearest valid position.
+
+Returns `400` when neither `afterCardId` nor `index` is given, a card or item id is longer than 64 characters or an item id is used twice on the card, a row-break card has items, a control is missing a variable or duplicates another control on the same card, or a list entry's `hexCode` is not a colour such as `#1f77b4` or `#abc`. Returns `404` if the dashboard does not exist. Returns `409` if it references an account variable that does not exist, including one deleted while the change is being saved. Returns `400` if a single save adds references to too many account variables to save atomically. Requires the *Edit org model* permission, and the *Variable controls* permission when the card has controls.
 */
 func (a *DashboardsService) CreateCards(ctx context.Context, id string, dashboardCardCreate DashboardCardCreate) error {
 	r := requestForDashboardsCreateCards{
@@ -338,7 +342,11 @@ type requestForDashboardsDeleteCards struct {
 /*
 DeleteCards Remove a card from a dashboard
 
-Removes the card at the given zero-based `index` from the dashboard's card list. Cards that follow it are shifted up. Out-of-range indices are silently ignored. Returns `404` if the dashboard does not exist. Requires the *Edit org model* permission.
+Removes the card `cardId` from the dashboard's card list. Cards that follow it are shifted up. Deleting a card that is no longer on the dashboard succeeds. Returns `400` if neither `cardId` nor `index` is given, and `404` if the dashboard does not exist.
+
+Deprecated, and removed in a later release: without `cardId`, removes the card at the zero-based `index`, silently ignoring an out-of-range index.
+
+Requires the *Edit org model* permission.
 */
 func (a *DashboardsService) DeleteCards(ctx context.Context, id string, dashboardCardDelete DashboardCardDelete) error {
 	r := requestForDashboardsDeleteCards{
@@ -857,7 +865,11 @@ type requestForDashboardsUpdateCards struct {
 /*
 UpdateCards Update a dashboard card
 
-Applies a single action to a card on a dashboard. Use `moveCard` to swap two cards by their zero-based indices, `reorderCard` to move the card at `oldIndex` to `newIndex` (zero-based) while shifting the cards in between, or `updateCard` to replace the content of a card at a given index, including the order of its visualisation and control items. Out-of-range indices are silently ignored. Returns `400` when a row-break card has items, a control is missing a variable or duplicates another control on the same card, or a list entry's `hexCode` is not a colour such as `#1f77b4` or `#abc`. Returns `404` if the dashboard does not exist. Returns `409` if it references an account variable that does not exist, including one deleted while the change is being saved. Returns `400` if a single save adds references to too many account variables to save atomically. Requires the *Edit org model* permission, and the *Variable controls* permission when the update adds, removes, reorders or changes a card's controls.
+Applies a single action to a card on a dashboard. Use `moveCardAfter` to move the card `cardId` to just after the card `afterCardId`, or to the start when `afterCardId` is empty, or `updateCard` to replace the content of the card `cardId`, including the order of its visualisation and control items. Returns `404` if `cardId` is not on the dashboard and `409` if `afterCardId` is not.
+
+Deprecated, and removed in a later release: `moveCard` swaps two cards by their zero-based indices, `reorderCard` moves the card at `oldIndex` to `newIndex` while shifting the cards in between, and `updateCard` without a `cardId` addresses the card at `index`. Out-of-range indices are silently ignored.
+
+Returns `400` when `updateCard` has neither `cardId` nor `index`, a card would be moved after itself, a card or item id is longer than 64 characters, an item id is used twice on the card, a row-break card has items, a control is missing a variable or duplicates another control on the same card, or a list entry's `hexCode` is not a colour such as `#1f77b4` or `#abc`. Returns `404` if the dashboard does not exist. Returns `409` if it references an account variable that does not exist, including one deleted while the change is being saved. Returns `400` if a single save adds references to too many account variables to save atomically. Requires the *Edit org model* permission, and the *Variable controls* permission when the update adds, removes, reorders or changes a card's controls.
 */
 func (a *DashboardsService) UpdateCards(ctx context.Context, id string, dashboardCardPatch DashboardCardPatch) error {
 	r := requestForDashboardsUpdateCards{
