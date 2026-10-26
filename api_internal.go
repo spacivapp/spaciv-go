@@ -348,7 +348,7 @@ CreateAdminReconcileFileStorage Reconcile account file storage
 
 Compares the account file storage bucket with the file records, in both directions, and reports every difference. Requires the *Project admin controls* and *Sys admin* permissions.
 
-An **orphan** is a stored object with no record. With `apply`, an orphan older than 24 hours is deleted after a system audit entry is written to its account's file audit trail; younger orphans may be uploads still in flight and are always kept. Orphans under an account that no longer exists, and keys that are not `account/{accountId}/{fileId}`, are reported and never deleted. Deleting an orphan never changes an account's storage usage, which counts records only.
+An **orphan** is a stored object that no record names: one with no record, or bytes a replacement of a file's content superseded or never committed. With `apply`, an orphan older than 24 hours is deleted after a system audit entry is written to its account's file audit trail; younger orphans may be uploads still in flight and are always kept. Orphans under an account that no longer exists, and keys that are neither `account/{accountId}/{fileId}` nor `account/{accountId}/{fileId}.content/{uuid}`, are reported and never deleted. Deleting an orphan never changes an account's storage usage, which counts records only.
 
 A **dangling record** is a record whose object is missing. It is reported, and logged as an error, but never changed: it still counts towards the account's usage until it is deleted through the file delete operation.
 

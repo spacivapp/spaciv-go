@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **Account** | **int64** |  | 
 **Action** | **string** |  | 
 **FileId** | **string** |  | 
+**Key** | **string** |  | 
 **LastModified** | **time.Time** |  | 
 **Size** | **int64** |  | 
 
@@ -14,7 +15,7 @@ Name | Type | Description | Notes
 
 ### NewOrphan
 
-`func NewOrphan(account int64, action string, fileId string, lastModified time.Time, size int64, ) *Orphan`
+`func NewOrphan(account int64, action string, fileId string, key string, lastModified time.Time, size int64, ) *Orphan`
 
 NewOrphan instantiates a new Orphan object
 This constructor will assign default values to properties that have it defined,
@@ -87,6 +88,26 @@ and a boolean to check if the value has been set.
 `func (o *Orphan) SetFileId(v string)`
 
 SetFileId sets FileId field to given value.
+
+
+### GetKey
+
+`func (o *Orphan) GetKey() string`
+
+GetKey returns the Key field if non-nil, zero value otherwise.
+
+### GetKeyOk
+
+`func (o *Orphan) GetKeyOk() (*string, bool)`
+
+GetKeyOk returns a tuple with the Key field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetKey
+
+`func (o *Orphan) SetKey(v string)`
+
+SetKey sets Key field to given value.
 
 
 ### GetLastModified

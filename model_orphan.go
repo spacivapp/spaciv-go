@@ -26,6 +26,7 @@ type Orphan struct {
 	Account int64 `json:"account"`
 	Action string `json:"action"`
 	FileId string `json:"fileId"`
+	Key string `json:"key"`
 	LastModified time.Time `json:"lastModified"`
 	Size int64 `json:"size"`
 }
@@ -36,11 +37,12 @@ type _Orphan Orphan
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewOrphan(account int64, action string, fileId string, lastModified time.Time, size int64) *Orphan {
+func NewOrphan(account int64, action string, fileId string, key string, lastModified time.Time, size int64) *Orphan {
 	this := Orphan{}
 	this.Account = account
 	this.Action = action
 	this.FileId = fileId
+	this.Key = key
 	this.LastModified = lastModified
 	this.Size = size
 	return &this
@@ -126,6 +128,30 @@ func (o *Orphan) SetFileId(v string) {
 	o.FileId = v
 }
 
+// GetKey returns the Key field value
+func (o *Orphan) GetKey() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.Key
+}
+
+// GetKeyOk returns a tuple with the Key field value
+// and a boolean to check if the value has been set.
+func (o *Orphan) GetKeyOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Key, true
+}
+
+// SetKey sets field value
+func (o *Orphan) SetKey(v string) {
+	o.Key = v
+}
+
 // GetLastModified returns the LastModified field value
 func (o *Orphan) GetLastModified() time.Time {
 	if o == nil {
@@ -187,6 +213,7 @@ func (o Orphan) ToMap() (map[string]interface{}, error) {
 	toSerialize["account"] = o.Account
 	toSerialize["action"] = o.Action
 	toSerialize["fileId"] = o.FileId
+	toSerialize["key"] = o.Key
 	toSerialize["lastModified"] = o.LastModified
 	toSerialize["size"] = o.Size
 	return toSerialize, nil
@@ -200,6 +227,7 @@ func (o *Orphan) UnmarshalJSON(data []byte) (err error) {
 		"account",
 		"action",
 		"fileId",
+		"key",
 		"lastModified",
 		"size",
 	}
