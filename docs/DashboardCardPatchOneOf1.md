@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**MoveCardAfter** | [**DashboardCardMoveAfter**](DashboardCardMoveAfter.md) |  | 
+**UpdateCard** | [**DashboardCardUpdate**](DashboardCardUpdate.md) |  | 
 
 ## Methods
 
 ### NewDashboardCardPatchOneOf1
 
-`func NewDashboardCardPatchOneOf1(moveCardAfter DashboardCardMoveAfter, ) *DashboardCardPatchOneOf1`
+`func NewDashboardCardPatchOneOf1(updateCard DashboardCardUpdate, ) *DashboardCardPatchOneOf1`
 
 NewDashboardCardPatchOneOf1 instantiates a new DashboardCardPatchOneOf1 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewDashboardCardPatchOneOf1WithDefaults instantiates a new DashboardCardPatchOne
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetMoveCardAfter
+### GetUpdateCard
 
-`func (o *DashboardCardPatchOneOf1) GetMoveCardAfter() DashboardCardMoveAfter`
+`func (o *DashboardCardPatchOneOf1) GetUpdateCard() DashboardCardUpdate`
 
-GetMoveCardAfter returns the MoveCardAfter field if non-nil, zero value otherwise.
+GetUpdateCard returns the UpdateCard field if non-nil, zero value otherwise.
 
-### GetMoveCardAfterOk
+### GetUpdateCardOk
 
-`func (o *DashboardCardPatchOneOf1) GetMoveCardAfterOk() (*DashboardCardMoveAfter, bool)`
+`func (o *DashboardCardPatchOneOf1) GetUpdateCardOk() (*DashboardCardUpdate, bool)`
 
-GetMoveCardAfterOk returns a tuple with the MoveCardAfter field if it's non-nil, zero value otherwise
+GetUpdateCardOk returns a tuple with the UpdateCard field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetMoveCardAfter
+### SetUpdateCard
 
-`func (o *DashboardCardPatchOneOf1) SetMoveCardAfter(v DashboardCardMoveAfter)`
+`func (o *DashboardCardPatchOneOf1) SetUpdateCard(v DashboardCardUpdate)`
 
-SetMoveCardAfter sets MoveCardAfter field to given value.
+SetUpdateCard sets UpdateCard field to given value.
 
 
 

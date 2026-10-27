@@ -186,13 +186,10 @@ docs/DashboardCardItemOneOf.md
 docs/DashboardCardItemOneOf1.md
 docs/DashboardCardItemRequest.md
 docs/DashboardCardItemRequestOneOf.md
-docs/DashboardCardMove.md
 docs/DashboardCardMoveAfter.md
 docs/DashboardCardPatch.md
 docs/DashboardCardPatchOneOf.md
 docs/DashboardCardPatchOneOf1.md
-docs/DashboardCardPatchOneOf2.md
-docs/DashboardCardPatchOneOf3.md
 docs/DashboardCardRequest.md
 docs/DashboardCardUpdate.md
 docs/DashboardChangelogBody.md
@@ -635,13 +632,10 @@ model_dashboard_card_item_one_of.go
 model_dashboard_card_item_one_of_1.go
 model_dashboard_card_item_request.go
 model_dashboard_card_item_request_one_of.go
-model_dashboard_card_move.go
 model_dashboard_card_move_after.go
 model_dashboard_card_patch.go
 model_dashboard_card_patch_one_of.go
 model_dashboard_card_patch_one_of_1.go
-model_dashboard_card_patch_one_of_2.go
-model_dashboard_card_patch_one_of_3.go
 model_dashboard_card_request.go
 model_dashboard_card_update.go
 model_dashboard_changelog_body.go

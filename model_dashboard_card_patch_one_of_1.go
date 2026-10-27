@@ -22,7 +22,7 @@ var _ MappedNullable = &DashboardCardPatchOneOf1{}
 
 // DashboardCardPatchOneOf1 struct for DashboardCardPatchOneOf1
 type DashboardCardPatchOneOf1 struct {
-	MoveCardAfter DashboardCardMoveAfter `json:"moveCardAfter"`
+	UpdateCard DashboardCardUpdate `json:"updateCard"`
 }
 
 type _DashboardCardPatchOneOf1 DashboardCardPatchOneOf1
@@ -31,9 +31,9 @@ type _DashboardCardPatchOneOf1 DashboardCardPatchOneOf1
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDashboardCardPatchOneOf1(moveCardAfter DashboardCardMoveAfter) *DashboardCardPatchOneOf1 {
+func NewDashboardCardPatchOneOf1(updateCard DashboardCardUpdate) *DashboardCardPatchOneOf1 {
 	this := DashboardCardPatchOneOf1{}
-	this.MoveCardAfter = moveCardAfter
+	this.UpdateCard = updateCard
 	return &this
 }
 
@@ -45,28 +45,28 @@ func NewDashboardCardPatchOneOf1WithDefaults() *DashboardCardPatchOneOf1 {
 	return &this
 }
 
-// GetMoveCardAfter returns the MoveCardAfter field value
-func (o *DashboardCardPatchOneOf1) GetMoveCardAfter() DashboardCardMoveAfter {
+// GetUpdateCard returns the UpdateCard field value
+func (o *DashboardCardPatchOneOf1) GetUpdateCard() DashboardCardUpdate {
 	if o == nil {
-		var ret DashboardCardMoveAfter
+		var ret DashboardCardUpdate
 		return ret
 	}
 
-	return o.MoveCardAfter
+	return o.UpdateCard
 }
 
-// GetMoveCardAfterOk returns a tuple with the MoveCardAfter field value
+// GetUpdateCardOk returns a tuple with the UpdateCard field value
 // and a boolean to check if the value has been set.
-func (o *DashboardCardPatchOneOf1) GetMoveCardAfterOk() (*DashboardCardMoveAfter, bool) {
+func (o *DashboardCardPatchOneOf1) GetUpdateCardOk() (*DashboardCardUpdate, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.MoveCardAfter, true
+	return &o.UpdateCard, true
 }
 
-// SetMoveCardAfter sets field value
-func (o *DashboardCardPatchOneOf1) SetMoveCardAfter(v DashboardCardMoveAfter) {
-	o.MoveCardAfter = v
+// SetUpdateCard sets field value
+func (o *DashboardCardPatchOneOf1) SetUpdateCard(v DashboardCardUpdate) {
+	o.UpdateCard = v
 }
 
 func (o DashboardCardPatchOneOf1) MarshalJSON() ([]byte, error) {
@@ -79,7 +79,7 @@ func (o DashboardCardPatchOneOf1) MarshalJSON() ([]byte, error) {
 
 func (o DashboardCardPatchOneOf1) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["moveCardAfter"] = o.MoveCardAfter
+	toSerialize["updateCard"] = o.UpdateCard
 	return toSerialize, nil
 }
 
@@ -88,7 +88,7 @@ func (o *DashboardCardPatchOneOf1) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"moveCardAfter",
+		"updateCard",
 	}
 
 	allProperties := make(map[string]interface{})

@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**MoveCard** | [**DashboardCardMove**](DashboardCardMove.md) |  | 
+**MoveCardAfter** | [**DashboardCardMoveAfter**](DashboardCardMoveAfter.md) |  | 
 
 ## Methods
 
 ### NewDashboardCardPatchOneOf
 
-`func NewDashboardCardPatchOneOf(moveCard DashboardCardMove, ) *DashboardCardPatchOneOf`
+`func NewDashboardCardPatchOneOf(moveCardAfter DashboardCardMoveAfter, ) *DashboardCardPatchOneOf`
 
 NewDashboardCardPatchOneOf instantiates a new DashboardCardPatchOneOf object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewDashboardCardPatchOneOfWithDefaults instantiates a new DashboardCardPatchOneO
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetMoveCard
+### GetMoveCardAfter
 
-`func (o *DashboardCardPatchOneOf) GetMoveCard() DashboardCardMove`
+`func (o *DashboardCardPatchOneOf) GetMoveCardAfter() DashboardCardMoveAfter`
 
-GetMoveCard returns the MoveCard field if non-nil, zero value otherwise.
+GetMoveCardAfter returns the MoveCardAfter field if non-nil, zero value otherwise.
 
-### GetMoveCardOk
+### GetMoveCardAfterOk
 
-`func (o *DashboardCardPatchOneOf) GetMoveCardOk() (*DashboardCardMove, bool)`
+`func (o *DashboardCardPatchOneOf) GetMoveCardAfterOk() (*DashboardCardMoveAfter, bool)`
 
-GetMoveCardOk returns a tuple with the MoveCard field if it's non-nil, zero value otherwise
+GetMoveCardAfterOk returns a tuple with the MoveCardAfter field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetMoveCard
+### SetMoveCardAfter
 
-`func (o *DashboardCardPatchOneOf) SetMoveCard(v DashboardCardMove)`
+`func (o *DashboardCardPatchOneOf) SetMoveCardAfter(v DashboardCardMoveAfter)`
 
-SetMoveCard sets MoveCard field to given value.
+SetMoveCardAfter sets MoveCardAfter field to given value.
 
 
 

@@ -4,16 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**MoveCard** | [**DashboardCardMove**](DashboardCardMove.md) |  | 
 **MoveCardAfter** | [**DashboardCardMoveAfter**](DashboardCardMoveAfter.md) |  | 
-**ReorderCard** | [**DashboardCardMove**](DashboardCardMove.md) |  | 
 **UpdateCard** | [**DashboardCardUpdate**](DashboardCardUpdate.md) |  | 
 
 ## Methods
 
 ### NewDashboardCardPatch
 
-`func NewDashboardCardPatch(moveCard DashboardCardMove, moveCardAfter DashboardCardMoveAfter, reorderCard DashboardCardMove, updateCard DashboardCardUpdate, ) *DashboardCardPatch`
+`func NewDashboardCardPatch(moveCardAfter DashboardCardMoveAfter, updateCard DashboardCardUpdate, ) *DashboardCardPatch`
 
 NewDashboardCardPatch instantiates a new DashboardCardPatch object
 This constructor will assign default values to properties that have it defined,
@@ -27,26 +25,6 @@ will change when the set of required properties is changed
 NewDashboardCardPatchWithDefaults instantiates a new DashboardCardPatch object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
-
-### GetMoveCard
-
-`func (o *DashboardCardPatch) GetMoveCard() DashboardCardMove`
-
-GetMoveCard returns the MoveCard field if non-nil, zero value otherwise.
-
-### GetMoveCardOk
-
-`func (o *DashboardCardPatch) GetMoveCardOk() (*DashboardCardMove, bool)`
-
-GetMoveCardOk returns a tuple with the MoveCard field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetMoveCard
-
-`func (o *DashboardCardPatch) SetMoveCard(v DashboardCardMove)`
-
-SetMoveCard sets MoveCard field to given value.
-
 
 ### GetMoveCardAfter
 
@@ -66,26 +44,6 @@ and a boolean to check if the value has been set.
 `func (o *DashboardCardPatch) SetMoveCardAfter(v DashboardCardMoveAfter)`
 
 SetMoveCardAfter sets MoveCardAfter field to given value.
-
-
-### GetReorderCard
-
-`func (o *DashboardCardPatch) GetReorderCard() DashboardCardMove`
-
-GetReorderCard returns the ReorderCard field if non-nil, zero value otherwise.
-
-### GetReorderCardOk
-
-`func (o *DashboardCardPatch) GetReorderCardOk() (*DashboardCardMove, bool)`
-
-GetReorderCardOk returns a tuple with the ReorderCard field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetReorderCard
-
-`func (o *DashboardCardPatch) SetReorderCard(v DashboardCardMove)`
-
-SetReorderCard sets ReorderCard field to given value.
 
 
 ### GetUpdateCard
