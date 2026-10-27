@@ -2051,11 +2051,11 @@ paths:
         \ A `variableOverrides` value outside the variable's range, step or `options`\
         \ is rejected with `400` and `kind` `variable_type_mismatch`; `options` sent\
         \ inside an override are ignored. A result shows at most 500 objects or segments\
-        \ and 5000 tree nodes; a cut result has `truncated` set and `truncations`\
-        \ listing each thing that was cut: `1` objects (narrow the filters), `2` segments\
-        \ (segment by a node further down the property, or by a smaller group), `3`\
-        \ tree nodes (start the tree from a lower node). Requires the *View ideal\
-        \ space* permission."
+        \ (2000 segments of a floorplan) and 5000 tree nodes; a cut result has `truncated`\
+        \ set and `truncations` listing each thing that was cut: `1` objects (narrow\
+        \ the filters), `2` segments (segment by a node further down the property,\
+        \ or by a smaller group), `3` tree nodes (start the tree from a lower node).\
+        \ Requires the *View ideal space* permission."
       operationId: analysis_create-analyse
       parameters: []
       requestBody:
