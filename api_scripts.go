@@ -455,6 +455,116 @@ func (a *ScriptsService) executeCreateSchedulePreview(r requestForScriptsCreateS
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type requestForScriptsCreateScratchpadBuilds struct {
+	ctx context.Context
+	ApiService *ScriptsService
+	scratchpadBuildPostReqBody *ScratchpadBuildPostReqBody
+}
+
+/*
+CreateScratchpadBuilds Build scratchpad code with its dependencies
+
+Builds the files with their dependency manifest, as a saved script is built, so that scratchpad runs can use the dependencies. The build is keyed by the files, the manifest and the sandbox image, so the same files are built once and an existing build is returned at once as `ready`. The build has its own time limit and does not count towards a run's timeout. It waits up to `waitSeconds`; a build still in progress is returned as `pending`, and can be read with `GET /v1/scripts/scratchpad/builds/{buildId}`. A failed build returns `failed` with the build's `output`. Pass the returned `id` as `buildId` to `POST /v1/scripts/scratchpad/runs`. Builds are shared by the account and kept as long as saved scripts' builds, 30 days. A build counts towards the account's concurrent builds, and returns `failed` when it is over them. Returns `422` when the language or files are not accepted, and `403` for a script's API key or a scratchpad run's own token. Requires the *AI assistant* permission.
+*/
+func (a *ScriptsService) CreateScratchpadBuilds(ctx context.Context, scratchpadBuildPostReqBody ScratchpadBuildPostReqBody) (*ScratchpadBuild, error) {
+	r := requestForScriptsCreateScratchpadBuilds{
+		ApiService: a,
+		ctx: ctx,
+		scratchpadBuildPostReqBody: &scratchpadBuildPostReqBody,
+	}
+	result, _, err := a.executeCreateScratchpadBuilds(r)
+	return result, err
+}
+
+func (a *ScriptsService) executeCreateScratchpadBuilds(r requestForScriptsCreateScratchpadBuilds) (*ScratchpadBuild, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ScratchpadBuild
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ScriptsAPIService.CreateScratchpadBuilds")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/scripts/scratchpad/builds"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.scratchpadBuildPostReqBody == nil {
+		return localVarReturnValue, nil, reportError("scratchpadBuildPostReqBody is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.scratchpadBuildPostReqBody
+	if r.ctx != nil {
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "ScriptsAPIService.CreateScratchpadBuilds")
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type requestForScriptsCreateScratchpadRuns struct {
 	ctx context.Context
 	ApiService *ScriptsService
@@ -464,7 +574,7 @@ type requestForScriptsCreateScratchpadRuns struct {
 /*
 CreateScratchpadRuns Run scratchpad code
 
-Runs Python, Go or JavaScript code once in a sandbox without saving it as a script, for working something out from the account's data. The handler is the one an integration script implements, with `input` as `event.input` (`event.Input` in Go). Dependencies can't be installed, so dependency manifests are not accepted: Go code can import only the standard library and `spaciv/handler`, and is compiled in the sandbox, within the run's timeout. A compile error fails the run, with the compiler's output in `stderr`. The code runs with a read-only access token scoped to the caller: only the caller's view permissions, in the caller's current project if there is one, for 5 minutes. `ctx.fetch` sends it to the Spaciv API; Go has it as `hc.APIKey`. Files the handler writes to its output directory (`ctx.output_dir` in Python, `ctx.outputDir` in JavaScript, `hc.OutputDir` in Go) are returned with its stdout, stderr and return value.
+Runs Python, Go or JavaScript code once in a sandbox without saving it as a script, for working something out from the account's data. The handler is the one an integration script implements, with `input` as `event.input` (`event.Input` in Go). Without a `buildId`, dependencies can't be installed, so dependency manifests are not accepted: Go code can import only the standard library and `spaciv/handler`, and is compiled in the sandbox, within the run's timeout. A compile error fails the run, with the compiler's output in `stderr`. To use dependencies, build the files and manifest first with `POST /v1/scripts/scratchpad/builds`, then run with the build's `buildId`; a build that has expired fails the run with `409`, and needs building again. The code runs with a read-only access token scoped to the caller: only the caller's view permissions, in the caller's current project if there is one, for 5 minutes. With `writeFiles` it can also upload to the account's file storage. `ctx.fetch` sends it to the Spaciv API; Go has it as `hc.APIKey`. Files the handler writes to its output directory (`ctx.output_dir` in Python, `ctx.outputDir` in JavaScript, `hc.OutputDir` in Go) are returned with its stdout, stderr and return value.
 
 Limits: code up to 256 KiB in at most 50 files, `input` up to 1 MiB, and `timeoutSeconds` up to 120 (default 30). Of the output, stdout and stderr are kept up to 256 KiB each, the return value up to 256 KiB, and up to 20 output files totalling 2 MiB. Runs count towards the account's script credits and concurrent runs.
 
@@ -955,6 +1065,124 @@ func (a *ScriptsService) executeGetExport(r requestForScriptsGetExport) (*Script
 	}
 	if r.ctx != nil {
 		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "ScriptsAPIService.GetExport")
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type requestForScriptsGetScratchpadBuilds struct {
+	ctx context.Context
+	ApiService *ScriptsService
+	buildId string
+	waitSeconds *int32
+}
+
+type ScriptsGetScratchpadBuildsParams struct {
+	// Longest to wait for a build in progress to finish before responding. Defaults to 0, returning at once.
+	WaitSeconds *int32
+}
+
+/*
+GetScratchpadBuilds Get a scratchpad build
+
+Returns a scratchpad build of the caller's account: `pending`, `ready` or `failed`. Returns `404` when there is no such build, and `403` for a script's API key or a scratchpad run's own token. Requires the *AI assistant* permission.
+*/
+func (a *ScriptsService) GetScratchpadBuilds(ctx context.Context, buildId string, params *ScriptsGetScratchpadBuildsParams) (*ScratchpadBuild, error) {
+	r := requestForScriptsGetScratchpadBuilds{
+		ApiService: a,
+		ctx: ctx,
+		buildId: buildId,
+	}
+	if params != nil {
+		r.waitSeconds = params.WaitSeconds
+	}
+	result, _, err := a.executeGetScratchpadBuilds(r)
+	return result, err
+}
+
+func (a *ScriptsService) executeGetScratchpadBuilds(r requestForScriptsGetScratchpadBuilds) (*ScratchpadBuild, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ScratchpadBuild
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ScriptsAPIService.GetScratchpadBuilds")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/scripts/scratchpad/builds/{buildId}"
+	localVarPath = strings.Replace(localVarPath, "{"+"buildId"+"}", url.PathEscape(parameterValueToString(r.buildId, "buildId")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	if r.waitSeconds != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "waitSeconds", r.waitSeconds, "form", "")
+	}
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ctx != nil {
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "ScriptsAPIService.GetScratchpadBuilds")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {

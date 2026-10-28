@@ -22,8 +22,10 @@ var _ MappedNullable = &ScratchpadRunPostReqBody{}
 
 // ScratchpadRunPostReqBody struct for ScratchpadRunPostReqBody
 type ScratchpadRunPostReqBody struct {
-	// Source files keyed by path. Python needs script.py defining handle(event, ctx), JavaScript needs script.js exporting handle(event, ctx), and Go needs script.go in a non-main package exporting Handle(ctx context.Context, event handler.Event, hc handler.Context) (any, error) from spaciv/handler, as an integration script does, so the code can be saved as one unchanged.
-	Files map[string]string `json:"files"`
+	// The id of a build from POST /v1/scripts/scratchpad/builds, to run the files and dependencies that build holds instead of files.
+	BuildId *string `json:"buildId,omitempty"`
+	// Source files keyed by path. Python needs script.py defining handle(event, ctx), JavaScript needs script.js exporting handle(event, ctx), and Go needs script.go in a non-main package exporting Handle(ctx context.Context, event handler.Event, hc handler.Context) (any, error) from spaciv/handler, as an integration script does, so the code can be saved as one unchanged. Required unless buildId is given, and not allowed with it.
+	Files map[string]string `json:"files,omitempty"`
 	Input interface{} `json:"input,omitempty"`
 	// python, go or javascript.
 	Language string `json:"language"`
@@ -31,6 +33,8 @@ type ScratchpadRunPostReqBody struct {
 	TimeoutSeconds *int32 `json:"timeoutSeconds,omitempty"`
 	// Longest to wait for the run to finish before responding. Defaults to 20.
 	WaitSeconds *int32 `json:"waitSeconds,omitempty"`
+	// Gives the run's access token the *Edit file storage* permission as well, so the code can upload files to the account's file storage. Requires the caller to have it.
+	WriteFiles *bool `json:"writeFiles,omitempty"`
 }
 
 type _ScratchpadRunPostReqBody ScratchpadRunPostReqBody
@@ -39,9 +43,8 @@ type _ScratchpadRunPostReqBody ScratchpadRunPostReqBody
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewScratchpadRunPostReqBody(files map[string]string, language string) *ScratchpadRunPostReqBody {
+func NewScratchpadRunPostReqBody(language string) *ScratchpadRunPostReqBody {
 	this := ScratchpadRunPostReqBody{}
-	this.Files = files
 	this.Language = language
 	return &this
 }
@@ -54,26 +57,66 @@ func NewScratchpadRunPostReqBodyWithDefaults() *ScratchpadRunPostReqBody {
 	return &this
 }
 
-// GetFiles returns the Files field value
+// GetBuildId returns the BuildId field value if set, zero value otherwise.
+func (o *ScratchpadRunPostReqBody) GetBuildId() string {
+	if o == nil || IsNil(o.BuildId) {
+		var ret string
+		return ret
+	}
+	return *o.BuildId
+}
+
+// GetBuildIdOk returns a tuple with the BuildId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScratchpadRunPostReqBody) GetBuildIdOk() (*string, bool) {
+	if o == nil || IsNil(o.BuildId) {
+		return nil, false
+	}
+	return o.BuildId, true
+}
+
+// HasBuildId returns a boolean if a field has been set.
+func (o *ScratchpadRunPostReqBody) HasBuildId() bool {
+	if o != nil && !IsNil(o.BuildId) {
+		return true
+	}
+
+	return false
+}
+
+// SetBuildId gets a reference to the given string and assigns it to the BuildId field.
+func (o *ScratchpadRunPostReqBody) SetBuildId(v string) {
+	o.BuildId = &v
+}
+
+// GetFiles returns the Files field value if set, zero value otherwise.
 func (o *ScratchpadRunPostReqBody) GetFiles() map[string]string {
-	if o == nil {
+	if o == nil || IsNil(o.Files) {
 		var ret map[string]string
 		return ret
 	}
-
 	return o.Files
 }
 
-// GetFilesOk returns a tuple with the Files field value
+// GetFilesOk returns a tuple with the Files field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *ScratchpadRunPostReqBody) GetFilesOk() (map[string]string, bool) {
-	if o == nil {
+	if o == nil || IsNil(o.Files) {
 		return map[string]string{}, false
 	}
 	return o.Files, true
 }
 
-// SetFiles sets field value
+// HasFiles returns a boolean if a field has been set.
+func (o *ScratchpadRunPostReqBody) HasFiles() bool {
+	if o != nil && !IsNil(o.Files) {
+		return true
+	}
+
+	return false
+}
+
+// SetFiles gets a reference to the given map[string]string and assigns it to the Files field.
 func (o *ScratchpadRunPostReqBody) SetFiles(v map[string]string) {
 	o.Files = v
 }
@@ -199,6 +242,38 @@ func (o *ScratchpadRunPostReqBody) SetWaitSeconds(v int32) {
 	o.WaitSeconds = &v
 }
 
+// GetWriteFiles returns the WriteFiles field value if set, zero value otherwise.
+func (o *ScratchpadRunPostReqBody) GetWriteFiles() bool {
+	if o == nil || IsNil(o.WriteFiles) {
+		var ret bool
+		return ret
+	}
+	return *o.WriteFiles
+}
+
+// GetWriteFilesOk returns a tuple with the WriteFiles field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ScratchpadRunPostReqBody) GetWriteFilesOk() (*bool, bool) {
+	if o == nil || IsNil(o.WriteFiles) {
+		return nil, false
+	}
+	return o.WriteFiles, true
+}
+
+// HasWriteFiles returns a boolean if a field has been set.
+func (o *ScratchpadRunPostReqBody) HasWriteFiles() bool {
+	if o != nil && !IsNil(o.WriteFiles) {
+		return true
+	}
+
+	return false
+}
+
+// SetWriteFiles gets a reference to the given bool and assigns it to the WriteFiles field.
+func (o *ScratchpadRunPostReqBody) SetWriteFiles(v bool) {
+	o.WriteFiles = &v
+}
+
 func (o ScratchpadRunPostReqBody) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -209,7 +284,12 @@ func (o ScratchpadRunPostReqBody) MarshalJSON() ([]byte, error) {
 
 func (o ScratchpadRunPostReqBody) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["files"] = o.Files
+	if !IsNil(o.BuildId) {
+		toSerialize["buildId"] = o.BuildId
+	}
+	if !IsNil(o.Files) {
+		toSerialize["files"] = o.Files
+	}
 	if o.Input != nil {
 		toSerialize["input"] = o.Input
 	}
@@ -220,6 +300,9 @@ func (o ScratchpadRunPostReqBody) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.WaitSeconds) {
 		toSerialize["waitSeconds"] = o.WaitSeconds
 	}
+	if !IsNil(o.WriteFiles) {
+		toSerialize["writeFiles"] = o.WriteFiles
+	}
 	return toSerialize, nil
 }
 
@@ -228,7 +311,6 @@ func (o *ScratchpadRunPostReqBody) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"files",
 		"language",
 	}
 

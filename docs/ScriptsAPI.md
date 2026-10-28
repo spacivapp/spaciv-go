@@ -8,11 +8,13 @@ Method | HTTP request | Description
 [**CreateReauthorise**](ScriptsAPI.md#CreateReauthorise) | **Post** /v1/scripts/{id}/reauthorise | Re-authorise a script
 [**CreateRegenerateWebhook**](ScriptsAPI.md#CreateRegenerateWebhook) | **Post** /v1/scripts/{id}/regenerate-webhook | Regenerate a script&#39;s webhook URL
 [**CreateSchedulePreview**](ScriptsAPI.md#CreateSchedulePreview) | **Post** /v1/scripts/schedule-preview | Preview a script schedule
+[**CreateScratchpadBuilds**](ScriptsAPI.md#CreateScratchpadBuilds) | **Post** /v1/scripts/scratchpad/builds | Build scratchpad code with its dependencies
 [**CreateScratchpadRuns**](ScriptsAPI.md#CreateScratchpadRuns) | **Post** /v1/scripts/scratchpad/runs | Run scratchpad code
 [**Delete**](ScriptsAPI.md#Delete) | **Delete** /v1/scripts/{id} | Delete a script
 [**Get**](ScriptsAPI.md#Get) | **Get** /v1/scripts/{id} | Get a script
 [**GetAudit**](ScriptsAPI.md#GetAudit) | **Get** /v1/scripts/{id}/audit | List a script&#39;s activity
 [**GetExport**](ScriptsAPI.md#GetExport) | **Get** /v1/scripts/export | Export scripts
+[**GetScratchpadBuilds**](ScriptsAPI.md#GetScratchpadBuilds) | **Get** /v1/scripts/scratchpad/builds/{buildId} | Get a scratchpad build
 [**GetScratchpadRuns**](ScriptsAPI.md#GetScratchpadRuns) | **Get** /v1/scripts/scratchpad/runs/{runId} | Get a scratchpad run
 [**GetUsage**](ScriptsAPI.md#GetUsage) | **Get** /v1/scripts/usage | Get script usage
 [**List**](ScriptsAPI.md#List) | **Get** /v1/scripts | List scripts
@@ -268,6 +270,69 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**ScriptSchedulePreviewResBody**](ScriptSchedulePreviewResBody.md)
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## CreateScratchpadBuilds
+
+> ScratchpadBuild CreateScratchpadBuilds(ctx, scratchpadBuildPostReqBody)
+
+Build scratchpad code with its dependencies
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+	scratchpadBuildPostReqBody :=  // ScratchpadBuildPostReqBody | 
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.Scripts.CreateScratchpadBuilds(context.Background(), scratchpadBuildPostReqBody)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `Scripts.CreateScratchpadBuilds`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `Scripts.CreateScratchpadBuilds`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiCreateScratchpadBuildsRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **scratchpadBuildPostReqBody** | [**ScratchpadBuildPostReqBody**](ScratchpadBuildPostReqBody.md) |  | 
+
+### Return type
+
+[**ScratchpadBuild**](ScratchpadBuild.md)
 
 ### Authorization
 
@@ -591,6 +656,74 @@ Other parameters are passed through a pointer to a apiGetExportRequest struct vi
 ### Return type
 
 [**ScriptExportResBody**](ScriptExportResBody.md)
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## GetScratchpadBuilds
+
+> ScratchpadBuild GetScratchpadBuilds(ctx, buildId, params)
+
+Get a scratchpad build
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+	buildId :=  // string | 
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.Scripts.GetScratchpadBuilds(context.Background(), buildId, nil)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `Scripts.GetScratchpadBuilds`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `Scripts.GetScratchpadBuilds`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**buildId** | **string** |  | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetScratchpadBuildsRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+ **waitSeconds** | **int32** | Longest to wait for a build in progress to finish before responding. Defaults to 0, returning at once. | 
+
+### Return type
+
+[**ScratchpadBuild**](ScratchpadBuild.md)
 
 ### Authorization
 

@@ -4,17 +4,19 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Files** | **map[string]string** | Source files keyed by path. Python needs script.py defining handle(event, ctx), JavaScript needs script.js exporting handle(event, ctx), and Go needs script.go in a non-main package exporting Handle(ctx context.Context, event handler.Event, hc handler.Context) (any, error) from spaciv/handler, as an integration script does, so the code can be saved as one unchanged. | 
+**BuildId** | Pointer to **string** | The id of a build from POST /v1/scripts/scratchpad/builds, to run the files and dependencies that build holds instead of files. | [optional] 
+**Files** | Pointer to **map[string]string** | Source files keyed by path. Python needs script.py defining handle(event, ctx), JavaScript needs script.js exporting handle(event, ctx), and Go needs script.go in a non-main package exporting Handle(ctx context.Context, event handler.Event, hc handler.Context) (any, error) from spaciv/handler, as an integration script does, so the code can be saved as one unchanged. Required unless buildId is given, and not allowed with it. | [optional] 
 **Input** | Pointer to **interface{}** |  | [optional] 
 **Language** | **string** | python, go or javascript. | 
 **TimeoutSeconds** | Pointer to **int32** | Longest the code may run. Defaults to 30. | [optional] 
 **WaitSeconds** | Pointer to **int32** | Longest to wait for the run to finish before responding. Defaults to 20. | [optional] 
+**WriteFiles** | Pointer to **bool** | Gives the run&#39;s access token the *Edit file storage* permission as well, so the code can upload files to the account&#39;s file storage. Requires the caller to have it. | [optional] 
 
 ## Methods
 
 ### NewScratchpadRunPostReqBody
 
-`func NewScratchpadRunPostReqBody(files map[string]string, language string, ) *ScratchpadRunPostReqBody`
+`func NewScratchpadRunPostReqBody(language string, ) *ScratchpadRunPostReqBody`
 
 NewScratchpadRunPostReqBody instantiates a new ScratchpadRunPostReqBody object
 This constructor will assign default values to properties that have it defined,
@@ -28,6 +30,31 @@ will change when the set of required properties is changed
 NewScratchpadRunPostReqBodyWithDefaults instantiates a new ScratchpadRunPostReqBody object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetBuildId
+
+`func (o *ScratchpadRunPostReqBody) GetBuildId() string`
+
+GetBuildId returns the BuildId field if non-nil, zero value otherwise.
+
+### GetBuildIdOk
+
+`func (o *ScratchpadRunPostReqBody) GetBuildIdOk() (*string, bool)`
+
+GetBuildIdOk returns a tuple with the BuildId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetBuildId
+
+`func (o *ScratchpadRunPostReqBody) SetBuildId(v string)`
+
+SetBuildId sets BuildId field to given value.
+
+### HasBuildId
+
+`func (o *ScratchpadRunPostReqBody) HasBuildId() bool`
+
+HasBuildId returns a boolean if a field has been set.
 
 ### GetFiles
 
@@ -48,6 +75,11 @@ and a boolean to check if the value has been set.
 
 SetFiles sets Files field to given value.
 
+### HasFiles
+
+`func (o *ScratchpadRunPostReqBody) HasFiles() bool`
+
+HasFiles returns a boolean if a field has been set.
 
 ### GetInput
 
@@ -153,6 +185,31 @@ SetWaitSeconds sets WaitSeconds field to given value.
 `func (o *ScratchpadRunPostReqBody) HasWaitSeconds() bool`
 
 HasWaitSeconds returns a boolean if a field has been set.
+
+### GetWriteFiles
+
+`func (o *ScratchpadRunPostReqBody) GetWriteFiles() bool`
+
+GetWriteFiles returns the WriteFiles field if non-nil, zero value otherwise.
+
+### GetWriteFilesOk
+
+`func (o *ScratchpadRunPostReqBody) GetWriteFilesOk() (*bool, bool)`
+
+GetWriteFilesOk returns a tuple with the WriteFiles field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetWriteFiles
+
+`func (o *ScratchpadRunPostReqBody) SetWriteFiles(v bool)`
+
+SetWriteFiles sets WriteFiles field to given value.
+
+### HasWriteFiles
+
+`func (o *ScratchpadRunPostReqBody) HasWriteFiles() bool`
+
+HasWriteFiles returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

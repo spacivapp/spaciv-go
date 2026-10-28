@@ -386,6 +386,8 @@ docs/ScenarioListRes.md
 docs/ScenarioNotFoundDetail.md
 docs/ScenarioPatch.md
 docs/ScenariosAPI.md
+docs/ScratchpadBuild.md
+docs/ScratchpadBuildPostReqBody.md
 docs/ScratchpadOutput.md
 docs/ScratchpadOutputFile.md
 docs/ScratchpadRun.md
@@ -817,6 +819,8 @@ model_scenario_list_entry.go
 model_scenario_list_res.go
 model_scenario_not_found_detail.go
 model_scenario_patch.go
+model_scratchpad_build.go
+model_scratchpad_build_post_req_body.go
 model_scratchpad_output.go
 model_scratchpad_output_file.go
 model_scratchpad_run.go
