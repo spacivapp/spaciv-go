@@ -2216,18 +2216,19 @@ paths:
       description: "Returns the account's assistant configuration: whether the account\
         \ may reach the Spaciv MCP server, the AI budget in credits the account has\
         \ set for itself (`budgetLimitCredits`, `null` when it has set none) along\
-        \ with the most it may set that budget to (`budgetLimitMaxCredits`, `null`\
-        \ for no ceiling, and what holds the account where it has set no budget of\
-        \ its own or a larger one) and the minimum it is charged whatever it sets\
-        \ (`budgetLimitMinCredits`, `null` for none, and not a bound on the budget:\
-        \ an account may cap itself below it), what a credit costs the account in\
-        \ euros, what it has spent so far this month (`spentCredits`, `null` while\
-        \ that figure is unavailable), and the models it permits (empty for all of\
-        \ them). Every credit figure is `null` rather than `0` where there is none,\
-        \ so that no amount stands for the absence of one. `models` lists the whole\
-        \ catalogue, not just the permitted subset, so that the settings page can\
-        \ offer the models the account has not permitted. Requires either the *AI\
-        \ assistant* or the *Manage my account* permission."
+        \ with the most it may set that budget to (`budgetLimitMaxCredits`, never\
+        \ `null`: the ceiling agreed with the account, or a default where none has\
+        \ been, and what holds the account where it has set no budget of its own or\
+        \ a larger one) and the minimum it is charged whatever it sets (`budgetLimitMinCredits`,\
+        \ `null` for none, and not a bound on the budget: an account may cap itself\
+        \ below it), what a credit costs the account in euros, what it has spent so\
+        \ far this month (`spentCredits`, `null` while that figure is unavailable),\
+        \ and the models it permits (empty for all of them). Every credit figure is\
+        \ `null` rather than `0` where there is none, so that no amount stands for\
+        \ the absence of one. `models` lists the whole catalogue, not just the permitted\
+        \ subset, so that the settings page can offer the models the account has not\
+        \ permitted. Requires either the *AI assistant* or the *Manage my account*\
+        \ permission."
       operationId: assistant_get-config
       parameters: []
       responses:
@@ -2259,16 +2260,16 @@ paths:
         \ reports it for the account, and must be a budget of something rather than\
         \ `0`. It may sit below `budgetLimitMinCredits`, which is a minimum charge\
         \ rather than a bound, so that an account may cap what its current work costs.\
-        \ Where terms agreed with the account cap it, setting no limit of its own\
-        \ leaves it capped at those terms, which the configuration endpoint reports\
-        \ as `budgetLimitMaxCredits` rather than as a limit of the account's own.\
-        \ `permittedModels` restricts the models the account may use, and an empty\
-        \ list permits every model; unlike the other fields it is always replaced\
-        \ rather than merged, so a request that omits it clears it. Restricting `permittedModels`\
-        \ so that they exclude a default set by an earlier request clears that default.\
-        \ Returns `400` for an unsupported model, for an `llmModel` the same request\
-        \ does not permit, or for a budget above the permitted maximum. Requires the\
-        \ *Manage my account* permission."
+        \ Every account is capped: by terms agreed with it, or by a default where\
+        \ none have been. Setting no limit of its own leaves it capped at that ceiling,\
+        \ which the configuration endpoint reports as `budgetLimitMaxCredits` rather\
+        \ than as a limit of the account's own. `permittedModels` restricts the models\
+        \ the account may use, and an empty list permits every model; unlike the other\
+        \ fields it is always replaced rather than merged, so a request that omits\
+        \ it clears it. Restricting `permittedModels` so that they exclude a default\
+        \ set by an earlier request clears that default. Returns `400` for an unsupported\
+        \ model, for an `llmModel` the same request does not permit, or for a budget\
+        \ above the permitted maximum. Requires the *Manage my account* permission."
       operationId: assistant_update-config
       parameters: []
       requestBody:
