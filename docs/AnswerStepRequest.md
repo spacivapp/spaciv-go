@@ -4,12 +4,12 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Dependency** | [**StepDependency**](StepDependency.md) |  | 
+**Dependency** | Pointer to [**StepDependency**](StepDependency.md) |  | [optional] 
 **Description** | **string** |  | 
-**EstimationDefault** | [**Answer**](Answer.md) |  | 
+**EstimationDefault** | Pointer to [**Answer**](Answer.md) |  | [optional] 
 **Heading** | **string** |  | 
 **Info** | **string** |  | 
-**Initial** | [**Answer**](Answer.md) |  | 
+**Initial** | Pointer to [**Answer**](Answer.md) |  | [optional] 
 **InputLabel** | **string** |  | 
 **ObjectGroup** | **string** |  | 
 **Options** | [**[]AnswerOption**](AnswerOption.md) |  | 
@@ -27,7 +27,7 @@ Name | Type | Description | Notes
 
 ### NewAnswerStepRequest
 
-`func NewAnswerStepRequest(dependency StepDependency, description string, estimationDefault Answer, heading string, info string, initial Answer, inputLabel string, objectGroup string, options []AnswerOption, property string, sendsToCalculation bool, spacedHeading bool, freeText FreeTextType, number NumberType, rankedPicks RankedPicksType, select_ SelectType, timeRanges TimeRangesType, valuePerOption ValuePerOptionType, ) *AnswerStepRequest`
+`func NewAnswerStepRequest(description string, heading string, info string, inputLabel string, objectGroup string, options []AnswerOption, property string, sendsToCalculation bool, spacedHeading bool, freeText FreeTextType, number NumberType, rankedPicks RankedPicksType, select_ SelectType, timeRanges TimeRangesType, valuePerOption ValuePerOptionType, ) *AnswerStepRequest`
 
 NewAnswerStepRequest instantiates a new AnswerStepRequest object
 This constructor will assign default values to properties that have it defined,
@@ -61,6 +61,11 @@ and a boolean to check if the value has been set.
 
 SetDependency sets Dependency field to given value.
 
+### HasDependency
+
+`func (o *AnswerStepRequest) HasDependency() bool`
+
+HasDependency returns a boolean if a field has been set.
 
 ### GetDescription
 
@@ -101,6 +106,11 @@ and a boolean to check if the value has been set.
 
 SetEstimationDefault sets EstimationDefault field to given value.
 
+### HasEstimationDefault
+
+`func (o *AnswerStepRequest) HasEstimationDefault() bool`
+
+HasEstimationDefault returns a boolean if a field has been set.
 
 ### GetHeading
 
@@ -161,6 +171,11 @@ and a boolean to check if the value has been set.
 
 SetInitial sets Initial field to given value.
 
+### HasInitial
+
+`func (o *AnswerStepRequest) HasInitial() bool`
+
+HasInitial returns a boolean if a field has been set.
 
 ### GetInputLabel
 

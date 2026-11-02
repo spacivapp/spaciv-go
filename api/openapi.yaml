@@ -9227,12 +9227,9 @@ components:
         spacedHeading:
           type: boolean
       required:
-      - dependency
       - description
-      - estimationDefault
       - heading
       - info
-      - initial
       - inputLabel
       - objectGroup
       - options
