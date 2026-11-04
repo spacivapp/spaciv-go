@@ -2759,9 +2759,10 @@ paths:
       x-sdk-params: false
   /v1/auth/login-token:
     post:
-      description: "Exchanges a short-lived magic link token (issued by `POST /v1/auth/send-token`)\
-        \ for an access token and a refresh token cookie. Returns `401` if the token\
-        \ is invalid or expired, or magic-link sign-in is disabled for the account."
+      description: |-
+        Exchanges a magic link token (issued by `POST /v1/auth/send-token`, or in a data collection invitation) for an access token and a refresh token cookie.
+
+        Returns `401` when the link can't be used, with `detail` saying why: `token-expired` (the link is genuine but too old; request a new one), `token-invalid` (the token is malformed or was not issued by spaciv), or `auth-method-not-allowed` (the account named by `hostname` doesn't allow magic-link sign-in).
       operationId: authentication_create-auth-login-token
       parameters: []
       requestBody:
