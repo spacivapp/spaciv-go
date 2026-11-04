@@ -2183,7 +2183,10 @@ paths:
         \ If `conversationId` is omitted a new conversation is started. `attachmentFileIds`\
         \ attaches up to 10 distinct files from account file storage and requires\
         \ View file storage permission. Files cannot be attached while the account\
-        \ has turned the assistant's tools off. Returns `409` if `conversationId`\
+        \ has turned the assistant's tools off. Set `context.backgroundSubsessions`\
+        \ only if the client keeps polling a conversation after its turn has finished\
+        \ while `backgroundSubsessionIds` is not empty: the assistant can start subsessions\
+        \ in the background only for a client that does. Returns `409` if `conversationId`\
         \ names a conversation that cannot take messages: a subsession the assistant\
         \ started for a tool call, which only ever answers the task it was given,\
         \ or a deleted conversation. Requires the *AI assistant* permission."
@@ -2400,11 +2403,15 @@ paths:
       description: "Asks the assistant to stop the turn it is working on. The turn\
         \ ends at its next step - a tool call already sent finishes and is recorded\
         \ - so the conversation stays usable and keeps everything the turn did before\
-        \ it was stopped. Succeeds with nothing to do if no turn is running. Stopping\
-        \ a conversation also stops a subsession it is running. Returns `404` if the\
-        \ conversation does not exist, and `409` if it is a subsession, which is stopped\
-        \ only by stopping the conversation that started it. Requires the *AI assistant*\
-        \ permission."
+        \ it was stopped. Succeeds with nothing to do if no turn is running and no\
+        \ subsession is running in the background. Stopping a conversation also stops\
+        \ the subsessions it is running, including those in the background after its\
+        \ turn has ended, which then report that they were stopped. The `id` of a\
+        \ subsession the assistant started in the background (a `subsessionId` in\
+        \ the poll) stops that subsession alone, at its next step, and the conversation's\
+        \ own turn is left as it is. Returns `404` if the conversation does not exist,\
+        \ and `409` if it is any other subsession, which is stopped only by stopping\
+        \ the conversation that started it. Requires the *AI assistant* permission."
       operationId: assistant_stop-conversations
       parameters:
       - description: UUID of the conversation whose turn to stop.
@@ -9296,7 +9303,10 @@ components:
       additionalProperties: false
       example:
         currentUrl: currentUrl
+        backgroundSubsessions: true
       properties:
+        backgroundSubsessions:
+          type: boolean
         currentUrl:
           type: string
       required:
@@ -9344,14 +9354,33 @@ components:
           runId: runId
         - toolCallId: toolCallId
           runId: runId
+        failures:
+        - code: code
+          stage: stage
+          requestId: requestId
+        - code: code
+          stage: stage
+          requestId: requestId
         subsessionTool: subsessionTool
+        confirmations:
+        - toolCallId: toolCallId
+          payload: payload
+          type: type
+        - toolCallId: toolCallId
+          payload: payload
+          type: type
+        backgroundSubsessionIds:
+        - backgroundSubsessionIds
+        - backgroundSubsessionIds
+        activeRequestId: activeRequestId
         finishedToolCallIds:
         - finishedToolCallIds
         - finishedToolCallIds
-        subsessionSteps: 1
+        subsessionSteps: 5
         failure:
           code: code
           stage: stage
+          requestId: requestId
         messages:
         - createdAt: createdAt
           attachments:
@@ -9389,23 +9418,36 @@ components:
           id: id
           subsessionId: subsessionId
           text: text
-        confirmations:
-        - toolCallId: toolCallId
-          payload: payload
-          type: type
-        - toolCallId: toolCallId
-          payload: payload
-          type: type
         actions:
         - payload: payload
           type: type
         - payload: payload
           type: type
+        queuedTurns: 1
         status: status
       properties:
         actions:
+          description: "What the turns that finished after the since cursor asked\
+            \ the app to do, each given once, in order. A read from the start gives\
+            \ those of every turn it reads, which a client restoring the conversation\
+            \ has already acted on: it should drop them."
           items:
             $ref: "#/components/schemas/AssistantChatPollAction"
+          type: array
+        activeRequestId:
+          description: "The id of the chat request whose turn is running, or is next\
+            \ to, while the conversation is pending. A client that sent a request\
+            \ knows its turn has ended once this names another."
+          type: string
+        backgroundSubsessionIds:
+          description: "The subsessions the conversation started in the background\
+            \ that are still running, which carry on after the turn that started them\
+            \ has finished. A client keeps polling while there are any: the message\
+            \ delivering a finished one's result starts a new turn. A run_subsession\
+            \ call to one of them is not listed among the finished tool calls until\
+            \ then."
+          items:
+            type: string
           type: array
         confirmations:
           description: "What tool calls whose results were recorded after the since\
@@ -9417,12 +9459,21 @@ components:
           type: array
         failure:
           $ref: "#/components/schemas/AssistantConversationFailureBody"
+        failures:
+          description: "The failures of every turn that ended after the since cursor,\
+            \ in order, each with the request it was of, when more than one turn failed\
+            \ between two polls. failure is the last of them."
+          items:
+            $ref: "#/components/schemas/AssistantConversationFailureBody"
+          type: array
         finishedToolCallIds:
           description: "Tool calls whose results, failed or not, were recorded after\
             \ the since cursor, by the toolCallId of their action message. A call\
             \ that succeeded has no message of its own, so this is how a client tells\
-            \ a finished action from one still running. A later poll can list a call\
-            \ again."
+            \ a finished action from one still running. A run_subsession call that\
+            \ started a background subsession is listed once the subsession has ended\
+            \ and its result has been delivered to the conversation. A later poll\
+            \ can list a call again."
           items:
             type: string
           type: array
@@ -9430,6 +9481,13 @@ components:
           items:
             $ref: "#/components/schemas/AssistantChatPollMessage"
           type: array
+        queuedTurns:
+          description: "Messages queued behind the turn that has just finished, such\
+            \ as a background subsession's result, which each run as a turn of their\
+            \ own. A client keeps polling while there are any, even though the conversation\
+            \ is finished until the next one starts."
+          format: int64
+          type: integer
         scriptRuns:
           description: "The scratchpad run each run_script call returned, for calls\
             \ whose results were recorded after the since cursor. Only a call that\
@@ -9458,9 +9516,11 @@ components:
           type: string
       required:
       - actions
+      - backgroundSubsessionIds
       - confirmations
       - finishedToolCallIds
       - messages
+      - queuedTurns
       - scriptRuns
       - status
       - subsessionSteps
@@ -9544,7 +9604,9 @@ components:
           description: "Id of the conversation a run_subsession action message (kind\
             \ 2) started, which is polled like any other conversation to follow the\
             \ subsession's own steps. It is not found until the subsession has started.\
-            \ Empty on every other message."
+            \ On a user message (kind 0) it is the background subsession whose result\
+            \ the message delivers, which the user did not write. Empty on every other\
+            \ message."
           type: string
         text:
           type: string
@@ -9587,6 +9649,7 @@ components:
         conversationId: conversationId
         context:
           currentUrl: currentUrl
+          backgroundSubsessions: true
         message: message
         llmModel: llmModel
       properties:
@@ -9704,8 +9767,13 @@ components:
       example:
         code: code
         stage: stage
+        requestId: requestId
       properties:
         code:
+          type: string
+        requestId:
+          description: "Id of the chat request whose turn failed, so that a client\
+            \ following the conversation across polls reports each failure once."
           type: string
         stage:
           type: string

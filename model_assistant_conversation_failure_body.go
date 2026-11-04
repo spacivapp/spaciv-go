@@ -23,6 +23,8 @@ var _ MappedNullable = &AssistantConversationFailureBody{}
 // AssistantConversationFailureBody struct for AssistantConversationFailureBody
 type AssistantConversationFailureBody struct {
 	Code string `json:"code"`
+	// Id of the chat request whose turn failed, so that a client following the conversation across polls reports each failure once.
+	RequestId *string `json:"requestId,omitempty"`
 	Stage string `json:"stage"`
 }
 
@@ -71,6 +73,38 @@ func (o *AssistantConversationFailureBody) SetCode(v string) {
 	o.Code = v
 }
 
+// GetRequestId returns the RequestId field value if set, zero value otherwise.
+func (o *AssistantConversationFailureBody) GetRequestId() string {
+	if o == nil || IsNil(o.RequestId) {
+		var ret string
+		return ret
+	}
+	return *o.RequestId
+}
+
+// GetRequestIdOk returns a tuple with the RequestId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AssistantConversationFailureBody) GetRequestIdOk() (*string, bool) {
+	if o == nil || IsNil(o.RequestId) {
+		return nil, false
+	}
+	return o.RequestId, true
+}
+
+// HasRequestId returns a boolean if a field has been set.
+func (o *AssistantConversationFailureBody) HasRequestId() bool {
+	if o != nil && !IsNil(o.RequestId) {
+		return true
+	}
+
+	return false
+}
+
+// SetRequestId gets a reference to the given string and assigns it to the RequestId field.
+func (o *AssistantConversationFailureBody) SetRequestId(v string) {
+	o.RequestId = &v
+}
+
 // GetStage returns the Stage field value
 func (o *AssistantConversationFailureBody) GetStage() string {
 	if o == nil {
@@ -106,6 +140,9 @@ func (o AssistantConversationFailureBody) MarshalJSON() ([]byte, error) {
 func (o AssistantConversationFailureBody) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["code"] = o.Code
+	if !IsNil(o.RequestId) {
+		toSerialize["requestId"] = o.RequestId
+	}
 	toSerialize["stage"] = o.Stage
 	return toSerialize, nil
 }

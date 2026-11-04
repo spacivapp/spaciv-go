@@ -4,11 +4,15 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Actions** | [**[]AssistantChatPollAction**](AssistantChatPollAction.md) |  | 
+**Actions** | [**[]AssistantChatPollAction**](AssistantChatPollAction.md) | What the turns that finished after the since cursor asked the app to do, each given once, in order. A read from the start gives those of every turn it reads, which a client restoring the conversation has already acted on: it should drop them. | 
+**ActiveRequestId** | Pointer to **string** | The id of the chat request whose turn is running, or is next to, while the conversation is pending. A client that sent a request knows its turn has ended once this names another. | [optional] 
+**BackgroundSubsessionIds** | **[]string** | The subsessions the conversation started in the background that are still running, which carry on after the turn that started them has finished. A client keeps polling while there are any: the message delivering a finished one&#39;s result starts a new turn. A run_subsession call to one of them is not listed among the finished tool calls until then. | 
 **Confirmations** | [**[]AssistantChatPollConfirmation**](AssistantChatPollConfirmation.md) | What tool calls whose results were recorded after the since cursor asked the user to confirm. A tool never carries it out itself: the app shows it, and carries it out with the user&#39;s own request if they confirm. A later poll can list a call again. | 
 **Failure** | Pointer to [**AssistantConversationFailureBody**](AssistantConversationFailureBody.md) |  | [optional] 
-**FinishedToolCallIds** | **[]string** | Tool calls whose results, failed or not, were recorded after the since cursor, by the toolCallId of their action message. A call that succeeded has no message of its own, so this is how a client tells a finished action from one still running. A later poll can list a call again. | 
+**Failures** | Pointer to [**[]AssistantConversationFailureBody**](AssistantConversationFailureBody.md) | The failures of every turn that ended after the since cursor, in order, each with the request it was of, when more than one turn failed between two polls. failure is the last of them. | [optional] 
+**FinishedToolCallIds** | **[]string** | Tool calls whose results, failed or not, were recorded after the since cursor, by the toolCallId of their action message. A call that succeeded has no message of its own, so this is how a client tells a finished action from one still running. A run_subsession call that started a background subsession is listed once the subsession has ended and its result has been delivered to the conversation. A later poll can list a call again. | 
 **Messages** | [**[]AssistantChatPollMessage**](AssistantChatPollMessage.md) |  | 
+**QueuedTurns** | **int64** | Messages queued behind the turn that has just finished, such as a background subsession&#39;s result, which each run as a turn of their own. A client keeps polling while there are any, even though the conversation is finished until the next one starts. | 
 **ScriptRuns** | [**[]AssistantChatPollScriptRun**](AssistantChatPollScriptRun.md) | The scratchpad run each run_script call returned, for calls whose results were recorded after the since cursor. Only a call that started its run is listed, including one whose wait for the run then failed: one that only waited on a run by its ID is not. The run, its code and its output are read from GET /v1/scripts/scratchpad/runs/{runId} by the user who started it, while it is kept. A later poll can list a call again. | 
 **Status** | **string** |  | 
 **SubsessionSteps** | **int64** | While a subsession is running, how many messages it has recorded so far, which grows with each of its steps even when it calls the same tool again. Zero when no subsession is running, including once it has ended and before the turn has recorded its result. | 
@@ -18,7 +22,7 @@ Name | Type | Description | Notes
 
 ### NewAssistantChatPollBody
 
-`func NewAssistantChatPollBody(actions []AssistantChatPollAction, confirmations []AssistantChatPollConfirmation, finishedToolCallIds []string, messages []AssistantChatPollMessage, scriptRuns []AssistantChatPollScriptRun, status string, subsessionSteps int64, subsessionTool string, ) *AssistantChatPollBody`
+`func NewAssistantChatPollBody(actions []AssistantChatPollAction, backgroundSubsessionIds []string, confirmations []AssistantChatPollConfirmation, finishedToolCallIds []string, messages []AssistantChatPollMessage, queuedTurns int64, scriptRuns []AssistantChatPollScriptRun, status string, subsessionSteps int64, subsessionTool string, ) *AssistantChatPollBody`
 
 NewAssistantChatPollBody instantiates a new AssistantChatPollBody object
 This constructor will assign default values to properties that have it defined,
@@ -51,6 +55,51 @@ and a boolean to check if the value has been set.
 `func (o *AssistantChatPollBody) SetActions(v []AssistantChatPollAction)`
 
 SetActions sets Actions field to given value.
+
+
+### GetActiveRequestId
+
+`func (o *AssistantChatPollBody) GetActiveRequestId() string`
+
+GetActiveRequestId returns the ActiveRequestId field if non-nil, zero value otherwise.
+
+### GetActiveRequestIdOk
+
+`func (o *AssistantChatPollBody) GetActiveRequestIdOk() (*string, bool)`
+
+GetActiveRequestIdOk returns a tuple with the ActiveRequestId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetActiveRequestId
+
+`func (o *AssistantChatPollBody) SetActiveRequestId(v string)`
+
+SetActiveRequestId sets ActiveRequestId field to given value.
+
+### HasActiveRequestId
+
+`func (o *AssistantChatPollBody) HasActiveRequestId() bool`
+
+HasActiveRequestId returns a boolean if a field has been set.
+
+### GetBackgroundSubsessionIds
+
+`func (o *AssistantChatPollBody) GetBackgroundSubsessionIds() []string`
+
+GetBackgroundSubsessionIds returns the BackgroundSubsessionIds field if non-nil, zero value otherwise.
+
+### GetBackgroundSubsessionIdsOk
+
+`func (o *AssistantChatPollBody) GetBackgroundSubsessionIdsOk() (*[]string, bool)`
+
+GetBackgroundSubsessionIdsOk returns a tuple with the BackgroundSubsessionIds field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetBackgroundSubsessionIds
+
+`func (o *AssistantChatPollBody) SetBackgroundSubsessionIds(v []string)`
+
+SetBackgroundSubsessionIds sets BackgroundSubsessionIds field to given value.
 
 
 ### GetConfirmations
@@ -98,6 +147,31 @@ SetFailure sets Failure field to given value.
 
 HasFailure returns a boolean if a field has been set.
 
+### GetFailures
+
+`func (o *AssistantChatPollBody) GetFailures() []AssistantConversationFailureBody`
+
+GetFailures returns the Failures field if non-nil, zero value otherwise.
+
+### GetFailuresOk
+
+`func (o *AssistantChatPollBody) GetFailuresOk() (*[]AssistantConversationFailureBody, bool)`
+
+GetFailuresOk returns a tuple with the Failures field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetFailures
+
+`func (o *AssistantChatPollBody) SetFailures(v []AssistantConversationFailureBody)`
+
+SetFailures sets Failures field to given value.
+
+### HasFailures
+
+`func (o *AssistantChatPollBody) HasFailures() bool`
+
+HasFailures returns a boolean if a field has been set.
+
 ### GetFinishedToolCallIds
 
 `func (o *AssistantChatPollBody) GetFinishedToolCallIds() []string`
@@ -136,6 +210,26 @@ and a boolean to check if the value has been set.
 `func (o *AssistantChatPollBody) SetMessages(v []AssistantChatPollMessage)`
 
 SetMessages sets Messages field to given value.
+
+
+### GetQueuedTurns
+
+`func (o *AssistantChatPollBody) GetQueuedTurns() int64`
+
+GetQueuedTurns returns the QueuedTurns field if non-nil, zero value otherwise.
+
+### GetQueuedTurnsOk
+
+`func (o *AssistantChatPollBody) GetQueuedTurnsOk() (*int64, bool)`
+
+GetQueuedTurnsOk returns a tuple with the QueuedTurns field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetQueuedTurns
+
+`func (o *AssistantChatPollBody) SetQueuedTurns(v int64)`
+
+SetQueuedTurns sets QueuedTurns field to given value.
 
 
 ### GetScriptRuns

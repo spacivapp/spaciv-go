@@ -22,6 +22,7 @@ var _ MappedNullable = &AssistantChatContext{}
 
 // AssistantChatContext struct for AssistantChatContext
 type AssistantChatContext struct {
+	BackgroundSubsessions *bool `json:"backgroundSubsessions,omitempty"`
 	CurrentUrl string `json:"currentUrl"`
 }
 
@@ -43,6 +44,38 @@ func NewAssistantChatContext(currentUrl string) *AssistantChatContext {
 func NewAssistantChatContextWithDefaults() *AssistantChatContext {
 	this := AssistantChatContext{}
 	return &this
+}
+
+// GetBackgroundSubsessions returns the BackgroundSubsessions field value if set, zero value otherwise.
+func (o *AssistantChatContext) GetBackgroundSubsessions() bool {
+	if o == nil || IsNil(o.BackgroundSubsessions) {
+		var ret bool
+		return ret
+	}
+	return *o.BackgroundSubsessions
+}
+
+// GetBackgroundSubsessionsOk returns a tuple with the BackgroundSubsessions field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AssistantChatContext) GetBackgroundSubsessionsOk() (*bool, bool) {
+	if o == nil || IsNil(o.BackgroundSubsessions) {
+		return nil, false
+	}
+	return o.BackgroundSubsessions, true
+}
+
+// HasBackgroundSubsessions returns a boolean if a field has been set.
+func (o *AssistantChatContext) HasBackgroundSubsessions() bool {
+	if o != nil && !IsNil(o.BackgroundSubsessions) {
+		return true
+	}
+
+	return false
+}
+
+// SetBackgroundSubsessions gets a reference to the given bool and assigns it to the BackgroundSubsessions field.
+func (o *AssistantChatContext) SetBackgroundSubsessions(v bool) {
+	o.BackgroundSubsessions = &v
 }
 
 // GetCurrentUrl returns the CurrentUrl field value
@@ -79,6 +112,9 @@ func (o AssistantChatContext) MarshalJSON() ([]byte, error) {
 
 func (o AssistantChatContext) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	if !IsNil(o.BackgroundSubsessions) {
+		toSerialize["backgroundSubsessions"] = o.BackgroundSubsessions
+	}
 	toSerialize["currentUrl"] = o.CurrentUrl
 	return toSerialize, nil
 }

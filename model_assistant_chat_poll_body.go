@@ -22,13 +22,22 @@ var _ MappedNullable = &AssistantChatPollBody{}
 
 // AssistantChatPollBody struct for AssistantChatPollBody
 type AssistantChatPollBody struct {
+	// What the turns that finished after the since cursor asked the app to do, each given once, in order. A read from the start gives those of every turn it reads, which a client restoring the conversation has already acted on: it should drop them.
 	Actions []AssistantChatPollAction `json:"actions"`
+	// The id of the chat request whose turn is running, or is next to, while the conversation is pending. A client that sent a request knows its turn has ended once this names another.
+	ActiveRequestId *string `json:"activeRequestId,omitempty"`
+	// The subsessions the conversation started in the background that are still running, which carry on after the turn that started them has finished. A client keeps polling while there are any: the message delivering a finished one's result starts a new turn. A run_subsession call to one of them is not listed among the finished tool calls until then.
+	BackgroundSubsessionIds []string `json:"backgroundSubsessionIds"`
 	// What tool calls whose results were recorded after the since cursor asked the user to confirm. A tool never carries it out itself: the app shows it, and carries it out with the user's own request if they confirm. A later poll can list a call again.
 	Confirmations []AssistantChatPollConfirmation `json:"confirmations"`
 	Failure *AssistantConversationFailureBody `json:"failure,omitempty"`
-	// Tool calls whose results, failed or not, were recorded after the since cursor, by the toolCallId of their action message. A call that succeeded has no message of its own, so this is how a client tells a finished action from one still running. A later poll can list a call again.
+	// The failures of every turn that ended after the since cursor, in order, each with the request it was of, when more than one turn failed between two polls. failure is the last of them.
+	Failures []AssistantConversationFailureBody `json:"failures,omitempty"`
+	// Tool calls whose results, failed or not, were recorded after the since cursor, by the toolCallId of their action message. A call that succeeded has no message of its own, so this is how a client tells a finished action from one still running. A run_subsession call that started a background subsession is listed once the subsession has ended and its result has been delivered to the conversation. A later poll can list a call again.
 	FinishedToolCallIds []string `json:"finishedToolCallIds"`
 	Messages []AssistantChatPollMessage `json:"messages"`
+	// Messages queued behind the turn that has just finished, such as a background subsession's result, which each run as a turn of their own. A client keeps polling while there are any, even though the conversation is finished until the next one starts.
+	QueuedTurns int64 `json:"queuedTurns"`
 	// The scratchpad run each run_script call returned, for calls whose results were recorded after the since cursor. Only a call that started its run is listed, including one whose wait for the run then failed: one that only waited on a run by its ID is not. The run, its code and its output are read from GET /v1/scripts/scratchpad/runs/{runId} by the user who started it, while it is kept. A later poll can list a call again.
 	ScriptRuns []AssistantChatPollScriptRun `json:"scriptRuns"`
 	Status string `json:"status"`
@@ -44,12 +53,14 @@ type _AssistantChatPollBody AssistantChatPollBody
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAssistantChatPollBody(actions []AssistantChatPollAction, confirmations []AssistantChatPollConfirmation, finishedToolCallIds []string, messages []AssistantChatPollMessage, scriptRuns []AssistantChatPollScriptRun, status string, subsessionSteps int64, subsessionTool string) *AssistantChatPollBody {
+func NewAssistantChatPollBody(actions []AssistantChatPollAction, backgroundSubsessionIds []string, confirmations []AssistantChatPollConfirmation, finishedToolCallIds []string, messages []AssistantChatPollMessage, queuedTurns int64, scriptRuns []AssistantChatPollScriptRun, status string, subsessionSteps int64, subsessionTool string) *AssistantChatPollBody {
 	this := AssistantChatPollBody{}
 	this.Actions = actions
+	this.BackgroundSubsessionIds = backgroundSubsessionIds
 	this.Confirmations = confirmations
 	this.FinishedToolCallIds = finishedToolCallIds
 	this.Messages = messages
+	this.QueuedTurns = queuedTurns
 	this.ScriptRuns = scriptRuns
 	this.Status = status
 	this.SubsessionSteps = subsessionSteps
@@ -87,6 +98,62 @@ func (o *AssistantChatPollBody) GetActionsOk() ([]AssistantChatPollAction, bool)
 // SetActions sets field value
 func (o *AssistantChatPollBody) SetActions(v []AssistantChatPollAction) {
 	o.Actions = v
+}
+
+// GetActiveRequestId returns the ActiveRequestId field value if set, zero value otherwise.
+func (o *AssistantChatPollBody) GetActiveRequestId() string {
+	if o == nil || IsNil(o.ActiveRequestId) {
+		var ret string
+		return ret
+	}
+	return *o.ActiveRequestId
+}
+
+// GetActiveRequestIdOk returns a tuple with the ActiveRequestId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AssistantChatPollBody) GetActiveRequestIdOk() (*string, bool) {
+	if o == nil || IsNil(o.ActiveRequestId) {
+		return nil, false
+	}
+	return o.ActiveRequestId, true
+}
+
+// HasActiveRequestId returns a boolean if a field has been set.
+func (o *AssistantChatPollBody) HasActiveRequestId() bool {
+	if o != nil && !IsNil(o.ActiveRequestId) {
+		return true
+	}
+
+	return false
+}
+
+// SetActiveRequestId gets a reference to the given string and assigns it to the ActiveRequestId field.
+func (o *AssistantChatPollBody) SetActiveRequestId(v string) {
+	o.ActiveRequestId = &v
+}
+
+// GetBackgroundSubsessionIds returns the BackgroundSubsessionIds field value
+func (o *AssistantChatPollBody) GetBackgroundSubsessionIds() []string {
+	if o == nil {
+		var ret []string
+		return ret
+	}
+
+	return o.BackgroundSubsessionIds
+}
+
+// GetBackgroundSubsessionIdsOk returns a tuple with the BackgroundSubsessionIds field value
+// and a boolean to check if the value has been set.
+func (o *AssistantChatPollBody) GetBackgroundSubsessionIdsOk() ([]string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.BackgroundSubsessionIds, true
+}
+
+// SetBackgroundSubsessionIds sets field value
+func (o *AssistantChatPollBody) SetBackgroundSubsessionIds(v []string) {
+	o.BackgroundSubsessionIds = v
 }
 
 // GetConfirmations returns the Confirmations field value
@@ -145,6 +212,38 @@ func (o *AssistantChatPollBody) SetFailure(v AssistantConversationFailureBody) {
 	o.Failure = &v
 }
 
+// GetFailures returns the Failures field value if set, zero value otherwise.
+func (o *AssistantChatPollBody) GetFailures() []AssistantConversationFailureBody {
+	if o == nil || IsNil(o.Failures) {
+		var ret []AssistantConversationFailureBody
+		return ret
+	}
+	return o.Failures
+}
+
+// GetFailuresOk returns a tuple with the Failures field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AssistantChatPollBody) GetFailuresOk() ([]AssistantConversationFailureBody, bool) {
+	if o == nil || IsNil(o.Failures) {
+		return nil, false
+	}
+	return o.Failures, true
+}
+
+// HasFailures returns a boolean if a field has been set.
+func (o *AssistantChatPollBody) HasFailures() bool {
+	if o != nil && !IsNil(o.Failures) {
+		return true
+	}
+
+	return false
+}
+
+// SetFailures gets a reference to the given []AssistantConversationFailureBody and assigns it to the Failures field.
+func (o *AssistantChatPollBody) SetFailures(v []AssistantConversationFailureBody) {
+	o.Failures = v
+}
+
 // GetFinishedToolCallIds returns the FinishedToolCallIds field value
 func (o *AssistantChatPollBody) GetFinishedToolCallIds() []string {
 	if o == nil {
@@ -191,6 +290,30 @@ func (o *AssistantChatPollBody) GetMessagesOk() ([]AssistantChatPollMessage, boo
 // SetMessages sets field value
 func (o *AssistantChatPollBody) SetMessages(v []AssistantChatPollMessage) {
 	o.Messages = v
+}
+
+// GetQueuedTurns returns the QueuedTurns field value
+func (o *AssistantChatPollBody) GetQueuedTurns() int64 {
+	if o == nil {
+		var ret int64
+		return ret
+	}
+
+	return o.QueuedTurns
+}
+
+// GetQueuedTurnsOk returns a tuple with the QueuedTurns field value
+// and a boolean to check if the value has been set.
+func (o *AssistantChatPollBody) GetQueuedTurnsOk() (*int64, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.QueuedTurns, true
+}
+
+// SetQueuedTurns sets field value
+func (o *AssistantChatPollBody) SetQueuedTurns(v int64) {
+	o.QueuedTurns = v
 }
 
 // GetScriptRuns returns the ScriptRuns field value
@@ -300,12 +423,20 @@ func (o AssistantChatPollBody) MarshalJSON() ([]byte, error) {
 func (o AssistantChatPollBody) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["actions"] = o.Actions
+	if !IsNil(o.ActiveRequestId) {
+		toSerialize["activeRequestId"] = o.ActiveRequestId
+	}
+	toSerialize["backgroundSubsessionIds"] = o.BackgroundSubsessionIds
 	toSerialize["confirmations"] = o.Confirmations
 	if !IsNil(o.Failure) {
 		toSerialize["failure"] = o.Failure
 	}
+	if !IsNil(o.Failures) {
+		toSerialize["failures"] = o.Failures
+	}
 	toSerialize["finishedToolCallIds"] = o.FinishedToolCallIds
 	toSerialize["messages"] = o.Messages
+	toSerialize["queuedTurns"] = o.QueuedTurns
 	toSerialize["scriptRuns"] = o.ScriptRuns
 	toSerialize["status"] = o.Status
 	toSerialize["subsessionSteps"] = o.SubsessionSteps
@@ -319,9 +450,11 @@ func (o *AssistantChatPollBody) UnmarshalJSON(data []byte) (err error) {
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"actions",
+		"backgroundSubsessionIds",
 		"confirmations",
 		"finishedToolCallIds",
 		"messages",
+		"queuedTurns",
 		"scriptRuns",
 		"status",
 		"subsessionSteps",

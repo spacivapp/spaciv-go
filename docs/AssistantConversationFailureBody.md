@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Code** | **string** |  | 
+**RequestId** | Pointer to **string** | Id of the chat request whose turn failed, so that a client following the conversation across polls reports each failure once. | [optional] 
 **Stage** | **string** |  | 
 
 ## Methods
@@ -45,6 +46,31 @@ and a boolean to check if the value has been set.
 
 SetCode sets Code field to given value.
 
+
+### GetRequestId
+
+`func (o *AssistantConversationFailureBody) GetRequestId() string`
+
+GetRequestId returns the RequestId field if non-nil, zero value otherwise.
+
+### GetRequestIdOk
+
+`func (o *AssistantConversationFailureBody) GetRequestIdOk() (*string, bool)`
+
+GetRequestIdOk returns a tuple with the RequestId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetRequestId
+
+`func (o *AssistantConversationFailureBody) SetRequestId(v string)`
+
+SetRequestId sets RequestId field to given value.
+
+### HasRequestId
+
+`func (o *AssistantConversationFailureBody) HasRequestId() bool`
+
+HasRequestId returns a boolean if a field has been set.
 
 ### GetStage
 

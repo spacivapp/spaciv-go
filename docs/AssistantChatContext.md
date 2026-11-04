@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**BackgroundSubsessions** | Pointer to **bool** |  | [optional] 
 **CurrentUrl** | **string** |  | 
 
 ## Methods
@@ -24,6 +25,31 @@ will change when the set of required properties is changed
 NewAssistantChatContextWithDefaults instantiates a new AssistantChatContext object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetBackgroundSubsessions
+
+`func (o *AssistantChatContext) GetBackgroundSubsessions() bool`
+
+GetBackgroundSubsessions returns the BackgroundSubsessions field if non-nil, zero value otherwise.
+
+### GetBackgroundSubsessionsOk
+
+`func (o *AssistantChatContext) GetBackgroundSubsessionsOk() (*bool, bool)`
+
+GetBackgroundSubsessionsOk returns a tuple with the BackgroundSubsessions field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetBackgroundSubsessions
+
+`func (o *AssistantChatContext) SetBackgroundSubsessions(v bool)`
+
+SetBackgroundSubsessions sets BackgroundSubsessions field to given value.
+
+### HasBackgroundSubsessions
+
+`func (o *AssistantChatContext) HasBackgroundSubsessions() bool`
+
+HasBackgroundSubsessions returns a boolean if a field has been set.
 
 ### GetCurrentUrl
 
