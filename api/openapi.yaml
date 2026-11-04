@@ -7130,6 +7130,40 @@ paths:
       tags:
       - Logic layers
       x-sdk-params: false
+  /v1/space-rulesets/{id}/duplicate:
+    post:
+      description: "Creates a copy of the specified logic layer — its rules and its\
+        \ image — named \"<original name> (Copy)\", and returns the new logic layer's\
+        \ ID. If the copy cannot be completed, anything already stored for it, including\
+        \ a partly copied image, is removed again. The copy refers to the same object\
+        \ groups and variables as the original. Returns `404` if the logic layer does\
+        \ not exist. Requires the *Edit space rule sets* permission."
+      operationId: logic-layers_duplicate-space-rulesets
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Duplicate a logic layer
+      tags:
+      - Logic layers
+      x-sdk-params: false
   /v1/space-rulesets/{id}/image:
     delete:
       description: "Removes the custom image for a space ruleset. After deletion,\

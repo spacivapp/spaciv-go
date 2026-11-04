@@ -486,6 +486,112 @@ func (a *LogicLayersService) executeDeleteSpaceRulesetsImage(r requestForLogicLa
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type requestForLogicLayersDuplicateSpaceRulesets struct {
+	ctx context.Context
+	ApiService *LogicLayersService
+	id string
+}
+
+/*
+DuplicateSpaceRulesets Duplicate a logic layer
+
+Creates a copy of the specified logic layer — its rules and its image — named "<original name> (Copy)", and returns the new logic layer's ID. If the copy cannot be completed, anything already stored for it, including a partly copied image, is removed again. The copy refers to the same object groups and variables as the original. Returns `404` if the logic layer does not exist. Requires the *Edit space rule sets* permission.
+*/
+func (a *LogicLayersService) DuplicateSpaceRulesets(ctx context.Context, id string) (string, error) {
+	r := requestForLogicLayersDuplicateSpaceRulesets{
+		ApiService: a,
+		ctx: ctx,
+		id: id,
+	}
+	result, _, err := a.executeDuplicateSpaceRulesets(r)
+	return result, err
+}
+
+func (a *LogicLayersService) executeDuplicateSpaceRulesets(r requestForLogicLayersDuplicateSpaceRulesets) (string, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  string
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LogicLayersAPIService.DuplicateSpaceRulesets")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/space-rulesets/{id}/duplicate"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ctx != nil {
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "LogicLayersAPIService.DuplicateSpaceRulesets")
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type requestForLogicLayersGetSpaceRulesets struct {
 	ctx context.Context
 	ApiService *LogicLayersService
