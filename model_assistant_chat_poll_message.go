@@ -30,7 +30,7 @@ type AssistantChatPollMessage struct {
 	Payload string `json:"payload"`
 	RequestId string `json:"requestId"`
 	Role string `json:"role"`
-	// Id of the conversation a run_subsession action message (kind 2) started, which is polled like any other conversation to follow the subsession's own steps. It is not found until the subsession has started. On a user message (kind 0) it is the background subsession whose result the message delivers, which the user did not write. Empty on every other message.
+	// Id of the conversation a run_subsession action message (kind 2) started, which is polled like any other conversation to follow the subsession's own steps. It is not found until the subsession has started. On a user message (kind 0) it is the background subsession, or script run, whose result the message delivers, which the user did not write. Empty on every other message.
 	SubsessionId string `json:"subsessionId"`
 	Text string `json:"text"`
 	// Id of the tool call an action message (kind 2) stands for, or whose failure a tool_failed error message (kind 3) reports. Empty on every other message.

@@ -1789,6 +1789,112 @@ func (a *ScriptsService) executeListRunsLogs(r requestForScriptsListRunsLogs) (*
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type requestForScriptsStopScratchpadRuns struct {
+	ctx context.Context
+	ApiService *ScriptsService
+	runId string
+}
+
+/*
+StopScratchpadRuns Stop a scratchpad run
+
+Stops a scratchpad run the caller started that has not finished, ending it with status `killed` and the message "stopped by the user", and returns it like `GET /v1/scripts/scratchpad/runs/{runId}`. A run that has already finished is returned unchanged. Returns `404` when the run does not exist, has expired or was started by someone else, and `403` for a script's API key or a scratchpad run's own token. Requires the *AI assistant* permission.
+*/
+func (a *ScriptsService) StopScratchpadRuns(ctx context.Context, runId string) (*ScratchpadRun, error) {
+	r := requestForScriptsStopScratchpadRuns{
+		ApiService: a,
+		ctx: ctx,
+		runId: runId,
+	}
+	result, _, err := a.executeStopScratchpadRuns(r)
+	return result, err
+}
+
+func (a *ScriptsService) executeStopScratchpadRuns(r requestForScriptsStopScratchpadRuns) (*ScratchpadRun, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ScratchpadRun
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ScriptsAPIService.StopScratchpadRuns")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/scripts/scratchpad/runs/{runId}/stop"
+	localVarPath = strings.Replace(localVarPath, "{"+"runId"+"}", url.PathEscape(parameterValueToString(r.runId, "runId")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ctx != nil {
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "ScriptsAPIService.StopScratchpadRuns")
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type requestForScriptsUpdate struct {
 	ctx context.Context
 	ApiService *ScriptsService

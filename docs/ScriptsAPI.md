@@ -20,6 +20,7 @@ Method | HTTP request | Description
 [**List**](ScriptsAPI.md#List) | **Get** /v1/scripts | List scripts
 [**ListRuns**](ScriptsAPI.md#ListRuns) | **Get** /v1/scripts/{id}/runs | List a script&#39;s runs
 [**ListRunsLogs**](ScriptsAPI.md#ListRunsLogs) | **Get** /v1/scripts/{id}/runs/{runId}/logs | Get a script run&#39;s logs
+[**StopScratchpadRuns**](ScriptsAPI.md#StopScratchpadRuns) | **Post** /v1/scripts/scratchpad/runs/{runId}/stop | Stop a scratchpad run
 [**Update**](ScriptsAPI.md#Update) | **Patch** /v1/scripts/{id} | Update a script
 [**UpdateSecrets**](ScriptsAPI.md#UpdateSecrets) | **Put** /v1/scripts/{id}/secrets | Set script secrets
 
@@ -1047,6 +1048,73 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**ScriptRunLogsResBody**](ScriptRunLogsResBody.md)
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## StopScratchpadRuns
+
+> ScratchpadRun StopScratchpadRuns(ctx, runId)
+
+Stop a scratchpad run
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+	runId :=  // string | 
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.Scripts.StopScratchpadRuns(context.Background(), runId)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `Scripts.StopScratchpadRuns`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `Scripts.StopScratchpadRuns`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**runId** | **string** |  | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiStopScratchpadRunsRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+### Return type
+
+[**ScratchpadRun**](ScratchpadRun.md)
 
 ### Authorization
 

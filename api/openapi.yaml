@@ -2186,10 +2186,10 @@ paths:
         \ has turned the assistant's tools off. Set `context.backgroundSubsessions`\
         \ only if the client keeps polling a conversation after its turn has finished\
         \ while `backgroundSubsessionIds` is not empty: the assistant can start subsessions\
-        \ in the background only for a client that does. Returns `409` if `conversationId`\
-        \ names a conversation that cannot take messages: a subsession the assistant\
-        \ started for a tool call, which only ever answers the task it was given,\
-        \ or a deleted conversation. Requires the *AI assistant* permission."
+        \ and script runs in the background only for a client that does. Returns `409`\
+        \ if `conversationId` names a conversation that cannot take messages: a subsession\
+        \ the assistant started for a tool call, which only ever answers the task\
+        \ it was given, or a deleted conversation. Requires the *AI assistant* permission."
       operationId: assistant_create-chat
       parameters: []
       requestBody:
@@ -2403,15 +2403,17 @@ paths:
       description: "Asks the assistant to stop the turn it is working on. The turn\
         \ ends at its next step - a tool call already sent finishes and is recorded\
         \ - so the conversation stays usable and keeps everything the turn did before\
-        \ it was stopped. Succeeds with nothing to do if no turn is running and no\
-        \ subsession is running in the background. Stopping a conversation also stops\
-        \ the subsessions it is running, including those in the background after its\
+        \ it was stopped. Succeeds with nothing to do if no turn is running and nothing\
+        \ is running in the background. Stopping a conversation also stops the subsessions\
+        \ and script runs it is running, including those in the background after its\
         \ turn has ended, which then report that they were stopped. The `id` of a\
-        \ subsession the assistant started in the background (a `subsessionId` in\
-        \ the poll) stops that subsession alone, at its next step, and the conversation's\
-        \ own turn is left as it is. Returns `404` if the conversation does not exist,\
-        \ and `409` if it is any other subsession, which is stopped only by stopping\
-        \ the conversation that started it. Requires the *AI assistant* permission."
+        \ subsession or script run the assistant started in the background (a `subsessionId`\
+        \ in the poll, or an entry of `backgroundSubsessionIds`) stops that one alone,\
+        \ a subsession at its next step and a script run by ending its sandbox, and\
+        \ the conversation's own turn is left as it is. Returns `404` if the conversation\
+        \ does not exist, and `409` if it is any other subsession, which is stopped\
+        \ only by stopping the conversation that started it. Requires the *AI assistant*\
+        \ permission."
       operationId: assistant_stop-conversations
       parameters:
       - description: UUID of the conversation whose turn to stop.
@@ -6946,6 +6948,40 @@ paths:
       tags:
       - Scripts
       x-sdk-params: true
+  /v1/scripts/scratchpad/runs/{runId}/stop:
+    post:
+      description: "Stops a scratchpad run the caller started that has not finished,\
+        \ ending it with status `killed` and the message \"stopped by the user\",\
+        \ and returns it like `GET /v1/scripts/scratchpad/runs/{runId}`. A run that\
+        \ has already finished is returned unchanged. Returns `404` when the run does\
+        \ not exist, has expired or was started by someone else, and `403` for a script's\
+        \ API key or a scratchpad run's own token. Requires the *AI assistant* permission."
+      operationId: scripts_stop-scratchpad-runs
+      parameters:
+      - explode: false
+        in: path
+        name: runId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScratchpadRun"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Stop a scratchpad run
+      tags:
+      - Scripts
+      x-sdk-params: false
   /v1/scripts/usage:
     get:
       description: "Returns the credits the account's script runs were charged this\
@@ -9478,12 +9514,13 @@ components:
             \ knows its turn has ended once this names another."
           type: string
         backgroundSubsessionIds:
-          description: "The subsessions the conversation started in the background\
-            \ that are still running, which carry on after the turn that started them\
-            \ has finished. A client keeps polling while there are any: the message\
-            \ delivering a finished one's result starts a new turn. A run_subsession\
-            \ call to one of them is not listed among the finished tool calls until\
-            \ then."
+          description: "The subsessions and script runs the conversation started in\
+            \ the background that are still running, which carry on after the turn\
+            \ that started them has finished: a script run is listed by its run id,\
+            \ as scriptRuns gives it for its run_script call. A client keeps polling\
+            \ while there are any: the message delivering a finished one's result\
+            \ starts a new turn. The call that started one is not listed among the\
+            \ finished tool calls until then."
           items:
             type: string
           type: array
@@ -9509,9 +9546,9 @@ components:
             \ the since cursor, by the toolCallId of their action message. A call\
             \ that succeeded has no message of its own, so this is how a client tells\
             \ a finished action from one still running. A run_subsession call that\
-            \ started a background subsession is listed once the subsession has ended\
-            \ and its result has been delivered to the conversation. A later poll\
-            \ can list a call again."
+            \ started a background subsession, or a run_script call that started a\
+            \ background script run, is listed once it has ended and its result has\
+            \ been delivered to the conversation. A later poll can list a call again."
           items:
             type: string
           type: array
@@ -9642,9 +9679,9 @@ components:
           description: "Id of the conversation a run_subsession action message (kind\
             \ 2) started, which is polled like any other conversation to follow the\
             \ subsession's own steps. It is not found until the subsession has started.\
-            \ On a user message (kind 0) it is the background subsession whose result\
-            \ the message delivers, which the user did not write. Empty on every other\
-            \ message."
+            \ On a user message (kind 0) it is the background subsession, or script\
+            \ run, whose result the message delivers, which the user did not write.\
+            \ Empty on every other message."
           type: string
         text:
           type: string
