@@ -20,7 +20,7 @@ Method | HTTP request | Description
 [**Update**](ObjectGroupsAPI.md#Update) | **Patch** /v1/object-groups/{id} | Update an object group
 [**UpdateEntries**](ObjectGroupsAPI.md#UpdateEntries) | **Patch** /v1/object-groups/{id}/entries | Partially update entries in an object group
 [**UpdateEntriesImage**](ObjectGroupsAPI.md#UpdateEntriesImage) | **Put** /v1/object-groups/{id}/entries/{entryId}/image | Upload an entry image
-[**UpdateFile**](ObjectGroupsAPI.md#UpdateFile) | **Put** /v1/object-groups/{id}/file | Upload or replace an object group&#39;s file
+[**UpdateFile**](ObjectGroupsAPI.md#UpdateFile) | **Put** /v1/object-groups/{id}/file | Upload or replace a legacy property file
 
 
 
@@ -1111,7 +1111,7 @@ Name | Type | Description  | Notes
 
 > map[string]interface{} UpdateFile(ctx, id, params)
 
-Upload or replace an object group's file
+Upload or replace a legacy property file
 
 
 

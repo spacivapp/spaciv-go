@@ -1881,9 +1881,9 @@ type ObjectGroupsUpdateFileParams struct {
 }
 
 /*
-UpdateFile Upload or replace an object group's file
+UpdateFile Upload or replace a legacy property file
 
-Uploads a file and attaches it to the object group, replacing any previously uploaded file. Send the file as `multipart/form-data` with the field key `file`. Maximum file size is 4 MB. If no file is included in the form, any existing file is deleted. Requires the *Edit objects* permission.
+Uploads a file under a legacy property-file id (the id a file property value stores), replacing any previously uploaded file. The id must not be an object group's: object images are uploaded per object, and the id of an existing object group is refused with 409. Send the file as `multipart/form-data` with the field key `file`. Maximum file size is 4 MB. If no file is included in the form, any existing file is deleted. Refused with 400 unless the id is a single path segment. Requires the *Edit objects* permission.
 */
 func (a *ObjectGroupsService) UpdateFile(ctx context.Context, id string, params *ObjectGroupsUpdateFileParams) (map[string]interface{}, error) {
 	r := requestForObjectGroupsUpdateFile{
