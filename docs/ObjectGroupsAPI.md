@@ -12,7 +12,7 @@ Method | HTTP request | Description
 [**Duplicate**](ObjectGroupsAPI.md#Duplicate) | **Post** /v1/object-groups/{id}/duplicate | Duplicate an object group
 [**Get**](ObjectGroupsAPI.md#Get) | **Get** /v1/object-groups/{id} | Get an object group
 [**GetEntriesImage**](ObjectGroupsAPI.md#GetEntriesImage) | **Get** /v1/object-groups/{id}/entries/{entryId}/image | Download an entry&#39;s image
-[**GetFile**](ObjectGroupsAPI.md#GetFile) | **Get** /v1/object-groups/{id}/file | Download an object group&#39;s file
+[**GetFile**](ObjectGroupsAPI.md#GetFile) | **Get** /v1/object-groups/{id}/file | Download a legacy property file
 [**List**](ObjectGroupsAPI.md#List) | **Get** /v1/object-groups | List object groups
 [**ListEntries**](ObjectGroupsAPI.md#ListEntries) | **Get** /v1/object-groups/{id}/entries | List entries in an object group
 [**ReplaceEntries**](ObjectGroupsAPI.md#ReplaceEntries) | **Put** /v1/object-groups/{id}/entries | Upsert entries in an object group
@@ -565,7 +565,7 @@ Name | Type | Description  | Notes
 
 > string GetFile(ctx, id)
 
-Download an object group's file
+Download a legacy property file
 
 
 

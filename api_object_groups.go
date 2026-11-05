@@ -917,9 +917,9 @@ type requestForObjectGroupsGetFile struct {
 }
 
 /*
-GetFile Download an object group's file
+GetFile Download a legacy property file
 
-Returns the binary content of the file attached to the object group, with the appropriate `Content-Type` header. Requires the *View objects* permission. Returns `403` (`file quarantined: it matched a virus signature`) when a rescan found the stored file matches a virus signature; the bytes are kept for investigation.
+Returns the binary content of the legacy property file stored under this file id, with the appropriate `Content-Type` header. Requires the *View objects* permission. Returns `403` (`file quarantined: it matched a virus signature`) when a rescan found the stored file matches a virus signature; the bytes are kept for investigation.
 */
 func (a *ObjectGroupsService) GetFile(ctx context.Context, id string) (string, error) {
 	r := requestForObjectGroupsGetFile{
