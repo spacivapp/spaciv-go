@@ -1169,9 +1169,9 @@ type AuthenticationCreateAuthRefreshTokenParams struct {
 /*
 CreateAuthRefreshToken Refresh an access token
 
-Exchanges the refresh token cookie (`__Host-token`, or `token` when `AUTH_COOKIE_SECURE` is false) for a fresh short-lived access token. Optionally scope the token to a specific account or project by providing `account` and/or `project` in the request body. For OIDC accounts, the provider's token is silently re-validated on each refresh.
+Exchanges the refresh token cookie (`__Host-token`, or `token` when `AUTH_COOKIE_SECURE` is false) for a fresh short-lived access token. The token is scoped to the `account` in the request body, and further to a `project` when one is given. For OIDC accounts, the provider's token is silently re-validated on each refresh.
 
-The session keeps one login per account. A refresh for an account it has no login to adds one when the account accepts one of the session's sign-ins, so the person can switch accounts without signing in again; an account the session signed out of needs a new sign-in. A refresh without `account` is deprecated and returns `400` once account-less tokens are switched off.
+The session keeps one login per account. A refresh for an account it has no login to adds one when the account accepts one of the session's sign-ins, so the person can switch accounts without signing in again; an account the session signed out of needs a new sign-in. A refresh without `account` returns `400`: every token is for an account.
 
 A successful refresh rotates the cookie, keeping the session's original expiry. The session's refresh token advances at most once a minute: within that minute, presenting the current token sets no cookie, and presenting the token it just replaced sets a cookie for the current one. A superseded refresh token is still accepted for a short grace period, so parallel refreshes and retries succeed; presenting it after that revokes the whole session.
 
@@ -1179,7 +1179,7 @@ Returns `401` when no access token could be minted: an invalid refresh token, a 
 
 Returns `503` when, for a refresh scoped to an `account`, the OIDC provider could not be reached or reported a transient failure, or when concurrent refreshes kept changing the session. The session is still valid, so retry the refresh later rather than signing the user out.
 
-Returns `403` when the session is valid but is not authorised for the requested `account`, which typically means the account mandates a sign-in method the session did not use or the session signed out of that account, or when a refresh without an `account` comes from a session that signed in through an account's own OIDC provider: such a session only gets tokens for an account. The session stays usable for the accounts it is authorised for, so keep it and cancel only the action that needed the token.
+Returns `403` when the session is valid but is not authorised for the requested `account`, which typically means the account mandates a sign-in method the session did not use or the session signed out of that account. The session stays usable for the accounts it is authorised for, so keep it and cancel only the action that needed the token.
 */
 func (a *AuthenticationService) CreateAuthRefreshToken(ctx context.Context, authRefreshTokenReqBody AuthRefreshTokenReqBody, params *AuthenticationCreateAuthRefreshTokenParams) (*AuthRefreshTokenResBody, error) {
 	r := requestForAuthenticationCreateAuthRefreshToken{

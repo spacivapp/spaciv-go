@@ -20,7 +20,7 @@ var _ MappedNullable = &AuthRefreshTokenReqBody{}
 
 // AuthRefreshTokenReqBody struct for AuthRefreshTokenReqBody
 type AuthRefreshTokenReqBody struct {
-	// Scope the new access token to this account ID. Must be an account the session is authorised for.
+	// The account the new access token is for. Required; must be an account the session is authorised for.
 	Account *int64 `json:"account,omitempty"`
 	// Further scope the new access token to this project ID within the given account.
 	Project *int64 `json:"project,omitempty"`

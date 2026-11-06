@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Account** | Pointer to **int64** | Scope the new access token to this account ID. Must be an account the session is authorised for. | [optional] 
+**Account** | Pointer to **int64** | The account the new access token is for. Required; must be an account the session is authorised for. | [optional] 
 **Project** | Pointer to **int64** | Further scope the new access token to this project ID within the given account. | [optional] 
 
 ## Methods
