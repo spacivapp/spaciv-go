@@ -131,7 +131,7 @@ type requestForUsersCreateImport struct {
 /*
 CreateImport Bulk import users
 
-Creates or updates a batch of users and assigns each one a role within the current account. If a user with a given email address does not yet exist they are created. Requires the *Manage users* permission.
+Creates or updates a batch of users and assigns each one a role within the current account. If a user with a given email address does not yet exist they are created. Name, title and employee ID set the user's profile in the current account, for existing users too; where the account's SSO provider supplies the name, the name is left to it. Requires the *Manage users* permission.
 */
 func (a *UsersService) CreateImport(ctx context.Context, importBody []ImportBody) error {
 	r := requestForUsersCreateImport{
@@ -230,7 +230,7 @@ type requestForUsersDelete struct {
 /*
 Delete Delete the current user's account
 
-Permanently deletes the authenticated user's own account and all associated data. Requires the *Edit my user profile* permission. This action is irreversible. A script's own API key cannot delete its user.
+Permanently deletes the authenticated user's own account and all associated data. Requires the *Edit my user profile* permission. This action is irreversible. A script's own API key cannot delete its user. Returns `403` (`person-not-proven`) unless the session signed in with email and password, a magic link or the shared SSO provider: a sign-in through an account's own SSO provider only vouches for the person within that account.
 */
 func (a *UsersService) Delete(ctx context.Context) error {
 	r := requestForUsersDelete{
@@ -323,7 +323,7 @@ type requestForUsersDeleteImage struct {
 /*
 DeleteImage Delete the current user's profile image
 
-Permanently removes the profile image for the authenticated user. Requires the *Edit my user profile* permission.
+Permanently removes the authenticated user's profile image in the token's account. In an account whose SSO provider supplies the photo, returns `403` (`profile-managed-by-sso`). Requires the *Edit my user profile* permission.
 */
 func (a *UsersService) DeleteImage(ctx context.Context) (map[string]interface{}, error) {
 	r := requestForUsersDeleteImage{
@@ -426,7 +426,7 @@ type requestForUsersGet struct {
 /*
 Get Get the current user's profile
 
-Returns profile details for the authenticated user, including name, title, employee ID, locale, and a client-side key-value store. Requires the *View my user profile* permission.
+Returns profile details for the authenticated user, including name, title, employee ID, locale, and a client-side key-value store. Name, title, employee ID and store are the user's profile in the token's account; each account has its own. Any signed-in user can read their own profile.
 */
 func (a *UsersService) Get(ctx context.Context) (*UserV2GetResBody, error) {
 	r := requestForUsersGet{
@@ -535,7 +535,7 @@ type UsersGetImageParams struct {
 /*
 GetImage Get a user's profile image
 
-Returns the raw image bytes for a user's profile photo, with the `Content-Type` header set to the image's MIME type. Omit `id` to retrieve the authenticated user's own image, or supply `id` to retrieve a colleague's image (the target must belong to the same account). Supplying `id` requires the *View my user profile* permission; retrieving your own image needs no particular permission. Returns `403` (`file quarantined: it matched a virus signature`) when a rescan found the stored image matches a virus signature; the bytes are kept for investigation.
+Returns the raw image bytes for a user's profile photo in the token's account (each account has its own), with the `Content-Type` header set to the image's MIME type. Omit `id` to retrieve the authenticated user's own image, or supply `id` to retrieve a colleague's image (the target must belong to the same account). Supplying `id` requires the *View my user profile* permission; retrieving your own image needs no particular permission. Returns `403` (`file quarantined: it matched a virus signature`) when a rescan found the stored image matches a virus signature; the bytes are kept for investigation.
 */
 func (a *UsersService) GetImage(ctx context.Context, params *UsersGetImageParams) (string, error) {
 	r := requestForUsersGetImage{
@@ -851,7 +851,7 @@ type requestForUsersUpdate struct {
 /*
 Update Update a user's profile or role
 
-Applies a partial update to the authenticated user's own profile (name, title, employee ID, locale, client store, marketing preferences). To grant or revoke a role on another user, include `roleUser` (or `roleUserEmail`) and `role`; omitting `role` revokes the user's current role.
+Applies a partial update to the authenticated user's own profile (name, title, employee ID, locale, client store, marketing preferences). Name, title, employee ID and store change the user's profile in the token's account only; each account has its own. In an account whose SSO provider supplies the name, changing it returns `403` (`profile-managed-by-sso`). Marketing preferences belong to the user in every account, so changing them returns `403` (`person-not-proven`) unless the session signed in with email and password, a magic link or the shared SSO provider. To grant or revoke a role on another user, include `roleUser` (or `roleUserEmail`) and `role`; omitting `role` revokes the user's current role.
 
 Updating profile fields requires the `Edit my user profile` permission. Updating another user's role requires `Manage users`. Role changes are written to the audit log. Inviting a new user by email sends them a verification email.
 */
@@ -961,7 +961,7 @@ type UsersUpdateImageParams struct {
 /*
 UpdateImage Upload a profile image
 
-Uploads or replaces the authenticated user's profile photo. Send a `multipart/form-data` body with the image in the `img` field. Accepted MIME types: `image/png`, `image/jpeg`, `image/gif`, `image/webp`, `image/svg+xml` (detected from file bytes). Maximum file size: 4 MiB. Requires the *Edit my user profile* permission.
+Uploads or replaces the authenticated user's profile photo in the token's account; each account has its own. In an account whose SSO provider supplies the photo, returns `403` (`profile-managed-by-sso`). Send a `multipart/form-data` body with the image in the `img` field. Accepted MIME types: `image/png`, `image/jpeg`, `image/gif`, `image/webp`, `image/svg+xml` (detected from file bytes). Maximum file size: 4 MiB. Requires the *Edit my user profile* permission.
 */
 func (a *UsersService) UpdateImage(ctx context.Context, params *UsersUpdateImageParams) (map[string]interface{}, error) {
 	r := requestForUsersUpdateImage{

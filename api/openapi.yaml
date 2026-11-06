@@ -1624,7 +1624,7 @@ paths:
 
         The account is seeded from the prebuilt account for the chosen template (`blank` starts almost empty). Seeding runs in the background, so poll `GET /v1/accounts/{id}/setup-status` until it succeeds before sending the user into the new account.
 
-        Account names are unique; reusing one returns `400 account-name-in-use`. Requires the *Manage my account* permission.
+        Account names are unique; reusing one returns `400 account-name-in-use`. Anyone signed in may create an account, from any account and role, but only from a session that signed in with email and password, a magic link or the shared SSO provider; others get `403` (`person-not-proven`). The new account is entered by refreshing a token for it.
       operationId: accounts_create
       parameters: []
       requestBody:
@@ -2599,6 +2599,51 @@ paths:
       tags:
       - Audit log
       x-sdk-params: true
+  /v1/auth/accounts:
+    get:
+      description: "Lists the accounts the session behind the refresh token cookie\
+        \ can switch between, for an account switcher. A session with a sign-in Spaciv\
+        \ itself checks (email and password, magic link) or through the shared SSO\
+        \ provider lists every account the person belongs to. A session signed in\
+        \ only through accounts' own SSO providers lists only the accounts it holds\
+        \ logins to, because such a provider vouches for the person in its own account\
+        \ only. Returns `401` when the cookie is missing, invalid or signed out."
+      operationId: authentication_list-auth-accounts
+      parameters:
+      - explode: true
+        in: cookie
+        name: __Host-token
+        required: false
+        schema:
+          $ref: "#/components/schemas/Cookie"
+        style: form
+      - explode: true
+        in: cookie
+        name: token
+        required: false
+        schema:
+          $ref: "#/components/schemas/Cookie"
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/SessionAccount"
+                type: array
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      security: []
+      summary: List the accounts to switch between
+      tags:
+      - Authentication
+      x-sdk-params: true
   /v1/auth/api-key-token:
     post:
       description: "Trades an API key for a short-lived access token carrying the\
@@ -2640,6 +2685,20 @@ paths:
         If no user with the provider-returned email address exists it is created automatically. Call `GET /v1/auth/oidc/{hostname}` first to start the OIDC flow and obtain the code.
       operationId: authentication_get-auth-login-oidc
       parameters:
+      - explode: true
+        in: cookie
+        name: __Host-token
+        required: false
+        schema:
+          $ref: "#/components/schemas/Cookie"
+        style: form
+      - explode: true
+        in: cookie
+        name: token
+        required: false
+        schema:
+          $ref: "#/components/schemas/Cookie"
+        style: form
       - explode: false
         in: query
         name: code
@@ -2690,7 +2749,21 @@ paths:
         \ Returns `401` if the credentials do not match or email-and-password sign-in\
         \ is disabled for the account."
       operationId: authentication_create-auth-login-password
-      parameters: []
+      parameters:
+      - explode: true
+        in: cookie
+        name: __Host-token
+        required: false
+        schema:
+          $ref: "#/components/schemas/Cookie"
+        style: form
+      - explode: true
+        in: cookie
+        name: token
+        required: false
+        schema:
+          $ref: "#/components/schemas/Cookie"
+        style: form
       requestBody:
         content:
           application/json:
@@ -2720,7 +2793,7 @@ paths:
       summary: Sign in with email and password
       tags:
       - Authentication
-      x-sdk-params: false
+      x-sdk-params: true
   /v1/auth/login-public:
     post:
       description: |-
@@ -2728,7 +2801,21 @@ paths:
 
         The resulting access token grants only the permissions needed to view and submit public surveys.
       operationId: authentication_create-auth-login-public
-      parameters: []
+      parameters:
+      - explode: true
+        in: cookie
+        name: __Host-token
+        required: false
+        schema:
+          $ref: "#/components/schemas/Cookie"
+        style: form
+      - explode: true
+        in: cookie
+        name: token
+        required: false
+        schema:
+          $ref: "#/components/schemas/Cookie"
+        style: form
       requestBody:
         content:
           application/json:
@@ -2758,7 +2845,7 @@ paths:
       summary: Sign in as a public contributor
       tags:
       - Authentication
-      x-sdk-params: false
+      x-sdk-params: true
   /v1/auth/login-token:
     post:
       description: |-
@@ -2766,7 +2853,21 @@ paths:
 
         Returns `401` when the link can't be used, with `detail` saying why: `token-expired` (the link is genuine but too old; request a new one), `token-invalid` (the token is malformed or was not issued by spaciv), or `auth-method-not-allowed` (the account named by `hostname` doesn't allow magic-link sign-in).
       operationId: authentication_create-auth-login-token
-      parameters: []
+      parameters:
+      - explode: true
+        in: cookie
+        name: __Host-token
+        required: false
+        schema:
+          $ref: "#/components/schemas/Cookie"
+        style: form
+      - explode: true
+        in: cookie
+        name: token
+        required: false
+        schema:
+          $ref: "#/components/schemas/Cookie"
+        style: form
       requestBody:
         content:
           application/json:
@@ -2796,16 +2897,18 @@ paths:
       summary: Sign in with a magic link token
       tags:
       - Authentication
-      x-sdk-params: false
+      x-sdk-params: true
   /v1/auth/logout:
     post:
       description: "Revokes the session behind the refresh token cookie (`__Host-token`,\
         \ or `token` when `AUTH_COOKIE_SECURE` is false), so it can no longer be exchanged\
-        \ for access tokens, and clears the cookie. Succeeds without revoking anything\
-        \ when the cookie is missing or invalid. Returns `500` without clearing the\
-        \ cookie when the revocation itself fails, so the session is still live and\
-        \ the sign-out should be retried. The access token itself remains valid until\
-        \ it expires (typically within 5 minutes)."
+        \ for access tokens, and clears the cookie. With an `account`, ends only the\
+        \ session's login to that account: the account then needs a new sign-in, and\
+        \ the cookie is cleared only when no other login remains. Succeeds without\
+        \ revoking anything when the cookie is missing or invalid. Returns `500` without\
+        \ clearing the cookie when the revocation itself fails, so the session is\
+        \ still live and the sign-out should be retried. The access token itself remains\
+        \ valid until it expires (typically within 5 minutes)."
       operationId: authentication_create-auth-logout
       parameters:
       - explode: true
@@ -2822,6 +2925,11 @@ paths:
         schema:
           $ref: "#/components/schemas/Cookie"
         style: form
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthLogoutReqBody"
       responses:
         "204":
           description: No Content
@@ -2909,18 +3017,198 @@ paths:
       tags:
       - Authentication
       x-sdk-params: false
+  /v1/auth/proof:
+    post:
+      description: "Exchanges a magic link token that names no account — from signup,\
+        \ an invitation or a sign-in email sent without an account — for an identity\
+        \ proof and the accounts the person belongs to. The proof is not an access\
+        \ token: use it to enter one of the accounts (`POST /v1/auth/proof/enter`)\
+        \ or to create the person's first (`POST /v1/auth/proof/complete-signup`).\
+        \ `enterable` is true for accounts that accept magic-link sign-in; for the\
+        \ others, sign in on the account's page with one of `signInMethods`. Returns\
+        \ `401` with `token-expired` or `token-invalid` when the link can't be used."
+      operationId: authentication_create-auth-proof
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProofCreateReqBody"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProofCreateResBody"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      security: []
+      summary: Prove a person without choosing an account
+      tags:
+      - Authentication
+      x-sdk-params: false
+  /v1/auth/proof/accounts:
+    post:
+      description: "Lists the accounts the person behind an identity proof belongs\
+        \ to, as `POST /v1/auth/proof` does. Returns `401` (`proof-invalid`) when\
+        \ the proof has expired or was used to complete a signup."
+      operationId: authentication_create-auth-proof-accounts
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProofAccountsReqBody"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/SessionAccount"
+                type: array
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      security: []
+      summary: List the accounts of a proven person
+      tags:
+      - Authentication
+      x-sdk-params: false
+  /v1/auth/proof/complete-signup:
+    post:
+      description: "Sets the person's name, creates their first account and signs\
+        \ them in to it, using up the identity proof. The account is seeded in the\
+        \ background, so poll `GET /v1/accounts/{id}/setup-status` with the returned\
+        \ access token before entering it. Returns `401` (`proof-invalid`) when the\
+        \ proof has expired or was already used, and `400 account-name-in-use` when\
+        \ the name is taken, keeping the proof for another try."
+      operationId: authentication_create-auth-proof-complete-signup
+      parameters:
+      - explode: true
+        in: cookie
+        name: __Host-token
+        required: false
+        schema:
+          $ref: "#/components/schemas/Cookie"
+        style: form
+      - explode: true
+        in: cookie
+        name: token
+        required: false
+        schema:
+          $ref: "#/components/schemas/Cookie"
+        style: form
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProofCompleteSignupReqBody"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProofCompleteSignupResBody"
+          description: OK
+          headers:
+            Set-Cookie:
+              explode: false
+              schema:
+                type: string
+              style: simple
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      security: []
+      summary: Complete a signup with an identity proof
+      tags:
+      - Authentication
+      x-sdk-params: true
+  /v1/auth/proof/enter:
+    post:
+      description: "Signs the person behind an identity proof in to one of their accounts,\
+        \ as a magic-link sign-in: returns an access token for the account and sets\
+        \ the refresh token cookie (`__Host-token`, or `token` when `AUTH_COOKIE_SECURE`\
+        \ is false). Returns `403` with `auth-method-not-allowed` when the account\
+        \ doesn't accept magic-link sign-in — sign in on the account's own page instead\
+        \ — or when the person isn't a member, and `401` (`proof-invalid`) when the\
+        \ proof has expired or was used."
+      operationId: authentication_create-auth-proof-enter
+      parameters:
+      - explode: true
+        in: cookie
+        name: __Host-token
+        required: false
+        schema:
+          $ref: "#/components/schemas/Cookie"
+        style: form
+      - explode: true
+        in: cookie
+        name: token
+        required: false
+        schema:
+          $ref: "#/components/schemas/Cookie"
+        style: form
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProofEnterReqBody"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthLoginResBody"
+          description: OK
+          headers:
+            Set-Cookie:
+              explode: false
+              schema:
+                type: string
+              style: simple
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      security: []
+      summary: Enter an account with an identity proof
+      tags:
+      - Authentication
+      x-sdk-params: true
   /v1/auth/refresh-token:
     post:
       description: |-
         Exchanges the refresh token cookie (`__Host-token`, or `token` when `AUTH_COOKIE_SECURE` is false) for a fresh short-lived access token. Optionally scope the token to a specific account or project by providing `account` and/or `project` in the request body. For OIDC accounts, the provider's token is silently re-validated on each refresh.
 
+        The session keeps one login per account. A refresh for an account it has no login to adds one when the account accepts one of the session's sign-ins, so the person can switch accounts without signing in again; an account the session signed out of needs a new sign-in. A refresh without `account` is deprecated and returns `400` once account-less tokens are switched off.
+
         A successful refresh rotates the cookie, keeping the session's original expiry. The session's refresh token advances at most once a minute: within that minute, presenting the current token sets no cookie, and presenting the token it just replaced sets a cookie for the current one. A superseded refresh token is still accepted for a short grace period, so parallel refreshes and retries succeed; presenting it after that revokes the whole session.
 
         Returns `401` when no access token could be minted: an invalid refresh token, a missing or signed-out session, a reused refresh token, a deleted user, or, for a refresh scoped to an `account`, unusable session data or an OIDC provider that rejects the session's token. Returning the user to sign-in is the usual response.
 
-        Returns `503` when, for a refresh scoped to an `account`, the OIDC provider could not be reached or reported a transient failure. The session is still valid, so retry the refresh later rather than signing the user out.
+        Returns `503` when, for a refresh scoped to an `account`, the OIDC provider could not be reached or reported a transient failure, or when concurrent refreshes kept changing the session. The session is still valid, so retry the refresh later rather than signing the user out.
 
-        Returns `403` when the session is valid but is not authorised for the requested `account`, which typically means the account mandates a sign-in method the session did not use, or when a refresh without an `account` comes from a session that signed in through an account's own OIDC provider: such a session only gets tokens for an account. The session stays usable for the accounts it is authorised for, so keep it and cancel only the action that needed the token.
+        Returns `403` when the session is valid but is not authorised for the requested `account`, which typically means the account mandates a sign-in method the session did not use or the session signed out of that account, or when a refresh without an `account` comes from a session that signed in through an account's own OIDC provider: such a session only gets tokens for an account. The session stays usable for the accounts it is authorised for, so keep it and cancel only the action that needed the token.
       operationId: authentication_create-auth-refresh-token
       parameters:
       - explode: true
@@ -8026,9 +8314,12 @@ paths:
       x-sdk-params: false
   /v1/user:
     delete:
-      description: Permanently deletes the authenticated user's own account and all
-        associated data. Requires the *Edit my user profile* permission. This action
-        is irreversible. A script's own API key cannot delete its user.
+      description: "Permanently deletes the authenticated user's own account and all\
+        \ associated data. Requires the *Edit my user profile* permission. This action\
+        \ is irreversible. A script's own API key cannot delete its user. Returns\
+        \ `403` (`person-not-proven`) unless the session signed in with email and\
+        \ password, a magic link or the shared SSO provider: a sign-in through an\
+        \ account's own SSO provider only vouches for the person within that account."
       operationId: users_delete
       parameters: []
       responses:
@@ -8046,8 +8337,9 @@ paths:
       x-sdk-params: false
     get:
       description: "Returns profile details for the authenticated user, including\
-        \ name, title, employee ID, locale, and a client-side key-value store. Requires\
-        \ the *View my user profile* permission."
+        \ name, title, employee ID, locale, and a client-side key-value store. Name,\
+        \ title, employee ID and store are the user's profile in the token's account;\
+        \ each account has its own. Any signed-in user can read their own profile."
       operationId: users_get
       parameters: []
       responses:
@@ -8069,7 +8361,7 @@ paths:
       x-sdk-params: false
     patch:
       description: |-
-        Applies a partial update to the authenticated user's own profile (name, title, employee ID, locale, client store, marketing preferences). To grant or revoke a role on another user, include `roleUser` (or `roleUserEmail`) and `role`; omitting `role` revokes the user's current role.
+        Applies a partial update to the authenticated user's own profile (name, title, employee ID, locale, client store, marketing preferences). Name, title, employee ID and store change the user's profile in the token's account only; each account has its own. In an account whose SSO provider supplies the name, changing it returns `403` (`profile-managed-by-sso`). Marketing preferences belong to the user in every account, so changing them returns `403` (`person-not-proven`) unless the session signed in with email and password, a magic link or the shared SSO provider. To grant or revoke a role on another user, include `roleUser` (or `roleUserEmail`) and `role`; omitting `role` revokes the user's current role.
 
         Updating profile fields requires the `Edit my user profile` permission. Updating another user's role requires `Manage users`. Role changes are written to the audit log. Inviting a new user by email sends them a verification email.
       operationId: users_update
@@ -8121,8 +8413,10 @@ paths:
       x-sdk-params: false
   /v1/user/image:
     delete:
-      description: Permanently removes the profile image for the authenticated user.
-        Requires the *Edit my user profile* permission.
+      description: "Permanently removes the authenticated user's profile image in\
+        \ the token's account. In an account whose SSO provider supplies the photo,\
+        \ returns `403` (`profile-managed-by-sso`). Requires the *Edit my user profile*\
+        \ permission."
       operationId: users_delete-image
       parameters: []
       responses:
@@ -8143,14 +8437,14 @@ paths:
       - Users
       x-sdk-params: false
     get:
-      description: "Returns the raw image bytes for a user's profile photo, with the\
-        \ `Content-Type` header set to the image's MIME type. Omit `id` to retrieve\
-        \ the authenticated user's own image, or supply `id` to retrieve a colleague's\
-        \ image (the target must belong to the same account). Supplying `id` requires\
-        \ the *View my user profile* permission; retrieving your own image needs no\
-        \ particular permission. Returns `403` (`file quarantined: it matched a virus\
-        \ signature`) when a rescan found the stored image matches a virus signature;\
-        \ the bytes are kept for investigation."
+      description: "Returns the raw image bytes for a user's profile photo in the\
+        \ token's account (each account has its own), with the `Content-Type` header\
+        \ set to the image's MIME type. Omit `id` to retrieve the authenticated user's\
+        \ own image, or supply `id` to retrieve a colleague's image (the target must\
+        \ belong to the same account). Supplying `id` requires the *View my user profile*\
+        \ permission; retrieving your own image needs no particular permission. Returns\
+        \ `403` (`file quarantined: it matched a virus signature`) when a rescan found\
+        \ the stored image matches a virus signature; the bytes are kept for investigation."
       operationId: users_get-image
       parameters:
       - description: "ID of another user whose image to retrieve. When omitted, returns\
@@ -8211,11 +8505,13 @@ paths:
       - Users
       x-sdk-params: true
     put:
-      description: "Uploads or replaces the authenticated user's profile photo. Send\
-        \ a `multipart/form-data` body with the image in the `img` field. Accepted\
-        \ MIME types: `image/png`, `image/jpeg`, `image/gif`, `image/webp`, `image/svg+xml`\
-        \ (detected from file bytes). Maximum file size: 4 MiB. Requires the *Edit\
-        \ my user profile* permission."
+      description: "Uploads or replaces the authenticated user's profile photo in\
+        \ the token's account; each account has its own. In an account whose SSO provider\
+        \ supplies the photo, returns `403` (`profile-managed-by-sso`). Send a `multipart/form-data`\
+        \ body with the image in the `img` field. Accepted MIME types: `image/png`,\
+        \ `image/jpeg`, `image/gif`, `image/webp`, `image/svg+xml` (detected from\
+        \ file bytes). Maximum file size: 4 MiB. Requires the *Edit my user profile*\
+        \ permission."
       operationId: users_update-image
       parameters: []
       requestBody:
@@ -8296,9 +8592,12 @@ paths:
       x-sdk-params: false
   /v1/users/import:
     post:
-      description: Creates or updates a batch of users and assigns each one a role
-        within the current account. If a user with a given email address does not
-        yet exist they are created. Requires the *Manage users* permission.
+      description: "Creates or updates a batch of users and assigns each one a role\
+        \ within the current account. If a user with a given email address does not\
+        \ yet exist they are created. Name, title and employee ID set the user's profile\
+        \ in the current account, for existing users too; where the account's SSO\
+        \ provider supplies the name, the name is left to it. Requires the *Manage\
+        \ users* permission."
       operationId: users_create-import
       parameters: []
       requestBody:
@@ -10359,6 +10658,16 @@ components:
       required:
       - hostname
       - token
+    AuthLogoutReqBody:
+      additionalProperties: false
+      example:
+        account: 0
+      properties:
+        account:
+          description: "Sign out of this account only, keeping the session's logins\
+            \ to other accounts. Omit to sign out of every account."
+          format: int64
+          type: integer
     AuthRefreshTokenReqBody:
       additionalProperties: false
       example:
@@ -16324,6 +16633,123 @@ components:
       required:
       - deleteFilter
       - filters
+    ProofAccountsReqBody:
+      additionalProperties: false
+      example:
+        proof: proof
+      properties:
+        proof:
+          type: string
+      required:
+      - proof
+    ProofCompleteSignupReqBody:
+      additionalProperties: false
+      example:
+        firstName: firstName
+        lastName: lastName
+        acceptMarketing: true
+        proof: proof
+        account:
+          template: blank
+          country: country
+          city: city
+          street: street
+          houseNumber: houseNumber
+          name: name
+          postcode: postcode
+          addressLine2: addressLine2
+          industry: industry
+          state: state
+          companySize: companySize
+      properties:
+        acceptMarketing:
+          type: boolean
+        account:
+          $ref: "#/components/schemas/SignupAccount"
+        firstName:
+          minLength: 1
+          type: string
+        lastName:
+          type: string
+        proof:
+          type: string
+      required:
+      - account
+      - firstName
+      - lastName
+      - proof
+    ProofCompleteSignupResBody:
+      additionalProperties: false
+      example:
+        accessToken: accessToken
+        account: 0
+      properties:
+        accessToken:
+          type: string
+        account:
+          format: int64
+          type: integer
+      required:
+      - accessToken
+      - account
+    ProofCreateReqBody:
+      additionalProperties: false
+      example:
+        token: token
+      properties:
+        token:
+          description: "A magic link token for the person, from a signup, invitation\
+            \ or sign-in email."
+          type: string
+      required:
+      - token
+    ProofCreateResBody:
+      additionalProperties: false
+      example:
+        accounts:
+        - accountId: 0
+          hostname: hostname
+          enterable: true
+          accountName: accountName
+          signedIn: true
+          signInMethods:
+          - signInMethods
+          - signInMethods
+        - accountId: 0
+          hostname: hostname
+          enterable: true
+          accountName: accountName
+          signedIn: true
+          signInMethods:
+          - signInMethods
+          - signInMethods
+        proof: proof
+      properties:
+        accounts:
+          items:
+            $ref: "#/components/schemas/SessionAccount"
+          type: array
+        proof:
+          description: Proves the person to the other /v1/auth/proof endpoints for
+            15 minutes. It is not an access token.
+          type: string
+      required:
+      - accounts
+      - proof
+    ProofEnterReqBody:
+      additionalProperties: false
+      example:
+        proof: proof
+        account: 0
+      properties:
+        account:
+          format: int64
+          type: integer
+        proof:
+          type: string
+      required:
+      - account
+      - proof
     PropertyAndNode:
       additionalProperties: false
       example:
@@ -19079,6 +19505,99 @@ components:
       - topic
       - type
       - v
+    SessionAccount:
+      additionalProperties: false
+      example:
+        accountId: 0
+        hostname: hostname
+        enterable: true
+        accountName: accountName
+        signedIn: true
+        signInMethods:
+        - signInMethods
+        - signInMethods
+      properties:
+        accountId:
+          format: int64
+          type: integer
+        accountName:
+          type: string
+        enterable:
+          description: "A token for this account can be refreshed now, from an existing\
+            \ login or by carrying one of the session's sign-ins over. When false,\
+            \ the person signs in with one of signInMethods on the account's sign-in\
+            \ page."
+          type: boolean
+        hostname:
+          description: The account's sign-in hostname; empty when the account has
+            none.
+          type: string
+        signInMethods:
+          description: The sign-in methods the account accepts.
+          items:
+            type: string
+          type: array
+        signedIn:
+          description: The session holds a login to this account.
+          type: boolean
+      required:
+      - accountId
+      - accountName
+      - enterable
+      - hostname
+      - signInMethods
+      - signedIn
+    SignupAccount:
+      additionalProperties: false
+      example:
+        template: blank
+        country: country
+        city: city
+        street: street
+        houseNumber: houseNumber
+        name: name
+        postcode: postcode
+        addressLine2: addressLine2
+        industry: industry
+        state: state
+        companySize: companySize
+      properties:
+        addressLine2:
+          type: string
+        city:
+          type: string
+        companySize:
+          description: One of the values returned by /v1/lookups/company-sizes.
+          type: string
+        country:
+          description: "ISO 3166-1 alpha-3 code, as returned by /v1/lookups/countries."
+          type: string
+        houseNumber:
+          type: string
+        industry:
+          description: One of the values returned by /v1/lookups/industries.
+          type: string
+        name:
+          description: Display name of the new account. Must not already be in use.
+          type: string
+        postcode:
+          type: string
+        state:
+          type: string
+        street:
+          type: string
+        template:
+          description: Starting content for the account. "blank" creates an empty
+            account; the others copy in a prebuilt set of projects and settings.
+          enum:
+          - blank
+          - defaults
+          - demo
+          - academy
+          type: string
+      required:
+      - name
+      - template
     SpaceRuleSet:
       additionalProperties: false
       example:
@@ -19936,6 +20455,7 @@ components:
     UserV2GetResBody:
       additionalProperties: false
       example:
+        profileManagedBy: profileManagedBy
         firstName: firstName
         lastName: lastName
         localeCode: localeCode
@@ -19963,6 +20483,11 @@ components:
           description: "BCP 47 locale code selected by the user, or an empty string\
             \ if none has been set."
           type: string
+        profileManagedBy:
+          description: "The SSO provider that supplies the name and photo in this\
+            \ account, which the user then cannot change here; empty when the user\
+            \ manages their own profile."
+          type: string
         store:
           additionalProperties:
             type: string
@@ -19985,6 +20510,7 @@ components:
       - firstName
       - lastName
       - localeCode
+      - profileManagedBy
       - store
       - termsConditions
       - title

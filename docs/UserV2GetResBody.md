@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **FirstName** | **NullableString** |  | 
 **LastName** | **NullableString** |  | 
 **LocaleCode** | **string** | BCP 47 locale code selected by the user, or an empty string if none has been set. | 
+**ProfileManagedBy** | **string** | The SSO provider that supplies the name and photo in this account, which the user then cannot change here; empty when the user manages their own profile. | 
 **Store** | **map[string]string** | Arbitrary key-value pairs persisted by the client for UI state (e.g. dismissed banners, feature tour progress). | 
 **TermsConditions** | **bool** |  | 
 **Title** | **NullableString** |  | 
@@ -19,7 +20,7 @@ Name | Type | Description | Notes
 
 ### NewUserV2GetResBody
 
-`func NewUserV2GetResBody(email string, employeeId NullableString, firstName NullableString, lastName NullableString, localeCode string, store map[string]string, termsConditions bool, title NullableString, updatedAt time.Time, userId int64, ) *UserV2GetResBody`
+`func NewUserV2GetResBody(email string, employeeId NullableString, firstName NullableString, lastName NullableString, localeCode string, profileManagedBy string, store map[string]string, termsConditions bool, title NullableString, updatedAt time.Time, userId int64, ) *UserV2GetResBody`
 
 NewUserV2GetResBody instantiates a new UserV2GetResBody object
 This constructor will assign default values to properties that have it defined,
@@ -162,6 +163,26 @@ and a boolean to check if the value has been set.
 `func (o *UserV2GetResBody) SetLocaleCode(v string)`
 
 SetLocaleCode sets LocaleCode field to given value.
+
+
+### GetProfileManagedBy
+
+`func (o *UserV2GetResBody) GetProfileManagedBy() string`
+
+GetProfileManagedBy returns the ProfileManagedBy field if non-nil, zero value otherwise.
+
+### GetProfileManagedByOk
+
+`func (o *UserV2GetResBody) GetProfileManagedByOk() (*string, bool)`
+
+GetProfileManagedByOk returns a tuple with the ProfileManagedBy field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetProfileManagedBy
+
+`func (o *UserV2GetResBody) SetProfileManagedBy(v string)`
+
+SetProfileManagedBy sets ProfileManagedBy field to given value.
 
 
 ### GetStore

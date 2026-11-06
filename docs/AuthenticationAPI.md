@@ -10,12 +10,17 @@ Method | HTTP request | Description
 [**CreateAuthLoginPublic**](AuthenticationAPI.md#CreateAuthLoginPublic) | **Post** /v1/auth/login-public | Sign in as a public contributor
 [**CreateAuthLoginToken**](AuthenticationAPI.md#CreateAuthLoginToken) | **Post** /v1/auth/login-token | Sign in with a magic link token
 [**CreateAuthLogout**](AuthenticationAPI.md#CreateAuthLogout) | **Post** /v1/auth/logout | Sign out
+[**CreateAuthProof**](AuthenticationAPI.md#CreateAuthProof) | **Post** /v1/auth/proof | Prove a person without choosing an account
+[**CreateAuthProofAccounts**](AuthenticationAPI.md#CreateAuthProofAccounts) | **Post** /v1/auth/proof/accounts | List the accounts of a proven person
+[**CreateAuthProofCompleteSignup**](AuthenticationAPI.md#CreateAuthProofCompleteSignup) | **Post** /v1/auth/proof/complete-signup | Complete a signup with an identity proof
+[**CreateAuthProofEnter**](AuthenticationAPI.md#CreateAuthProofEnter) | **Post** /v1/auth/proof/enter | Enter an account with an identity proof
 [**CreateAuthRefreshToken**](AuthenticationAPI.md#CreateAuthRefreshToken) | **Post** /v1/auth/refresh-token | Refresh an access token
 [**CreateAuthSendPasswordReset**](AuthenticationAPI.md#CreateAuthSendPasswordReset) | **Post** /v1/auth/send-password-reset | Request a password reset
 [**CreateAuthSendToken**](AuthenticationAPI.md#CreateAuthSendToken) | **Post** /v1/auth/send-token | Send a magic link sign-in email
 [**DeleteApiKeys**](AuthenticationAPI.md#DeleteApiKeys) | **Delete** /v1/api-keys/{id} | Revoke an API key
 [**GetAuthLoginOidc**](AuthenticationAPI.md#GetAuthLoginOidc) | **Get** /v1/auth/login-oidc | Sign in via OIDC
 [**ListApiKeys**](AuthenticationAPI.md#ListApiKeys) | **Get** /v1/api-keys | List API keys
+[**ListAuthAccounts**](AuthenticationAPI.md#ListAuthAccounts) | **Get** /v1/auth/accounts | List the accounts to switch between
 [**UpdateAuthPassword**](AuthenticationAPI.md#UpdateAuthPassword) | **Put** /v1/auth/password | Set a new password
 
 
@@ -148,7 +153,7 @@ No authorization required
 
 ## CreateAuthLoginPassword
 
-> AuthLoginResBody CreateAuthLoginPassword(ctx, authLoginPassReqBody)
+> AuthLoginResBody CreateAuthLoginPassword(ctx, authLoginPassReqBody, params)
 
 Sign in with email and password
 
@@ -163,6 +168,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+    "time"
 	openapiclient "github.com/spacivapp/spaciv-go"
 )
 
@@ -170,7 +176,7 @@ func main() {
 	authLoginPassReqBody :=  // AuthLoginPassReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	resp, err := client.Authentication.CreateAuthLoginPassword(context.Background(), authLoginPassReqBody)
+	resp, err := client.Authentication.CreateAuthLoginPassword(context.Background(), authLoginPassReqBody, nil)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `Authentication.CreateAuthLoginPassword`: %v\n", err)
 	}
@@ -190,6 +196,8 @@ Other parameters are passed through a pointer to a apiCreateAuthLoginPasswordReq
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **authLoginPassReqBody** | [**AuthLoginPassReqBody**](AuthLoginPassReqBody.md) |  | 
+ **hostToken** | [**Cookie**](Cookie.md) |  | 
+ **token** | [**Cookie**](Cookie.md) |  | 
 
 ### Return type
 
@@ -211,7 +219,7 @@ No authorization required
 
 ## CreateAuthLoginPublic
 
-> AuthLoginResBody CreateAuthLoginPublic(ctx, authLoginPublicReqBody)
+> AuthLoginResBody CreateAuthLoginPublic(ctx, authLoginPublicReqBody, params)
 
 Sign in as a public contributor
 
@@ -226,6 +234,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+    "time"
 	openapiclient "github.com/spacivapp/spaciv-go"
 )
 
@@ -233,7 +242,7 @@ func main() {
 	authLoginPublicReqBody :=  // AuthLoginPublicReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	resp, err := client.Authentication.CreateAuthLoginPublic(context.Background(), authLoginPublicReqBody)
+	resp, err := client.Authentication.CreateAuthLoginPublic(context.Background(), authLoginPublicReqBody, nil)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `Authentication.CreateAuthLoginPublic`: %v\n", err)
 	}
@@ -253,6 +262,8 @@ Other parameters are passed through a pointer to a apiCreateAuthLoginPublicReque
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **authLoginPublicReqBody** | [**AuthLoginPublicReqBody**](AuthLoginPublicReqBody.md) |  | 
+ **hostToken** | [**Cookie**](Cookie.md) |  | 
+ **token** | [**Cookie**](Cookie.md) |  | 
 
 ### Return type
 
@@ -274,7 +285,7 @@ No authorization required
 
 ## CreateAuthLoginToken
 
-> AuthLoginResBody CreateAuthLoginToken(ctx, authLoginTokenReqBody)
+> AuthLoginResBody CreateAuthLoginToken(ctx, authLoginTokenReqBody, params)
 
 Sign in with a magic link token
 
@@ -289,6 +300,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+    "time"
 	openapiclient "github.com/spacivapp/spaciv-go"
 )
 
@@ -296,7 +308,7 @@ func main() {
 	authLoginTokenReqBody :=  // AuthLoginTokenReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	resp, err := client.Authentication.CreateAuthLoginToken(context.Background(), authLoginTokenReqBody)
+	resp, err := client.Authentication.CreateAuthLoginToken(context.Background(), authLoginTokenReqBody, nil)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `Authentication.CreateAuthLoginToken`: %v\n", err)
 	}
@@ -316,6 +328,8 @@ Other parameters are passed through a pointer to a apiCreateAuthLoginTokenReques
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **authLoginTokenReqBody** | [**AuthLoginTokenReqBody**](AuthLoginTokenReqBody.md) |  | 
+ **hostToken** | [**Cookie**](Cookie.md) |  | 
+ **token** | [**Cookie**](Cookie.md) |  | 
 
 ### Return type
 
@@ -337,7 +351,7 @@ No authorization required
 
 ## CreateAuthLogout
 
-> CreateAuthLogout(ctx, params)
+> CreateAuthLogout(ctx, authLogoutReqBody, params)
 
 Sign out
 
@@ -357,9 +371,10 @@ import (
 )
 
 func main() {
+	authLogoutReqBody :=  // AuthLogoutReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	err := client.Authentication.CreateAuthLogout(context.Background(), nil)
+	err := client.Authentication.CreateAuthLogout(context.Background(), authLogoutReqBody, nil)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `Authentication.CreateAuthLogout`: %v\n", err)
 	}
@@ -379,6 +394,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **hostToken** | [**Cookie**](Cookie.md) |  | 
  **token** | [**Cookie**](Cookie.md) |  | 
+ **authLogoutReqBody** | [**AuthLogoutReqBody**](AuthLogoutReqBody.md) |  | 
 
 ### Return type
 
@@ -390,8 +406,266 @@ No authorization required
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
+- **Content-Type**: application/json
 - **Accept**: application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## CreateAuthProof
+
+> ProofCreateResBody CreateAuthProof(ctx, proofCreateReqBody)
+
+Prove a person without choosing an account
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+	proofCreateReqBody :=  // ProofCreateReqBody | 
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.Authentication.CreateAuthProof(context.Background(), proofCreateReqBody)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `Authentication.CreateAuthProof`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `Authentication.CreateAuthProof`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiCreateAuthProofRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **proofCreateReqBody** | [**ProofCreateReqBody**](ProofCreateReqBody.md) |  | 
+
+### Return type
+
+[**ProofCreateResBody**](ProofCreateResBody.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## CreateAuthProofAccounts
+
+> []SessionAccount CreateAuthProofAccounts(ctx, proofAccountsReqBody)
+
+List the accounts of a proven person
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+	proofAccountsReqBody :=  // ProofAccountsReqBody | 
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.Authentication.CreateAuthProofAccounts(context.Background(), proofAccountsReqBody)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `Authentication.CreateAuthProofAccounts`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `Authentication.CreateAuthProofAccounts`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiCreateAuthProofAccountsRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **proofAccountsReqBody** | [**ProofAccountsReqBody**](ProofAccountsReqBody.md) |  | 
+
+### Return type
+
+[**[]SessionAccount**](SessionAccount.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## CreateAuthProofCompleteSignup
+
+> ProofCompleteSignupResBody CreateAuthProofCompleteSignup(ctx, proofCompleteSignupReqBody, params)
+
+Complete a signup with an identity proof
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+    "time"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+	proofCompleteSignupReqBody :=  // ProofCompleteSignupReqBody | 
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.Authentication.CreateAuthProofCompleteSignup(context.Background(), proofCompleteSignupReqBody, nil)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `Authentication.CreateAuthProofCompleteSignup`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `Authentication.CreateAuthProofCompleteSignup`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiCreateAuthProofCompleteSignupRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **proofCompleteSignupReqBody** | [**ProofCompleteSignupReqBody**](ProofCompleteSignupReqBody.md) |  | 
+ **hostToken** | [**Cookie**](Cookie.md) |  | 
+ **token** | [**Cookie**](Cookie.md) |  | 
+
+### Return type
+
+[**ProofCompleteSignupResBody**](ProofCompleteSignupResBody.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## CreateAuthProofEnter
+
+> AuthLoginResBody CreateAuthProofEnter(ctx, proofEnterReqBody, params)
+
+Enter an account with an identity proof
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+    "time"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+	proofEnterReqBody :=  // ProofEnterReqBody | 
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.Authentication.CreateAuthProofEnter(context.Background(), proofEnterReqBody, nil)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `Authentication.CreateAuthProofEnter`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `Authentication.CreateAuthProofEnter`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiCreateAuthProofEnterRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **proofEnterReqBody** | [**ProofEnterReqBody**](ProofEnterReqBody.md) |  | 
+ **hostToken** | [**Cookie**](Cookie.md) |  | 
+ **token** | [**Cookie**](Cookie.md) |  | 
+
+### Return type
+
+[**AuthLoginResBody**](AuthLoginResBody.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json, application/problem+json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -671,6 +945,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+    "time"
 	openapiclient "github.com/spacivapp/spaciv-go"
 )
 
@@ -696,6 +971,8 @@ Other parameters are passed through a pointer to a apiGetAuthLoginOidcRequest st
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **hostToken** | [**Cookie**](Cookie.md) |  | 
+ **token** | [**Cookie**](Cookie.md) |  | 
  **code** | **string** |  | 
  **hostname** | **string** | The account hostname that determines which OIDC provider to authenticate against. | 
 
@@ -764,6 +1041,70 @@ Other parameters are passed through a pointer to a apiListApiKeysRequest struct 
 ### Authorization
 
 [accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## ListAuthAccounts
+
+> []SessionAccount ListAuthAccounts(ctx, params)
+
+List the accounts to switch between
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+    "time"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.Authentication.ListAuthAccounts(context.Background(), nil)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `Authentication.ListAuthAccounts`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `Authentication.ListAuthAccounts`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiListAuthAccountsRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **hostToken** | [**Cookie**](Cookie.md) |  | 
+ **token** | [**Cookie**](Cookie.md) |  | 
+
+### Return type
+
+[**[]SessionAccount**](SessionAccount.md)
+
+### Authorization
+
+No authorization required
 
 ### HTTP request headers
 

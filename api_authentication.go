@@ -244,6 +244,13 @@ type requestForAuthenticationCreateAuthLoginPassword struct {
 	ctx context.Context
 	ApiService *AuthenticationService
 	authLoginPassReqBody *AuthLoginPassReqBody
+	hostToken *Cookie
+	token *Cookie
+}
+
+type AuthenticationCreateAuthLoginPasswordParams struct {
+	HostToken *Cookie
+	Token *Cookie
 }
 
 /*
@@ -251,11 +258,15 @@ CreateAuthLoginPassword Sign in with email and password
 
 Authenticates with an email address and plaintext password. Returns a short-lived access token in the response body and sets a long-lived refresh token cookie (`__Host-token`, or `token` when `AUTH_COOKIE_SECURE` is false). Returns `401` if the credentials do not match or email-and-password sign-in is disabled for the account.
 */
-func (a *AuthenticationService) CreateAuthLoginPassword(ctx context.Context, authLoginPassReqBody AuthLoginPassReqBody) (*AuthLoginResBody, error) {
+func (a *AuthenticationService) CreateAuthLoginPassword(ctx context.Context, authLoginPassReqBody AuthLoginPassReqBody, params *AuthenticationCreateAuthLoginPasswordParams) (*AuthLoginResBody, error) {
 	r := requestForAuthenticationCreateAuthLoginPassword{
 		ApiService: a,
 		ctx: ctx,
 		authLoginPassReqBody: &authLoginPassReqBody,
+	}
+	if params != nil {
+		r.hostToken = params.HostToken
+		r.token = params.Token
 	}
 	result, _, err := a.executeCreateAuthLoginPassword(r)
 	return result, err
@@ -351,6 +362,13 @@ type requestForAuthenticationCreateAuthLoginPublic struct {
 	ctx context.Context
 	ApiService *AuthenticationService
 	authLoginPublicReqBody *AuthLoginPublicReqBody
+	hostToken *Cookie
+	token *Cookie
+}
+
+type AuthenticationCreateAuthLoginPublicParams struct {
+	HostToken *Cookie
+	Token *Cookie
 }
 
 /*
@@ -360,11 +378,15 @@ Creates an anonymous session for a data collection contributor who has no spaciv
 
 The resulting access token grants only the permissions needed to view and submit public surveys.
 */
-func (a *AuthenticationService) CreateAuthLoginPublic(ctx context.Context, authLoginPublicReqBody AuthLoginPublicReqBody) (*AuthLoginResBody, error) {
+func (a *AuthenticationService) CreateAuthLoginPublic(ctx context.Context, authLoginPublicReqBody AuthLoginPublicReqBody, params *AuthenticationCreateAuthLoginPublicParams) (*AuthLoginResBody, error) {
 	r := requestForAuthenticationCreateAuthLoginPublic{
 		ApiService: a,
 		ctx: ctx,
 		authLoginPublicReqBody: &authLoginPublicReqBody,
+	}
+	if params != nil {
+		r.hostToken = params.HostToken
+		r.token = params.Token
 	}
 	result, _, err := a.executeCreateAuthLoginPublic(r)
 	return result, err
@@ -460,6 +482,13 @@ type requestForAuthenticationCreateAuthLoginToken struct {
 	ctx context.Context
 	ApiService *AuthenticationService
 	authLoginTokenReqBody *AuthLoginTokenReqBody
+	hostToken *Cookie
+	token *Cookie
+}
+
+type AuthenticationCreateAuthLoginTokenParams struct {
+	HostToken *Cookie
+	Token *Cookie
 }
 
 /*
@@ -469,11 +498,15 @@ Exchanges a magic link token (issued by `POST /v1/auth/send-token`, or in a data
 
 Returns `401` when the link can't be used, with `detail` saying why: `token-expired` (the link is genuine but too old; request a new one), `token-invalid` (the token is malformed or was not issued by spaciv), or `auth-method-not-allowed` (the account named by `hostname` doesn't allow magic-link sign-in).
 */
-func (a *AuthenticationService) CreateAuthLoginToken(ctx context.Context, authLoginTokenReqBody AuthLoginTokenReqBody) (*AuthLoginResBody, error) {
+func (a *AuthenticationService) CreateAuthLoginToken(ctx context.Context, authLoginTokenReqBody AuthLoginTokenReqBody, params *AuthenticationCreateAuthLoginTokenParams) (*AuthLoginResBody, error) {
 	r := requestForAuthenticationCreateAuthLoginToken{
 		ApiService: a,
 		ctx: ctx,
 		authLoginTokenReqBody: &authLoginTokenReqBody,
+	}
+	if params != nil {
+		r.hostToken = params.HostToken
+		r.token = params.Token
 	}
 	result, _, err := a.executeCreateAuthLoginToken(r)
 	return result, err
@@ -570,6 +603,7 @@ type requestForAuthenticationCreateAuthLogout struct {
 	ApiService *AuthenticationService
 	hostToken *Cookie
 	token *Cookie
+	authLogoutReqBody *AuthLogoutReqBody
 }
 
 type AuthenticationCreateAuthLogoutParams struct {
@@ -580,12 +614,13 @@ type AuthenticationCreateAuthLogoutParams struct {
 /*
 CreateAuthLogout Sign out
 
-Revokes the session behind the refresh token cookie (`__Host-token`, or `token` when `AUTH_COOKIE_SECURE` is false), so it can no longer be exchanged for access tokens, and clears the cookie. Succeeds without revoking anything when the cookie is missing or invalid. Returns `500` without clearing the cookie when the revocation itself fails, so the session is still live and the sign-out should be retried. The access token itself remains valid until it expires (typically within 5 minutes).
+Revokes the session behind the refresh token cookie (`__Host-token`, or `token` when `AUTH_COOKIE_SECURE` is false), so it can no longer be exchanged for access tokens, and clears the cookie. With an `account`, ends only the session's login to that account: the account then needs a new sign-in, and the cookie is cleared only when no other login remains. Succeeds without revoking anything when the cookie is missing or invalid. Returns `500` without clearing the cookie when the revocation itself fails, so the session is still live and the sign-out should be retried. The access token itself remains valid until it expires (typically within 5 minutes).
 */
-func (a *AuthenticationService) CreateAuthLogout(ctx context.Context, params *AuthenticationCreateAuthLogoutParams) error {
+func (a *AuthenticationService) CreateAuthLogout(ctx context.Context, authLogoutReqBody AuthLogoutReqBody, params *AuthenticationCreateAuthLogoutParams) error {
 	r := requestForAuthenticationCreateAuthLogout{
 		ApiService: a,
 		ctx: ctx,
+		authLogoutReqBody: &authLogoutReqBody,
 	}
 	if params != nil {
 		r.hostToken = params.HostToken
@@ -614,7 +649,7 @@ func (a *AuthenticationService) executeCreateAuthLogout(r requestForAuthenticati
 	localVarFormParams := url.Values{}
 
 	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
+	localVarHTTPContentTypes := []string{"application/json"}
 
 	// set Content-Type header
 	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
@@ -630,6 +665,8 @@ func (a *AuthenticationService) executeCreateAuthLogout(r requestForAuthenticati
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
+	// body params
+	localVarPostBody = r.authLogoutReqBody
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return nil, err
@@ -666,6 +703,456 @@ func (a *AuthenticationService) executeCreateAuthLogout(r requestForAuthenticati
 	return localVarHTTPResponse, nil
 }
 
+type requestForAuthenticationCreateAuthProof struct {
+	ctx context.Context
+	ApiService *AuthenticationService
+	proofCreateReqBody *ProofCreateReqBody
+}
+
+/*
+CreateAuthProof Prove a person without choosing an account
+
+Exchanges a magic link token that names no account — from signup, an invitation or a sign-in email sent without an account — for an identity proof and the accounts the person belongs to. The proof is not an access token: use it to enter one of the accounts (`POST /v1/auth/proof/enter`) or to create the person's first (`POST /v1/auth/proof/complete-signup`). `enterable` is true for accounts that accept magic-link sign-in; for the others, sign in on the account's page with one of `signInMethods`. Returns `401` with `token-expired` or `token-invalid` when the link can't be used.
+*/
+func (a *AuthenticationService) CreateAuthProof(ctx context.Context, proofCreateReqBody ProofCreateReqBody) (*ProofCreateResBody, error) {
+	r := requestForAuthenticationCreateAuthProof{
+		ApiService: a,
+		ctx: ctx,
+		proofCreateReqBody: &proofCreateReqBody,
+	}
+	result, _, err := a.executeCreateAuthProof(r)
+	return result, err
+}
+
+func (a *AuthenticationService) executeCreateAuthProof(r requestForAuthenticationCreateAuthProof) (*ProofCreateResBody, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ProofCreateResBody
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuthenticationAPIService.CreateAuthProof")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/auth/proof"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.proofCreateReqBody == nil {
+		return localVarReturnValue, nil, reportError("proofCreateReqBody is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.proofCreateReqBody
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type requestForAuthenticationCreateAuthProofAccounts struct {
+	ctx context.Context
+	ApiService *AuthenticationService
+	proofAccountsReqBody *ProofAccountsReqBody
+}
+
+/*
+CreateAuthProofAccounts List the accounts of a proven person
+
+Lists the accounts the person behind an identity proof belongs to, as `POST /v1/auth/proof` does. Returns `401` (`proof-invalid`) when the proof has expired or was used to complete a signup.
+*/
+func (a *AuthenticationService) CreateAuthProofAccounts(ctx context.Context, proofAccountsReqBody ProofAccountsReqBody) ([]SessionAccount, error) {
+	r := requestForAuthenticationCreateAuthProofAccounts{
+		ApiService: a,
+		ctx: ctx,
+		proofAccountsReqBody: &proofAccountsReqBody,
+	}
+	result, _, err := a.executeCreateAuthProofAccounts(r)
+	return result, err
+}
+
+func (a *AuthenticationService) executeCreateAuthProofAccounts(r requestForAuthenticationCreateAuthProofAccounts) ([]SessionAccount, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  []SessionAccount
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuthenticationAPIService.CreateAuthProofAccounts")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/auth/proof/accounts"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.proofAccountsReqBody == nil {
+		return localVarReturnValue, nil, reportError("proofAccountsReqBody is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.proofAccountsReqBody
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type requestForAuthenticationCreateAuthProofCompleteSignup struct {
+	ctx context.Context
+	ApiService *AuthenticationService
+	proofCompleteSignupReqBody *ProofCompleteSignupReqBody
+	hostToken *Cookie
+	token *Cookie
+}
+
+type AuthenticationCreateAuthProofCompleteSignupParams struct {
+	HostToken *Cookie
+	Token *Cookie
+}
+
+/*
+CreateAuthProofCompleteSignup Complete a signup with an identity proof
+
+Sets the person's name, creates their first account and signs them in to it, using up the identity proof. The account is seeded in the background, so poll `GET /v1/accounts/{id}/setup-status` with the returned access token before entering it. Returns `401` (`proof-invalid`) when the proof has expired or was already used, and `400 account-name-in-use` when the name is taken, keeping the proof for another try.
+*/
+func (a *AuthenticationService) CreateAuthProofCompleteSignup(ctx context.Context, proofCompleteSignupReqBody ProofCompleteSignupReqBody, params *AuthenticationCreateAuthProofCompleteSignupParams) (*ProofCompleteSignupResBody, error) {
+	r := requestForAuthenticationCreateAuthProofCompleteSignup{
+		ApiService: a,
+		ctx: ctx,
+		proofCompleteSignupReqBody: &proofCompleteSignupReqBody,
+	}
+	if params != nil {
+		r.hostToken = params.HostToken
+		r.token = params.Token
+	}
+	result, _, err := a.executeCreateAuthProofCompleteSignup(r)
+	return result, err
+}
+
+func (a *AuthenticationService) executeCreateAuthProofCompleteSignup(r requestForAuthenticationCreateAuthProofCompleteSignup) (*ProofCompleteSignupResBody, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ProofCompleteSignupResBody
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuthenticationAPIService.CreateAuthProofCompleteSignup")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/auth/proof/complete-signup"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.proofCompleteSignupReqBody == nil {
+		return localVarReturnValue, nil, reportError("proofCompleteSignupReqBody is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.proofCompleteSignupReqBody
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type requestForAuthenticationCreateAuthProofEnter struct {
+	ctx context.Context
+	ApiService *AuthenticationService
+	proofEnterReqBody *ProofEnterReqBody
+	hostToken *Cookie
+	token *Cookie
+}
+
+type AuthenticationCreateAuthProofEnterParams struct {
+	HostToken *Cookie
+	Token *Cookie
+}
+
+/*
+CreateAuthProofEnter Enter an account with an identity proof
+
+Signs the person behind an identity proof in to one of their accounts, as a magic-link sign-in: returns an access token for the account and sets the refresh token cookie (`__Host-token`, or `token` when `AUTH_COOKIE_SECURE` is false). Returns `403` with `auth-method-not-allowed` when the account doesn't accept magic-link sign-in — sign in on the account's own page instead — or when the person isn't a member, and `401` (`proof-invalid`) when the proof has expired or was used.
+*/
+func (a *AuthenticationService) CreateAuthProofEnter(ctx context.Context, proofEnterReqBody ProofEnterReqBody, params *AuthenticationCreateAuthProofEnterParams) (*AuthLoginResBody, error) {
+	r := requestForAuthenticationCreateAuthProofEnter{
+		ApiService: a,
+		ctx: ctx,
+		proofEnterReqBody: &proofEnterReqBody,
+	}
+	if params != nil {
+		r.hostToken = params.HostToken
+		r.token = params.Token
+	}
+	result, _, err := a.executeCreateAuthProofEnter(r)
+	return result, err
+}
+
+func (a *AuthenticationService) executeCreateAuthProofEnter(r requestForAuthenticationCreateAuthProofEnter) (*AuthLoginResBody, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AuthLoginResBody
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuthenticationAPIService.CreateAuthProofEnter")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/auth/proof/enter"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.proofEnterReqBody == nil {
+		return localVarReturnValue, nil, reportError("proofEnterReqBody is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.proofEnterReqBody
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type requestForAuthenticationCreateAuthRefreshToken struct {
 	ctx context.Context
 	ApiService *AuthenticationService
@@ -684,13 +1171,15 @@ CreateAuthRefreshToken Refresh an access token
 
 Exchanges the refresh token cookie (`__Host-token`, or `token` when `AUTH_COOKIE_SECURE` is false) for a fresh short-lived access token. Optionally scope the token to a specific account or project by providing `account` and/or `project` in the request body. For OIDC accounts, the provider's token is silently re-validated on each refresh.
 
+The session keeps one login per account. A refresh for an account it has no login to adds one when the account accepts one of the session's sign-ins, so the person can switch accounts without signing in again; an account the session signed out of needs a new sign-in. A refresh without `account` is deprecated and returns `400` once account-less tokens are switched off.
+
 A successful refresh rotates the cookie, keeping the session's original expiry. The session's refresh token advances at most once a minute: within that minute, presenting the current token sets no cookie, and presenting the token it just replaced sets a cookie for the current one. A superseded refresh token is still accepted for a short grace period, so parallel refreshes and retries succeed; presenting it after that revokes the whole session.
 
 Returns `401` when no access token could be minted: an invalid refresh token, a missing or signed-out session, a reused refresh token, a deleted user, or, for a refresh scoped to an `account`, unusable session data or an OIDC provider that rejects the session's token. Returning the user to sign-in is the usual response.
 
-Returns `503` when, for a refresh scoped to an `account`, the OIDC provider could not be reached or reported a transient failure. The session is still valid, so retry the refresh later rather than signing the user out.
+Returns `503` when, for a refresh scoped to an `account`, the OIDC provider could not be reached or reported a transient failure, or when concurrent refreshes kept changing the session. The session is still valid, so retry the refresh later rather than signing the user out.
 
-Returns `403` when the session is valid but is not authorised for the requested `account`, which typically means the account mandates a sign-in method the session did not use, or when a refresh without an `account` comes from a session that signed in through an account's own OIDC provider: such a session only gets tokens for an account. The session stays usable for the accounts it is authorised for, so keep it and cancel only the action that needed the token.
+Returns `403` when the session is valid but is not authorised for the requested `account`, which typically means the account mandates a sign-in method the session did not use or the session signed out of that account, or when a refresh without an `account` comes from a session that signed in through an account's own OIDC provider: such a session only gets tokens for an account. The session stays usable for the accounts it is authorised for, so keep it and cancel only the action that needed the token.
 */
 func (a *AuthenticationService) CreateAuthRefreshToken(ctx context.Context, authRefreshTokenReqBody AuthRefreshTokenReqBody, params *AuthenticationCreateAuthRefreshTokenParams) (*AuthRefreshTokenResBody, error) {
 	r := requestForAuthenticationCreateAuthRefreshToken{
@@ -1085,6 +1574,8 @@ func (a *AuthenticationService) executeDeleteApiKeys(r requestForAuthenticationD
 type requestForAuthenticationGetAuthLoginOidc struct {
 	ctx context.Context
 	ApiService *AuthenticationService
+	hostToken *Cookie
+	token *Cookie
 	code *string
 	hostname *string
 }
@@ -1093,6 +1584,8 @@ type AuthenticationGetAuthLoginOidcParams struct {
 	Code *string
 	// The account hostname that determines which OIDC provider to authenticate against.
 	Hostname *string
+	HostToken *Cookie
+	Token *Cookie
 }
 
 /*
@@ -1110,6 +1603,8 @@ func (a *AuthenticationService) GetAuthLoginOidc(ctx context.Context, params *Au
 	if params != nil {
 		r.code = params.Code
 		r.hostname = params.Hostname
+		r.hostToken = params.HostToken
+		r.token = params.Token
 	}
 	result, _, err := a.executeGetAuthLoginOidc(r)
 	return result, err
@@ -1259,6 +1754,117 @@ func (a *AuthenticationService) executeListApiKeys(r requestForAuthenticationLis
 	}
 	if r.ctx != nil {
 		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "AuthenticationAPIService.ListApiKeys")
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type requestForAuthenticationListAuthAccounts struct {
+	ctx context.Context
+	ApiService *AuthenticationService
+	hostToken *Cookie
+	token *Cookie
+}
+
+type AuthenticationListAuthAccountsParams struct {
+	HostToken *Cookie
+	Token *Cookie
+}
+
+/*
+ListAuthAccounts List the accounts to switch between
+
+Lists the accounts the session behind the refresh token cookie can switch between, for an account switcher. A session with a sign-in Spaciv itself checks (email and password, magic link) or through the shared SSO provider lists every account the person belongs to. A session signed in only through accounts' own SSO providers lists only the accounts it holds logins to, because such a provider vouches for the person in its own account only. Returns `401` when the cookie is missing, invalid or signed out.
+*/
+func (a *AuthenticationService) ListAuthAccounts(ctx context.Context, params *AuthenticationListAuthAccountsParams) ([]SessionAccount, error) {
+	r := requestForAuthenticationListAuthAccounts{
+		ApiService: a,
+		ctx: ctx,
+	}
+	if params != nil {
+		r.hostToken = params.HostToken
+		r.token = params.Token
+	}
+	result, _, err := a.executeListAuthAccounts(r)
+	return result, err
+}
+
+func (a *AuthenticationService) executeListAuthAccounts(r requestForAuthenticationListAuthAccounts) ([]SessionAccount, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  []SessionAccount
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuthenticationAPIService.ListAuthAccounts")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/auth/accounts"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {

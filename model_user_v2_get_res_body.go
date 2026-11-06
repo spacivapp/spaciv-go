@@ -29,6 +29,8 @@ type UserV2GetResBody struct {
 	LastName NullableString `json:"lastName"`
 	// BCP 47 locale code selected by the user, or an empty string if none has been set.
 	LocaleCode string `json:"localeCode"`
+	// The SSO provider that supplies the name and photo in this account, which the user then cannot change here; empty when the user manages their own profile.
+	ProfileManagedBy string `json:"profileManagedBy"`
 	// Arbitrary key-value pairs persisted by the client for UI state (e.g. dismissed banners, feature tour progress).
 	Store map[string]string `json:"store"`
 	TermsConditions bool `json:"termsConditions"`
@@ -43,13 +45,14 @@ type _UserV2GetResBody UserV2GetResBody
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewUserV2GetResBody(email string, employeeId NullableString, firstName NullableString, lastName NullableString, localeCode string, store map[string]string, termsConditions bool, title NullableString, updatedAt time.Time, userId int64) *UserV2GetResBody {
+func NewUserV2GetResBody(email string, employeeId NullableString, firstName NullableString, lastName NullableString, localeCode string, profileManagedBy string, store map[string]string, termsConditions bool, title NullableString, updatedAt time.Time, userId int64) *UserV2GetResBody {
 	this := UserV2GetResBody{}
 	this.Email = email
 	this.EmployeeId = employeeId
 	this.FirstName = firstName
 	this.LastName = lastName
 	this.LocaleCode = localeCode
+	this.ProfileManagedBy = profileManagedBy
 	this.Store = store
 	this.TermsConditions = termsConditions
 	this.Title = title
@@ -192,6 +195,30 @@ func (o *UserV2GetResBody) SetLocaleCode(v string) {
 	o.LocaleCode = v
 }
 
+// GetProfileManagedBy returns the ProfileManagedBy field value
+func (o *UserV2GetResBody) GetProfileManagedBy() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.ProfileManagedBy
+}
+
+// GetProfileManagedByOk returns a tuple with the ProfileManagedBy field value
+// and a boolean to check if the value has been set.
+func (o *UserV2GetResBody) GetProfileManagedByOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.ProfileManagedBy, true
+}
+
+// SetProfileManagedBy sets field value
+func (o *UserV2GetResBody) SetProfileManagedBy(v string) {
+	o.ProfileManagedBy = v
+}
+
 // GetStore returns the Store field value
 func (o *UserV2GetResBody) GetStore() map[string]string {
 	if o == nil {
@@ -329,6 +356,7 @@ func (o UserV2GetResBody) ToMap() (map[string]interface{}, error) {
 	toSerialize["firstName"] = o.FirstName.Get()
 	toSerialize["lastName"] = o.LastName.Get()
 	toSerialize["localeCode"] = o.LocaleCode
+	toSerialize["profileManagedBy"] = o.ProfileManagedBy
 	toSerialize["store"] = o.Store
 	toSerialize["termsConditions"] = o.TermsConditions
 	toSerialize["title"] = o.Title.Get()
@@ -347,6 +375,7 @@ func (o *UserV2GetResBody) UnmarshalJSON(data []byte) (err error) {
 		"firstName",
 		"lastName",
 		"localeCode",
+		"profileManagedBy",
 		"store",
 		"termsConditions",
 		"title",

@@ -99,6 +99,7 @@ docs/AuthLoginPassReqBody.md
 docs/AuthLoginPublicReqBody.md
 docs/AuthLoginResBody.md
 docs/AuthLoginTokenReqBody.md
+docs/AuthLogoutReqBody.md
 docs/AuthRefreshTokenReqBody.md
 docs/AuthRefreshTokenResBody.md
 docs/AuthSendTokenReqBody.md
@@ -410,6 +411,12 @@ docs/ProjectListEntry.md
 docs/ProjectListRes.md
 docs/ProjectPatchBody.md
 docs/ProjectsAPI.md
+docs/ProofAccountsReqBody.md
+docs/ProofCompleteSignupReqBody.md
+docs/ProofCompleteSignupResBody.md
+docs/ProofCreateReqBody.md
+docs/ProofCreateResBody.md
+docs/ProofEnterReqBody.md
 docs/PropertiesAPI.md
 docs/PropertyAndNode.md
 docs/PropertyBody.md
@@ -494,6 +501,8 @@ docs/ServerPresenceSnapshotMessage.md
 docs/ServerResyncMessage.md
 docs/ServerSubscribedMessage.md
 docs/ServiceAPI.md
+docs/SessionAccount.md
+docs/SignupAccount.md
 docs/SpaceRuleSet.md
 docs/SpaceRuleSetJSON.md
 docs/SpaceRulesetCreate.md
@@ -610,6 +619,7 @@ model_auth_login_pass_req_body.go
 model_auth_login_public_req_body.go
 model_auth_login_res_body.go
 model_auth_login_token_req_body.go
+model_auth_logout_req_body.go
 model_auth_refresh_token_req_body.go
 model_auth_refresh_token_res_body.go
 model_auth_send_token_req_body.go
@@ -905,6 +915,12 @@ model_project_create_template.go
 model_project_list_entry.go
 model_project_list_res.go
 model_project_patch_body.go
+model_proof_accounts_req_body.go
+model_proof_complete_signup_req_body.go
+model_proof_complete_signup_res_body.go
+model_proof_create_req_body.go
+model_proof_create_res_body.go
+model_proof_enter_req_body.go
 model_property_and_node.go
 model_property_body.go
 model_property_changelog_body.go
@@ -985,6 +1001,8 @@ model_server_presence_message.go
 model_server_presence_snapshot_message.go
 model_server_resync_message.go
 model_server_subscribed_message.go
+model_session_account.go
+model_signup_account.go
 model_space_rule_set.go
 model_space_rule_set_json.go
 model_space_ruleset_create.go

@@ -36,7 +36,7 @@ Creates an account owned by the authenticated user and returns its identifier.
 
 The account is seeded from the prebuilt account for the chosen template (`blank` starts almost empty). Seeding runs in the background, so poll `GET /v1/accounts/{id}/setup-status` until it succeeds before sending the user into the new account.
 
-Account names are unique; reusing one returns `400 account-name-in-use`. Requires the *Manage my account* permission.
+Account names are unique; reusing one returns `400 account-name-in-use`. Anyone signed in may create an account, from any account and role, but only from a session that signed in with email and password, a magic link or the shared SSO provider; others get `403` (`person-not-proven`). The new account is entered by refreshing a token for it.
 */
 func (a *AccountsService) Create(ctx context.Context, accountPostReqBody AccountPostReqBody) (int64, error) {
 	r := requestForAccountsCreate{
