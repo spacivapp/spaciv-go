@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ObjectGroup** | **map[string]interface{}** |  | 
+**Need** | [**LayerTypeNeed**](LayerTypeNeed.md) |  | 
 
 ## Methods
 
 ### NewLayerOneOf1
 
-`func NewLayerOneOf1(objectGroup map[string]interface{}, ) *LayerOneOf1`
+`func NewLayerOneOf1(need LayerTypeNeed, ) *LayerOneOf1`
 
 NewLayerOneOf1 instantiates a new LayerOneOf1 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewLayerOneOf1WithDefaults instantiates a new LayerOneOf1 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetObjectGroup
+### GetNeed
 
-`func (o *LayerOneOf1) GetObjectGroup() map[string]interface{}`
+`func (o *LayerOneOf1) GetNeed() LayerTypeNeed`
 
-GetObjectGroup returns the ObjectGroup field if non-nil, zero value otherwise.
+GetNeed returns the Need field if non-nil, zero value otherwise.
 
-### GetObjectGroupOk
+### GetNeedOk
 
-`func (o *LayerOneOf1) GetObjectGroupOk() (*map[string]interface{}, bool)`
+`func (o *LayerOneOf1) GetNeedOk() (*LayerTypeNeed, bool)`
 
-GetObjectGroupOk returns a tuple with the ObjectGroup field if it's non-nil, zero value otherwise
+GetNeedOk returns a tuple with the Need field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetObjectGroup
+### SetNeed
 
-`func (o *LayerOneOf1) SetObjectGroup(v map[string]interface{})`
+`func (o *LayerOneOf1) SetNeed(v LayerTypeNeed)`
 
-SetObjectGroup sets ObjectGroup field to given value.
+SetNeed sets Need field to given value.
 
 
 

@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **EndDay** | Pointer to **int32** |  | [optional] 
 **Id** | **string** |  | 
 **StartDay** | Pointer to **int32** |  | [optional] 
+**Graph** | **map[string]interface{}** |  | 
 **Need** | [**LayerTypeNeed**](LayerTypeNeed.md) |  | 
 **ObjectGroup** | **map[string]interface{}** |  | 
 **PropertyMap** | **map[string]interface{}** |  | 
@@ -17,7 +18,7 @@ Name | Type | Description | Notes
 
 ### NewLayer
 
-`func NewLayer(id string, need LayerTypeNeed, objectGroup map[string]interface{}, propertyMap map[string]interface{}, rule map[string]interface{}, stack map[string]interface{}, ) *Layer`
+`func NewLayer(id string, graph map[string]interface{}, need LayerTypeNeed, objectGroup map[string]interface{}, propertyMap map[string]interface{}, rule map[string]interface{}, stack map[string]interface{}, ) *Layer`
 
 NewLayer instantiates a new Layer object
 This constructor will assign default values to properties that have it defined,
@@ -101,6 +102,26 @@ SetStartDay sets StartDay field to given value.
 `func (o *Layer) HasStartDay() bool`
 
 HasStartDay returns a boolean if a field has been set.
+
+### GetGraph
+
+`func (o *Layer) GetGraph() map[string]interface{}`
+
+GetGraph returns the Graph field if non-nil, zero value otherwise.
+
+### GetGraphOk
+
+`func (o *Layer) GetGraphOk() (*map[string]interface{}, bool)`
+
+GetGraphOk returns a tuple with the Graph field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetGraph
+
+`func (o *Layer) SetGraph(v map[string]interface{})`
+
+SetGraph sets Graph field to given value.
+
 
 ### GetNeed
 

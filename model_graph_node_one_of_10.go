@@ -17,59 +17,59 @@ import (
 	"fmt"
 )
 
-// checks if the LogicAssignmentOneOf1 type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &LogicAssignmentOneOf1{}
+// checks if the GraphNodeOneOf10 type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &GraphNodeOneOf10{}
 
-// LogicAssignmentOneOf1 struct for LogicAssignmentOneOf1
-type LogicAssignmentOneOf1 struct {
-	Node string `json:"node"`
+// GraphNodeOneOf10 struct for GraphNodeOneOf10
+type GraphNodeOneOf10 struct {
+	Join GraphJoin `json:"join"`
 }
 
-type _LogicAssignmentOneOf1 LogicAssignmentOneOf1
+type _GraphNodeOneOf10 GraphNodeOneOf10
 
-// NewLogicAssignmentOneOf1 instantiates a new LogicAssignmentOneOf1 object
+// NewGraphNodeOneOf10 instantiates a new GraphNodeOneOf10 object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewLogicAssignmentOneOf1(node string) *LogicAssignmentOneOf1 {
-	this := LogicAssignmentOneOf1{}
-	this.Node = node
+func NewGraphNodeOneOf10(join GraphJoin) *GraphNodeOneOf10 {
+	this := GraphNodeOneOf10{}
+	this.Join = join
 	return &this
 }
 
-// NewLogicAssignmentOneOf1WithDefaults instantiates a new LogicAssignmentOneOf1 object
+// NewGraphNodeOneOf10WithDefaults instantiates a new GraphNodeOneOf10 object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewLogicAssignmentOneOf1WithDefaults() *LogicAssignmentOneOf1 {
-	this := LogicAssignmentOneOf1{}
+func NewGraphNodeOneOf10WithDefaults() *GraphNodeOneOf10 {
+	this := GraphNodeOneOf10{}
 	return &this
 }
 
-// GetNode returns the Node field value
-func (o *LogicAssignmentOneOf1) GetNode() string {
+// GetJoin returns the Join field value
+func (o *GraphNodeOneOf10) GetJoin() GraphJoin {
 	if o == nil {
-		var ret string
+		var ret GraphJoin
 		return ret
 	}
 
-	return o.Node
+	return o.Join
 }
 
-// GetNodeOk returns a tuple with the Node field value
+// GetJoinOk returns a tuple with the Join field value
 // and a boolean to check if the value has been set.
-func (o *LogicAssignmentOneOf1) GetNodeOk() (*string, bool) {
+func (o *GraphNodeOneOf10) GetJoinOk() (*GraphJoin, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Node, true
+	return &o.Join, true
 }
 
-// SetNode sets field value
-func (o *LogicAssignmentOneOf1) SetNode(v string) {
-	o.Node = v
+// SetJoin sets field value
+func (o *GraphNodeOneOf10) SetJoin(v GraphJoin) {
+	o.Join = v
 }
 
-func (o LogicAssignmentOneOf1) MarshalJSON() ([]byte, error) {
+func (o GraphNodeOneOf10) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -77,18 +77,18 @@ func (o LogicAssignmentOneOf1) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o LogicAssignmentOneOf1) ToMap() (map[string]interface{}, error) {
+func (o GraphNodeOneOf10) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["node"] = o.Node
+	toSerialize["join"] = o.Join
 	return toSerialize, nil
 }
 
-func (o *LogicAssignmentOneOf1) UnmarshalJSON(data []byte) (err error) {
+func (o *GraphNodeOneOf10) UnmarshalJSON(data []byte) (err error) {
 	// This validates that all required properties are included in the JSON object
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"node",
+		"join",
 	}
 
 	allProperties := make(map[string]interface{})
@@ -105,53 +105,53 @@ func (o *LogicAssignmentOneOf1) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varLogicAssignmentOneOf1 := _LogicAssignmentOneOf1{}
+	varGraphNodeOneOf10 := _GraphNodeOneOf10{}
 
 	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varLogicAssignmentOneOf1)
+	err = decoder.Decode(&varGraphNodeOneOf10)
 
 	if err != nil {
 		return err
 	}
 
-	*o = LogicAssignmentOneOf1(varLogicAssignmentOneOf1)
+	*o = GraphNodeOneOf10(varGraphNodeOneOf10)
 
 	return err
 }
 
-type NullableLogicAssignmentOneOf1 struct {
-	value *LogicAssignmentOneOf1
+type NullableGraphNodeOneOf10 struct {
+	value *GraphNodeOneOf10
 	isSet bool
 }
 
-func (v NullableLogicAssignmentOneOf1) Get() *LogicAssignmentOneOf1 {
+func (v NullableGraphNodeOneOf10) Get() *GraphNodeOneOf10 {
 	return v.value
 }
 
-func (v *NullableLogicAssignmentOneOf1) Set(val *LogicAssignmentOneOf1) {
+func (v *NullableGraphNodeOneOf10) Set(val *GraphNodeOneOf10) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableLogicAssignmentOneOf1) IsSet() bool {
+func (v NullableGraphNodeOneOf10) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableLogicAssignmentOneOf1) Unset() {
+func (v *NullableGraphNodeOneOf10) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableLogicAssignmentOneOf1(val *LogicAssignmentOneOf1) *NullableLogicAssignmentOneOf1 {
-	return &NullableLogicAssignmentOneOf1{value: val, isSet: true}
+func NewNullableGraphNodeOneOf10(val *GraphNodeOneOf10) *NullableGraphNodeOneOf10 {
+	return &NullableGraphNodeOneOf10{value: val, isSet: true}
 }
 
-func (v NullableLogicAssignmentOneOf1) MarshalJSON() ([]byte, error) {
+func (v NullableGraphNodeOneOf10) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableLogicAssignmentOneOf1) UnmarshalJSON(src []byte) error {
+func (v *NullableGraphNodeOneOf10) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

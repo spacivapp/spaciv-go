@@ -22,7 +22,7 @@ var _ MappedNullable = &LayerOneOf3{}
 
 // LayerOneOf3 struct for LayerOneOf3
 type LayerOneOf3 struct {
-	Rule map[string]interface{} `json:"rule"`
+	PropertyMap map[string]interface{} `json:"propertyMap"`
 }
 
 type _LayerOneOf3 LayerOneOf3
@@ -31,9 +31,9 @@ type _LayerOneOf3 LayerOneOf3
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewLayerOneOf3(rule map[string]interface{}) *LayerOneOf3 {
+func NewLayerOneOf3(propertyMap map[string]interface{}) *LayerOneOf3 {
 	this := LayerOneOf3{}
-	this.Rule = rule
+	this.PropertyMap = propertyMap
 	return &this
 }
 
@@ -45,28 +45,28 @@ func NewLayerOneOf3WithDefaults() *LayerOneOf3 {
 	return &this
 }
 
-// GetRule returns the Rule field value
-func (o *LayerOneOf3) GetRule() map[string]interface{} {
+// GetPropertyMap returns the PropertyMap field value
+func (o *LayerOneOf3) GetPropertyMap() map[string]interface{} {
 	if o == nil {
 		var ret map[string]interface{}
 		return ret
 	}
 
-	return o.Rule
+	return o.PropertyMap
 }
 
-// GetRuleOk returns a tuple with the Rule field value
+// GetPropertyMapOk returns a tuple with the PropertyMap field value
 // and a boolean to check if the value has been set.
-func (o *LayerOneOf3) GetRuleOk() (map[string]interface{}, bool) {
+func (o *LayerOneOf3) GetPropertyMapOk() (map[string]interface{}, bool) {
 	if o == nil {
 		return map[string]interface{}{}, false
 	}
-	return o.Rule, true
+	return o.PropertyMap, true
 }
 
-// SetRule sets field value
-func (o *LayerOneOf3) SetRule(v map[string]interface{}) {
-	o.Rule = v
+// SetPropertyMap sets field value
+func (o *LayerOneOf3) SetPropertyMap(v map[string]interface{}) {
+	o.PropertyMap = v
 }
 
 func (o LayerOneOf3) MarshalJSON() ([]byte, error) {
@@ -79,7 +79,7 @@ func (o LayerOneOf3) MarshalJSON() ([]byte, error) {
 
 func (o LayerOneOf3) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["rule"] = o.Rule
+	toSerialize["propertyMap"] = o.PropertyMap
 	return toSerialize, nil
 }
 
@@ -88,7 +88,7 @@ func (o *LayerOneOf3) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"rule",
+		"propertyMap",
 	}
 
 	allProperties := make(map[string]interface{})

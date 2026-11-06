@@ -4475,6 +4475,179 @@ paths:
       tags:
       - Floor plans
       x-sdk-params: true
+  /v1/graph-layers:
+    get:
+      description: "Returns the account's graph layers with summary fields. Use `GET\
+        \ /v1/graph-layers/{id}` for a layer's graph. Requires the *View space rule\
+        \ sets* permission."
+      operationId: logic-layers_list-graph-layers
+      parameters: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/GraphLayerListEntry"
+                type: array
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: List graph layers
+      tags:
+      - Logic layers
+      x-sdk-params: false
+    post:
+      description: "A graph layer works out its changes with a graph of typed nodes\
+        \ (a `GraphLayerConfig`): values, maths, tests, sets of objects and pairs,\
+        \ aggregates, object groups, data collections, dates, sub-graphs, and outputs\
+        \ that set properties, set variables, create objects or remove them. The properties\
+        \ it changes are the ones its Set property and Create objects nodes name,\
+        \ and the variables it sets are named `graph:<name>`. `outputs` is kept for\
+        \ compatibility and isn't read. Omit `config` to start with an empty graph.\
+        \ Returns `400` if the graph isn't valid, such as a cycle, an unconnected\
+        \ input or inputs of the wrong type, with the node that's wrong. Requires\
+        \ the *Edit space rule sets* permission."
+      operationId: logic-layers_create-graph-layers
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GraphLayerCreate"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PostResponseBody"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Create a graph layer
+      tags:
+      - Logic layers
+      x-sdk-params: false
+  /v1/graph-layers/{id}:
+    delete:
+      description: "Permanently deletes a graph layer from the current account and\
+        \ removes it from every variable's allowed `options`. Returns `404` if the\
+        \ graph layer does not exist, and `409` if another graph layer uses it as\
+        \ a sub-graph. Requires the *Edit space rule set details* permission."
+      operationId: logic-layers_delete-graph-layers
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteResponseBody"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Delete a graph layer
+      tags:
+      - Logic layers
+      x-sdk-params: false
+    get:
+      description: "A graph layer works out its changes with a graph of typed nodes\
+        \ (a `GraphLayerConfig`): values, maths, tests, sets of objects and pairs,\
+        \ aggregates, object groups, data collections, dates, sub-graphs, and outputs\
+        \ that set properties, set variables, create objects or remove them. The properties\
+        \ it changes are the ones its Set property and Create objects nodes name,\
+        \ and the variables it sets are named `graph:<name>`. `outputs` is kept for\
+        \ compatibility and isn't read. Returns `404` if the graph layer does not\
+        \ exist. Requires the *View space rule set details* permission."
+      operationId: logic-layers_get-graph-layers
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GraphLayerJSON"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Get a graph layer
+      tags:
+      - Logic layers
+      x-sdk-params: false
+    patch:
+      description: "A graph layer works out its changes with a graph of typed nodes\
+        \ (a `GraphLayerConfig`): values, maths, tests, sets of objects and pairs,\
+        \ aggregates, object groups, data collections, dates, sub-graphs, and outputs\
+        \ that set properties, set variables, create objects or remove them. The properties\
+        \ it changes are the ones its Set property and Create objects nodes name,\
+        \ and the variables it sets are named `graph:<name>`. `outputs` is kept for\
+        \ compatibility and isn't read. Only fields present in the request body are\
+        \ changed. Function nodes may read account number variables (`account:<id>`),\
+        \ which needs the *Variable controls* feature. Returns `400` if `config` isn't\
+        \ a valid graph or reads an unknown or non-number variable, and `404` if the\
+        \ graph layer does not exist. Requires the *Edit space rule set details* permission."
+      operationId: logic-layers_update-graph-layers
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GraphLayerUpdate"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PatchResponseBody"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Update a graph layer
+      tags:
+      - Logic layers
+      x-sdk-params: false
   /v1/integrations/slack:
     post:
       description: Completes the Slack OAuth flow by exchanging the authorisation
@@ -12320,6 +12493,9 @@ components:
     DatasetUpdateResponseWrapperBody:
       additionalProperties: false
       type: object
+    DeleteResponseBody:
+      additionalProperties: false
+      type: object
     Directory:
       additionalProperties: false
       example:
@@ -13732,6 +13908,557 @@ components:
       required:
       - list
       - total
+    GraphAggregate:
+      additionalProperties: false
+      properties:
+        function:
+          format: int32
+          type: integer
+        groupBy:
+          format: int32
+          type: integer
+        groupProperty:
+          type: string
+      required:
+      - function
+      - groupBy
+      - groupProperty
+    GraphAnd:
+      additionalProperties: false
+      type: object
+    GraphCalculationDate:
+      additionalProperties: false
+      type: object
+    GraphChanges:
+      additionalProperties: false
+      example:
+        nodes:
+        - nodes
+        - nodes
+      properties:
+        nodes:
+          items:
+            type: string
+          type: array
+      required:
+      - nodes
+    GraphConnection:
+      additionalProperties: false
+      example:
+        from:
+          node: node
+          socket: socket
+        to:
+          node: node
+          socket: socket
+      properties:
+        from:
+          $ref: "#/components/schemas/GraphSocketRef"
+        to:
+          $ref: "#/components/schemas/GraphSocketRef"
+      required:
+      - from
+      - to
+    GraphCreateObjects:
+      additionalProperties: false
+      properties:
+        assignments:
+          items:
+            $ref: "#/components/schemas/GraphCreatedLink"
+          type: array
+        base:
+          format: int32
+          type: integer
+        idSuffix:
+          type: string
+        overlay:
+          format: int32
+          type: integer
+        values:
+          items:
+            $ref: "#/components/schemas/GraphCreatedValue"
+          type: array
+      required:
+      - assignments
+      - base
+      - idSuffix
+      - overlay
+      - values
+    GraphCreatedLink:
+      example:
+        property: property
+      oneOf:
+      - $ref: "#/components/schemas/GraphCreatedLink_oneOf"
+      - $ref: "#/components/schemas/GraphCreatedLink_oneOf_1"
+      properties:
+        property:
+          type: string
+      required:
+      - property
+    GraphCreatedValue:
+      additionalProperties: false
+      example:
+        node: node
+        property: property
+      properties:
+        node:
+          type: string
+        property:
+          type: string
+      required:
+      - node
+      - property
+    GraphFilter:
+      additionalProperties: false
+      properties:
+        filters:
+          items:
+            $ref: "#/components/schemas/FilterGroup"
+          type: array
+      required:
+      - filters
+    GraphFunction:
+      additionalProperties: false
+      properties:
+        exactNodes:
+          type: boolean
+        function:
+          $ref: "#/components/schemas/CalcRuleRef"
+      required:
+      - exactNodes
+      - function
+    GraphInput:
+      additionalProperties: false
+      properties:
+        default:
+          format: double
+          type: number
+        kind:
+          format: int32
+          type: integer
+        name:
+          type: string
+      required:
+      - default
+      - kind
+      - name
+    GraphInputObjects:
+      additionalProperties: false
+      type: object
+    GraphJoin:
+      additionalProperties: false
+      properties:
+        left:
+          $ref: "#/components/schemas/GraphJoinKey"
+        right:
+          $ref: "#/components/schemas/GraphJoinKey"
+      required:
+      - left
+      - right
+    GraphJoinKey:
+      additionalProperties: false
+      properties:
+        by:
+          format: int32
+          type: integer
+        property:
+          type: string
+      required:
+      - by
+      - property
+    GraphLayerConfig:
+      additionalProperties: false
+      example:
+        outputs:
+        - outputs
+        - outputs
+        nodes:
+        - id: id
+          position:
+            x: 7.061401241503109
+            "y": 9.301444243932576
+        - id: id
+          position:
+            x: 7.061401241503109
+            "y": 9.301444243932576
+        type: type
+        connections:
+        - from:
+            node: node
+            socket: socket
+          to:
+            node: node
+            socket: socket
+        - from:
+            node: node
+            socket: socket
+          to:
+            node: node
+            socket: socket
+      properties:
+        connections:
+          items:
+            $ref: "#/components/schemas/GraphConnection"
+          type: array
+        nodes:
+          items:
+            $ref: "#/components/schemas/GraphNode"
+          type: array
+        outputs:
+          items:
+            type: string
+          type: array
+        type:
+          type: string
+      required:
+      - connections
+      - nodes
+      - outputs
+      - type
+    GraphLayerCreate:
+      additionalProperties: false
+      example:
+        name: name
+        description: description
+        config: ""
+      properties:
+        config: {}
+        description:
+          type: string
+        name:
+          type: string
+      required:
+      - name
+    GraphLayerJSON:
+      additionalProperties: false
+      example:
+        createdDate: createdDate
+        modifiedDate: modifiedDate
+        name: name
+        description: description
+        id: id
+        config:
+          outputs:
+          - outputs
+          - outputs
+          nodes:
+          - id: id
+            position:
+              x: 7.061401241503109
+              "y": 9.301444243932576
+          - id: id
+            position:
+              x: 7.061401241503109
+              "y": 9.301444243932576
+          type: type
+          connections:
+          - from:
+              node: node
+              socket: socket
+            to:
+              node: node
+              socket: socket
+          - from:
+              node: node
+              socket: socket
+            to:
+              node: node
+              socket: socket
+      properties:
+        config:
+          $ref: "#/components/schemas/GraphLayerConfig"
+        createdDate:
+          type: string
+        description:
+          type: string
+        id:
+          type: string
+        modifiedDate:
+          type: string
+        name:
+          type: string
+      required:
+      - config
+      - createdDate
+      - description
+      - id
+      - modifiedDate
+      - name
+    GraphLayerListEntry:
+      additionalProperties: false
+      example:
+        modifiedDate: modifiedDate
+        name: name
+        description: description
+        id: id
+      properties:
+        description:
+          type: string
+        id:
+          type: string
+        modifiedDate:
+          type: string
+        name:
+          type: string
+      required:
+      - description
+      - id
+      - modifiedDate
+      - name
+    GraphLayerUpdate:
+      additionalProperties: false
+      example:
+        name: name
+        description: description
+        config: ""
+      properties:
+        config: {}
+        description:
+          type: string
+        name:
+          type: string
+    GraphLookupEntry:
+      additionalProperties: false
+      properties:
+        key:
+          format: double
+          type: number
+        object:
+          type: string
+        value:
+          format: double
+          type: number
+      required:
+      - key
+      - object
+      - value
+    GraphLookupTable:
+      additionalProperties: false
+      properties:
+        default:
+          format: double
+          type: number
+        entries:
+          items:
+            $ref: "#/components/schemas/GraphLookupEntry"
+          type: array
+        keyBy:
+          format: int32
+          type: integer
+        missing:
+          format: int32
+          type: integer
+        requireAllKeys:
+          type: boolean
+      required:
+      - default
+      - entries
+      - keyBy
+      - missing
+      - requireAllKeys
+    GraphMultiplyAdd:
+      additionalProperties: false
+      type: object
+    GraphNeed:
+      additionalProperties: false
+      properties:
+        datacollection:
+          type: string
+        endDay:
+          format: int32
+          type: integer
+        startDay:
+          format: int32
+          type: integer
+      required:
+      - datacollection
+      - endDay
+      - startDay
+    GraphNode:
+      example:
+        id: id
+        position:
+          x: 7.061401241503109
+          "y": 9.301444243932576
+      oneOf:
+      - $ref: "#/components/schemas/GraphNode_oneOf"
+      - $ref: "#/components/schemas/GraphNode_oneOf_1"
+      - $ref: "#/components/schemas/GraphNode_oneOf_2"
+      - $ref: "#/components/schemas/GraphNode_oneOf_3"
+      - $ref: "#/components/schemas/GraphNode_oneOf_4"
+      - $ref: "#/components/schemas/GraphNode_oneOf_5"
+      - $ref: "#/components/schemas/GraphNode_oneOf_6"
+      - $ref: "#/components/schemas/GraphNode_oneOf_7"
+      - $ref: "#/components/schemas/GraphNode_oneOf_8"
+      - $ref: "#/components/schemas/GraphNode_oneOf_9"
+      - $ref: "#/components/schemas/GraphNode_oneOf_10"
+      - $ref: "#/components/schemas/GraphNode_oneOf_11"
+      - $ref: "#/components/schemas/GraphNode_oneOf_12"
+      - $ref: "#/components/schemas/GraphNode_oneOf_13"
+      - $ref: "#/components/schemas/GraphNode_oneOf_14"
+      - $ref: "#/components/schemas/GraphNode_oneOf_15"
+      - $ref: "#/components/schemas/GraphNode_oneOf_16"
+      - $ref: "#/components/schemas/GraphNode_oneOf_17"
+      - $ref: "#/components/schemas/GraphNode_oneOf_18"
+      - $ref: "#/components/schemas/GraphNode_oneOf_19"
+      - $ref: "#/components/schemas/GraphNode_oneOf_20"
+      - $ref: "#/components/schemas/GraphNode_oneOf_21"
+      - $ref: "#/components/schemas/GraphNode_oneOf_22"
+      - $ref: "#/components/schemas/GraphNode_oneOf_23"
+      - $ref: "#/components/schemas/GraphNode_oneOf_24"
+      - $ref: "#/components/schemas/GraphNode_oneOf_25"
+      properties:
+        id:
+          type: string
+        position:
+          $ref: "#/components/schemas/GraphPosition"
+      required:
+      - id
+      - position
+    GraphNot:
+      additionalProperties: false
+      type: object
+    GraphObjectGroup:
+      additionalProperties: false
+      properties:
+        endDay:
+          format: int32
+          type: integer
+        group:
+          type: string
+        startDay:
+          format: int32
+          type: integer
+      required:
+      - endDay
+      - group
+      - startDay
+    GraphOr:
+      additionalProperties: false
+      type: object
+    GraphOutput:
+      additionalProperties: false
+      properties:
+        kind:
+          format: int32
+          type: integer
+        name:
+          type: string
+      required:
+      - kind
+      - name
+    GraphOverTime:
+      additionalProperties: false
+      properties:
+        points:
+          items:
+            $ref: "#/components/schemas/GraphOverTimePoint"
+          type: array
+      required:
+      - points
+    GraphOverTimePoint:
+      additionalProperties: false
+      properties:
+        day:
+          format: int64
+          type: string
+        value:
+          format: double
+          type: number
+      required:
+      - day
+      - value
+    GraphPair:
+      additionalProperties: false
+      type: object
+    GraphPosition:
+      additionalProperties: false
+      example:
+        x: 7.061401241503109
+        "y": 9.301444243932576
+      properties:
+        x:
+          format: double
+          type: number
+        "y":
+          format: double
+          type: number
+      required:
+      - x
+      - "y"
+    GraphRemoveObjects:
+      additionalProperties: false
+      type: object
+    GraphRound:
+      additionalProperties: false
+      properties:
+        mode:
+          format: int32
+          type: integer
+      required:
+      - mode
+    GraphSelect:
+      additionalProperties: false
+      properties:
+        property:
+          type: string
+      required:
+      - property
+    GraphSetProperty:
+      additionalProperties: false
+      example:
+        node: node
+        property: property
+      properties:
+        node:
+          type: string
+        property:
+          type: string
+      required:
+      - node
+      - property
+    GraphSetVariable:
+      additionalProperties: false
+      example:
+        variable: variable
+      properties:
+        variable:
+          type: string
+      required:
+      - variable
+    GraphSocketRef:
+      additionalProperties: false
+      example:
+        node: node
+        socket: socket
+      properties:
+        node:
+          type: string
+        socket:
+          type: string
+      required:
+      - node
+      - socket
+    GraphSubGraph:
+      additionalProperties: false
+      properties:
+        graph:
+          type: string
+      required:
+      - graph
+    GraphUnion:
+      additionalProperties: false
+      properties:
+        columns:
+          items:
+            type: string
+          type: array
+        inputs:
+          format: int32
+          type: integer
+      required:
+      - columns
+      - inputs
     Group:
       additionalProperties: false
       example:
@@ -13913,6 +14640,7 @@ components:
       - $ref: "#/components/schemas/Layer_oneOf_2"
       - $ref: "#/components/schemas/Layer_oneOf_3"
       - $ref: "#/components/schemas/Layer_oneOf_4"
+      - $ref: "#/components/schemas/Layer_oneOf_5"
       properties:
         endDay:
           format: int32
@@ -13924,6 +14652,9 @@ components:
           type: integer
       required:
       - id
+    LayerTypeGraph:
+      additionalProperties: false
+      type: object
     LayerTypeNeed:
       additionalProperties: false
       properties:
@@ -14140,8 +14871,8 @@ components:
       example:
         property: property
       oneOf:
-      - $ref: "#/components/schemas/LogicAssignment_oneOf"
-      - $ref: "#/components/schemas/LogicAssignment_oneOf_1"
+      - $ref: "#/components/schemas/GraphCreatedLink_oneOf"
+      - $ref: "#/components/schemas/GraphCreatedLink_oneOf_1"
       properties:
         property:
           type: string
@@ -15124,6 +15855,9 @@ components:
       required:
       - password
       - token
+    PatchResponseBody:
+      additionalProperties: false
+      type: object
     PathItem:
       additionalProperties: false
       example:
@@ -15164,6 +15898,15 @@ components:
           $ref: "#/components/schemas/Directory"
         file:
           $ref: "#/components/schemas/Record"
+    PostResponseBody:
+      additionalProperties: false
+      example:
+        id: id
+      properties:
+        id:
+          type: string
+      required:
+      - id
     PresenceMember:
       additionalProperties: {}
       properties:
@@ -20004,53 +20747,224 @@ components:
             object removes the property from the entry.
       required:
       - nodes
-    Layer_oneOf:
-      properties:
-        need:
-          $ref: "#/components/schemas/LayerTypeNeed"
-      required:
-      - need
-    Layer_oneOf_1:
-      properties:
-        objectGroup:
-          additionalProperties: false
-          type: object
-      required:
-      - objectGroup
-    Layer_oneOf_2:
-      properties:
-        propertyMap:
-          additionalProperties: false
-          type: object
-      required:
-      - propertyMap
-    Layer_oneOf_3:
-      properties:
-        rule:
-          additionalProperties: false
-          type: object
-      required:
-      - rule
-    Layer_oneOf_4:
-      properties:
-        stack:
-          additionalProperties: false
-          type: object
-      required:
-      - stack
-    LogicAssignment_oneOf:
+    GraphCreatedLink_oneOf:
       properties:
         link:
           format: int32
           type: integer
       required:
       - link
-    LogicAssignment_oneOf_1:
+    GraphCreatedLink_oneOf_1:
       properties:
         node:
           type: string
       required:
       - node
+    GraphNode_oneOf:
+      properties:
+        aggregate:
+          $ref: "#/components/schemas/GraphAggregate"
+      required:
+      - aggregate
+    GraphNode_oneOf_1:
+      properties:
+        and:
+          additionalProperties: false
+          type: object
+      required:
+      - and
+    GraphNode_oneOf_2:
+      properties:
+        calculationDate:
+          additionalProperties: false
+          type: object
+      required:
+      - calculationDate
+    GraphNode_oneOf_3:
+      properties:
+        changes:
+          $ref: "#/components/schemas/GraphChanges"
+      required:
+      - changes
+    GraphNode_oneOf_4:
+      properties:
+        createObjects:
+          $ref: "#/components/schemas/GraphCreateObjects"
+      required:
+      - createObjects
+    GraphNode_oneOf_5:
+      properties:
+        filter:
+          $ref: "#/components/schemas/GraphFilter"
+      required:
+      - filter
+    GraphNode_oneOf_6:
+      properties:
+        function:
+          $ref: "#/components/schemas/GraphFunction"
+      required:
+      - function
+    GraphNode_oneOf_7:
+      properties:
+        graphInput:
+          $ref: "#/components/schemas/GraphInput"
+      required:
+      - graphInput
+    GraphNode_oneOf_8:
+      properties:
+        graphOutput:
+          $ref: "#/components/schemas/GraphOutput"
+      required:
+      - graphOutput
+    GraphNode_oneOf_9:
+      properties:
+        inputObjects:
+          additionalProperties: false
+          type: object
+      required:
+      - inputObjects
+    GraphNode_oneOf_10:
+      properties:
+        join:
+          $ref: "#/components/schemas/GraphJoin"
+      required:
+      - join
+    GraphNode_oneOf_11:
+      properties:
+        lookupTable:
+          $ref: "#/components/schemas/GraphLookupTable"
+      required:
+      - lookupTable
+    GraphNode_oneOf_12:
+      properties:
+        multiplyAdd:
+          additionalProperties: false
+          type: object
+      required:
+      - multiplyAdd
+    GraphNode_oneOf_13:
+      properties:
+        need:
+          $ref: "#/components/schemas/GraphNeed"
+      required:
+      - need
+    GraphNode_oneOf_14:
+      properties:
+        not:
+          additionalProperties: false
+          type: object
+      required:
+      - not
+    GraphNode_oneOf_15:
+      properties:
+        objectGroup:
+          $ref: "#/components/schemas/GraphObjectGroup"
+      required:
+      - objectGroup
+    GraphNode_oneOf_16:
+      properties:
+        or:
+          additionalProperties: false
+          type: object
+      required:
+      - or
+    GraphNode_oneOf_17:
+      properties:
+        overTime:
+          $ref: "#/components/schemas/GraphOverTime"
+      required:
+      - overTime
+    GraphNode_oneOf_18:
+      properties:
+        pair:
+          additionalProperties: false
+          type: object
+      required:
+      - pair
+    GraphNode_oneOf_19:
+      properties:
+        removeObjects:
+          additionalProperties: false
+          type: object
+      required:
+      - removeObjects
+    GraphNode_oneOf_20:
+      properties:
+        round:
+          $ref: "#/components/schemas/GraphRound"
+      required:
+      - round
+    GraphNode_oneOf_21:
+      properties:
+        select:
+          $ref: "#/components/schemas/GraphSelect"
+      required:
+      - select
+    GraphNode_oneOf_22:
+      properties:
+        setProperty:
+          $ref: "#/components/schemas/GraphSetProperty"
+      required:
+      - setProperty
+    GraphNode_oneOf_23:
+      properties:
+        setVariable:
+          $ref: "#/components/schemas/GraphSetVariable"
+      required:
+      - setVariable
+    GraphNode_oneOf_24:
+      properties:
+        subGraph:
+          $ref: "#/components/schemas/GraphSubGraph"
+      required:
+      - subGraph
+    GraphNode_oneOf_25:
+      properties:
+        union:
+          $ref: "#/components/schemas/GraphUnion"
+      required:
+      - union
+    Layer_oneOf:
+      properties:
+        graph:
+          additionalProperties: false
+          type: object
+      required:
+      - graph
+    Layer_oneOf_1:
+      properties:
+        need:
+          $ref: "#/components/schemas/LayerTypeNeed"
+      required:
+      - need
+    Layer_oneOf_2:
+      properties:
+        objectGroup:
+          additionalProperties: false
+          type: object
+      required:
+      - objectGroup
+    Layer_oneOf_3:
+      properties:
+        propertyMap:
+          additionalProperties: false
+          type: object
+      required:
+      - propertyMap
+    Layer_oneOf_4:
+      properties:
+        rule:
+          additionalProperties: false
+          type: object
+      required:
+      - rule
+    Layer_oneOf_5:
+      properties:
+        stack:
+          additionalProperties: false
+          type: object
+      required:
+      - stack
     MaybeVarInt_oneOf:
       example:
         static: 0

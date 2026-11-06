@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Need** | [**LayerTypeNeed**](LayerTypeNeed.md) |  | 
+**Graph** | **map[string]interface{}** |  | 
 
 ## Methods
 
 ### NewLayerOneOf
 
-`func NewLayerOneOf(need LayerTypeNeed, ) *LayerOneOf`
+`func NewLayerOneOf(graph map[string]interface{}, ) *LayerOneOf`
 
 NewLayerOneOf instantiates a new LayerOneOf object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewLayerOneOfWithDefaults instantiates a new LayerOneOf object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetNeed
+### GetGraph
 
-`func (o *LayerOneOf) GetNeed() LayerTypeNeed`
+`func (o *LayerOneOf) GetGraph() map[string]interface{}`
 
-GetNeed returns the Need field if non-nil, zero value otherwise.
+GetGraph returns the Graph field if non-nil, zero value otherwise.
 
-### GetNeedOk
+### GetGraphOk
 
-`func (o *LayerOneOf) GetNeedOk() (*LayerTypeNeed, bool)`
+`func (o *LayerOneOf) GetGraphOk() (*map[string]interface{}, bool)`
 
-GetNeedOk returns a tuple with the Need field if it's non-nil, zero value otherwise
+GetGraphOk returns a tuple with the Graph field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetNeed
+### SetGraph
 
-`func (o *LayerOneOf) SetNeed(v LayerTypeNeed)`
+`func (o *LayerOneOf) SetGraph(v map[string]interface{})`
 
-SetNeed sets Need field to given value.
+SetGraph sets Graph field to given value.
 
 
 

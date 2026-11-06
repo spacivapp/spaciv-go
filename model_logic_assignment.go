@@ -19,21 +19,21 @@ import (
 
 // LogicAssignment - struct for LogicAssignment
 type LogicAssignment struct {
-	LogicAssignmentOneOf *LogicAssignmentOneOf
-	LogicAssignmentOneOf1 *LogicAssignmentOneOf1
+	GraphCreatedLinkOneOf *GraphCreatedLinkOneOf
+	GraphCreatedLinkOneOf1 *GraphCreatedLinkOneOf1
 }
 
-// LogicAssignmentOneOfAsLogicAssignment is a convenience function that returns LogicAssignmentOneOf wrapped in LogicAssignment
-func LogicAssignmentOneOfAsLogicAssignment(v *LogicAssignmentOneOf) LogicAssignment {
+// GraphCreatedLinkOneOfAsLogicAssignment is a convenience function that returns GraphCreatedLinkOneOf wrapped in LogicAssignment
+func GraphCreatedLinkOneOfAsLogicAssignment(v *GraphCreatedLinkOneOf) LogicAssignment {
 	return LogicAssignment{
-		LogicAssignmentOneOf: v,
+		GraphCreatedLinkOneOf: v,
 	}
 }
 
-// LogicAssignmentOneOf1AsLogicAssignment is a convenience function that returns LogicAssignmentOneOf1 wrapped in LogicAssignment
-func LogicAssignmentOneOf1AsLogicAssignment(v *LogicAssignmentOneOf1) LogicAssignment {
+// GraphCreatedLinkOneOf1AsLogicAssignment is a convenience function that returns GraphCreatedLinkOneOf1 wrapped in LogicAssignment
+func GraphCreatedLinkOneOf1AsLogicAssignment(v *GraphCreatedLinkOneOf1) LogicAssignment {
 	return LogicAssignment{
-		LogicAssignmentOneOf1: v,
+		GraphCreatedLinkOneOf1: v,
 	}
 }
 
@@ -42,44 +42,44 @@ func LogicAssignmentOneOf1AsLogicAssignment(v *LogicAssignmentOneOf1) LogicAssig
 func (dst *LogicAssignment) UnmarshalJSON(data []byte) error {
 	var err error
 	match := 0
-	// try to unmarshal data into LogicAssignmentOneOf
-	err = newStrictDecoder(data).Decode(&dst.LogicAssignmentOneOf)
+	// try to unmarshal data into GraphCreatedLinkOneOf
+	err = newStrictDecoder(data).Decode(&dst.GraphCreatedLinkOneOf)
 	if err == nil {
-		jsonLogicAssignmentOneOf, _ := json.Marshal(dst.LogicAssignmentOneOf)
-		if string(jsonLogicAssignmentOneOf) == "{}" { // empty struct
-			dst.LogicAssignmentOneOf = nil
+		jsonGraphCreatedLinkOneOf, _ := json.Marshal(dst.GraphCreatedLinkOneOf)
+		if string(jsonGraphCreatedLinkOneOf) == "{}" { // empty struct
+			dst.GraphCreatedLinkOneOf = nil
 		} else {
-			if err = validator.Validate(dst.LogicAssignmentOneOf); err != nil {
-				dst.LogicAssignmentOneOf = nil
+			if err = validator.Validate(dst.GraphCreatedLinkOneOf); err != nil {
+				dst.GraphCreatedLinkOneOf = nil
 			} else {
 				match++
 			}
 		}
 	} else {
-		dst.LogicAssignmentOneOf = nil
+		dst.GraphCreatedLinkOneOf = nil
 	}
 
-	// try to unmarshal data into LogicAssignmentOneOf1
-	err = newStrictDecoder(data).Decode(&dst.LogicAssignmentOneOf1)
+	// try to unmarshal data into GraphCreatedLinkOneOf1
+	err = newStrictDecoder(data).Decode(&dst.GraphCreatedLinkOneOf1)
 	if err == nil {
-		jsonLogicAssignmentOneOf1, _ := json.Marshal(dst.LogicAssignmentOneOf1)
-		if string(jsonLogicAssignmentOneOf1) == "{}" { // empty struct
-			dst.LogicAssignmentOneOf1 = nil
+		jsonGraphCreatedLinkOneOf1, _ := json.Marshal(dst.GraphCreatedLinkOneOf1)
+		if string(jsonGraphCreatedLinkOneOf1) == "{}" { // empty struct
+			dst.GraphCreatedLinkOneOf1 = nil
 		} else {
-			if err = validator.Validate(dst.LogicAssignmentOneOf1); err != nil {
-				dst.LogicAssignmentOneOf1 = nil
+			if err = validator.Validate(dst.GraphCreatedLinkOneOf1); err != nil {
+				dst.GraphCreatedLinkOneOf1 = nil
 			} else {
 				match++
 			}
 		}
 	} else {
-		dst.LogicAssignmentOneOf1 = nil
+		dst.GraphCreatedLinkOneOf1 = nil
 	}
 
 	if match > 1 { // more than 1 match
 		// reset to nil
-		dst.LogicAssignmentOneOf = nil
-		dst.LogicAssignmentOneOf1 = nil
+		dst.GraphCreatedLinkOneOf = nil
+		dst.GraphCreatedLinkOneOf1 = nil
 
 		return fmt.Errorf("data matches more than one schema in oneOf(LogicAssignment)")
 	} else if match == 1 {
@@ -91,12 +91,12 @@ func (dst *LogicAssignment) UnmarshalJSON(data []byte) error {
 
 // Marshal data from the first non-nil pointers in the struct to JSON
 func (src LogicAssignment) MarshalJSON() ([]byte, error) {
-	if src.LogicAssignmentOneOf != nil {
-		return json.Marshal(&src.LogicAssignmentOneOf)
+	if src.GraphCreatedLinkOneOf != nil {
+		return json.Marshal(&src.GraphCreatedLinkOneOf)
 	}
 
-	if src.LogicAssignmentOneOf1 != nil {
-		return json.Marshal(&src.LogicAssignmentOneOf1)
+	if src.GraphCreatedLinkOneOf1 != nil {
+		return json.Marshal(&src.GraphCreatedLinkOneOf1)
 	}
 
 	return nil, nil // no data in oneOf schemas
@@ -107,12 +107,12 @@ func (obj *LogicAssignment) GetActualInstance() (interface{}) {
 	if obj == nil {
 		return nil
 	}
-	if obj.LogicAssignmentOneOf != nil {
-		return obj.LogicAssignmentOneOf
+	if obj.GraphCreatedLinkOneOf != nil {
+		return obj.GraphCreatedLinkOneOf
 	}
 
-	if obj.LogicAssignmentOneOf1 != nil {
-		return obj.LogicAssignmentOneOf1
+	if obj.GraphCreatedLinkOneOf1 != nil {
+		return obj.GraphCreatedLinkOneOf1
 	}
 
 	// all schemas are nil
@@ -121,12 +121,12 @@ func (obj *LogicAssignment) GetActualInstance() (interface{}) {
 
 // Get the actual instance value
 func (obj LogicAssignment) GetActualInstanceValue() (interface{}) {
-	if obj.LogicAssignmentOneOf != nil {
-		return *obj.LogicAssignmentOneOf
+	if obj.GraphCreatedLinkOneOf != nil {
+		return *obj.GraphCreatedLinkOneOf
 	}
 
-	if obj.LogicAssignmentOneOf1 != nil {
-		return *obj.LogicAssignmentOneOf1
+	if obj.GraphCreatedLinkOneOf1 != nil {
+		return *obj.GraphCreatedLinkOneOf1
 	}
 
 	// all schemas are nil

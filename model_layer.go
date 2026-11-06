@@ -24,6 +24,7 @@ type Layer struct {
 	LayerOneOf2 *LayerOneOf2
 	LayerOneOf3 *LayerOneOf3
 	LayerOneOf4 *LayerOneOf4
+	LayerOneOf5 *LayerOneOf5
 }
 
 // LayerOneOfAsLayer is a convenience function that returns LayerOneOf wrapped in Layer
@@ -58,6 +59,13 @@ func LayerOneOf3AsLayer(v *LayerOneOf3) Layer {
 func LayerOneOf4AsLayer(v *LayerOneOf4) Layer {
 	return Layer{
 		LayerOneOf4: v,
+	}
+}
+
+// LayerOneOf5AsLayer is a convenience function that returns LayerOneOf5 wrapped in Layer
+func LayerOneOf5AsLayer(v *LayerOneOf5) Layer {
+	return Layer{
+		LayerOneOf5: v,
 	}
 }
 
@@ -151,6 +159,23 @@ func (dst *Layer) UnmarshalJSON(data []byte) error {
 		dst.LayerOneOf4 = nil
 	}
 
+	// try to unmarshal data into LayerOneOf5
+	err = newStrictDecoder(data).Decode(&dst.LayerOneOf5)
+	if err == nil {
+		jsonLayerOneOf5, _ := json.Marshal(dst.LayerOneOf5)
+		if string(jsonLayerOneOf5) == "{}" { // empty struct
+			dst.LayerOneOf5 = nil
+		} else {
+			if err = validator.Validate(dst.LayerOneOf5); err != nil {
+				dst.LayerOneOf5 = nil
+			} else {
+				match++
+			}
+		}
+	} else {
+		dst.LayerOneOf5 = nil
+	}
+
 	if match > 1 { // more than 1 match
 		// reset to nil
 		dst.LayerOneOf = nil
@@ -158,6 +183,7 @@ func (dst *Layer) UnmarshalJSON(data []byte) error {
 		dst.LayerOneOf2 = nil
 		dst.LayerOneOf3 = nil
 		dst.LayerOneOf4 = nil
+		dst.LayerOneOf5 = nil
 
 		return fmt.Errorf("data matches more than one schema in oneOf(Layer)")
 	} else if match == 1 {
@@ -189,6 +215,10 @@ func (src Layer) MarshalJSON() ([]byte, error) {
 		return json.Marshal(&src.LayerOneOf4)
 	}
 
+	if src.LayerOneOf5 != nil {
+		return json.Marshal(&src.LayerOneOf5)
+	}
+
 	return nil, nil // no data in oneOf schemas
 }
 
@@ -217,6 +247,10 @@ func (obj *Layer) GetActualInstance() (interface{}) {
 		return obj.LayerOneOf4
 	}
 
+	if obj.LayerOneOf5 != nil {
+		return obj.LayerOneOf5
+	}
+
 	// all schemas are nil
 	return nil
 }
@@ -241,6 +275,10 @@ func (obj Layer) GetActualInstanceValue() (interface{}) {
 
 	if obj.LayerOneOf4 != nil {
 		return *obj.LayerOneOf4
+	}
+
+	if obj.LayerOneOf5 != nil {
+		return *obj.LayerOneOf5
 	}
 
 	// all schemas are nil

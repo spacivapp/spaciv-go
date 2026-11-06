@@ -1,4 +1,4 @@
-# LogicAssignmentOneOf
+# GraphCreatedLinkOneOf
 
 ## Properties
 
@@ -8,39 +8,39 @@ Name | Type | Description | Notes
 
 ## Methods
 
-### NewLogicAssignmentOneOf
+### NewGraphCreatedLinkOneOf
 
-`func NewLogicAssignmentOneOf(link int32, ) *LogicAssignmentOneOf`
+`func NewGraphCreatedLinkOneOf(link int32, ) *GraphCreatedLinkOneOf`
 
-NewLogicAssignmentOneOf instantiates a new LogicAssignmentOneOf object
+NewGraphCreatedLinkOneOf instantiates a new GraphCreatedLinkOneOf object
 This constructor will assign default values to properties that have it defined,
 and makes sure properties required by API are set, but the set of arguments
 will change when the set of required properties is changed
 
-### NewLogicAssignmentOneOfWithDefaults
+### NewGraphCreatedLinkOneOfWithDefaults
 
-`func NewLogicAssignmentOneOfWithDefaults() *LogicAssignmentOneOf`
+`func NewGraphCreatedLinkOneOfWithDefaults() *GraphCreatedLinkOneOf`
 
-NewLogicAssignmentOneOfWithDefaults instantiates a new LogicAssignmentOneOf object
+NewGraphCreatedLinkOneOfWithDefaults instantiates a new GraphCreatedLinkOneOf object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
 ### GetLink
 
-`func (o *LogicAssignmentOneOf) GetLink() int32`
+`func (o *GraphCreatedLinkOneOf) GetLink() int32`
 
 GetLink returns the Link field if non-nil, zero value otherwise.
 
 ### GetLinkOk
 
-`func (o *LogicAssignmentOneOf) GetLinkOk() (*int32, bool)`
+`func (o *GraphCreatedLinkOneOf) GetLinkOk() (*int32, bool)`
 
 GetLinkOk returns a tuple with the Link field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetLink
 
-`func (o *LogicAssignmentOneOf) SetLink(v int32)`
+`func (o *GraphCreatedLinkOneOf) SetLink(v int32)`
 
 SetLink sets Link field to given value.
 

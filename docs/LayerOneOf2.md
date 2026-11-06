@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**PropertyMap** | **map[string]interface{}** |  | 
+**ObjectGroup** | **map[string]interface{}** |  | 
 
 ## Methods
 
 ### NewLayerOneOf2
 
-`func NewLayerOneOf2(propertyMap map[string]interface{}, ) *LayerOneOf2`
+`func NewLayerOneOf2(objectGroup map[string]interface{}, ) *LayerOneOf2`
 
 NewLayerOneOf2 instantiates a new LayerOneOf2 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewLayerOneOf2WithDefaults instantiates a new LayerOneOf2 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetPropertyMap
+### GetObjectGroup
 
-`func (o *LayerOneOf2) GetPropertyMap() map[string]interface{}`
+`func (o *LayerOneOf2) GetObjectGroup() map[string]interface{}`
 
-GetPropertyMap returns the PropertyMap field if non-nil, zero value otherwise.
+GetObjectGroup returns the ObjectGroup field if non-nil, zero value otherwise.
 
-### GetPropertyMapOk
+### GetObjectGroupOk
 
-`func (o *LayerOneOf2) GetPropertyMapOk() (*map[string]interface{}, bool)`
+`func (o *LayerOneOf2) GetObjectGroupOk() (*map[string]interface{}, bool)`
 
-GetPropertyMapOk returns a tuple with the PropertyMap field if it's non-nil, zero value otherwise
+GetObjectGroupOk returns a tuple with the ObjectGroup field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetPropertyMap
+### SetObjectGroup
 
-`func (o *LayerOneOf2) SetPropertyMap(v map[string]interface{})`
+`func (o *LayerOneOf2) SetObjectGroup(v map[string]interface{})`
 
-SetPropertyMap sets PropertyMap field to given value.
+SetObjectGroup sets ObjectGroup field to given value.
 
 
 

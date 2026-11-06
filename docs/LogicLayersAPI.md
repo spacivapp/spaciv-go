@@ -4,17 +4,85 @@ All URIs are relative to *https://api.spaciv.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**CreateGraphLayers**](LogicLayersAPI.md#CreateGraphLayers) | **Post** /v1/graph-layers | Create a graph layer
 [**CreateSpaceRulesets**](LogicLayersAPI.md#CreateSpaceRulesets) | **Post** /v1/space-rulesets | Create a logic layer
 [**CreateSpaceRulesetsImage**](LogicLayersAPI.md#CreateSpaceRulesetsImage) | **Post** /v1/space-rulesets/{id}/image | Upload a space ruleset image
+[**DeleteGraphLayers**](LogicLayersAPI.md#DeleteGraphLayers) | **Delete** /v1/graph-layers/{id} | Delete a graph layer
 [**DeleteSpaceRulesets**](LogicLayersAPI.md#DeleteSpaceRulesets) | **Delete** /v1/space-rulesets/{id} | Delete a logic layer
 [**DeleteSpaceRulesetsImage**](LogicLayersAPI.md#DeleteSpaceRulesetsImage) | **Delete** /v1/space-rulesets/{id}/image | Delete a space ruleset image
 [**DuplicateSpaceRulesets**](LogicLayersAPI.md#DuplicateSpaceRulesets) | **Post** /v1/space-rulesets/{id}/duplicate | Duplicate a logic layer
+[**GetGraphLayers**](LogicLayersAPI.md#GetGraphLayers) | **Get** /v1/graph-layers/{id} | Get a graph layer
 [**GetSpaceRulesets**](LogicLayersAPI.md#GetSpaceRulesets) | **Get** /v1/space-rulesets/{id} | Get a logic layer
 [**GetSpaceRulesetsImage**](LogicLayersAPI.md#GetSpaceRulesetsImage) | **Get** /v1/space-rulesets/{id}/image | Get a space ruleset image
+[**ListGraphLayers**](LogicLayersAPI.md#ListGraphLayers) | **Get** /v1/graph-layers | List graph layers
 [**ListSpaceRulesets**](LogicLayersAPI.md#ListSpaceRulesets) | **Get** /v1/space-rulesets | List logic layers
 [**ListSpaceRulesetsPresets**](LogicLayersAPI.md#ListSpaceRulesetsPresets) | **Get** /v1/space-rulesets/presets | List preset logic layers
+[**UpdateGraphLayers**](LogicLayersAPI.md#UpdateGraphLayers) | **Patch** /v1/graph-layers/{id} | Update a graph layer
 [**UpdateSpaceRulesets**](LogicLayersAPI.md#UpdateSpaceRulesets) | **Patch** /v1/space-rulesets/{id} | Update a logic layer
 
+
+
+## CreateGraphLayers
+
+> PostResponseBody CreateGraphLayers(ctx, graphLayerCreate)
+
+Create a graph layer
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+	graphLayerCreate :=  // GraphLayerCreate | 
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.LogicLayers.CreateGraphLayers(context.Background(), graphLayerCreate)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `LogicLayers.CreateGraphLayers`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `LogicLayers.CreateGraphLayers`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiCreateGraphLayersRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **graphLayerCreate** | [**GraphLayerCreate**](GraphLayerCreate.md) |  | 
+
+### Return type
+
+[**PostResponseBody**](PostResponseBody.md)
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
 
 
 ## CreateSpaceRulesets
@@ -142,6 +210,73 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: multipart/form-data
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## DeleteGraphLayers
+
+> map[string]interface{} DeleteGraphLayers(ctx, id)
+
+Delete a graph layer
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+	id :=  // string | 
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.LogicLayers.DeleteGraphLayers(context.Background(), id)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `LogicLayers.DeleteGraphLayers`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `LogicLayers.DeleteGraphLayers`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**id** | **string** |  | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiDeleteGraphLayersRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+### Return type
+
+**map[string]interface{}**
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
 - **Accept**: application/json, application/problem+json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
@@ -350,6 +485,73 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
+## GetGraphLayers
+
+> GraphLayerJSON GetGraphLayers(ctx, id)
+
+Get a graph layer
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+	id :=  // string | 
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.LogicLayers.GetGraphLayers(context.Background(), id)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `LogicLayers.GetGraphLayers`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `LogicLayers.GetGraphLayers`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**id** | **string** |  | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetGraphLayersRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+### Return type
+
+[**GraphLayerJSON**](GraphLayerJSON.md)
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## GetSpaceRulesets
 
 > SpaceRuleSetJSON GetSpaceRulesets(ctx, id)
@@ -485,6 +687,64 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
+## ListGraphLayers
+
+> []GraphLayerListEntry ListGraphLayers(ctx)
+
+List graph layers
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.LogicLayers.ListGraphLayers(context.Background())
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `LogicLayers.ListGraphLayers`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `LogicLayers.ListGraphLayers`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+This endpoint does not need any parameter.
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiListGraphLayersRequest struct via the builder pattern
+
+
+### Return type
+
+[**[]GraphLayerListEntry**](GraphLayerListEntry.md)
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## ListSpaceRulesets
 
 > []SpaceRulesetListEntry ListSpaceRulesets(ctx)
@@ -594,6 +854,75 @@ Other parameters are passed through a pointer to a apiListSpaceRulesetsPresetsRe
 ### HTTP request headers
 
 - **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## UpdateGraphLayers
+
+> map[string]interface{} UpdateGraphLayers(ctx, id, graphLayerUpdate)
+
+Update a graph layer
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+	id :=  // string | 
+	graphLayerUpdate :=  // GraphLayerUpdate | 
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.LogicLayers.UpdateGraphLayers(context.Background(), id, graphLayerUpdate)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `LogicLayers.UpdateGraphLayers`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `LogicLayers.UpdateGraphLayers`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**id** | **string** |  | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiUpdateGraphLayersRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+ **graphLayerUpdate** | [**GraphLayerUpdate**](GraphLayerUpdate.md) |  | 
+
+### Return type
+
+**map[string]interface{}**
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
 - **Accept**: application/json, application/problem+json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)

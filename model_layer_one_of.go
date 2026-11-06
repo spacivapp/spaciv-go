@@ -22,7 +22,7 @@ var _ MappedNullable = &LayerOneOf{}
 
 // LayerOneOf struct for LayerOneOf
 type LayerOneOf struct {
-	Need LayerTypeNeed `json:"need"`
+	Graph map[string]interface{} `json:"graph"`
 }
 
 type _LayerOneOf LayerOneOf
@@ -31,9 +31,9 @@ type _LayerOneOf LayerOneOf
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewLayerOneOf(need LayerTypeNeed) *LayerOneOf {
+func NewLayerOneOf(graph map[string]interface{}) *LayerOneOf {
 	this := LayerOneOf{}
-	this.Need = need
+	this.Graph = graph
 	return &this
 }
 
@@ -45,28 +45,28 @@ func NewLayerOneOfWithDefaults() *LayerOneOf {
 	return &this
 }
 
-// GetNeed returns the Need field value
-func (o *LayerOneOf) GetNeed() LayerTypeNeed {
+// GetGraph returns the Graph field value
+func (o *LayerOneOf) GetGraph() map[string]interface{} {
 	if o == nil {
-		var ret LayerTypeNeed
+		var ret map[string]interface{}
 		return ret
 	}
 
-	return o.Need
+	return o.Graph
 }
 
-// GetNeedOk returns a tuple with the Need field value
+// GetGraphOk returns a tuple with the Graph field value
 // and a boolean to check if the value has been set.
-func (o *LayerOneOf) GetNeedOk() (*LayerTypeNeed, bool) {
+func (o *LayerOneOf) GetGraphOk() (map[string]interface{}, bool) {
 	if o == nil {
-		return nil, false
+		return map[string]interface{}{}, false
 	}
-	return &o.Need, true
+	return o.Graph, true
 }
 
-// SetNeed sets field value
-func (o *LayerOneOf) SetNeed(v LayerTypeNeed) {
-	o.Need = v
+// SetGraph sets field value
+func (o *LayerOneOf) SetGraph(v map[string]interface{}) {
+	o.Graph = v
 }
 
 func (o LayerOneOf) MarshalJSON() ([]byte, error) {
@@ -79,7 +79,7 @@ func (o LayerOneOf) MarshalJSON() ([]byte, error) {
 
 func (o LayerOneOf) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["need"] = o.Need
+	toSerialize["graph"] = o.Graph
 	return toSerialize, nil
 }
 
@@ -88,7 +88,7 @@ func (o *LayerOneOf) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"need",
+		"graph",
 	}
 
 	allProperties := make(map[string]interface{})

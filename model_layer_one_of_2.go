@@ -22,7 +22,7 @@ var _ MappedNullable = &LayerOneOf2{}
 
 // LayerOneOf2 struct for LayerOneOf2
 type LayerOneOf2 struct {
-	PropertyMap map[string]interface{} `json:"propertyMap"`
+	ObjectGroup map[string]interface{} `json:"objectGroup"`
 }
 
 type _LayerOneOf2 LayerOneOf2
@@ -31,9 +31,9 @@ type _LayerOneOf2 LayerOneOf2
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewLayerOneOf2(propertyMap map[string]interface{}) *LayerOneOf2 {
+func NewLayerOneOf2(objectGroup map[string]interface{}) *LayerOneOf2 {
 	this := LayerOneOf2{}
-	this.PropertyMap = propertyMap
+	this.ObjectGroup = objectGroup
 	return &this
 }
 
@@ -45,28 +45,28 @@ func NewLayerOneOf2WithDefaults() *LayerOneOf2 {
 	return &this
 }
 
-// GetPropertyMap returns the PropertyMap field value
-func (o *LayerOneOf2) GetPropertyMap() map[string]interface{} {
+// GetObjectGroup returns the ObjectGroup field value
+func (o *LayerOneOf2) GetObjectGroup() map[string]interface{} {
 	if o == nil {
 		var ret map[string]interface{}
 		return ret
 	}
 
-	return o.PropertyMap
+	return o.ObjectGroup
 }
 
-// GetPropertyMapOk returns a tuple with the PropertyMap field value
+// GetObjectGroupOk returns a tuple with the ObjectGroup field value
 // and a boolean to check if the value has been set.
-func (o *LayerOneOf2) GetPropertyMapOk() (map[string]interface{}, bool) {
+func (o *LayerOneOf2) GetObjectGroupOk() (map[string]interface{}, bool) {
 	if o == nil {
 		return map[string]interface{}{}, false
 	}
-	return o.PropertyMap, true
+	return o.ObjectGroup, true
 }
 
-// SetPropertyMap sets field value
-func (o *LayerOneOf2) SetPropertyMap(v map[string]interface{}) {
-	o.PropertyMap = v
+// SetObjectGroup sets field value
+func (o *LayerOneOf2) SetObjectGroup(v map[string]interface{}) {
+	o.ObjectGroup = v
 }
 
 func (o LayerOneOf2) MarshalJSON() ([]byte, error) {
@@ -79,7 +79,7 @@ func (o LayerOneOf2) MarshalJSON() ([]byte, error) {
 
 func (o LayerOneOf2) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["propertyMap"] = o.PropertyMap
+	toSerialize["objectGroup"] = o.ObjectGroup
 	return toSerialize, nil
 }
 
@@ -88,7 +88,7 @@ func (o *LayerOneOf2) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"propertyMap",
+		"objectGroup",
 	}
 
 	allProperties := make(map[string]interface{})

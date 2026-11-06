@@ -22,7 +22,7 @@ var _ MappedNullable = &LayerOneOf4{}
 
 // LayerOneOf4 struct for LayerOneOf4
 type LayerOneOf4 struct {
-	Stack map[string]interface{} `json:"stack"`
+	Rule map[string]interface{} `json:"rule"`
 }
 
 type _LayerOneOf4 LayerOneOf4
@@ -31,9 +31,9 @@ type _LayerOneOf4 LayerOneOf4
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewLayerOneOf4(stack map[string]interface{}) *LayerOneOf4 {
+func NewLayerOneOf4(rule map[string]interface{}) *LayerOneOf4 {
 	this := LayerOneOf4{}
-	this.Stack = stack
+	this.Rule = rule
 	return &this
 }
 
@@ -45,28 +45,28 @@ func NewLayerOneOf4WithDefaults() *LayerOneOf4 {
 	return &this
 }
 
-// GetStack returns the Stack field value
-func (o *LayerOneOf4) GetStack() map[string]interface{} {
+// GetRule returns the Rule field value
+func (o *LayerOneOf4) GetRule() map[string]interface{} {
 	if o == nil {
 		var ret map[string]interface{}
 		return ret
 	}
 
-	return o.Stack
+	return o.Rule
 }
 
-// GetStackOk returns a tuple with the Stack field value
+// GetRuleOk returns a tuple with the Rule field value
 // and a boolean to check if the value has been set.
-func (o *LayerOneOf4) GetStackOk() (map[string]interface{}, bool) {
+func (o *LayerOneOf4) GetRuleOk() (map[string]interface{}, bool) {
 	if o == nil {
 		return map[string]interface{}{}, false
 	}
-	return o.Stack, true
+	return o.Rule, true
 }
 
-// SetStack sets field value
-func (o *LayerOneOf4) SetStack(v map[string]interface{}) {
-	o.Stack = v
+// SetRule sets field value
+func (o *LayerOneOf4) SetRule(v map[string]interface{}) {
+	o.Rule = v
 }
 
 func (o LayerOneOf4) MarshalJSON() ([]byte, error) {
@@ -79,7 +79,7 @@ func (o LayerOneOf4) MarshalJSON() ([]byte, error) {
 
 func (o LayerOneOf4) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["stack"] = o.Stack
+	toSerialize["rule"] = o.Rule
 	return toSerialize, nil
 }
 
@@ -88,7 +88,7 @@ func (o *LayerOneOf4) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"stack",
+		"rule",
 	}
 
 	allProperties := make(map[string]interface{})
