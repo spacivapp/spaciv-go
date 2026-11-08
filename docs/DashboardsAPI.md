@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**Create**](DashboardsAPI.md#Create) | **Post** /v1/dashboards | Create a dashboard
 [**CreateCards**](DashboardsAPI.md#CreateCards) | **Post** /v1/dashboards/{id}/cards | Add a card to a dashboard
+[**CreateMove**](DashboardsAPI.md#CreateMove) | **Post** /v1/dashboards/{id}/move | Move a dashboard to another project
 [**Delete**](DashboardsAPI.md#Delete) | **Delete** /v1/dashboards/{id} | Delete a dashboard
 [**DeleteCards**](DashboardsAPI.md#DeleteCards) | **Delete** /v1/dashboards/{id}/cards | Remove a card from a dashboard
 [**Duplicate**](DashboardsAPI.md#Duplicate) | **Post** /v1/dashboards/{id}/duplicate | Copy a dashboard
@@ -81,7 +82,7 @@ Name | Type | Description  | Notes
 
 ## CreateCards
 
-> CreateCards(ctx, id, dashboardCardCreate)
+> CreateCards(ctx, id, dashboardCardCreate, params)
 
 Add a card to a dashboard
 
@@ -104,7 +105,7 @@ func main() {
 	dashboardCardCreate :=  // DashboardCardCreate | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	err := client.Dashboards.CreateCards(context.Background(), id, dashboardCardCreate)
+	err := client.Dashboards.CreateCards(context.Background(), id, dashboardCardCreate, nil)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `Dashboards.CreateCards`: %v\n", err)
 	}
@@ -127,6 +128,7 @@ Other parameters are passed through a pointer to a apiCreateCardsRequest struct 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **ifMatch** | **string** | The dashboard&#39;s ETag when it was read. The change is saved only if the dashboard has not changed since. | 
  **dashboardCardCreate** | [**DashboardCardCreate**](DashboardCardCreate.md) |  | 
 
 ### Return type
@@ -141,6 +143,75 @@ Name | Type | Description  | Notes
 
 - **Content-Type**: application/json
 - **Accept**: application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## CreateMove
+
+> string CreateMove(ctx, id, dashboardCopy)
+
+Move a dashboard to another project
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+	id :=  // string | 
+	dashboardCopy :=  // DashboardCopy | 
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.Dashboards.CreateMove(context.Background(), id, dashboardCopy)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `Dashboards.CreateMove`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `Dashboards.CreateMove`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**id** | **string** |  | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiCreateMoveRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+ **dashboardCopy** | [**DashboardCopy**](DashboardCopy.md) |  | 
+
+### Return type
+
+**string**
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json, application/problem+json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -215,7 +286,7 @@ Name | Type | Description  | Notes
 
 ## DeleteCards
 
-> DeleteCards(ctx, id, dashboardCardDelete)
+> DeleteCards(ctx, id, dashboardCardDelete, params)
 
 Remove a card from a dashboard
 
@@ -238,7 +309,7 @@ func main() {
 	dashboardCardDelete :=  // DashboardCardDelete | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	err := client.Dashboards.DeleteCards(context.Background(), id, dashboardCardDelete)
+	err := client.Dashboards.DeleteCards(context.Background(), id, dashboardCardDelete, nil)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `Dashboards.DeleteCards`: %v\n", err)
 	}
@@ -261,6 +332,7 @@ Other parameters are passed through a pointer to a apiDeleteCardsRequest struct 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **ifMatch** | **string** | The dashboard&#39;s ETag when it was read. The change is saved only if the dashboard has not changed since. | 
  **dashboardCardDelete** | [**DashboardCardDelete**](DashboardCardDelete.md) |  | 
 
 ### Return type
@@ -477,7 +549,7 @@ Other parameters are passed through a pointer to a apiListRequest struct via the
 
 ## Update
 
-> Update(ctx, id, dashboardUpdate)
+> Update(ctx, id, dashboardUpdate, params)
 
 Update a dashboard
 
@@ -500,7 +572,7 @@ func main() {
 	dashboardUpdate :=  // DashboardUpdate | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	err := client.Dashboards.Update(context.Background(), id, dashboardUpdate)
+	err := client.Dashboards.Update(context.Background(), id, dashboardUpdate, nil)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `Dashboards.Update`: %v\n", err)
 	}
@@ -523,6 +595,7 @@ Other parameters are passed through a pointer to a apiUpdateRequest struct via t
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **ifMatch** | **string** | The dashboard&#39;s ETag when it was read. The change is saved only if the dashboard has not changed since. | 
  **dashboardUpdate** | [**DashboardUpdate**](DashboardUpdate.md) |  | 
 
 ### Return type
@@ -545,7 +618,7 @@ Name | Type | Description  | Notes
 
 ## UpdateCards
 
-> UpdateCards(ctx, id, dashboardCardPatch)
+> UpdateCards(ctx, id, dashboardCardPatch, params)
 
 Update a dashboard card
 
@@ -568,7 +641,7 @@ func main() {
 	dashboardCardPatch :=  // DashboardCardPatch | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	err := client.Dashboards.UpdateCards(context.Background(), id, dashboardCardPatch)
+	err := client.Dashboards.UpdateCards(context.Background(), id, dashboardCardPatch, nil)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `Dashboards.UpdateCards`: %v\n", err)
 	}
@@ -591,6 +664,7 @@ Other parameters are passed through a pointer to a apiUpdateCardsRequest struct 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **ifMatch** | **string** | The dashboard&#39;s ETag when it was read. The change is saved only if the dashboard has not changed since. | 
  **dashboardCardPatch** | [**DashboardCardPatch**](DashboardCardPatch.md) |  | 
 
 ### Return type

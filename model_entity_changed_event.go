@@ -25,6 +25,7 @@ type EntityChangedEvent struct {
 	Actor EntityChangeActor `json:"actor"`
 	At string `json:"at"`
 	Id string `json:"id"`
+	MovedTo *EntityMovedTo `json:"movedTo,omitempty"`
 	Op string `json:"op"`
 	Project *int64 `json:"project,omitempty"`
 	Type string `json:"type"`
@@ -153,6 +154,38 @@ func (o *EntityChangedEvent) SetId(v string) {
 	o.Id = v
 }
 
+// GetMovedTo returns the MovedTo field value if set, zero value otherwise.
+func (o *EntityChangedEvent) GetMovedTo() EntityMovedTo {
+	if o == nil || IsNil(o.MovedTo) {
+		var ret EntityMovedTo
+		return ret
+	}
+	return *o.MovedTo
+}
+
+// GetMovedToOk returns a tuple with the MovedTo field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *EntityChangedEvent) GetMovedToOk() (*EntityMovedTo, bool) {
+	if o == nil || IsNil(o.MovedTo) {
+		return nil, false
+	}
+	return o.MovedTo, true
+}
+
+// HasMovedTo returns a boolean if a field has been set.
+func (o *EntityChangedEvent) HasMovedTo() bool {
+	if o != nil && !IsNil(o.MovedTo) {
+		return true
+	}
+
+	return false
+}
+
+// SetMovedTo gets a reference to the given EntityMovedTo and assigns it to the MovedTo field.
+func (o *EntityChangedEvent) SetMovedTo(v EntityMovedTo) {
+	o.MovedTo = &v
+}
+
 // GetOp returns the Op field value
 func (o *EntityChangedEvent) GetOp() string {
 	if o == nil {
@@ -279,6 +312,9 @@ func (o EntityChangedEvent) ToMap() (map[string]interface{}, error) {
 	toSerialize["actor"] = o.Actor
 	toSerialize["at"] = o.At
 	toSerialize["id"] = o.Id
+	if !IsNil(o.MovedTo) {
+		toSerialize["movedTo"] = o.MovedTo
+	}
 	toSerialize["op"] = o.Op
 	if !IsNil(o.Project) {
 		toSerialize["project"] = o.Project
@@ -339,6 +375,7 @@ func (o *EntityChangedEvent) UnmarshalJSON(data []byte) (err error) {
 		delete(additionalProperties, "actor")
 		delete(additionalProperties, "at")
 		delete(additionalProperties, "id")
+		delete(additionalProperties, "movedTo")
 		delete(additionalProperties, "op")
 		delete(additionalProperties, "project")
 		delete(additionalProperties, "type")

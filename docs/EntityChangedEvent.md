@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **Actor** | [**EntityChangeActor**](EntityChangeActor.md) |  | 
 **At** | **string** |  | 
 **Id** | **string** |  | 
+**MovedTo** | Pointer to [**EntityMovedTo**](EntityMovedTo.md) |  | [optional] 
 **Op** | **string** |  | 
 **Project** | Pointer to **int64** |  | [optional] 
 **Type** | **string** |  | 
@@ -111,6 +112,31 @@ and a boolean to check if the value has been set.
 
 SetId sets Id field to given value.
 
+
+### GetMovedTo
+
+`func (o *EntityChangedEvent) GetMovedTo() EntityMovedTo`
+
+GetMovedTo returns the MovedTo field if non-nil, zero value otherwise.
+
+### GetMovedToOk
+
+`func (o *EntityChangedEvent) GetMovedToOk() (*EntityMovedTo, bool)`
+
+GetMovedToOk returns a tuple with the MovedTo field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetMovedTo
+
+`func (o *EntityChangedEvent) SetMovedTo(v EntityMovedTo)`
+
+SetMovedTo sets MovedTo field to given value.
+
+### HasMovedTo
+
+`func (o *EntityChangedEvent) HasMovedTo() bool`
+
+HasMovedTo returns a boolean if a field has been set.
 
 ### GetOp
 

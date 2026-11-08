@@ -3648,6 +3648,14 @@ paths:
               schema:
                 $ref: "#/components/schemas/DashboardChangelogBody"
           description: OK
+          headers:
+            ETag:
+              explode: false
+              schema:
+                description: The dashboard's version. Send it as If-Match when changing
+                  the dashboard.
+                type: string
+              style: simple
         default:
           content:
             application/problem+json:
@@ -3662,7 +3670,12 @@ paths:
       description: "Updates the name or description of a dashboard, or changes its\
         \ position in the project's ordered list. Supply `move` with `\"Up\"` or `\"\
         Down\"` to reorder; omit it to update metadata only. Returns `404` if the\
-        \ dashboard does not exist. Requires the *Edit org model* permission."
+        \ dashboard does not exist. Requires the *Edit org model* permission. Send\
+        \ the dashboard's `ETag` as `If-Match` to save the change only if nobody has\
+        \ changed the dashboard since it was read; otherwise the request is rejected\
+        \ with `412`, and the error's `header.If-Match` detail carries the current\
+        \ `ETag`. Without `If-Match` the change is applied to the latest version.\
+        \ The response's `ETag` is the dashboard's version after the change."
       operationId: dashboards_update
       parameters:
       - explode: false
@@ -3670,6 +3683,17 @@ paths:
         name: id
         required: true
         schema:
+          type: string
+        style: simple
+      - description: The dashboard's ETag when it was read. The change is saved only
+          if the dashboard has not changed since.
+        explode: false
+        in: header
+        name: If-Match
+        required: false
+        schema:
+          description: The dashboard's ETag when it was read. The change is saved
+            only if the dashboard has not changed since.
           type: string
         style: simple
       requestBody:
@@ -3680,6 +3704,13 @@ paths:
       responses:
         "204":
           description: No Content
+          headers:
+            ETag:
+              explode: false
+              schema:
+                description: The dashboard's version after the change.
+                type: string
+              style: simple
         default:
           content:
             application/problem+json:
@@ -3689,13 +3720,13 @@ paths:
       summary: Update a dashboard
       tags:
       - Dashboards
-      x-sdk-params: false
+      x-sdk-params: true
   /v1/dashboards/{id}/cards:
     delete:
       description: |-
         Removes the card `cardId` from the dashboard's card list. Cards that follow it are shifted up. Deleting a card that is no longer on the dashboard succeeds. Returns `400` if `cardId` is empty, and `404` if the dashboard does not exist.
 
-        Requires the *Edit org model* permission.
+        Requires the *Edit org model* permission. Send the dashboard's `ETag` as `If-Match` to save the change only if nobody has changed the dashboard since it was read; otherwise the request is rejected with `412`, and the error's `header.If-Match` detail carries the current `ETag`. Without `If-Match` the change is applied to the latest version. The response's `ETag` is the dashboard's version after the change.
       operationId: dashboards_delete-cards
       parameters:
       - explode: false
@@ -3703,6 +3734,17 @@ paths:
         name: id
         required: true
         schema:
+          type: string
+        style: simple
+      - description: The dashboard's ETag when it was read. The change is saved only
+          if the dashboard has not changed since.
+        explode: false
+        in: header
+        name: If-Match
+        required: false
+        schema:
+          description: The dashboard's ETag when it was read. The change is saved
+            only if the dashboard has not changed since.
           type: string
         style: simple
       requestBody:
@@ -3713,6 +3755,13 @@ paths:
       responses:
         "204":
           description: No Content
+          headers:
+            ETag:
+              explode: false
+              schema:
+                description: The dashboard's version after the change.
+                type: string
+              style: simple
         default:
           content:
             application/problem+json:
@@ -3722,12 +3771,12 @@ paths:
       summary: Remove a card from a dashboard
       tags:
       - Dashboards
-      x-sdk-params: false
+      x-sdk-params: true
     patch:
       description: |-
         Applies a single action to a card on a dashboard. Use `moveCardAfter` to move the card `cardId` to just after the card `afterCardId`, or to the start when `afterCardId` is empty, or `updateCard` to replace the content of the card `cardId`, including the order of its visualisation and control items. Returns `404` if `cardId` is not on the dashboard and `409` if `afterCardId` is not.
 
-        Returns `400` when `cardId` is empty, a card would be moved after itself, a card or item id is longer than 64 characters, an item id is used twice on the card, a row-break card has items, a control is missing a variable or duplicates another control on the same card, or a list entry's `hexCode` is not a colour such as `#1f77b4` or `#abc`. Returns `404` if the dashboard does not exist. Returns `409` if it references an account variable that does not exist, including one deleted while the change is being saved. Returns `400` if a single save adds references to too many account variables to save atomically. Requires the *Edit org model* permission, and the *Variable controls* permission when the update adds, removes, reorders or changes a card's controls.
+        Returns `400` when `cardId` is empty, a card would be moved after itself, a card or item id is longer than 64 characters, an item id is used twice on the card, a row-break card has items, a control is missing a variable or duplicates another control on the same card, or a list entry's `hexCode` is not a colour such as `#1f77b4` or `#abc`. Returns `404` if the dashboard does not exist. Returns `409` if it references an account variable that does not exist, including one deleted while the change is being saved. Returns `400` if a single save adds references to too many account variables to save atomically. Requires the *Edit org model* permission, and the *Variable controls* permission when the update adds, removes, reorders or changes a card's controls. Send the dashboard's `ETag` as `If-Match` to save the change only if nobody has changed the dashboard since it was read; otherwise the request is rejected with `412`, and the error's `header.If-Match` detail carries the current `ETag`. Without `If-Match` the change is applied to the latest version. The response's `ETag` is the dashboard's version after the change.
       operationId: dashboards_update-cards
       parameters:
       - explode: false
@@ -3735,6 +3784,17 @@ paths:
         name: id
         required: true
         schema:
+          type: string
+        style: simple
+      - description: The dashboard's ETag when it was read. The change is saved only
+          if the dashboard has not changed since.
+        explode: false
+        in: header
+        name: If-Match
+        required: false
+        schema:
+          description: The dashboard's ETag when it was read. The change is saved
+            only if the dashboard has not changed since.
           type: string
         style: simple
       requestBody:
@@ -3745,6 +3805,13 @@ paths:
       responses:
         "204":
           description: No Content
+          headers:
+            ETag:
+              explode: false
+              schema:
+                description: The dashboard's version after the change.
+                type: string
+              style: simple
         default:
           content:
             application/problem+json:
@@ -3754,12 +3821,12 @@ paths:
       summary: Update a dashboard card
       tags:
       - Dashboards
-      x-sdk-params: false
+      x-sdk-params: true
     post:
       description: |-
         Inserts a new card just after the card `afterCardId`, at the start when `afterCardId` is empty, or at the end when `afterCardId` is omitted. Cards already at that position and beyond are shifted down. Set `card.id` to choose the new card's id; otherwise one is assigned. Returns `409` if `afterCardId` is not on the dashboard or a card with `card.id` already is.
 
-        Returns `400` when a card or item id is longer than 64 characters or an item id is used twice on the card, a row-break card has items, a control is missing a variable or duplicates another control on the same card, or a list entry's `hexCode` is not a colour such as `#1f77b4` or `#abc`. Returns `404` if the dashboard does not exist. Returns `409` if it references an account variable that does not exist, including one deleted while the change is being saved. Returns `400` if a single save adds references to too many account variables to save atomically. Requires the *Edit org model* permission, and the *Variable controls* permission when the card has controls.
+        Returns `400` when a card or item id is longer than 64 characters or an item id is used twice on the card, a row-break card has items, a control is missing a variable or duplicates another control on the same card, or a list entry's `hexCode` is not a colour such as `#1f77b4` or `#abc`. Returns `404` if the dashboard does not exist. Returns `409` if it references an account variable that does not exist, including one deleted while the change is being saved. Returns `400` if a single save adds references to too many account variables to save atomically. Requires the *Edit org model* permission, and the *Variable controls* permission when the card has controls. Send the dashboard's `ETag` as `If-Match` to save the change only if nobody has changed the dashboard since it was read; otherwise the request is rejected with `412`, and the error's `header.If-Match` detail carries the current `ETag`. Without `If-Match` the change is applied to the latest version. The response's `ETag` is the dashboard's version after the change.
       operationId: dashboards_create-cards
       parameters:
       - explode: false
@@ -3767,6 +3834,17 @@ paths:
         name: id
         required: true
         schema:
+          type: string
+        style: simple
+      - description: The dashboard's ETag when it was read. The change is saved only
+          if the dashboard has not changed since.
+        explode: false
+        in: header
+        name: If-Match
+        required: false
+        schema:
+          description: The dashboard's ETag when it was read. The change is saved
+            only if the dashboard has not changed since.
           type: string
         style: simple
       requestBody:
@@ -3777,6 +3855,13 @@ paths:
       responses:
         "204":
           description: No Content
+          headers:
+            ETag:
+              explode: false
+              schema:
+                description: The dashboard's version after the change.
+                type: string
+              style: simple
         default:
           content:
             application/problem+json:
@@ -3786,7 +3871,7 @@ paths:
       summary: Add a card to a dashboard
       tags:
       - Dashboards
-      x-sdk-params: false
+      x-sdk-params: true
   /v1/dashboards/{id}/duplicate:
     post:
       description: "Copies a dashboard from the current project into a target project\
@@ -3825,6 +3910,47 @@ paths:
                 $ref: "#/components/schemas/ErrorModel"
           description: Error
       summary: Copy a dashboard
+      tags:
+      - Dashboards
+      x-sdk-params: false
+  /v1/dashboards/{id}/move:
+    post:
+      description: "Copies a dashboard from the current project into the project `toProject`,\
+        \ removes it from the current project, and returns the moved dashboard's new\
+        \ UUID. Anyone viewing the dashboard is told where it moved. Returns `404`\
+        \ if the dashboard or the project `toProject` does not exist, `400` if `toProject`\
+        \ is missing, and `409` if the dashboard was changed while it was being moved,\
+        \ in which case nothing moves. Requires the *Edit org model* permission, and\
+        \ the *Variable controls* permission when any of the dashboard's cards has\
+        \ controls."
+      operationId: dashboards_create-move
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DashboardCopy"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Move a dashboard to another project
       tags:
       - Dashboards
       x-sdk-params: false
@@ -12940,6 +13066,8 @@ components:
           type: string
         id:
           type: string
+        movedTo:
+          $ref: "#/components/schemas/EntityMovedTo"
         op:
           enum:
           - upsert
@@ -12958,6 +13086,17 @@ components:
       - id
       - op
       - type
+    EntityMovedTo:
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        project:
+          format: int64
+          type: integer
+      required:
+      - id
+      - project
     EntryPatch:
       additionalProperties: false
       example:

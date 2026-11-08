@@ -239,6 +239,7 @@ docs/Directory.md
 docs/DirectoryPage.md
 docs/EntityChangeActor.md
 docs/EntityChangedEvent.md
+docs/EntityMovedTo.md
 docs/EntryPatch.md
 docs/EntryPatchPropertiesValue.md
 docs/ErrorDetail.md
@@ -753,6 +754,7 @@ model_directory.go
 model_directory_page.go
 model_entity_change_actor.go
 model_entity_changed_event.go
+model_entity_moved_to.go
 model_entry_patch.go
 model_entry_patch_properties_value.go
 model_error_detail.go

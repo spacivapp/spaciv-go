@@ -136,7 +136,13 @@ type requestForDashboardsCreateCards struct {
 	ctx context.Context
 	ApiService *DashboardsService
 	id string
+	ifMatch *string
 	dashboardCardCreate *DashboardCardCreate
+}
+
+type DashboardsCreateCardsParams struct {
+	// The dashboard&#39;s ETag when it was read. The change is saved only if the dashboard has not changed since.
+	IfMatch *string
 }
 
 /*
@@ -144,14 +150,17 @@ CreateCards Add a card to a dashboard
 
 Inserts a new card just after the card `afterCardId`, at the start when `afterCardId` is empty, or at the end when `afterCardId` is omitted. Cards already at that position and beyond are shifted down. Set `card.id` to choose the new card's id; otherwise one is assigned. Returns `409` if `afterCardId` is not on the dashboard or a card with `card.id` already is.
 
-Returns `400` when a card or item id is longer than 64 characters or an item id is used twice on the card, a row-break card has items, a control is missing a variable or duplicates another control on the same card, or a list entry's `hexCode` is not a colour such as `#1f77b4` or `#abc`. Returns `404` if the dashboard does not exist. Returns `409` if it references an account variable that does not exist, including one deleted while the change is being saved. Returns `400` if a single save adds references to too many account variables to save atomically. Requires the *Edit org model* permission, and the *Variable controls* permission when the card has controls.
+Returns `400` when a card or item id is longer than 64 characters or an item id is used twice on the card, a row-break card has items, a control is missing a variable or duplicates another control on the same card, or a list entry's `hexCode` is not a colour such as `#1f77b4` or `#abc`. Returns `404` if the dashboard does not exist. Returns `409` if it references an account variable that does not exist, including one deleted while the change is being saved. Returns `400` if a single save adds references to too many account variables to save atomically. Requires the *Edit org model* permission, and the *Variable controls* permission when the card has controls. Send the dashboard's `ETag` as `If-Match` to save the change only if nobody has changed the dashboard since it was read; otherwise the request is rejected with `412`, and the error's `header.If-Match` detail carries the current `ETag`. Without `If-Match` the change is applied to the latest version. The response's `ETag` is the dashboard's version after the change.
 */
-func (a *DashboardsService) CreateCards(ctx context.Context, id string, dashboardCardCreate DashboardCardCreate) error {
+func (a *DashboardsService) CreateCards(ctx context.Context, id string, dashboardCardCreate DashboardCardCreate, params *DashboardsCreateCardsParams) error {
 	r := requestForDashboardsCreateCards{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
 		dashboardCardCreate: &dashboardCardCreate,
+	}
+	if params != nil {
+		r.ifMatch = params.IfMatch
 	}
 	_, err := a.executeCreateCards(r)
 	return err
@@ -193,6 +202,9 @@ func (a *DashboardsService) executeCreateCards(r requestForDashboardsCreateCards
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
+	if r.ifMatch != nil {
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "If-Match", r.ifMatch, "simple", "")
+	}
 	// body params
 	localVarPostBody = r.dashboardCardCreate
 	if r.ctx != nil {
@@ -232,6 +244,116 @@ func (a *DashboardsService) executeCreateCards(r requestForDashboardsCreateCards
 	}
 
 	return localVarHTTPResponse, nil
+}
+
+type requestForDashboardsCreateMove struct {
+	ctx context.Context
+	ApiService *DashboardsService
+	id string
+	dashboardCopy *DashboardCopy
+}
+
+/*
+CreateMove Move a dashboard to another project
+
+Copies a dashboard from the current project into the project `toProject`, removes it from the current project, and returns the moved dashboard's new UUID. Anyone viewing the dashboard is told where it moved. Returns `404` if the dashboard or the project `toProject` does not exist, `400` if `toProject` is missing, and `409` if the dashboard was changed while it was being moved, in which case nothing moves. Requires the *Edit org model* permission, and the *Variable controls* permission when any of the dashboard's cards has controls.
+*/
+func (a *DashboardsService) CreateMove(ctx context.Context, id string, dashboardCopy DashboardCopy) (string, error) {
+	r := requestForDashboardsCreateMove{
+		ApiService: a,
+		ctx: ctx,
+		id: id,
+		dashboardCopy: &dashboardCopy,
+	}
+	result, _, err := a.executeCreateMove(r)
+	return result, err
+}
+
+func (a *DashboardsService) executeCreateMove(r requestForDashboardsCreateMove) (string, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  string
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DashboardsAPIService.CreateMove")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/dashboards/{id}/move"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.dashboardCopy
+	if r.ctx != nil {
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "DashboardsAPIService.CreateMove")
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type requestForDashboardsDelete struct {
@@ -334,7 +456,13 @@ type requestForDashboardsDeleteCards struct {
 	ctx context.Context
 	ApiService *DashboardsService
 	id string
+	ifMatch *string
 	dashboardCardDelete *DashboardCardDelete
+}
+
+type DashboardsDeleteCardsParams struct {
+	// The dashboard&#39;s ETag when it was read. The change is saved only if the dashboard has not changed since.
+	IfMatch *string
 }
 
 /*
@@ -342,14 +470,17 @@ DeleteCards Remove a card from a dashboard
 
 Removes the card `cardId` from the dashboard's card list. Cards that follow it are shifted up. Deleting a card that is no longer on the dashboard succeeds. Returns `400` if `cardId` is empty, and `404` if the dashboard does not exist.
 
-Requires the *Edit org model* permission.
+Requires the *Edit org model* permission. Send the dashboard's `ETag` as `If-Match` to save the change only if nobody has changed the dashboard since it was read; otherwise the request is rejected with `412`, and the error's `header.If-Match` detail carries the current `ETag`. Without `If-Match` the change is applied to the latest version. The response's `ETag` is the dashboard's version after the change.
 */
-func (a *DashboardsService) DeleteCards(ctx context.Context, id string, dashboardCardDelete DashboardCardDelete) error {
+func (a *DashboardsService) DeleteCards(ctx context.Context, id string, dashboardCardDelete DashboardCardDelete, params *DashboardsDeleteCardsParams) error {
 	r := requestForDashboardsDeleteCards{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
 		dashboardCardDelete: &dashboardCardDelete,
+	}
+	if params != nil {
+		r.ifMatch = params.IfMatch
 	}
 	_, err := a.executeDeleteCards(r)
 	return err
@@ -390,6 +521,9 @@ func (a *DashboardsService) executeDeleteCards(r requestForDashboardsDeleteCards
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ifMatch != nil {
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "If-Match", r.ifMatch, "simple", "")
 	}
 	// body params
 	localVarPostBody = r.dashboardCardDelete
@@ -755,20 +889,29 @@ type requestForDashboardsUpdate struct {
 	ctx context.Context
 	ApiService *DashboardsService
 	id string
+	ifMatch *string
 	dashboardUpdate *DashboardUpdate
+}
+
+type DashboardsUpdateParams struct {
+	// The dashboard&#39;s ETag when it was read. The change is saved only if the dashboard has not changed since.
+	IfMatch *string
 }
 
 /*
 Update Update a dashboard
 
-Updates the name or description of a dashboard, or changes its position in the project's ordered list. Supply `move` with `"Up"` or `"Down"` to reorder; omit it to update metadata only. Returns `404` if the dashboard does not exist. Requires the *Edit org model* permission.
+Updates the name or description of a dashboard, or changes its position in the project's ordered list. Supply `move` with `"Up"` or `"Down"` to reorder; omit it to update metadata only. Returns `404` if the dashboard does not exist. Requires the *Edit org model* permission. Send the dashboard's `ETag` as `If-Match` to save the change only if nobody has changed the dashboard since it was read; otherwise the request is rejected with `412`, and the error's `header.If-Match` detail carries the current `ETag`. Without `If-Match` the change is applied to the latest version. The response's `ETag` is the dashboard's version after the change.
 */
-func (a *DashboardsService) Update(ctx context.Context, id string, dashboardUpdate DashboardUpdate) error {
+func (a *DashboardsService) Update(ctx context.Context, id string, dashboardUpdate DashboardUpdate, params *DashboardsUpdateParams) error {
 	r := requestForDashboardsUpdate{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
 		dashboardUpdate: &dashboardUpdate,
+	}
+	if params != nil {
+		r.ifMatch = params.IfMatch
 	}
 	_, err := a.executeUpdate(r)
 	return err
@@ -809,6 +952,9 @@ func (a *DashboardsService) executeUpdate(r requestForDashboardsUpdate) (*http.R
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ifMatch != nil {
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "If-Match", r.ifMatch, "simple", "")
 	}
 	// body params
 	localVarPostBody = r.dashboardUpdate
@@ -855,7 +1001,13 @@ type requestForDashboardsUpdateCards struct {
 	ctx context.Context
 	ApiService *DashboardsService
 	id string
+	ifMatch *string
 	dashboardCardPatch *DashboardCardPatch
+}
+
+type DashboardsUpdateCardsParams struct {
+	// The dashboard&#39;s ETag when it was read. The change is saved only if the dashboard has not changed since.
+	IfMatch *string
 }
 
 /*
@@ -863,14 +1015,17 @@ UpdateCards Update a dashboard card
 
 Applies a single action to a card on a dashboard. Use `moveCardAfter` to move the card `cardId` to just after the card `afterCardId`, or to the start when `afterCardId` is empty, or `updateCard` to replace the content of the card `cardId`, including the order of its visualisation and control items. Returns `404` if `cardId` is not on the dashboard and `409` if `afterCardId` is not.
 
-Returns `400` when `cardId` is empty, a card would be moved after itself, a card or item id is longer than 64 characters, an item id is used twice on the card, a row-break card has items, a control is missing a variable or duplicates another control on the same card, or a list entry's `hexCode` is not a colour such as `#1f77b4` or `#abc`. Returns `404` if the dashboard does not exist. Returns `409` if it references an account variable that does not exist, including one deleted while the change is being saved. Returns `400` if a single save adds references to too many account variables to save atomically. Requires the *Edit org model* permission, and the *Variable controls* permission when the update adds, removes, reorders or changes a card's controls.
+Returns `400` when `cardId` is empty, a card would be moved after itself, a card or item id is longer than 64 characters, an item id is used twice on the card, a row-break card has items, a control is missing a variable or duplicates another control on the same card, or a list entry's `hexCode` is not a colour such as `#1f77b4` or `#abc`. Returns `404` if the dashboard does not exist. Returns `409` if it references an account variable that does not exist, including one deleted while the change is being saved. Returns `400` if a single save adds references to too many account variables to save atomically. Requires the *Edit org model* permission, and the *Variable controls* permission when the update adds, removes, reorders or changes a card's controls. Send the dashboard's `ETag` as `If-Match` to save the change only if nobody has changed the dashboard since it was read; otherwise the request is rejected with `412`, and the error's `header.If-Match` detail carries the current `ETag`. Without `If-Match` the change is applied to the latest version. The response's `ETag` is the dashboard's version after the change.
 */
-func (a *DashboardsService) UpdateCards(ctx context.Context, id string, dashboardCardPatch DashboardCardPatch) error {
+func (a *DashboardsService) UpdateCards(ctx context.Context, id string, dashboardCardPatch DashboardCardPatch, params *DashboardsUpdateCardsParams) error {
 	r := requestForDashboardsUpdateCards{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
 		dashboardCardPatch: &dashboardCardPatch,
+	}
+	if params != nil {
+		r.ifMatch = params.IfMatch
 	}
 	_, err := a.executeUpdateCards(r)
 	return err
@@ -911,6 +1066,9 @@ func (a *DashboardsService) executeUpdateCards(r requestForDashboardsUpdateCards
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ifMatch != nil {
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "If-Match", r.ifMatch, "simple", "")
 	}
 	// body params
 	localVarPostBody = r.dashboardCardPatch
