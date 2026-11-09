@@ -397,7 +397,7 @@ Other parameters are passed through a pointer to a apiListDatasetTemplatesReques
 
 ## Update
 
-> map[string]interface{} Update(ctx, id, datasetModify)
+> map[string]interface{} Update(ctx, id, datasetModify, params)
 
 Update a dataset
 
@@ -420,7 +420,7 @@ func main() {
 	datasetModify :=  // DatasetModify | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	resp, err := client.Datasets.Update(context.Background(), id, datasetModify)
+	resp, err := client.Datasets.Update(context.Background(), id, datasetModify, nil)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `Datasets.Update`: %v\n", err)
 	}
@@ -444,6 +444,7 @@ Other parameters are passed through a pointer to a apiUpdateRequest struct via t
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **ifMatch** | **string** | The question&#39;s ETag when it was read. The change is saved only if the question has not changed since. | 
  **datasetModify** | [**DatasetModify**](DatasetModify.md) |  | 
 
 ### Return type

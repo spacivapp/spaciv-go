@@ -348,7 +348,7 @@ type requestForDatasetsGet struct {
 /*
 Get Get a dataset
 
-Returns the question identified by `id`: a section of a survey made of steps, each either a content screen or an answer screen over the options of a property. Requires the *View datasets* or *View public datasets* permission; returns `403` if the question is private and the caller only holds *View public datasets*.
+Returns the question identified by `id`: a section of a survey made of steps, each either a content screen or an answer screen over the options of a property. Requires the *View datasets* or *View public datasets* permission; returns `403` if the question is private and the caller only holds *View public datasets*. The response's `ETag` is the question's version; send it as `If-Match` when updating the question.
 */
 func (a *DatasetsService) Get(ctx context.Context, id string) (*DatasetChangelogBody, error) {
 	r := requestForDatasetsGet{
@@ -655,20 +655,29 @@ type requestForDatasetsUpdate struct {
 	ctx context.Context
 	ApiService *DatasetsService
 	id string
+	ifMatch *string
 	datasetModify *DatasetModify
+}
+
+type DatasetsUpdateParams struct {
+	// The question&#39;s ETag when it was read. The change is saved only if the question has not changed since.
+	IfMatch *string
 }
 
 /*
 Update Update a dataset
 
-Updates the specified question. Only fields supplied in the request body are changed; `steps` replaces every step when `replaceSteps` is true. A question never changes the properties its steps read: change a step's options through the property. Returns `400` if a step has no ID or answer type, repeats another step's ID, depends on a step that is not earlier in the question, sends to the calculation without a property, reads a property the account does not have or an option that property lacks, splits a slider between other than two options, or asks an option another step of the question or of a data collection using it already asks. Returns `409` if replacing the steps would change what a step sends to the calculation while a data collection that has been sent uses the question. Requires the *Edit datasets* permission.
+Updates the specified question. Only fields supplied in the request body are changed; `steps` replaces every step when `replaceSteps` is true. A question never changes the properties its steps read: change a step's options through the property. Returns `400` if a step has no ID or answer type, repeats another step's ID, depends on a step that is not earlier in the question, sends to the calculation without a property, reads a property the account does not have or an option that property lacks, splits a slider between other than two options, or asks an option another step of the question or of a data collection using it already asks. Returns `409` if replacing the steps would change what a step sends to the calculation while a data collection that has been sent uses the question. Send the question's `ETag` as `If-Match` to save the change only if nobody has changed the question since it was read; otherwise the request is rejected with `412`, and the error's `header.If-Match` detail carries the current `ETag`. Without `If-Match` the change is applied to the latest version, and `409` is returned if the question keeps changing concurrently while the update is retried. The response's `ETag` is the question's version after the change. Requires the *Edit datasets* permission.
 */
-func (a *DatasetsService) Update(ctx context.Context, id string, datasetModify DatasetModify) (map[string]interface{}, error) {
+func (a *DatasetsService) Update(ctx context.Context, id string, datasetModify DatasetModify, params *DatasetsUpdateParams) (map[string]interface{}, error) {
 	r := requestForDatasetsUpdate{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
 		datasetModify: &datasetModify,
+	}
+	if params != nil {
+		r.ifMatch = params.IfMatch
 	}
 	result, _, err := a.executeUpdate(r)
 	return result, err
@@ -710,6 +719,9 @@ func (a *DatasetsService) executeUpdate(r requestForDatasetsUpdate) (map[string]
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ifMatch != nil {
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "If-Match", r.ifMatch, "simple", "")
 	}
 	// body params
 	localVarPostBody = r.datasetModify

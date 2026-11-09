@@ -468,7 +468,7 @@ Name | Type | Description  | Notes
 
 ## Update
 
-> map[string]interface{} Update(ctx, id, datacollectionBody)
+> map[string]interface{} Update(ctx, id, datacollectionBody, params)
 
 Update a data collection survey
 
@@ -491,7 +491,7 @@ func main() {
 	datacollectionBody :=  // DatacollectionBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	resp, err := client.DataCollection.Update(context.Background(), id, datacollectionBody)
+	resp, err := client.DataCollection.Update(context.Background(), id, datacollectionBody, nil)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `DataCollection.Update`: %v\n", err)
 	}
@@ -515,6 +515,7 @@ Other parameters are passed through a pointer to a apiUpdateRequest struct via t
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **ifMatch** | **string** | The data collection&#39;s ETag when it was read. The change is saved only if the data collection has not changed since. | 
  **datacollectionBody** | [**DatacollectionBody**](DatacollectionBody.md) |  | 
 
 ### Return type

@@ -901,7 +901,7 @@ Name | Type | Description  | Notes
 
 ## Update
 
-> Update(ctx, id, objectGroupChangelogBody)
+> Update(ctx, id, objectGroupChangelogBody, params)
 
 Update an object group
 
@@ -924,7 +924,7 @@ func main() {
 	objectGroupChangelogBody :=  // ObjectGroupChangelogBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	err := client.ObjectGroups.Update(context.Background(), id, objectGroupChangelogBody)
+	err := client.ObjectGroups.Update(context.Background(), id, objectGroupChangelogBody, nil)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `ObjectGroups.Update`: %v\n", err)
 	}
@@ -947,6 +947,7 @@ Other parameters are passed through a pointer to a apiUpdateRequest struct via t
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **ifMatch** | **string** | The object group&#39;s ETag when it was read. The change is saved only if the object group has not changed since. | 
  **objectGroupChangelogBody** | [**ObjectGroupChangelogBody**](ObjectGroupChangelogBody.md) |  | 
 
 ### Return type

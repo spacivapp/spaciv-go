@@ -2057,7 +2057,18 @@ paths:
         \ or by a smaller group), `3` tree nodes (start the tree from a lower node).\
         \ Requires the *View ideal space* permission."
       operationId: analysis_create-analyse
-      parameters: []
+      parameters:
+      - description: "Why the app asks, counted to measure the load it causes: data-change\
+          \ is a visualisation refreshing after the account's data changed."
+        explode: false
+        in: header
+        name: x-calc-reason
+        required: false
+        schema:
+          description: "Why the app asks, counted to measure the load it causes: data-change\
+            \ is a visualisation refreshing after the account's data changed."
+          type: string
+        style: simple
       requestBody:
         content:
           application/json:
@@ -2085,7 +2096,7 @@ paths:
       summary: Run analysis
       tags:
       - Analysis
-      x-sdk-params: false
+      x-sdk-params: true
   /v1/api-keys:
     get:
       description: "Returns the calling user's keys for the current account, most\
@@ -4041,7 +4052,8 @@ paths:
         \ *View crowd modelling* receive the survey without its `contributors` list\
         \ or progress counts. `contributorCount` is the number of uploaded contributors\
         \ for callers with *View crowd modelling* or *Configure crowd modelling*,\
-        \ and 0 otherwise."
+        \ and 0 otherwise. The response's `ETag` is the survey's version; send it\
+        \ as `If-Match` when updating the survey."
       operationId: data-collection_get
       parameters:
       - explode: false
@@ -4058,6 +4070,14 @@ paths:
               schema:
                 $ref: "#/components/schemas/GetDatacollectionRes"
           description: OK
+          headers:
+            ETag:
+              explode: false
+              schema:
+                description: The data collection's version. Send it as If-Match when
+                  changing the data collection.
+                type: string
+              style: simple
         default:
           content:
             application/problem+json:
@@ -4094,7 +4114,13 @@ paths:
         \ the stored survey, contributors included, would exceed 300 KiB; at one node\
         \ ID per contributor that is roughly 5,000 contributors. A survey that leaves\
         \ draft without ever having had contributors uploaded takes them from the\
-        \ object group named by its authentication mode, if any."
+        \ object group named by its authentication mode, if any. Send the survey's\
+        \ `ETag` as `If-Match` to save the change only if nobody has changed the survey\
+        \ since it was read; otherwise the request is rejected with `412`, and the\
+        \ error's `header.If-Match` detail carries the current `ETag`. Without `If-Match`\
+        \ the change is applied to the latest version, and `409` is returned if the\
+        \ survey keeps changing concurrently while the update is retried. The response's\
+        \ `ETag` is the survey's version after the change."
       operationId: data-collection_update
       parameters:
       - explode: false
@@ -4102,6 +4128,17 @@ paths:
         name: id
         required: true
         schema:
+          type: string
+        style: simple
+      - description: The data collection's ETag when it was read. The change is saved
+          only if the data collection has not changed since.
+        explode: false
+        in: header
+        name: If-Match
+        required: false
+        schema:
+          description: The data collection's ETag when it was read. The change is
+            saved only if the data collection has not changed since.
           type: string
         style: simple
       requestBody:
@@ -4116,6 +4153,13 @@ paths:
               schema:
                 $ref: "#/components/schemas/DataCollectionUpdateResponseWrapperBody"
           description: OK
+          headers:
+            ETag:
+              explode: false
+              schema:
+                description: The data collection's version after the change.
+                type: string
+              style: simple
         default:
           content:
             application/problem+json:
@@ -4125,7 +4169,7 @@ paths:
       summary: Update a data collection survey
       tags:
       - Data collection
-      x-sdk-params: false
+      x-sdk-params: true
   /v1/data-collections/{id}/contribution:
     get:
       description: "Returns the authenticated contributor's current contribution for\
@@ -4518,7 +4562,8 @@ paths:
         \ made of steps, each either a content screen or an answer screen over the\
         \ options of a property. Requires the *View datasets* or *View public datasets*\
         \ permission; returns `403` if the question is private and the caller only\
-        \ holds *View public datasets*."
+        \ holds *View public datasets*. The response's `ETag` is the question's version;\
+        \ send it as `If-Match` when updating the question."
       operationId: datasets_get
       parameters:
       - explode: false
@@ -4535,6 +4580,14 @@ paths:
               schema:
                 $ref: "#/components/schemas/DatasetChangelogBody"
           description: OK
+          headers:
+            ETag:
+              explode: false
+              schema:
+                description: The question's version. Send it as If-Match when changing
+                  the question.
+                type: string
+              style: simple
         default:
           content:
             application/problem+json:
@@ -4556,7 +4609,13 @@ paths:
         \ between other than two options, or asks an option another step of the question\
         \ or of a data collection using it already asks. Returns `409` if replacing\
         \ the steps would change what a step sends to the calculation while a data\
-        \ collection that has been sent uses the question. Requires the *Edit datasets*\
+        \ collection that has been sent uses the question. Send the question's `ETag`\
+        \ as `If-Match` to save the change only if nobody has changed the question\
+        \ since it was read; otherwise the request is rejected with `412`, and the\
+        \ error's `header.If-Match` detail carries the current `ETag`. Without `If-Match`\
+        \ the change is applied to the latest version, and `409` is returned if the\
+        \ question keeps changing concurrently while the update is retried. The response's\
+        \ `ETag` is the question's version after the change. Requires the *Edit datasets*\
         \ permission."
       operationId: datasets_update
       parameters:
@@ -4565,6 +4624,17 @@ paths:
         name: id
         required: true
         schema:
+          type: string
+        style: simple
+      - description: The question's ETag when it was read. The change is saved only
+          if the question has not changed since.
+        explode: false
+        in: header
+        name: If-Match
+        required: false
+        schema:
+          description: The question's ETag when it was read. The change is saved only
+            if the question has not changed since.
           type: string
         style: simple
       requestBody:
@@ -4579,6 +4649,13 @@ paths:
               schema:
                 $ref: "#/components/schemas/DatasetUpdateResponseWrapperBody"
           description: OK
+          headers:
+            ETag:
+              explode: false
+              schema:
+                description: The question's version after the change.
+                type: string
+              style: simple
         default:
           content:
             application/problem+json:
@@ -4588,7 +4665,7 @@ paths:
       summary: Update a dataset
       tags:
       - Datasets
-      x-sdk-params: false
+      x-sdk-params: true
   /v1/floorplans:
     get:
       description: "Returns a summary of every floor plan for the account. Use `GET\
@@ -4681,8 +4758,10 @@ paths:
     get:
       description: "Returns the floor plan's metadata, view mode, scale, space overlay\
         \ geometry with each space's 3D heights in metres, and image offset. Returns\
-        \ an empty body (not 404) when the floor plan does not exist. Use `GET /v1/floorplans/{id}/images/{imageType}`\
-        \ to retrieve the drawing image. Requires the *View floorplans* permission."
+        \ an empty body (not 404) when the floor plan does not exist. The response's\
+        \ `ETag` is the floor plan's version, to send as `If-Match` with `PATCH /v1/floorplans/{id}`.\
+        \ Use `GET /v1/floorplans/{id}/images/{imageType}` to retrieve the drawing\
+        \ image. Requires the *View floorplans* permission."
       operationId: floor-plans_get
       parameters:
       - explode: false
@@ -4699,6 +4778,14 @@ paths:
               schema:
                 $ref: "#/components/schemas/FloorplanGetBody"
           description: OK
+          headers:
+            ETag:
+              explode: false
+              schema:
+                description: The floor plan's version. Send it as If-Match when changing
+                  the floor plan. Absent when the floor plan does not exist.
+                type: string
+              style: simple
         default:
           content:
             application/problem+json:
@@ -4711,7 +4798,7 @@ paths:
       x-sdk-params: false
     patch:
       description: |-
-        Partially updates the floor plan's name, linked property and node, creation timestamp, image overlay offset, background and foreground images, view mode, scale, and space geometry. Only fields present in the request body are changed, and the request fails with `409` if the floor plan keeps changing while they are. When `spaces` is provided the entire space overlay is replaced. `viewMode` is one of `2d-and-3d`, `3d-only` or `2d-only`. `unitsPerMetre` is how many of the spaces' path units make one metre; `0` clears the scale. A space's `startHeightMetres` and `endHeightMetres` must be set together and the end must be above the start; a space without them is drawn at a default height. `startHeight` and `endHeight` are the same in the spaces' path units, from editors that predate metres, and follow the same rules. Requires the *Edit floorplans* permission.
+        Partially updates the floor plan's name, linked property and node, creation timestamp, image overlay offset, background and foreground images, view mode, scale, and space geometry. Only fields present in the request body are changed. Send the floor plan's `ETag` as `If-Match` to save the change only if nobody has changed the floor plan, including its spaces, since it was read; otherwise the request is rejected with `412`, and the error's `header.If-Match` detail carries the current `ETag` (a floor plan that does not exist is not created when `If-Match` is sent). Without `If-Match` the change is applied to the latest version, a missing floor plan is created, and `409` is returned if the floor plan keeps changing while the update is retried. The response's `ETag` is the floor plan's version after the change. When `spaces` is provided the entire space overlay is replaced. `viewMode` is one of `2d-and-3d`, `3d-only` or `2d-only`. `unitsPerMetre` is how many of the spaces' path units make one metre; `0` clears the scale. A space's `startHeightMetres` and `endHeightMetres` must be set together and the end must be above the start; a space without them is drawn at a default height. `startHeight` and `endHeight` are the same in the spaces' path units, from editors that predate metres, and follow the same rules. Requires the *Edit floorplans* permission.
 
         `backgroundFile` and `foregroundFile` take the ID of an image in the account's file storage (see `/v1/account/files`), or an empty string to remove the layer's image; choosing a file also requires the *View file storage* permission. The file must be a PNG, JPEG, GIF, WebP or SVG image of at most 4 MB that is not quarantined, otherwise the request fails with `422` (`403` when quarantined) and nothing is changed. Setting or removing a layer's file also deletes any image previously uploaded to that layer through `PUT /v1/floorplans/{id}/images/{imageType}`.
       operationId: floor-plans_update
@@ -4721,6 +4808,17 @@ paths:
         name: id
         required: true
         schema:
+          type: string
+        style: simple
+      - description: The floor plan's ETag when it was read. The change is saved only
+          if the floor plan has not changed since.
+        explode: false
+        in: header
+        name: If-Match
+        required: false
+        schema:
+          description: The floor plan's ETag when it was read. The change is saved
+            only if the floor plan has not changed since.
           type: string
         style: simple
       requestBody:
@@ -4735,6 +4833,13 @@ paths:
               schema:
                 $ref: "#/components/schemas/FloorplanPatchResponseWrapperBody"
           description: OK
+          headers:
+            ETag:
+              explode: false
+              schema:
+                description: The floor plan's version after the change.
+                type: string
+              style: simple
         default:
           content:
             application/problem+json:
@@ -4744,7 +4849,7 @@ paths:
       summary: Update a floor plan
       tags:
       - Floor plans
-      x-sdk-params: false
+      x-sdk-params: true
   /v1/floorplans/{id}/images/{imageType}:
     get:
       description: "Returns the raw image bytes for the specified layer (`image` for\
@@ -5525,7 +5630,7 @@ paths:
       description: |-
         Returns the full record for a single object group, including its name, description, visibility flag, and attached properties.
 
-        Callers with the *View objects* permission receive the group regardless of its `isPublic` flag. Callers with only the *View public objects* permission receive a `403` if the group is not public.
+        Callers with the *View objects* permission receive the group regardless of its `isPublic` flag. Callers with only the *View public objects* permission receive a `403` if the group is not public. The response's `ETag` is the group's version, for use as `If-Match` when changing it; adding, changing or removing the group's objects does not change it.
       operationId: object-groups_get
       parameters:
       - explode: false
@@ -5542,6 +5647,14 @@ paths:
               schema:
                 $ref: "#/components/schemas/ObjectGroupChangelogBody"
           description: OK
+          headers:
+            ETag:
+              explode: false
+              schema:
+                description: The object group's version. Send it as If-Match when
+                  changing the object group.
+                type: string
+              style: simple
         default:
           content:
             application/problem+json:
@@ -5556,7 +5669,13 @@ paths:
       description: "Applies a partial update to the specified object group. Only the\
         \ fields present in the request body are changed; omitted fields are left\
         \ as-is. Returns 404 if the group does not exist, including when it is deleted\
-        \ while the update is in progress. Requires the *Edit objects* permission."
+        \ while the update is in progress. Send the group's `ETag` as `If-Match` to\
+        \ save the change only if nobody has changed the group since it was read;\
+        \ otherwise the request is rejected with `412`, and the error's `header.If-Match`\
+        \ detail carries the current `ETag`. Without `If-Match` the change is applied\
+        \ to the latest version, and `409` is returned if the group keeps changing\
+        \ concurrently while the update is retried. The response's `ETag` is the group's\
+        \ version after the change. Requires the *Edit objects* permission."
       operationId: object-groups_update
       parameters:
       - explode: false
@@ -5564,6 +5683,17 @@ paths:
         name: id
         required: true
         schema:
+          type: string
+        style: simple
+      - description: The object group's ETag when it was read. The change is saved
+          only if the object group has not changed since.
+        explode: false
+        in: header
+        name: If-Match
+        required: false
+        schema:
+          description: The object group's ETag when it was read. The change is saved
+            only if the object group has not changed since.
           type: string
         style: simple
       requestBody:
@@ -5574,6 +5704,13 @@ paths:
       responses:
         "204":
           description: No Content
+          headers:
+            ETag:
+              explode: false
+              schema:
+                description: The object group's version after the change.
+                type: string
+              style: simple
         default:
           content:
             application/problem+json:
@@ -5583,7 +5720,7 @@ paths:
       summary: Update an object group
       tags:
       - Object groups
-      x-sdk-params: false
+      x-sdk-params: true
   /v1/object-groups/{id}/duplicate:
     post:
       description: "Creates a full copy of the specified object group — including\
@@ -6216,7 +6353,8 @@ paths:
     get:
       description: Returns the projection for the current project. Pass `templateId`
         to retrieve a built-in template project instead. Returns `404` if the project
-        does not exist. Requires the *View projects* permission.
+        does not exist. The response's `ETag` is the project's version; send it as
+        `If-Match` when updating the project. Requires the *View projects* permission.
       operationId: projects_get
       parameters:
       - description: "When non-zero, fetches this built-in template project instead\
@@ -6238,6 +6376,14 @@ paths:
               schema:
                 $ref: "#/components/schemas/ProjectChangelogBody"
           description: OK
+          headers:
+            ETag:
+              explode: false
+              schema:
+                description: The project's version. Send it as If-Match when changing
+                  the project.
+                type: string
+              style: simple
         default:
           content:
             application/problem+json:
@@ -6260,9 +6406,25 @@ paths:
         \ account variable for this project; their type, range and `options` come\
         \ from the account definition; such an override must not set `options` itself\
         \ and must choose one of the listed values. Other variable IDs must not contain\
-        \ `:`. Requires the *Manage projects* permission."
+        \ `:`. Send the project's `ETag` as `If-Match` to save the change only if\
+        \ nobody has changed the project since it was read; otherwise the request\
+        \ is rejected with `412`, and the error's `header.If-Match` detail carries\
+        \ the current `ETag`. Without `If-Match` the change is applied to the latest\
+        \ version. The response's `ETag` is the project's version after the change.\
+        \ Requires the *Manage projects* permission."
       operationId: projects_update
-      parameters: []
+      parameters:
+      - description: The project's ETag when it was read. The change is saved only
+          if the project has not changed since.
+        explode: false
+        in: header
+        name: If-Match
+        required: false
+        schema:
+          description: The project's ETag when it was read. The change is saved only
+            if the project has not changed since.
+          type: string
+        style: simple
       requestBody:
         content:
           application/json:
@@ -6271,6 +6433,13 @@ paths:
       responses:
         "204":
           description: No Content
+          headers:
+            ETag:
+              explode: false
+              schema:
+                description: The project's version after the change.
+                type: string
+              style: simple
         default:
           content:
             application/problem+json:
@@ -6280,7 +6449,7 @@ paths:
       summary: Update a project
       tags:
       - Projects
-      x-sdk-params: false
+      x-sdk-params: true
   /v1/project/image:
     delete:
       description: "Removes the custom cover image for the current project. After\
@@ -6590,7 +6759,7 @@ paths:
       description: |-
         Returns the full record for a single property, including its metadata and — for tree-type properties — the complete node hierarchy.
 
-        Callers with only the *View public properties* permission receive a `403` if the property is not public. Built-in system properties (`count`, `growth`) are always available to callers with either permission. An object group property has the id `og:<object group id>`, is named after its object group, and its tree has one node per object in the group (node id = object id) under a `Root` node; it returns `404` when the object group does not exist, and `403` unless the caller can see the group's objects (*View objects* or *Edit objects*, or *View public objects* for a public group) and, for a private group, has full property access. Callers with *Edit properties* are treated as having full view access, since a caller trusted to modify a property must also be able to read it.
+        Callers with only the *View public properties* permission receive a `403` if the property is not public. Built-in system properties (`count`, `growth`) are always available to callers with either permission. An object group property has the id `og:<object group id>`, is named after its object group, and its tree has one node per object in the group (node id = object id) under a `Root` node; it returns `404` when the object group does not exist, and `403` unless the caller can see the group's objects (*View objects* or *Edit objects*, or *View public objects* for a public group) and, for a private group, has full property access. The response's `ETag` is the property's version, covering its metadata and nodes, for use as `If-Match` when changing it; an object group property has none. Callers with *Edit properties* are treated as having full view access, since a caller trusted to modify a property must also be able to read it.
       operationId: properties_get
       parameters:
       - explode: false
@@ -6607,6 +6776,14 @@ paths:
               schema:
                 $ref: "#/components/schemas/PropertyRes"
           description: OK
+          headers:
+            ETag:
+              explode: false
+              schema:
+                description: The property's version. Send it as If-Match when changing
+                  the property. Absent for an object group property.
+                type: string
+              style: simple
         default:
           content:
             application/problem+json:
@@ -6626,6 +6803,8 @@ paths:
         New or re-parented nodes are placed after their siblings. A node's `position` moves it to that zero-based index among its siblings (clamped to the end); negative positions are rejected with a `400`.
 
         Setting `delete` removes the property. While a live data collection uses the property for anonymisation, deleting it, changing its type away from tree, clearing all nodes, or deleting, re-parenting or changing the ID of an existing node returns a `409`; adding nodes under a parent and editing names are allowed.
+
+        The property's version covers its metadata and its nodes. Send the property's `ETag` as `If-Match` to save the change only if nobody has changed the property since it was read; otherwise the request is rejected with `412` before anything is written, and the error's `header.If-Match` detail carries the current `ETag`. Without `If-Match` the change is applied to the latest version, and `409` is returned if the property keeps changing concurrently while the update is retried. The response's `ETag` is the property's version after the change.
       operationId: properties_update
       parameters:
       - explode: false
@@ -6633,6 +6812,17 @@ paths:
         name: id
         required: true
         schema:
+          type: string
+        style: simple
+      - description: The property's ETag when it was read. The change is saved only
+          if the property has not changed since.
+        explode: false
+        in: header
+        name: If-Match
+        required: false
+        schema:
+          description: The property's ETag when it was read. The change is saved only
+            if the property has not changed since.
           type: string
         style: simple
       requestBody:
@@ -6643,6 +6833,13 @@ paths:
       responses:
         "204":
           description: No Content
+          headers:
+            ETag:
+              explode: false
+              schema:
+                description: The property's version after the change.
+                type: string
+              style: simple
         default:
           content:
             application/problem+json:
@@ -6652,7 +6849,7 @@ paths:
       summary: Update a property
       tags:
       - Properties
-      x-sdk-params: false
+      x-sdk-params: true
   /v1/properties/{id}/duplicate:
     post:
       description: Creates a full copy of the specified property — including all its
@@ -6815,6 +7012,14 @@ paths:
               schema:
                 $ref: "#/components/schemas/ScenarioChangelogBody"
           description: OK
+          headers:
+            ETag:
+              explode: false
+              schema:
+                description: The scenario's version. Send it as If-Match when changing
+                  the scenario.
+                type: string
+              style: simple
         default:
           content:
             application/problem+json:
@@ -6832,8 +7037,13 @@ paths:
         \ `layers` replaces the stored layers and `clearLayers` removes them all;\
         \ sending both returns `400`. Returns `400` if the colour is not a valid hex\
         \ code or a newly referenced layer points at an entity that does not exist.\
-        \ Returns `409` if the scenario keeps changing concurrently while the update\
-        \ is retried. Requires the *Edit scenario planning* permission."
+        \ Send the scenario's `ETag` as `If-Match` to save the change only if nobody\
+        \ has changed the scenario since it was read; otherwise the request is rejected\
+        \ with `412`, and the error's `header.If-Match` detail carries the current\
+        \ `ETag`. Without `If-Match` the change is applied to the latest version,\
+        \ and `409` is returned if the scenario keeps changing concurrently while\
+        \ the update is retried. The response's `ETag` is the scenario's version after\
+        \ the change. Requires the *Edit scenario planning* permission."
       operationId: scenarios_update
       parameters:
       - explode: false
@@ -6841,6 +7051,17 @@ paths:
         name: id
         required: true
         schema:
+          type: string
+        style: simple
+      - description: The scenario's ETag when it was read. The change is saved only
+          if the scenario has not changed since.
+        explode: false
+        in: header
+        name: If-Match
+        required: false
+        schema:
+          description: The scenario's ETag when it was read. The change is saved only
+            if the scenario has not changed since.
           type: string
         style: simple
       requestBody:
@@ -6855,6 +7076,13 @@ paths:
               schema:
                 $ref: "#/components/schemas/ScenarioGenericPatchResponseWrapperBody"
           description: OK
+          headers:
+            ETag:
+              explode: false
+              schema:
+                description: The scenario's version after the change.
+                type: string
+              style: simple
         default:
           content:
             application/problem+json:
@@ -6864,7 +7092,7 @@ paths:
       summary: Update a scenario
       tags:
       - Scenarios
-      x-sdk-params: false
+      x-sdk-params: true
   /v1/scenarios/{id}/duplicate:
     post:
       description: Creates a copy of the specified scenario named "Copy of <original
@@ -8124,6 +8352,14 @@ paths:
               schema:
                 $ref: "#/components/schemas/TopDownModelChangelogBody"
           description: OK
+          headers:
+            ETag:
+              explode: false
+              schema:
+                description: The top-down model's version. Send it as If-Match when
+                  changing the model.
+                type: string
+              style: simple
         default:
           content:
             application/problem+json:
@@ -8135,9 +8371,15 @@ paths:
       - Top-down models
       x-sdk-params: false
     patch:
-      description: Updates the name and/or description of the specified top-down model.
-        Only non-empty fields in the request body are applied. Requires the *Edit
-        modification* permission.
+      description: "Updates the name and/or description of the specified top-down\
+        \ model. Only non-empty fields in the request body are applied. Send the model's\
+        \ `ETag` as `If-Match` to save the change only if nobody has changed the model\
+        \ since it was read; otherwise the request is rejected with `412`, and the\
+        \ error's `header.If-Match` detail carries the current `ETag`. Without `If-Match`\
+        \ the change is applied to the latest version, and `409` is returned if the\
+        \ model keeps changing concurrently while the update is retried. The response's\
+        \ `ETag` is the model's version after the change. Requires the *Edit modification*\
+        \ permission."
       operationId: top-down-models_update
       parameters:
       - explode: false
@@ -8145,6 +8387,17 @@ paths:
         name: id
         required: true
         schema:
+          type: string
+        style: simple
+      - description: The top-down model's ETag when it was read. The change is saved
+          only if the model has not changed since.
+        explode: false
+        in: header
+        name: If-Match
+        required: false
+        schema:
+          description: The top-down model's ETag when it was read. The change is saved
+            only if the model has not changed since.
           type: string
         style: simple
       requestBody:
@@ -8155,6 +8408,13 @@ paths:
       responses:
         "204":
           description: No Content
+          headers:
+            ETag:
+              explode: false
+              schema:
+                description: The top-down model's version after the change.
+                type: string
+              style: simple
         default:
           content:
             application/problem+json:
@@ -8164,7 +8424,7 @@ paths:
       summary: Update a top-down model
       tags:
       - Top-down models
-      x-sdk-params: false
+      x-sdk-params: true
   /v1/top-down-models/{id}/duplicate:
     post:
       description: "Creates a full copy of the specified top-down model, including\
@@ -8855,6 +9115,14 @@ paths:
               schema:
                 $ref: "#/components/schemas/VariableRes"
           description: OK
+          headers:
+            ETag:
+              explode: false
+              schema:
+                description: The variable's version. Send it as If-Match when changing
+                  the variable.
+                type: string
+              style: simple
         default:
           content:
             application/problem+json:
@@ -8877,8 +9145,14 @@ paths:
         \ otherwise only their count. Narrowing `options` so that an existing project\
         \ override is no longer listed is rejected the same way. A reference saved\
         \ while a type change or delete is in progress fails it with `409`; retry\
-        \ the request. Sending `data` replaces the variable's `options` too. Requires\
-        \ the *Manage my account* permission."
+        \ the request. Sending `data` replaces the variable's `options` too. Send\
+        \ the variable's `ETag` as `If-Match` to save a change only if nobody has\
+        \ changed the variable since it was read; otherwise the request is rejected\
+        \ with `412`, and the error's `header.If-Match` detail carries the current\
+        \ `ETag`. Without `If-Match` the change is applied to the latest version,\
+        \ and `409` is returned if the variable changes while it is being saved. The\
+        \ response's `ETag` is the variable's version after the change. Requires the\
+        \ *Manage my account* permission."
       operationId: variables_update
       parameters:
       - description: "Account variable ID, either qualified (account:<id>) or bare."
@@ -8890,6 +9164,17 @@ paths:
           description: "Account variable ID, either qualified (account:<id>) or bare."
           type: string
         style: simple
+      - description: The variable's ETag when it was read. The change is saved only
+          if the variable has not changed since.
+        explode: false
+        in: header
+        name: If-Match
+        required: false
+        schema:
+          description: The variable's ETag when it was read. The change is saved only
+            if the variable has not changed since.
+          type: string
+        style: simple
       requestBody:
         content:
           application/json:
@@ -8898,6 +9183,14 @@ paths:
       responses:
         "204":
           description: No Content
+          headers:
+            ETag:
+              explode: false
+              schema:
+                description: The variable's version after the change. Absent when
+                  the variable was deleted.
+                type: string
+              style: simple
         default:
           content:
             application/problem+json:
@@ -8907,7 +9200,7 @@ paths:
       summary: Update an account variable
       tags:
       - Variables
-      x-sdk-params: false
+      x-sdk-params: true
   /v1/variables/{id}/references:
     get:
       description: "Returns every place in the account that uses the account-level\

@@ -545,20 +545,29 @@ type requestForVariablesUpdate struct {
 	ctx context.Context
 	ApiService *VariablesService
 	id string
+	ifMatch *string
 	variablePatch *VariablePatch
+}
+
+type VariablesUpdateParams struct {
+	// The variable&#39;s ETag when it was read. The change is saved only if the variable has not changed since.
+	IfMatch *string
 }
 
 /*
 Update Update an account variable
 
-Updates the name and/or default value of an account-level variable; the new default applies to every project that does not override it. Setting `delete` behaves like `DELETE /v1/variables/{id}`. Changing the variable's type, or deleting it, is rejected with `409` while it is referenced. Changing its data so that an existing project override no longer validates (for example, a narrower number `min`/`max` or a different `step`) is also rejected with `409`, listing the projects with invalid overrides. In both cases the error details list the references when the caller has the *View projects* permission, otherwise only their count. Narrowing `options` so that an existing project override is no longer listed is rejected the same way. A reference saved while a type change or delete is in progress fails it with `409`; retry the request. Sending `data` replaces the variable's `options` too. Requires the *Manage my account* permission.
+Updates the name and/or default value of an account-level variable; the new default applies to every project that does not override it. Setting `delete` behaves like `DELETE /v1/variables/{id}`. Changing the variable's type, or deleting it, is rejected with `409` while it is referenced. Changing its data so that an existing project override no longer validates (for example, a narrower number `min`/`max` or a different `step`) is also rejected with `409`, listing the projects with invalid overrides. In both cases the error details list the references when the caller has the *View projects* permission, otherwise only their count. Narrowing `options` so that an existing project override is no longer listed is rejected the same way. A reference saved while a type change or delete is in progress fails it with `409`; retry the request. Sending `data` replaces the variable's `options` too. Send the variable's `ETag` as `If-Match` to save a change only if nobody has changed the variable since it was read; otherwise the request is rejected with `412`, and the error's `header.If-Match` detail carries the current `ETag`. Without `If-Match` the change is applied to the latest version, and `409` is returned if the variable changes while it is being saved. The response's `ETag` is the variable's version after the change. Requires the *Manage my account* permission.
 */
-func (a *VariablesService) Update(ctx context.Context, id string, variablePatch VariablePatch) error {
+func (a *VariablesService) Update(ctx context.Context, id string, variablePatch VariablePatch, params *VariablesUpdateParams) error {
 	r := requestForVariablesUpdate{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
 		variablePatch: &variablePatch,
+	}
+	if params != nil {
+		r.ifMatch = params.IfMatch
 	}
 	_, err := a.executeUpdate(r)
 	return err
@@ -599,6 +608,9 @@ func (a *VariablesService) executeUpdate(r requestForVariablesUpdate) (*http.Res
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ifMatch != nil {
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "If-Match", r.ifMatch, "simple", "")
 	}
 	// body params
 	localVarPostBody = r.variablePatch

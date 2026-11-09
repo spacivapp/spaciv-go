@@ -340,7 +340,7 @@ Name | Type | Description  | Notes
 
 ## Update
 
-> Update(ctx, id, propertyBody)
+> Update(ctx, id, propertyBody, params)
 
 Update a property
 
@@ -363,7 +363,7 @@ func main() {
 	propertyBody :=  // PropertyBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	err := client.Properties.Update(context.Background(), id, propertyBody)
+	err := client.Properties.Update(context.Background(), id, propertyBody, nil)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `Properties.Update`: %v\n", err)
 	}
@@ -386,6 +386,7 @@ Other parameters are passed through a pointer to a apiUpdateRequest struct via t
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **ifMatch** | **string** | The property&#39;s ETag when it was read. The change is saved only if the property has not changed since. | 
  **propertyBody** | [**PropertyBody**](PropertyBody.md) |  | 
 
 ### Return type

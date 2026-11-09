@@ -342,7 +342,7 @@ Other parameters are passed through a pointer to a apiListRequest struct via the
 
 ## Update
 
-> map[string]interface{} Update(ctx, id, floorplanPatchParamsBody)
+> map[string]interface{} Update(ctx, id, floorplanPatchParamsBody, params)
 
 Update a floor plan
 
@@ -365,7 +365,7 @@ func main() {
 	floorplanPatchParamsBody :=  // FloorplanPatchParamsBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	resp, err := client.FloorPlans.Update(context.Background(), id, floorplanPatchParamsBody)
+	resp, err := client.FloorPlans.Update(context.Background(), id, floorplanPatchParamsBody, nil)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `FloorPlans.Update`: %v\n", err)
 	}
@@ -389,6 +389,7 @@ Other parameters are passed through a pointer to a apiUpdateRequest struct via t
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **ifMatch** | **string** | The floor plan&#39;s ETag when it was read. The change is saved only if the floor plan has not changed since. | 
  **floorplanPatchParamsBody** | [**FloorplanPatchParamsBody**](FloorplanPatchParamsBody.md) |  | 
 
 ### Return type

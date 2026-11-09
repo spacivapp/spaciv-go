@@ -352,7 +352,7 @@ type ProjectsGetParams struct {
 /*
 Get Get a project
 
-Returns the projection for the current project. Pass `templateId` to retrieve a built-in template project instead. Returns `404` if the project does not exist. Requires the *View projects* permission.
+Returns the projection for the current project. Pass `templateId` to retrieve a built-in template project instead. Returns `404` if the project does not exist. The response's `ETag` is the project's version; send it as `If-Match` when updating the project. Requires the *View projects* permission.
 */
 func (a *ProjectsService) Get(ctx context.Context, params *ProjectsGetParams) (*ProjectChangelogBody, error) {
 	r := requestForProjectsGet{
@@ -693,19 +693,28 @@ func (a *ProjectsService) executeList(r requestForProjectsList) (*ProjectListRes
 type requestForProjectsUpdate struct {
 	ctx context.Context
 	ApiService *ProjectsService
+	ifMatch *string
 	projectPatchBody *ProjectPatchBody
+}
+
+type ProjectsUpdateParams struct {
+	// The project&#39;s ETag when it was read. The change is saved only if the project has not changed since.
+	IfMatch *string
 }
 
 /*
 Update Update a project
 
-Updates the name, description, default filters, or variables of the current project. Only fields present in the request body are changed; set `keepFilters` to preserve filters when `filters` is sent only for schema compatibility. Returns `404` if the project does not exist, and `409` if it keeps changing concurrently, or if an account variable it overrides is deleted or changes type while it is being saved; retry the request. Returns `400` if a single save adds references to too many account variables to save atomically. Variables keyed `account:<id>` override the value of that account variable for this project; their type, range and `options` come from the account definition; such an override must not set `options` itself and must choose one of the listed values. Other variable IDs must not contain `:`. Requires the *Manage projects* permission.
+Updates the name, description, default filters, or variables of the current project. Only fields present in the request body are changed; set `keepFilters` to preserve filters when `filters` is sent only for schema compatibility. Returns `404` if the project does not exist, and `409` if it keeps changing concurrently, or if an account variable it overrides is deleted or changes type while it is being saved; retry the request. Returns `400` if a single save adds references to too many account variables to save atomically. Variables keyed `account:<id>` override the value of that account variable for this project; their type, range and `options` come from the account definition; such an override must not set `options` itself and must choose one of the listed values. Other variable IDs must not contain `:`. Send the project's `ETag` as `If-Match` to save the change only if nobody has changed the project since it was read; otherwise the request is rejected with `412`, and the error's `header.If-Match` detail carries the current `ETag`. Without `If-Match` the change is applied to the latest version. The response's `ETag` is the project's version after the change. Requires the *Manage projects* permission.
 */
-func (a *ProjectsService) Update(ctx context.Context, projectPatchBody ProjectPatchBody) error {
+func (a *ProjectsService) Update(ctx context.Context, projectPatchBody ProjectPatchBody, params *ProjectsUpdateParams) error {
 	r := requestForProjectsUpdate{
 		ApiService: a,
 		ctx: ctx,
 		projectPatchBody: &projectPatchBody,
+	}
+	if params != nil {
+		r.ifMatch = params.IfMatch
 	}
 	_, err := a.executeUpdate(r)
 	return err
@@ -745,6 +754,9 @@ func (a *ProjectsService) executeUpdate(r requestForProjectsUpdate) (*http.Respo
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ifMatch != nil {
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "If-Match", r.ifMatch, "simple", "")
 	}
 	// body params
 	localVarPostBody = r.projectPatchBody

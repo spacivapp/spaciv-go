@@ -336,7 +336,7 @@ Name | Type | Description  | Notes
 
 ## Update
 
-> Update(ctx, id, variablePatch)
+> Update(ctx, id, variablePatch, params)
 
 Update an account variable
 
@@ -359,7 +359,7 @@ func main() {
 	variablePatch :=  // VariablePatch | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	err := client.Variables.Update(context.Background(), id, variablePatch)
+	err := client.Variables.Update(context.Background(), id, variablePatch, nil)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `Variables.Update`: %v\n", err)
 	}
@@ -382,6 +382,7 @@ Other parameters are passed through a pointer to a apiUpdateRequest struct via t
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **ifMatch** | **string** | The variable&#39;s ETag when it was read. The change is saved only if the variable has not changed since. | 
  **variablePatch** | [**VariablePatch**](VariablePatch.md) |  | 
 
 ### Return type

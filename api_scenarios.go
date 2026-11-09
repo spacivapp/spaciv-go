@@ -681,20 +681,29 @@ type requestForScenariosUpdate struct {
 	ctx context.Context
 	ApiService *ScenariosService
 	id string
+	ifMatch *string
 	scenarioPatch *ScenarioPatch
+}
+
+type ScenariosUpdateParams struct {
+	// The scenario&#39;s ETag when it was read. The change is saved only if the scenario has not changed since.
+	IfMatch *string
 }
 
 /*
 Update Update a scenario
 
-Updates the name, description, colour, and/or layers of the specified scenario. Only non-nil fields in the request body are applied. `hexCode` is a colour such as `#1f77b4` or `#abc`; an empty string clears it. A non-empty `layers` replaces the stored layers and `clearLayers` removes them all; sending both returns `400`. Returns `400` if the colour is not a valid hex code or a newly referenced layer points at an entity that does not exist. Returns `409` if the scenario keeps changing concurrently while the update is retried. Requires the *Edit scenario planning* permission.
+Updates the name, description, colour, and/or layers of the specified scenario. Only non-nil fields in the request body are applied. `hexCode` is a colour such as `#1f77b4` or `#abc`; an empty string clears it. A non-empty `layers` replaces the stored layers and `clearLayers` removes them all; sending both returns `400`. Returns `400` if the colour is not a valid hex code or a newly referenced layer points at an entity that does not exist. Send the scenario's `ETag` as `If-Match` to save the change only if nobody has changed the scenario since it was read; otherwise the request is rejected with `412`, and the error's `header.If-Match` detail carries the current `ETag`. Without `If-Match` the change is applied to the latest version, and `409` is returned if the scenario keeps changing concurrently while the update is retried. The response's `ETag` is the scenario's version after the change. Requires the *Edit scenario planning* permission.
 */
-func (a *ScenariosService) Update(ctx context.Context, id string, scenarioPatch ScenarioPatch) (map[string]interface{}, error) {
+func (a *ScenariosService) Update(ctx context.Context, id string, scenarioPatch ScenarioPatch, params *ScenariosUpdateParams) (map[string]interface{}, error) {
 	r := requestForScenariosUpdate{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
 		scenarioPatch: &scenarioPatch,
+	}
+	if params != nil {
+		r.ifMatch = params.IfMatch
 	}
 	result, _, err := a.executeUpdate(r)
 	return result, err
@@ -736,6 +745,9 @@ func (a *ScenariosService) executeUpdate(r requestForScenariosUpdate) (map[strin
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ifMatch != nil {
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "If-Match", r.ifMatch, "simple", "")
 	}
 	// body params
 	localVarPostBody = r.scenarioPatch

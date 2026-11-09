@@ -804,20 +804,29 @@ type requestForTopDownModelsUpdate struct {
 	ctx context.Context
 	ApiService *TopDownModelsService
 	id string
+	ifMatch *string
 	topDownModelChangelogBody *TopDownModelChangelogBody
+}
+
+type TopDownModelsUpdateParams struct {
+	// The top-down model&#39;s ETag when it was read. The change is saved only if the model has not changed since.
+	IfMatch *string
 }
 
 /*
 Update Update a top-down model
 
-Updates the name and/or description of the specified top-down model. Only non-empty fields in the request body are applied. Requires the *Edit modification* permission.
+Updates the name and/or description of the specified top-down model. Only non-empty fields in the request body are applied. Send the model's `ETag` as `If-Match` to save the change only if nobody has changed the model since it was read; otherwise the request is rejected with `412`, and the error's `header.If-Match` detail carries the current `ETag`. Without `If-Match` the change is applied to the latest version, and `409` is returned if the model keeps changing concurrently while the update is retried. The response's `ETag` is the model's version after the change. Requires the *Edit modification* permission.
 */
-func (a *TopDownModelsService) Update(ctx context.Context, id string, topDownModelChangelogBody TopDownModelChangelogBody) error {
+func (a *TopDownModelsService) Update(ctx context.Context, id string, topDownModelChangelogBody TopDownModelChangelogBody, params *TopDownModelsUpdateParams) error {
 	r := requestForTopDownModelsUpdate{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
 		topDownModelChangelogBody: &topDownModelChangelogBody,
+	}
+	if params != nil {
+		r.ifMatch = params.IfMatch
 	}
 	_, err := a.executeUpdate(r)
 	return err
@@ -858,6 +867,9 @@ func (a *TopDownModelsService) executeUpdate(r requestForTopDownModelsUpdate) (*
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ifMatch != nil {
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "If-Match", r.ifMatch, "simple", "")
 	}
 	// body params
 	localVarPostBody = r.topDownModelChangelogBody

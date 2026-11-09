@@ -481,7 +481,7 @@ Name | Type | Description  | Notes
 
 ## Update
 
-> Update(ctx, id, topDownModelChangelogBody)
+> Update(ctx, id, topDownModelChangelogBody, params)
 
 Update a top-down model
 
@@ -504,7 +504,7 @@ func main() {
 	topDownModelChangelogBody :=  // TopDownModelChangelogBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	err := client.TopDownModels.Update(context.Background(), id, topDownModelChangelogBody)
+	err := client.TopDownModels.Update(context.Background(), id, topDownModelChangelogBody, nil)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `TopDownModels.Update`: %v\n", err)
 	}
@@ -527,6 +527,7 @@ Other parameters are passed through a pointer to a apiUpdateRequest struct via t
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **ifMatch** | **string** | The top-down model&#39;s ETag when it was read. The change is saved only if the model has not changed since. | 
  **topDownModelChangelogBody** | [**TopDownModelChangelogBody**](TopDownModelChangelogBody.md) |  | 
 
 ### Return type

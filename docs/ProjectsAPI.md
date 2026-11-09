@@ -386,7 +386,7 @@ Name | Type | Description  | Notes
 
 ## Update
 
-> Update(ctx, projectPatchBody)
+> Update(ctx, projectPatchBody, params)
 
 Update a project
 
@@ -408,7 +408,7 @@ func main() {
 	projectPatchBody :=  // ProjectPatchBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	err := client.Projects.Update(context.Background(), projectPatchBody)
+	err := client.Projects.Update(context.Background(), projectPatchBody, nil)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `Projects.Update`: %v\n", err)
 	}
@@ -426,6 +426,7 @@ Other parameters are passed through a pointer to a apiUpdateRequest struct via t
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **ifMatch** | **string** | The project&#39;s ETag when it was read. The change is saved only if the project has not changed since. | 
  **projectPatchBody** | [**ProjectPatchBody**](ProjectPatchBody.md) |  | 
 
 ### Return type

@@ -249,7 +249,7 @@ type requestForFloorPlansGet struct {
 /*
 Get Get a floor plan
 
-Returns the floor plan's metadata, view mode, scale, space overlay geometry with each space's 3D heights in metres, and image offset. Returns an empty body (not 404) when the floor plan does not exist. Use `GET /v1/floorplans/{id}/images/{imageType}` to retrieve the drawing image. Requires the *View floorplans* permission.
+Returns the floor plan's metadata, view mode, scale, space overlay geometry with each space's 3D heights in metres, and image offset. Returns an empty body (not 404) when the floor plan does not exist. The response's `ETag` is the floor plan's version, to send as `If-Match` with `PATCH /v1/floorplans/{id}`. Use `GET /v1/floorplans/{id}/images/{imageType}` to retrieve the drawing image. Requires the *View floorplans* permission.
 */
 func (a *FloorPlansService) Get(ctx context.Context, id string) (*FloorplanGetBody, error) {
 	r := requestForFloorPlansGet{
@@ -574,22 +574,31 @@ type requestForFloorPlansUpdate struct {
 	ctx context.Context
 	ApiService *FloorPlansService
 	id string
+	ifMatch *string
 	floorplanPatchParamsBody *FloorplanPatchParamsBody
+}
+
+type FloorPlansUpdateParams struct {
+	// The floor plan&#39;s ETag when it was read. The change is saved only if the floor plan has not changed since.
+	IfMatch *string
 }
 
 /*
 Update Update a floor plan
 
-Partially updates the floor plan's name, linked property and node, creation timestamp, image overlay offset, background and foreground images, view mode, scale, and space geometry. Only fields present in the request body are changed, and the request fails with `409` if the floor plan keeps changing while they are. When `spaces` is provided the entire space overlay is replaced. `viewMode` is one of `2d-and-3d`, `3d-only` or `2d-only`. `unitsPerMetre` is how many of the spaces' path units make one metre; `0` clears the scale. A space's `startHeightMetres` and `endHeightMetres` must be set together and the end must be above the start; a space without them is drawn at a default height. `startHeight` and `endHeight` are the same in the spaces' path units, from editors that predate metres, and follow the same rules. Requires the *Edit floorplans* permission.
+Partially updates the floor plan's name, linked property and node, creation timestamp, image overlay offset, background and foreground images, view mode, scale, and space geometry. Only fields present in the request body are changed. Send the floor plan's `ETag` as `If-Match` to save the change only if nobody has changed the floor plan, including its spaces, since it was read; otherwise the request is rejected with `412`, and the error's `header.If-Match` detail carries the current `ETag` (a floor plan that does not exist is not created when `If-Match` is sent). Without `If-Match` the change is applied to the latest version, a missing floor plan is created, and `409` is returned if the floor plan keeps changing while the update is retried. The response's `ETag` is the floor plan's version after the change. When `spaces` is provided the entire space overlay is replaced. `viewMode` is one of `2d-and-3d`, `3d-only` or `2d-only`. `unitsPerMetre` is how many of the spaces' path units make one metre; `0` clears the scale. A space's `startHeightMetres` and `endHeightMetres` must be set together and the end must be above the start; a space without them is drawn at a default height. `startHeight` and `endHeight` are the same in the spaces' path units, from editors that predate metres, and follow the same rules. Requires the *Edit floorplans* permission.
 
 `backgroundFile` and `foregroundFile` take the ID of an image in the account's file storage (see `/v1/account/files`), or an empty string to remove the layer's image; choosing a file also requires the *View file storage* permission. The file must be a PNG, JPEG, GIF, WebP or SVG image of at most 4 MB that is not quarantined, otherwise the request fails with `422` (`403` when quarantined) and nothing is changed. Setting or removing a layer's file also deletes any image previously uploaded to that layer through `PUT /v1/floorplans/{id}/images/{imageType}`.
 */
-func (a *FloorPlansService) Update(ctx context.Context, id string, floorplanPatchParamsBody FloorplanPatchParamsBody) (map[string]interface{}, error) {
+func (a *FloorPlansService) Update(ctx context.Context, id string, floorplanPatchParamsBody FloorplanPatchParamsBody, params *FloorPlansUpdateParams) (map[string]interface{}, error) {
 	r := requestForFloorPlansUpdate{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
 		floorplanPatchParamsBody: &floorplanPatchParamsBody,
+	}
+	if params != nil {
+		r.ifMatch = params.IfMatch
 	}
 	result, _, err := a.executeUpdate(r)
 	return result, err
@@ -631,6 +640,9 @@ func (a *FloorPlansService) executeUpdate(r requestForFloorPlansUpdate) (map[str
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ifMatch != nil {
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "If-Match", r.ifMatch, "simple", "")
 	}
 	// body params
 	localVarPostBody = r.floorplanPatchParamsBody

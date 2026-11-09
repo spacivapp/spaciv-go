@@ -241,7 +241,7 @@ type requestForDataCollectionGet struct {
 /*
 Get Get a data collection survey
 
-Returns the survey and a summary of contribution progress: how many contributors have started, completed, and the total invited. Requires the *View crowd modelling*, *View data collection preview* or *View public data collection* permission; drafts need one of the first two. Callers without *View crowd modelling* receive the survey without its `contributors` list or progress counts. `contributorCount` is the number of uploaded contributors for callers with *View crowd modelling* or *Configure crowd modelling*, and 0 otherwise.
+Returns the survey and a summary of contribution progress: how many contributors have started, completed, and the total invited. Requires the *View crowd modelling*, *View data collection preview* or *View public data collection* permission; drafts need one of the first two. Callers without *View crowd modelling* receive the survey without its `contributors` list or progress counts. `contributorCount` is the number of uploaded contributors for callers with *View crowd modelling* or *Configure crowd modelling*, and 0 otherwise. The response's `ETag` is the survey's version; send it as `If-Match` when updating the survey.
 */
 func (a *DataCollectionService) Get(ctx context.Context, id string) (*GetDatacollectionRes, error) {
 	r := requestForDataCollectionGet{
@@ -763,20 +763,29 @@ type requestForDataCollectionUpdate struct {
 	ctx context.Context
 	ApiService *DataCollectionService
 	id string
+	ifMatch *string
 	datacollectionBody *DatacollectionBody
+}
+
+type DataCollectionUpdateParams struct {
+	// The data collection&#39;s ETag when it was read. The change is saved only if the data collection has not changed since.
+	IfMatch *string
 }
 
 /*
 Update Update a data collection survey
 
-Partially updates the survey's name, questions, authentication mode, status, and other configurable fields. Only fields present in the request body are changed; a non-empty `questions` list replaces the stored one in order and `clearQuestions` empties it. Returns 400 if a question does not exist, two questions share a step ID or ask the same option of a property, or a ranked-picks step has no property to pick from. Requires the *Configure crowd modelling* permission. Returns 400 if `anonymisationProperty` names a property that does not exist, or that is not a tree property for email or preferred-channel authentication. Also returns 400 if an already-set anonymisation property or authentication mode is changed, or status is moved back to draft, once the survey has left draft; an empty property or mode may still be set. The object group ID in an email or preferred-channel authentication mode is only locked until contributors have been uploaded. For email or preferred-channel authentication, `contributors` lists each contributor's user ID and their nodes on the anonymisation property; a non-empty list replaces the stored one and `clearContributors` empties it. Sending both returns 400. Switching a draft to anonymous or public authentication clears its contributors. Returns 400 if contributors are uploaded for anonymous or public authentication, if a contributor is listed twice, is not a user of the account, or names a node that is not on the anonymisation property, if the contributors change or are cleared once the survey has left draft, or if the survey leaves draft without contributors. Also returns 400 if the stored survey, contributors included, would exceed 300 KiB; at one node ID per contributor that is roughly 5,000 contributors. A survey that leaves draft without ever having had contributors uploaded takes them from the object group named by its authentication mode, if any.
+Partially updates the survey's name, questions, authentication mode, status, and other configurable fields. Only fields present in the request body are changed; a non-empty `questions` list replaces the stored one in order and `clearQuestions` empties it. Returns 400 if a question does not exist, two questions share a step ID or ask the same option of a property, or a ranked-picks step has no property to pick from. Requires the *Configure crowd modelling* permission. Returns 400 if `anonymisationProperty` names a property that does not exist, or that is not a tree property for email or preferred-channel authentication. Also returns 400 if an already-set anonymisation property or authentication mode is changed, or status is moved back to draft, once the survey has left draft; an empty property or mode may still be set. The object group ID in an email or preferred-channel authentication mode is only locked until contributors have been uploaded. For email or preferred-channel authentication, `contributors` lists each contributor's user ID and their nodes on the anonymisation property; a non-empty list replaces the stored one and `clearContributors` empties it. Sending both returns 400. Switching a draft to anonymous or public authentication clears its contributors. Returns 400 if contributors are uploaded for anonymous or public authentication, if a contributor is listed twice, is not a user of the account, or names a node that is not on the anonymisation property, if the contributors change or are cleared once the survey has left draft, or if the survey leaves draft without contributors. Also returns 400 if the stored survey, contributors included, would exceed 300 KiB; at one node ID per contributor that is roughly 5,000 contributors. A survey that leaves draft without ever having had contributors uploaded takes them from the object group named by its authentication mode, if any. Send the survey's `ETag` as `If-Match` to save the change only if nobody has changed the survey since it was read; otherwise the request is rejected with `412`, and the error's `header.If-Match` detail carries the current `ETag`. Without `If-Match` the change is applied to the latest version, and `409` is returned if the survey keeps changing concurrently while the update is retried. The response's `ETag` is the survey's version after the change.
 */
-func (a *DataCollectionService) Update(ctx context.Context, id string, datacollectionBody DatacollectionBody) (map[string]interface{}, error) {
+func (a *DataCollectionService) Update(ctx context.Context, id string, datacollectionBody DatacollectionBody, params *DataCollectionUpdateParams) (map[string]interface{}, error) {
 	r := requestForDataCollectionUpdate{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
 		datacollectionBody: &datacollectionBody,
+	}
+	if params != nil {
+		r.ifMatch = params.IfMatch
 	}
 	result, _, err := a.executeUpdate(r)
 	return result, err
@@ -818,6 +827,9 @@ func (a *DataCollectionService) executeUpdate(r requestForDataCollectionUpdate) 
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ifMatch != nil {
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "If-Match", r.ifMatch, "simple", "")
 	}
 	// body params
 	localVarPostBody = r.datacollectionBody

@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 ## CreateAnalyse
 
-> CalcRes CreateAnalyse(ctx, calcBody)
+> CalcRes CreateAnalyse(ctx, calcBody, params)
 
 Run analysis
 
@@ -32,7 +32,7 @@ func main() {
 	calcBody :=  // CalcBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	resp, err := client.Analysis.CreateAnalyse(context.Background(), calcBody)
+	resp, err := client.Analysis.CreateAnalyse(context.Background(), calcBody, nil)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `Analysis.CreateAnalyse`: %v\n", err)
 	}
@@ -51,6 +51,7 @@ Other parameters are passed through a pointer to a apiCreateAnalyseRequest struc
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **xCalcReason** | **string** | Why the app asks, counted to measure the load it causes: data-change is a visualisation refreshing after the account&#39;s data changed. | 
  **calcBody** | [**CalcBody**](CalcBody.md) |  | 
 
 ### Return type

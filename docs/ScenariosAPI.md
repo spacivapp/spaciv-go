@@ -401,7 +401,7 @@ Other parameters are passed through a pointer to a apiListLayerVariablesRequest 
 
 ## Update
 
-> map[string]interface{} Update(ctx, id, scenarioPatch)
+> map[string]interface{} Update(ctx, id, scenarioPatch, params)
 
 Update a scenario
 
@@ -424,7 +424,7 @@ func main() {
 	scenarioPatch :=  // ScenarioPatch | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	resp, err := client.Scenarios.Update(context.Background(), id, scenarioPatch)
+	resp, err := client.Scenarios.Update(context.Background(), id, scenarioPatch, nil)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `Scenarios.Update`: %v\n", err)
 	}
@@ -448,6 +448,7 @@ Other parameters are passed through a pointer to a apiUpdateRequest struct via t
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **ifMatch** | **string** | The scenario&#39;s ETag when it was read. The change is saved only if the scenario has not changed since. | 
  **scenarioPatch** | [**ScenarioPatch**](ScenarioPatch.md) |  | 
 
 ### Return type

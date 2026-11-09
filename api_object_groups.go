@@ -690,7 +690,7 @@ Get Get an object group
 
 Returns the full record for a single object group, including its name, description, visibility flag, and attached properties.
 
-Callers with the *View objects* permission receive the group regardless of its `isPublic` flag. Callers with only the *View public objects* permission receive a `403` if the group is not public.
+Callers with the *View objects* permission receive the group regardless of its `isPublic` flag. Callers with only the *View public objects* permission receive a `403` if the group is not public. The response's `ETag` is the group's version, for use as `If-Match` when changing it; adding, changing or removing the group's objects does not change it.
 */
 func (a *ObjectGroupsService) Get(ctx context.Context, id string) (*ObjectGroupChangelogBody, error) {
 	r := requestForObjectGroupsGet{
@@ -1519,20 +1519,29 @@ type requestForObjectGroupsUpdate struct {
 	ctx context.Context
 	ApiService *ObjectGroupsService
 	id string
+	ifMatch *string
 	objectGroupChangelogBody *ObjectGroupChangelogBody
+}
+
+type ObjectGroupsUpdateParams struct {
+	// The object group&#39;s ETag when it was read. The change is saved only if the object group has not changed since.
+	IfMatch *string
 }
 
 /*
 Update Update an object group
 
-Applies a partial update to the specified object group. Only the fields present in the request body are changed; omitted fields are left as-is. Returns 404 if the group does not exist, including when it is deleted while the update is in progress. Requires the *Edit objects* permission.
+Applies a partial update to the specified object group. Only the fields present in the request body are changed; omitted fields are left as-is. Returns 404 if the group does not exist, including when it is deleted while the update is in progress. Send the group's `ETag` as `If-Match` to save the change only if nobody has changed the group since it was read; otherwise the request is rejected with `412`, and the error's `header.If-Match` detail carries the current `ETag`. Without `If-Match` the change is applied to the latest version, and `409` is returned if the group keeps changing concurrently while the update is retried. The response's `ETag` is the group's version after the change. Requires the *Edit objects* permission.
 */
-func (a *ObjectGroupsService) Update(ctx context.Context, id string, objectGroupChangelogBody ObjectGroupChangelogBody) error {
+func (a *ObjectGroupsService) Update(ctx context.Context, id string, objectGroupChangelogBody ObjectGroupChangelogBody, params *ObjectGroupsUpdateParams) error {
 	r := requestForObjectGroupsUpdate{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
 		objectGroupChangelogBody: &objectGroupChangelogBody,
+	}
+	if params != nil {
+		r.ifMatch = params.IfMatch
 	}
 	_, err := a.executeUpdate(r)
 	return err
@@ -1573,6 +1582,9 @@ func (a *ObjectGroupsService) executeUpdate(r requestForObjectGroupsUpdate) (*ht
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ifMatch != nil {
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "If-Match", r.ifMatch, "simple", "")
 	}
 	// body params
 	localVarPostBody = r.objectGroupChangelogBody

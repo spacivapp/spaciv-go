@@ -343,7 +343,7 @@ Get Get a property
 
 Returns the full record for a single property, including its metadata and — for tree-type properties — the complete node hierarchy.
 
-Callers with only the *View public properties* permission receive a `403` if the property is not public. Built-in system properties (`count`, `growth`) are always available to callers with either permission. An object group property has the id `og:<object group id>`, is named after its object group, and its tree has one node per object in the group (node id = object id) under a `Root` node; it returns `404` when the object group does not exist, and `403` unless the caller can see the group's objects (*View objects* or *Edit objects*, or *View public objects* for a public group) and, for a private group, has full property access. Callers with *Edit properties* are treated as having full view access, since a caller trusted to modify a property must also be able to read it.
+Callers with only the *View public properties* permission receive a `403` if the property is not public. Built-in system properties (`count`, `growth`) are always available to callers with either permission. An object group property has the id `og:<object group id>`, is named after its object group, and its tree has one node per object in the group (node id = object id) under a `Root` node; it returns `404` when the object group does not exist, and `403` unless the caller can see the group's objects (*View objects* or *Edit objects*, or *View public objects* for a public group) and, for a private group, has full property access. The response's `ETag` is the property's version, covering its metadata and nodes, for use as `If-Match` when changing it; an object group property has none. Callers with *Edit properties* are treated as having full view access, since a caller trusted to modify a property must also be able to read it.
 */
 func (a *PropertiesService) Get(ctx context.Context, id string) (*PropertyRes, error) {
 	r := requestForPropertiesGet{
@@ -561,7 +561,13 @@ type requestForPropertiesUpdate struct {
 	ctx context.Context
 	ApiService *PropertiesService
 	id string
+	ifMatch *string
 	propertyBody *PropertyBody
+}
+
+type PropertiesUpdateParams struct {
+	// The property&#39;s ETag when it was read. The change is saved only if the property has not changed since.
+	IfMatch *string
 }
 
 /*
@@ -574,13 +580,18 @@ Renaming a node ID requires the *Edit property ID* permission in addition to *Ed
 New or re-parented nodes are placed after their siblings. A node's `position` moves it to that zero-based index among its siblings (clamped to the end); negative positions are rejected with a `400`.
 
 Setting `delete` removes the property. While a live data collection uses the property for anonymisation, deleting it, changing its type away from tree, clearing all nodes, or deleting, re-parenting or changing the ID of an existing node returns a `409`; adding nodes under a parent and editing names are allowed.
+
+The property's version covers its metadata and its nodes. Send the property's `ETag` as `If-Match` to save the change only if nobody has changed the property since it was read; otherwise the request is rejected with `412` before anything is written, and the error's `header.If-Match` detail carries the current `ETag`. Without `If-Match` the change is applied to the latest version, and `409` is returned if the property keeps changing concurrently while the update is retried. The response's `ETag` is the property's version after the change.
 */
-func (a *PropertiesService) Update(ctx context.Context, id string, propertyBody PropertyBody) error {
+func (a *PropertiesService) Update(ctx context.Context, id string, propertyBody PropertyBody, params *PropertiesUpdateParams) error {
 	r := requestForPropertiesUpdate{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
 		propertyBody: &propertyBody,
+	}
+	if params != nil {
+		r.ifMatch = params.IfMatch
 	}
 	_, err := a.executeUpdate(r)
 	return err
@@ -621,6 +632,9 @@ func (a *PropertiesService) executeUpdate(r requestForPropertiesUpdate) (*http.R
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ifMatch != nil {
+		parameterAddToHeaderOrQuery(localVarHeaderParams, "If-Match", r.ifMatch, "simple", "")
 	}
 	// body params
 	localVarPostBody = r.propertyBody
