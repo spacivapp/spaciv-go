@@ -24,6 +24,112 @@ import (
 
 type FilesService service
 
+type requestForFilesCreateAccountBuiltInSkillsInstall struct {
+	ctx context.Context
+	ApiService *FilesService
+	name string
+}
+
+/*
+CreateAccountBuiltInSkillsInstall Install or reload a skill Spaciv provides into the account's files
+
+If the account has no skill of that name, copies the built-in skill's files into a new directory at the root of the account's files, named for the skill, and tags it `skill` so the assistant can load it. If it has one, reloads it in place: replaces its files that differ, adds those it lacks and deletes those the built-in skill doesn't have, discarding any changes made to them. Returns the directory with the directories and files the load wrote, each with its path, and the ids of the files it deleted. The copy is the account's own: it is not updated when the built-in skill changes, until it is reloaded. Counts towards the account's storage quota like an upload, and is refused with 413 when the account is already past it. Returns 404 if there is no built-in skill with that name, and 409 if the account's copy is already identical to the built-in skill, or if it has no such skill and a file or directory at the root already has the name. Requires the *Edit file storage* and *Manage my account* permissions.
+*/
+func (a *FilesService) CreateAccountBuiltInSkillsInstall(ctx context.Context, name string) (*InstalledSkill, error) {
+	r := requestForFilesCreateAccountBuiltInSkillsInstall{
+		ApiService: a,
+		ctx: ctx,
+		name: name,
+	}
+	result, _, err := a.executeCreateAccountBuiltInSkillsInstall(r)
+	return result, err
+}
+
+func (a *FilesService) executeCreateAccountBuiltInSkillsInstall(r requestForFilesCreateAccountBuiltInSkillsInstall) (*InstalledSkill, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *InstalledSkill
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FilesAPIService.CreateAccountBuiltInSkillsInstall")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/account/built-in-skills/{name}/install"
+	localVarPath = strings.Replace(localVarPath, "{"+"name"+"}", url.PathEscape(parameterValueToString(r.name, "name")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ctx != nil {
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "FilesAPIService.CreateAccountBuiltInSkillsInstall")
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type requestForFilesCreateAccountDirectories struct {
 	ctx context.Context
 	ApiService *FilesService
@@ -1017,6 +1123,109 @@ func (a *FilesService) executeGetAccountFilesContent(r requestForFilesGetAccount
 	}
 	if r.ctx != nil {
 		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "FilesAPIService.GetAccountFilesContent")
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type requestForFilesListAccountBuiltInSkills struct {
+	ctx context.Context
+	ApiService *FilesService
+}
+
+/*
+ListAccountBuiltInSkills List the skills Spaciv provides
+
+Returns the name and description of each skill Spaciv writes and maintains for the assistant, and for each whether the account has a skill of that name and, if it does, whether its files are exactly the built-in skill's. Skills can be loaded into the account with the install operation. Requires the *View file storage* permission.
+*/
+func (a *FilesService) ListAccountBuiltInSkills(ctx context.Context) ([]BuiltInSkill, error) {
+	r := requestForFilesListAccountBuiltInSkills{
+		ApiService: a,
+		ctx: ctx,
+	}
+	result, _, err := a.executeListAccountBuiltInSkills(r)
+	return result, err
+}
+
+func (a *FilesService) executeListAccountBuiltInSkills(r requestForFilesListAccountBuiltInSkills) ([]BuiltInSkill, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  []BuiltInSkill
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "FilesAPIService.ListAccountBuiltInSkills")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/account/built-in-skills"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ctx != nil {
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "FilesAPIService.ListAccountBuiltInSkills")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {

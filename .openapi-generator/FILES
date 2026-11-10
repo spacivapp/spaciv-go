@@ -110,6 +110,7 @@ docs/AuthenticationPreferredChanel.md
 docs/AuthenticationPublic.md
 docs/Branding.md
 docs/BrandingAPI.md
+docs/BuiltInSkill.md
 docs/CalcAxis.md
 docs/CalcAxisMember.md
 docs/CalcBody.md
@@ -340,6 +341,7 @@ docs/I18nTranslationsImportParamsWrapperBody.md
 docs/I18nTranslationsParamsWrapperBody.md
 docs/IDNameStringString.md
 docs/ImportBody.md
+docs/InstalledSkill.md
 docs/IntegrationCreateSlackParamsWrapperBody.md
 docs/IntegrationsAPI.md
 docs/InternalAPI.md
@@ -629,6 +631,7 @@ model_authentication_email.go
 model_authentication_preferred_chanel.go
 model_authentication_public.go
 model_branding.go
+model_built_in_skill.go
 model_calc_axis.go
 model_calc_axis_member.go
 model_calc_body.go
@@ -853,6 +856,7 @@ model_i18n_translations_import_params_wrapper_body.go
 model_i18n_translations_params_wrapper_body.go
 model_id_name_string_string.go
 model_import_body.go
+model_installed_skill.go
 model_integration_create_slack_params_wrapper_body.go
 model_invalid_modifier_formula_detail.go
 model_item.go

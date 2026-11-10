@@ -267,6 +267,78 @@ paths:
       tags:
       - Accounts
       x-sdk-params: false
+  /v1/account/built-in-skills:
+    get:
+      description: "Returns the name and description of each skill Spaciv writes and\
+        \ maintains for the assistant, and for each whether the account has a skill\
+        \ of that name and, if it does, whether its files are exactly the built-in\
+        \ skill's. Skills can be loaded into the account with the install operation.\
+        \ Requires the *View file storage* permission."
+      operationId: files_list-account-built-in-skills
+      parameters: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/BuiltInSkill"
+                type: array
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: List the skills Spaciv provides
+      tags:
+      - Files
+      x-sdk-params: false
+  /v1/account/built-in-skills/{name}/install:
+    post:
+      description: "If the account has no skill of that name, copies the built-in\
+        \ skill's files into a new directory at the root of the account's files, named\
+        \ for the skill, and tags it `skill` so the assistant can load it. If it has\
+        \ one, reloads it in place: replaces its files that differ, adds those it\
+        \ lacks and deletes those the built-in skill doesn't have, discarding any\
+        \ changes made to them. Returns the directory with the directories and files\
+        \ the load wrote, each with its path, and the ids of the files it deleted.\
+        \ The copy is the account's own: it is not updated when the built-in skill\
+        \ changes, until it is reloaded. Counts towards the account's storage quota\
+        \ like an upload, and is refused with 413 when the account is already past\
+        \ it. Returns 404 if there is no built-in skill with that name, and 409 if\
+        \ the account's copy is already identical to the built-in skill, or if it\
+        \ has no such skill and a file or directory at the root already has the name.\
+        \ Requires the *Edit file storage* and *Manage my account* permissions."
+      operationId: files_create-account-built-in-skills-install
+      parameters:
+      - description: "Name of the built-in skill, as listed."
+        explode: false
+        in: path
+        name: name
+        required: true
+        schema:
+          description: "Name of the built-in skill, as listed."
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InstalledSkill"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Install or reload a skill Spaciv provides into the account's files
+      tags:
+      - Files
+      x-sdk-params: false
   /v1/account/directories:
     get:
       description: |-
@@ -11195,6 +11267,29 @@ components:
       - hasBackground
       - hasLogo
       - logoVersion
+    BuiltInSkill:
+      additionalProperties: false
+      example:
+        name: name
+        description: description
+        status: not-installed
+      properties:
+        description:
+          type: string
+        name:
+          type: string
+        status:
+          description: "Whether the account has a skill of this name, and if it does,\
+            \ whether its files are exactly the built-in skill's."
+          enum:
+          - not-installed
+          - up-to-date
+          - outdated
+          type: string
+      required:
+      - description
+      - name
+      - status
     CalcAxis:
       additionalProperties: false
       example:
@@ -15311,6 +15406,114 @@ components:
       - firstName
       - lastName
       - role
+    InstalledSkill:
+      additionalProperties: false
+      example:
+        directories:
+        - createdAt: 2000-01-23T04:56:07.000+00:00
+          path: path
+          createdBy: 0
+          name: name
+          id: id
+          tagProblems:
+            key:
+            - tagProblems
+            - tagProblems
+          parentId: parentId
+          tags:
+          - tags
+          - tags
+        - createdAt: 2000-01-23T04:56:07.000+00:00
+          path: path
+          createdBy: 0
+          name: name
+          id: id
+          tagProblems:
+            key:
+            - tagProblems
+            - tagProblems
+          parentId: parentId
+          tags:
+          - tags
+          - tags
+        files:
+        - createdAt: 2000-01-23T04:56:07.000+00:00
+          path: path
+          size: 6
+          quarantinedAt: 2000-01-23T04:56:07.000+00:00
+          quarantineSignature: quarantineSignature
+          name: name
+          id: id
+          mimeType: mimeType
+          tagProblems:
+            key:
+            - tagProblems
+            - tagProblems
+          uploadedBy: 1
+          parentId: parentId
+          tags:
+          - tags
+          - tags
+        - createdAt: 2000-01-23T04:56:07.000+00:00
+          path: path
+          size: 6
+          quarantinedAt: 2000-01-23T04:56:07.000+00:00
+          quarantineSignature: quarantineSignature
+          name: name
+          id: id
+          mimeType: mimeType
+          tagProblems:
+            key:
+            - tagProblems
+            - tagProblems
+          uploadedBy: 1
+          parentId: parentId
+          tags:
+          - tags
+          - tags
+        directory:
+          createdAt: 2000-01-23T04:56:07.000+00:00
+          path: path
+          createdBy: 0
+          name: name
+          id: id
+          tagProblems:
+            key:
+            - tagProblems
+            - tagProblems
+          parentId: parentId
+          tags:
+          - tags
+          - tags
+        removedFileIds:
+        - removedFileIds
+        - removedFileIds
+      properties:
+        directories:
+          description: The directories inside the skill's directory that the load
+            needed.
+          items:
+            $ref: "#/components/schemas/Directory"
+          type: array
+        directory:
+          $ref: "#/components/schemas/Directory"
+        files:
+          description: "Every file the load wrote into the skill's directory, at any\
+            \ depth."
+          items:
+            $ref: "#/components/schemas/Record"
+          type: array
+        removedFileIds:
+          description: "The files the load deleted: those it replaced, and those the\
+            \ built-in skill doesn't have."
+          items:
+            type: string
+          type: array
+      required:
+      - directories
+      - directory
+      - files
+      - removedFileIds
     IntegrationCreateSlackParamsWrapperBody:
       additionalProperties: false
       example:
@@ -15500,7 +15703,7 @@ components:
         files:
         - createdAt: 2000-01-23T04:56:07.000+00:00
           path: path
-          size: 0
+          size: 6
           quarantinedAt: 2000-01-23T04:56:07.000+00:00
           quarantineSignature: quarantineSignature
           name: name
@@ -15510,14 +15713,14 @@ components:
             key:
             - tagProblems
             - tagProblems
-          uploadedBy: 6
+          uploadedBy: 1
           parentId: parentId
           tags:
           - tags
           - tags
         - createdAt: 2000-01-23T04:56:07.000+00:00
           path: path
-          size: 0
+          size: 6
           quarantinedAt: 2000-01-23T04:56:07.000+00:00
           quarantineSignature: quarantineSignature
           name: name
@@ -15527,7 +15730,7 @@ components:
             key:
             - tagProblems
             - tagProblems
-          uploadedBy: 6
+          uploadedBy: 1
           parentId: parentId
           tags:
           - tags
@@ -16605,7 +16808,7 @@ components:
         file:
           createdAt: 2000-01-23T04:56:07.000+00:00
           path: path
-          size: 0
+          size: 6
           quarantinedAt: 2000-01-23T04:56:07.000+00:00
           quarantineSignature: quarantineSignature
           name: name
@@ -16615,7 +16818,7 @@ components:
             key:
             - tagProblems
             - tagProblems
-          uploadedBy: 6
+          uploadedBy: 1
           parentId: parentId
           tags:
           - tags
@@ -17486,7 +17689,7 @@ components:
       example:
         createdAt: 2000-01-23T04:56:07.000+00:00
         path: path
-        size: 0
+        size: 6
         quarantinedAt: 2000-01-23T04:56:07.000+00:00
         quarantineSignature: quarantineSignature
         name: name
@@ -17496,7 +17699,7 @@ components:
           key:
           - tagProblems
           - tagProblems
-        uploadedBy: 6
+        uploadedBy: 1
         parentId: parentId
         tags:
         - tags

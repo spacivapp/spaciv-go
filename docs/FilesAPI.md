@@ -4,6 +4,7 @@ All URIs are relative to *https://api.spaciv.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**CreateAccountBuiltInSkillsInstall**](FilesAPI.md#CreateAccountBuiltInSkillsInstall) | **Post** /v1/account/built-in-skills/{name}/install | Install or reload a skill Spaciv provides into the account&#39;s files
 [**CreateAccountDirectories**](FilesAPI.md#CreateAccountDirectories) | **Post** /v1/account/directories | Create a directory in the account&#39;s files
 [**CreateAccountFiles**](FilesAPI.md#CreateAccountFiles) | **Post** /v1/account/files | Upload a file to the account
 [**CreateAccountTextFiles**](FilesAPI.md#CreateAccountTextFiles) | **Post** /v1/account/text-files | Create an empty text file in the account&#39;s files
@@ -13,6 +14,7 @@ Method | HTTP request | Description
 [**GetAccountFilesByPath**](FilesAPI.md#GetAccountFilesByPath) | **Get** /v1/account/files/by-path | Get the file or directory at a path
 [**GetAccountFilesByPathContent**](FilesAPI.md#GetAccountFilesByPathContent) | **Get** /v1/account/files/by-path/content | Download the account file at a path
 [**GetAccountFilesContent**](FilesAPI.md#GetAccountFilesContent) | **Get** /v1/account/files/{id}/content | Download an account file
+[**ListAccountBuiltInSkills**](FilesAPI.md#ListAccountBuiltInSkills) | **Get** /v1/account/built-in-skills | List the skills Spaciv provides
 [**ListAccountDirectories**](FilesAPI.md#ListAccountDirectories) | **Get** /v1/account/directories | List the account&#39;s directories
 [**ListAccountFileTags**](FilesAPI.md#ListAccountFileTags) | **Get** /v1/account/file-tags | List the account&#39;s file and directory tags
 [**ListAccountFiles**](FilesAPI.md#ListAccountFiles) | **Get** /v1/account/files | List the account&#39;s files
@@ -22,6 +24,73 @@ Method | HTTP request | Description
 [**UpdateAccountFilesByPathContent**](FilesAPI.md#UpdateAccountFilesByPathContent) | **Put** /v1/account/files/by-path/content | Replace the content of the account file at a path
 [**UpdateAccountFilesContent**](FilesAPI.md#UpdateAccountFilesContent) | **Put** /v1/account/files/{id}/content | Replace an account file&#39;s content
 
+
+
+## CreateAccountBuiltInSkillsInstall
+
+> InstalledSkill CreateAccountBuiltInSkillsInstall(ctx, name)
+
+Install or reload a skill Spaciv provides into the account's files
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+	name :=  // string | Name of the built-in skill, as listed.
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.Files.CreateAccountBuiltInSkillsInstall(context.Background(), name)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `Files.CreateAccountBuiltInSkillsInstall`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `Files.CreateAccountBuiltInSkillsInstall`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**name** | **string** | Name of the built-in skill, as listed. | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiCreateAccountBuiltInSkillsInstallRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+### Return type
+
+[**InstalledSkill**](InstalledSkill.md)
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
 
 
 ## CreateAccountDirectories
@@ -585,6 +654,64 @@ Name | Type | Description  | Notes
 ### Return type
 
 **string**
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## ListAccountBuiltInSkills
+
+> []BuiltInSkill ListAccountBuiltInSkills(ctx)
+
+List the skills Spaciv provides
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.Files.ListAccountBuiltInSkills(context.Background())
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `Files.ListAccountBuiltInSkills`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `Files.ListAccountBuiltInSkills`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+This endpoint does not need any parameter.
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiListAccountBuiltInSkillsRequest struct via the builder pattern
+
+
+### Return type
+
+[**[]BuiltInSkill**](BuiltInSkill.md)
 
 ### Authorization
 
