@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Union** | [**GraphUnion**](GraphUnion.md) |  | 
+**SolveStep** | [**GraphSolveStep**](GraphSolveStep.md) |  | 
 
 ## Methods
 
 ### NewGraphNodeOneOf25
 
-`func NewGraphNodeOneOf25(union GraphUnion, ) *GraphNodeOneOf25`
+`func NewGraphNodeOneOf25(solveStep GraphSolveStep, ) *GraphNodeOneOf25`
 
 NewGraphNodeOneOf25 instantiates a new GraphNodeOneOf25 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewGraphNodeOneOf25WithDefaults instantiates a new GraphNodeOneOf25 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetUnion
+### GetSolveStep
 
-`func (o *GraphNodeOneOf25) GetUnion() GraphUnion`
+`func (o *GraphNodeOneOf25) GetSolveStep() GraphSolveStep`
 
-GetUnion returns the Union field if non-nil, zero value otherwise.
+GetSolveStep returns the SolveStep field if non-nil, zero value otherwise.
 
-### GetUnionOk
+### GetSolveStepOk
 
-`func (o *GraphNodeOneOf25) GetUnionOk() (*GraphUnion, bool)`
+`func (o *GraphNodeOneOf25) GetSolveStepOk() (*GraphSolveStep, bool)`
 
-GetUnionOk returns a tuple with the Union field if it's non-nil, zero value otherwise
+GetSolveStepOk returns a tuple with the SolveStep field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetUnion
+### SetSolveStep
 
-`func (o *GraphNodeOneOf25) SetUnion(v GraphUnion)`
+`func (o *GraphNodeOneOf25) SetSolveStep(v GraphSolveStep)`
 
-SetUnion sets Union field to given value.
+SetSolveStep sets SolveStep field to given value.
 
 
 

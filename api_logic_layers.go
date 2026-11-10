@@ -33,7 +33,7 @@ type requestForLogicLayersCreateGraphLayers struct {
 /*
 CreateGraphLayers Create a graph layer
 
-A graph layer works out its changes with a graph of typed nodes (a `GraphLayerConfig`): values, maths, tests, sets of objects and pairs, aggregates, object groups, data collections, dates, sub-graphs, and outputs that set properties, set variables, create objects or remove them. The properties it changes are the ones its Set property and Create objects nodes name, and the variables it sets are named `graph:<name>`. `outputs` is kept for compatibility and isn't read. Omit `config` to start with an empty graph. Returns `400` if the graph isn't valid, such as a cycle, an unconnected input or inputs of the wrong type, with the node that's wrong. Requires the *Edit space rule sets* permission.
+A graph layer works out its changes with a graph of typed nodes (a `GraphLayerConfig`): values, maths, tests, sets of objects and pairs, aggregates, object groups, data collections, dates, sub-graphs, goal seeking (Solve), and outputs that set properties, set variables, create objects or remove them. The properties it changes are the ones its Set property and Create objects nodes name, and the variables it sets are named `graph:<name>`. `outputs` is kept for compatibility and isn't read. Omit `config` to start with an empty graph. Returns `400` if the graph isn't valid, such as a cycle, an unconnected input or inputs of the wrong type, with the node that's wrong. Requires the *Edit space rule sets* permission.
 */
 func (a *LogicLayersService) CreateGraphLayers(ctx context.Context, graphLayerCreate GraphLayerCreate) (*PostResponseBody, error) {
 	r := requestForLogicLayersCreateGraphLayers{
@@ -393,7 +393,7 @@ type requestForLogicLayersDeleteGraphLayers struct {
 /*
 DeleteGraphLayers Delete a graph layer
 
-Permanently deletes a graph layer from the current account and removes it from every variable's allowed `options`. Returns `404` if the graph layer does not exist, and `409` if another graph layer uses it as a sub-graph. Requires the *Edit space rule set details* permission.
+Permanently deletes a graph layer from the current account and removes it from every variable's allowed `options`. Returns `404` if the graph layer does not exist, and `409` if another graph layer uses it as a sub-graph or as a Solve's graph. Requires the *Edit space rule set details* permission.
 */
 func (a *LogicLayersService) DeleteGraphLayers(ctx context.Context, id string) (map[string]interface{}, error) {
 	r := requestForLogicLayersDeleteGraphLayers{
@@ -817,7 +817,7 @@ type requestForLogicLayersGetGraphLayers struct {
 /*
 GetGraphLayers Get a graph layer
 
-A graph layer works out its changes with a graph of typed nodes (a `GraphLayerConfig`): values, maths, tests, sets of objects and pairs, aggregates, object groups, data collections, dates, sub-graphs, and outputs that set properties, set variables, create objects or remove them. The properties it changes are the ones its Set property and Create objects nodes name, and the variables it sets are named `graph:<name>`. `outputs` is kept for compatibility and isn't read. Returns `404` if the graph layer does not exist. Requires the *View space rule set details* permission.
+A graph layer works out its changes with a graph of typed nodes (a `GraphLayerConfig`): values, maths, tests, sets of objects and pairs, aggregates, object groups, data collections, dates, sub-graphs, goal seeking (Solve), and outputs that set properties, set variables, create objects or remove them. The properties it changes are the ones its Set property and Create objects nodes name, and the variables it sets are named `graph:<name>`. `outputs` is kept for compatibility and isn't read. Returns `404` if the graph layer does not exist. Requires the *View space rule set details* permission.
 */
 func (a *LogicLayersService) GetGraphLayers(ctx context.Context, id string) (*GraphLayerJSON, error) {
 	r := requestForLogicLayersGetGraphLayers{
@@ -1457,7 +1457,7 @@ type requestForLogicLayersUpdateGraphLayers struct {
 /*
 UpdateGraphLayers Update a graph layer
 
-A graph layer works out its changes with a graph of typed nodes (a `GraphLayerConfig`): values, maths, tests, sets of objects and pairs, aggregates, object groups, data collections, dates, sub-graphs, and outputs that set properties, set variables, create objects or remove them. The properties it changes are the ones its Set property and Create objects nodes name, and the variables it sets are named `graph:<name>`. `outputs` is kept for compatibility and isn't read. Only fields present in the request body are changed. Function nodes may read account number variables (`account:<id>`), which needs the *Variable controls* feature. Returns `400` if `config` isn't a valid graph or reads an unknown or non-number variable, and `404` if the graph layer does not exist. Requires the *Edit space rule set details* permission.
+A graph layer works out its changes with a graph of typed nodes (a `GraphLayerConfig`): values, maths, tests, sets of objects and pairs, aggregates, object groups, data collections, dates, sub-graphs, goal seeking (Solve), and outputs that set properties, set variables, create objects or remove them. The properties it changes are the ones its Set property and Create objects nodes name, and the variables it sets are named `graph:<name>`. `outputs` is kept for compatibility and isn't read. Only fields present in the request body are changed. Function nodes may read account number variables (`account:<id>`), which needs the *Variable controls* feature. Returns `400` if `config` isn't a valid graph or reads an unknown or non-number variable, and `404` if the graph layer does not exist. Requires the *Edit space rule set details* permission.
 */
 func (a *LogicLayersService) UpdateGraphLayers(ctx context.Context, id string, graphLayerUpdate GraphLayerUpdate) (map[string]interface{}, error) {
 	r := requestForLogicLayersUpdateGraphLayers{

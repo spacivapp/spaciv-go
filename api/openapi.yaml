@@ -5095,14 +5095,14 @@ paths:
     post:
       description: "A graph layer works out its changes with a graph of typed nodes\
         \ (a `GraphLayerConfig`): values, maths, tests, sets of objects and pairs,\
-        \ aggregates, object groups, data collections, dates, sub-graphs, and outputs\
-        \ that set properties, set variables, create objects or remove them. The properties\
-        \ it changes are the ones its Set property and Create objects nodes name,\
-        \ and the variables it sets are named `graph:<name>`. `outputs` is kept for\
-        \ compatibility and isn't read. Omit `config` to start with an empty graph.\
-        \ Returns `400` if the graph isn't valid, such as a cycle, an unconnected\
-        \ input or inputs of the wrong type, with the node that's wrong. Requires\
-        \ the *Edit space rule sets* permission."
+        \ aggregates, object groups, data collections, dates, sub-graphs, goal seeking\
+        \ (Solve), and outputs that set properties, set variables, create objects\
+        \ or remove them. The properties it changes are the ones its Set property\
+        \ and Create objects nodes name, and the variables it sets are named `graph:<name>`.\
+        \ `outputs` is kept for compatibility and isn't read. Omit `config` to start\
+        \ with an empty graph. Returns `400` if the graph isn't valid, such as a cycle,\
+        \ an unconnected input or inputs of the wrong type, with the node that's wrong.\
+        \ Requires the *Edit space rule sets* permission."
       operationId: logic-layers_create-graph-layers
       parameters: []
       requestBody:
@@ -5133,7 +5133,8 @@ paths:
       description: "Permanently deletes a graph layer from the current account and\
         \ removes it from every variable's allowed `options`. Returns `404` if the\
         \ graph layer does not exist, and `409` if another graph layer uses it as\
-        \ a sub-graph. Requires the *Edit space rule set details* permission."
+        \ a sub-graph or as a Solve's graph. Requires the *Edit space rule set details*\
+        \ permission."
       operationId: logic-layers_delete-graph-layers
       parameters:
       - explode: false
@@ -5163,12 +5164,12 @@ paths:
     get:
       description: "A graph layer works out its changes with a graph of typed nodes\
         \ (a `GraphLayerConfig`): values, maths, tests, sets of objects and pairs,\
-        \ aggregates, object groups, data collections, dates, sub-graphs, and outputs\
-        \ that set properties, set variables, create objects or remove them. The properties\
-        \ it changes are the ones its Set property and Create objects nodes name,\
-        \ and the variables it sets are named `graph:<name>`. `outputs` is kept for\
-        \ compatibility and isn't read. Returns `404` if the graph layer does not\
-        \ exist. Requires the *View space rule set details* permission."
+        \ aggregates, object groups, data collections, dates, sub-graphs, goal seeking\
+        \ (Solve), and outputs that set properties, set variables, create objects\
+        \ or remove them. The properties it changes are the ones its Set property\
+        \ and Create objects nodes name, and the variables it sets are named `graph:<name>`.\
+        \ `outputs` is kept for compatibility and isn't read. Returns `404` if the\
+        \ graph layer does not exist. Requires the *View space rule set details* permission."
       operationId: logic-layers_get-graph-layers
       parameters:
       - explode: false
@@ -5198,15 +5199,16 @@ paths:
     patch:
       description: "A graph layer works out its changes with a graph of typed nodes\
         \ (a `GraphLayerConfig`): values, maths, tests, sets of objects and pairs,\
-        \ aggregates, object groups, data collections, dates, sub-graphs, and outputs\
-        \ that set properties, set variables, create objects or remove them. The properties\
-        \ it changes are the ones its Set property and Create objects nodes name,\
-        \ and the variables it sets are named `graph:<name>`. `outputs` is kept for\
-        \ compatibility and isn't read. Only fields present in the request body are\
-        \ changed. Function nodes may read account number variables (`account:<id>`),\
-        \ which needs the *Variable controls* feature. Returns `400` if `config` isn't\
-        \ a valid graph or reads an unknown or non-number variable, and `404` if the\
-        \ graph layer does not exist. Requires the *Edit space rule set details* permission."
+        \ aggregates, object groups, data collections, dates, sub-graphs, goal seeking\
+        \ (Solve), and outputs that set properties, set variables, create objects\
+        \ or remove them. The properties it changes are the ones its Set property\
+        \ and Create objects nodes name, and the variables it sets are named `graph:<name>`.\
+        \ `outputs` is kept for compatibility and isn't read. Only fields present\
+        \ in the request body are changed. Function nodes may read account number\
+        \ variables (`account:<id>`), which needs the *Variable controls* feature.\
+        \ Returns `400` if `config` isn't a valid graph or reads an unknown or non-number\
+        \ variable, and `404` if the graph layer does not exist. Requires the *Edit\
+        \ space rule set details* permission."
       operationId: logic-layers_update-graph-layers
       parameters:
       - explode: false
@@ -15143,6 +15145,8 @@ components:
       - $ref: "#/components/schemas/GraphNode_oneOf_23"
       - $ref: "#/components/schemas/GraphNode_oneOf_24"
       - $ref: "#/components/schemas/GraphNode_oneOf_25"
+      - $ref: "#/components/schemas/GraphNode_oneOf_26"
+      - $ref: "#/components/schemas/GraphNode_oneOf_27"
       properties:
         id:
           type: string
@@ -15275,6 +15279,48 @@ components:
       required:
       - node
       - socket
+    GraphSolve:
+      additionalProperties: false
+      properties:
+        body:
+          items:
+            type: string
+          type: array
+        graph:
+          type: string
+        method:
+          format: int32
+          type: integer
+        step:
+          type: string
+        steps:
+          format: int32
+          type: integer
+        tolerance:
+          format: double
+          type: number
+        variable:
+          type: string
+      required:
+      - body
+      - graph
+      - method
+      - step
+      - steps
+      - tolerance
+      - variable
+    GraphSolveStep:
+      additionalProperties: false
+      properties:
+        inputs:
+          items:
+            type: string
+          type: array
+        solve:
+          type: string
+      required:
+      - inputs
+      - solve
     GraphSubGraph:
       additionalProperties: false
       properties:
@@ -22075,11 +22121,23 @@ components:
       - setVariable
     GraphNode_oneOf_24:
       properties:
+        solve:
+          $ref: "#/components/schemas/GraphSolve"
+      required:
+      - solve
+    GraphNode_oneOf_25:
+      properties:
+        solveStep:
+          $ref: "#/components/schemas/GraphSolveStep"
+      required:
+      - solveStep
+    GraphNode_oneOf_26:
+      properties:
         subGraph:
           $ref: "#/components/schemas/GraphSubGraph"
       required:
       - subGraph
-    GraphNode_oneOf_25:
+    GraphNode_oneOf_27:
       properties:
         union:
           $ref: "#/components/schemas/GraphUnion"

@@ -316,6 +316,8 @@ docs/GraphNodeOneOf22.md
 docs/GraphNodeOneOf23.md
 docs/GraphNodeOneOf24.md
 docs/GraphNodeOneOf25.md
+docs/GraphNodeOneOf26.md
+docs/GraphNodeOneOf27.md
 docs/GraphNodeOneOf3.md
 docs/GraphNodeOneOf4.md
 docs/GraphNodeOneOf5.md
@@ -333,6 +335,8 @@ docs/GraphSelect.md
 docs/GraphSetProperty.md
 docs/GraphSetVariable.md
 docs/GraphSocketRef.md
+docs/GraphSolve.md
+docs/GraphSolveStep.md
 docs/GraphSubGraph.md
 docs/GraphUnion.md
 docs/Group.md
@@ -831,6 +835,8 @@ model_graph_node_one_of_22.go
 model_graph_node_one_of_23.go
 model_graph_node_one_of_24.go
 model_graph_node_one_of_25.go
+model_graph_node_one_of_26.go
+model_graph_node_one_of_27.go
 model_graph_node_one_of_3.go
 model_graph_node_one_of_4.go
 model_graph_node_one_of_5.go
@@ -848,6 +854,8 @@ model_graph_select.go
 model_graph_set_property.go
 model_graph_set_variable.go
 model_graph_socket_ref.go
+model_graph_solve.go
+model_graph_solve_step.go
 model_graph_sub_graph.go
 model_graph_union.go
 model_group.go

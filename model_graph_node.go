@@ -38,6 +38,8 @@ type GraphNode struct {
 	GraphNodeOneOf23 *GraphNodeOneOf23
 	GraphNodeOneOf24 *GraphNodeOneOf24
 	GraphNodeOneOf25 *GraphNodeOneOf25
+	GraphNodeOneOf26 *GraphNodeOneOf26
+	GraphNodeOneOf27 *GraphNodeOneOf27
 	GraphNodeOneOf3 *GraphNodeOneOf3
 	GraphNodeOneOf4 *GraphNodeOneOf4
 	GraphNodeOneOf5 *GraphNodeOneOf5
@@ -177,6 +179,20 @@ func GraphNodeOneOf24AsGraphNode(v *GraphNodeOneOf24) GraphNode {
 func GraphNodeOneOf25AsGraphNode(v *GraphNodeOneOf25) GraphNode {
 	return GraphNode{
 		GraphNodeOneOf25: v,
+	}
+}
+
+// GraphNodeOneOf26AsGraphNode is a convenience function that returns GraphNodeOneOf26 wrapped in GraphNode
+func GraphNodeOneOf26AsGraphNode(v *GraphNodeOneOf26) GraphNode {
+	return GraphNode{
+		GraphNodeOneOf26: v,
+	}
+}
+
+// GraphNodeOneOf27AsGraphNode is a convenience function that returns GraphNodeOneOf27 wrapped in GraphNode
+func GraphNodeOneOf27AsGraphNode(v *GraphNodeOneOf27) GraphNode {
+	return GraphNode{
+		GraphNodeOneOf27: v,
 	}
 }
 
@@ -557,6 +573,40 @@ func (dst *GraphNode) UnmarshalJSON(data []byte) error {
 		dst.GraphNodeOneOf25 = nil
 	}
 
+	// try to unmarshal data into GraphNodeOneOf26
+	err = newStrictDecoder(data).Decode(&dst.GraphNodeOneOf26)
+	if err == nil {
+		jsonGraphNodeOneOf26, _ := json.Marshal(dst.GraphNodeOneOf26)
+		if string(jsonGraphNodeOneOf26) == "{}" { // empty struct
+			dst.GraphNodeOneOf26 = nil
+		} else {
+			if err = validator.Validate(dst.GraphNodeOneOf26); err != nil {
+				dst.GraphNodeOneOf26 = nil
+			} else {
+				match++
+			}
+		}
+	} else {
+		dst.GraphNodeOneOf26 = nil
+	}
+
+	// try to unmarshal data into GraphNodeOneOf27
+	err = newStrictDecoder(data).Decode(&dst.GraphNodeOneOf27)
+	if err == nil {
+		jsonGraphNodeOneOf27, _ := json.Marshal(dst.GraphNodeOneOf27)
+		if string(jsonGraphNodeOneOf27) == "{}" { // empty struct
+			dst.GraphNodeOneOf27 = nil
+		} else {
+			if err = validator.Validate(dst.GraphNodeOneOf27); err != nil {
+				dst.GraphNodeOneOf27 = nil
+			} else {
+				match++
+			}
+		}
+	} else {
+		dst.GraphNodeOneOf27 = nil
+	}
+
 	// try to unmarshal data into GraphNodeOneOf3
 	err = newStrictDecoder(data).Decode(&dst.GraphNodeOneOf3)
 	if err == nil {
@@ -697,6 +747,8 @@ func (dst *GraphNode) UnmarshalJSON(data []byte) error {
 		dst.GraphNodeOneOf23 = nil
 		dst.GraphNodeOneOf24 = nil
 		dst.GraphNodeOneOf25 = nil
+		dst.GraphNodeOneOf26 = nil
+		dst.GraphNodeOneOf27 = nil
 		dst.GraphNodeOneOf3 = nil
 		dst.GraphNodeOneOf4 = nil
 		dst.GraphNodeOneOf5 = nil
@@ -789,6 +841,14 @@ func (src GraphNode) MarshalJSON() ([]byte, error) {
 
 	if src.GraphNodeOneOf25 != nil {
 		return json.Marshal(&src.GraphNodeOneOf25)
+	}
+
+	if src.GraphNodeOneOf26 != nil {
+		return json.Marshal(&src.GraphNodeOneOf26)
+	}
+
+	if src.GraphNodeOneOf27 != nil {
+		return json.Marshal(&src.GraphNodeOneOf27)
 	}
 
 	if src.GraphNodeOneOf3 != nil {
@@ -903,6 +963,14 @@ func (obj *GraphNode) GetActualInstance() (interface{}) {
 		return obj.GraphNodeOneOf25
 	}
 
+	if obj.GraphNodeOneOf26 != nil {
+		return obj.GraphNodeOneOf26
+	}
+
+	if obj.GraphNodeOneOf27 != nil {
+		return obj.GraphNodeOneOf27
+	}
+
 	if obj.GraphNodeOneOf3 != nil {
 		return obj.GraphNodeOneOf3
 	}
@@ -1011,6 +1079,14 @@ func (obj GraphNode) GetActualInstanceValue() (interface{}) {
 
 	if obj.GraphNodeOneOf25 != nil {
 		return *obj.GraphNodeOneOf25
+	}
+
+	if obj.GraphNodeOneOf26 != nil {
+		return *obj.GraphNodeOneOf26
+	}
+
+	if obj.GraphNodeOneOf27 != nil {
+		return *obj.GraphNodeOneOf27
 	}
 
 	if obj.GraphNodeOneOf3 != nil {
