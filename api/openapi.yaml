@@ -12967,9 +12967,14 @@ components:
     DashboardVisualisationCalc:
       additionalProperties: false
       properties:
+        customUnit:
+          type: string
         data:
           $ref: "#/components/schemas/DataShapes"
         decimalPlaces:
+          format: int32
+          type: integer
+        decimalPlacesOverride:
           format: int32
           type: integer
         floorplan:
@@ -12999,7 +13004,6 @@ components:
       - floorplan
       - hideRoot
       - keyValueSize
-      - keyValueSuffix
       - name
       - removeZeros
       - text
@@ -13008,9 +13012,14 @@ components:
     DashboardVisualisationCalcRequest:
       additionalProperties: false
       properties:
+        customUnit:
+          type: string
         data:
           $ref: "#/components/schemas/DataShapesRequest"
         decimalPlaces:
+          format: int32
+          type: integer
+        decimalPlacesOverride:
           format: int32
           type: integer
         floorplan:
@@ -13040,7 +13049,6 @@ components:
       - floorplan
       - hideRoot
       - keyValueSize
-      - keyValueSuffix
       - name
       - removeZeros
       - text

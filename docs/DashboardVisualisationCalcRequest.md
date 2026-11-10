@@ -4,12 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**CustomUnit** | Pointer to **string** |  | [optional] 
 **Data** | [**DataShapesRequest**](DataShapesRequest.md) |  | 
 **DecimalPlaces** | **int32** |  | 
+**DecimalPlacesOverride** | Pointer to **int32** |  | [optional] 
 **Floorplan** | **string** |  | 
 **HideRoot** | **bool** |  | 
 **KeyValueSize** | **int32** |  | 
-**KeyValueSuffix** | **string** |  | 
+**KeyValueSuffix** | Pointer to **string** |  | [optional] 
 **Name** | **string** |  | 
 **RemoveZeros** | **bool** |  | 
 **Text** | **string** |  | 
@@ -20,7 +22,7 @@ Name | Type | Description | Notes
 
 ### NewDashboardVisualisationCalcRequest
 
-`func NewDashboardVisualisationCalcRequest(data DataShapesRequest, decimalPlaces int32, floorplan string, hideRoot bool, keyValueSize int32, keyValueSuffix string, name string, removeZeros bool, text string, unit int32, visualisation int32, ) *DashboardVisualisationCalcRequest`
+`func NewDashboardVisualisationCalcRequest(data DataShapesRequest, decimalPlaces int32, floorplan string, hideRoot bool, keyValueSize int32, name string, removeZeros bool, text string, unit int32, visualisation int32, ) *DashboardVisualisationCalcRequest`
 
 NewDashboardVisualisationCalcRequest instantiates a new DashboardVisualisationCalcRequest object
 This constructor will assign default values to properties that have it defined,
@@ -34,6 +36,31 @@ will change when the set of required properties is changed
 NewDashboardVisualisationCalcRequestWithDefaults instantiates a new DashboardVisualisationCalcRequest object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetCustomUnit
+
+`func (o *DashboardVisualisationCalcRequest) GetCustomUnit() string`
+
+GetCustomUnit returns the CustomUnit field if non-nil, zero value otherwise.
+
+### GetCustomUnitOk
+
+`func (o *DashboardVisualisationCalcRequest) GetCustomUnitOk() (*string, bool)`
+
+GetCustomUnitOk returns a tuple with the CustomUnit field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCustomUnit
+
+`func (o *DashboardVisualisationCalcRequest) SetCustomUnit(v string)`
+
+SetCustomUnit sets CustomUnit field to given value.
+
+### HasCustomUnit
+
+`func (o *DashboardVisualisationCalcRequest) HasCustomUnit() bool`
+
+HasCustomUnit returns a boolean if a field has been set.
 
 ### GetData
 
@@ -74,6 +101,31 @@ and a boolean to check if the value has been set.
 
 SetDecimalPlaces sets DecimalPlaces field to given value.
 
+
+### GetDecimalPlacesOverride
+
+`func (o *DashboardVisualisationCalcRequest) GetDecimalPlacesOverride() int32`
+
+GetDecimalPlacesOverride returns the DecimalPlacesOverride field if non-nil, zero value otherwise.
+
+### GetDecimalPlacesOverrideOk
+
+`func (o *DashboardVisualisationCalcRequest) GetDecimalPlacesOverrideOk() (*int32, bool)`
+
+GetDecimalPlacesOverrideOk returns a tuple with the DecimalPlacesOverride field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDecimalPlacesOverride
+
+`func (o *DashboardVisualisationCalcRequest) SetDecimalPlacesOverride(v int32)`
+
+SetDecimalPlacesOverride sets DecimalPlacesOverride field to given value.
+
+### HasDecimalPlacesOverride
+
+`func (o *DashboardVisualisationCalcRequest) HasDecimalPlacesOverride() bool`
+
+HasDecimalPlacesOverride returns a boolean if a field has been set.
 
 ### GetFloorplan
 
@@ -154,6 +206,11 @@ and a boolean to check if the value has been set.
 
 SetKeyValueSuffix sets KeyValueSuffix field to given value.
 
+### HasKeyValueSuffix
+
+`func (o *DashboardVisualisationCalcRequest) HasKeyValueSuffix() bool`
+
+HasKeyValueSuffix returns a boolean if a field has been set.
 
 ### GetName
 

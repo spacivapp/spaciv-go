@@ -22,12 +22,14 @@ var _ MappedNullable = &DashboardVisualisationCalcRequest{}
 
 // DashboardVisualisationCalcRequest struct for DashboardVisualisationCalcRequest
 type DashboardVisualisationCalcRequest struct {
+	CustomUnit *string `json:"customUnit,omitempty"`
 	Data DataShapesRequest `json:"data"`
 	DecimalPlaces int32 `json:"decimalPlaces"`
+	DecimalPlacesOverride *int32 `json:"decimalPlacesOverride,omitempty"`
 	Floorplan string `json:"floorplan"`
 	HideRoot bool `json:"hideRoot"`
 	KeyValueSize int32 `json:"keyValueSize"`
-	KeyValueSuffix string `json:"keyValueSuffix"`
+	KeyValueSuffix *string `json:"keyValueSuffix,omitempty"`
 	Name string `json:"name"`
 	RemoveZeros bool `json:"removeZeros"`
 	Text string `json:"text"`
@@ -41,14 +43,13 @@ type _DashboardVisualisationCalcRequest DashboardVisualisationCalcRequest
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDashboardVisualisationCalcRequest(data DataShapesRequest, decimalPlaces int32, floorplan string, hideRoot bool, keyValueSize int32, keyValueSuffix string, name string, removeZeros bool, text string, unit int32, visualisation int32) *DashboardVisualisationCalcRequest {
+func NewDashboardVisualisationCalcRequest(data DataShapesRequest, decimalPlaces int32, floorplan string, hideRoot bool, keyValueSize int32, name string, removeZeros bool, text string, unit int32, visualisation int32) *DashboardVisualisationCalcRequest {
 	this := DashboardVisualisationCalcRequest{}
 	this.Data = data
 	this.DecimalPlaces = decimalPlaces
 	this.Floorplan = floorplan
 	this.HideRoot = hideRoot
 	this.KeyValueSize = keyValueSize
-	this.KeyValueSuffix = keyValueSuffix
 	this.Name = name
 	this.RemoveZeros = removeZeros
 	this.Text = text
@@ -63,6 +64,38 @@ func NewDashboardVisualisationCalcRequest(data DataShapesRequest, decimalPlaces 
 func NewDashboardVisualisationCalcRequestWithDefaults() *DashboardVisualisationCalcRequest {
 	this := DashboardVisualisationCalcRequest{}
 	return &this
+}
+
+// GetCustomUnit returns the CustomUnit field value if set, zero value otherwise.
+func (o *DashboardVisualisationCalcRequest) GetCustomUnit() string {
+	if o == nil || IsNil(o.CustomUnit) {
+		var ret string
+		return ret
+	}
+	return *o.CustomUnit
+}
+
+// GetCustomUnitOk returns a tuple with the CustomUnit field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DashboardVisualisationCalcRequest) GetCustomUnitOk() (*string, bool) {
+	if o == nil || IsNil(o.CustomUnit) {
+		return nil, false
+	}
+	return o.CustomUnit, true
+}
+
+// HasCustomUnit returns a boolean if a field has been set.
+func (o *DashboardVisualisationCalcRequest) HasCustomUnit() bool {
+	if o != nil && !IsNil(o.CustomUnit) {
+		return true
+	}
+
+	return false
+}
+
+// SetCustomUnit gets a reference to the given string and assigns it to the CustomUnit field.
+func (o *DashboardVisualisationCalcRequest) SetCustomUnit(v string) {
+	o.CustomUnit = &v
 }
 
 // GetData returns the Data field value
@@ -111,6 +144,38 @@ func (o *DashboardVisualisationCalcRequest) GetDecimalPlacesOk() (*int32, bool) 
 // SetDecimalPlaces sets field value
 func (o *DashboardVisualisationCalcRequest) SetDecimalPlaces(v int32) {
 	o.DecimalPlaces = v
+}
+
+// GetDecimalPlacesOverride returns the DecimalPlacesOverride field value if set, zero value otherwise.
+func (o *DashboardVisualisationCalcRequest) GetDecimalPlacesOverride() int32 {
+	if o == nil || IsNil(o.DecimalPlacesOverride) {
+		var ret int32
+		return ret
+	}
+	return *o.DecimalPlacesOverride
+}
+
+// GetDecimalPlacesOverrideOk returns a tuple with the DecimalPlacesOverride field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DashboardVisualisationCalcRequest) GetDecimalPlacesOverrideOk() (*int32, bool) {
+	if o == nil || IsNil(o.DecimalPlacesOverride) {
+		return nil, false
+	}
+	return o.DecimalPlacesOverride, true
+}
+
+// HasDecimalPlacesOverride returns a boolean if a field has been set.
+func (o *DashboardVisualisationCalcRequest) HasDecimalPlacesOverride() bool {
+	if o != nil && !IsNil(o.DecimalPlacesOverride) {
+		return true
+	}
+
+	return false
+}
+
+// SetDecimalPlacesOverride gets a reference to the given int32 and assigns it to the DecimalPlacesOverride field.
+func (o *DashboardVisualisationCalcRequest) SetDecimalPlacesOverride(v int32) {
+	o.DecimalPlacesOverride = &v
 }
 
 // GetFloorplan returns the Floorplan field value
@@ -185,28 +250,36 @@ func (o *DashboardVisualisationCalcRequest) SetKeyValueSize(v int32) {
 	o.KeyValueSize = v
 }
 
-// GetKeyValueSuffix returns the KeyValueSuffix field value
+// GetKeyValueSuffix returns the KeyValueSuffix field value if set, zero value otherwise.
 func (o *DashboardVisualisationCalcRequest) GetKeyValueSuffix() string {
-	if o == nil {
+	if o == nil || IsNil(o.KeyValueSuffix) {
 		var ret string
 		return ret
 	}
-
-	return o.KeyValueSuffix
+	return *o.KeyValueSuffix
 }
 
-// GetKeyValueSuffixOk returns a tuple with the KeyValueSuffix field value
+// GetKeyValueSuffixOk returns a tuple with the KeyValueSuffix field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *DashboardVisualisationCalcRequest) GetKeyValueSuffixOk() (*string, bool) {
-	if o == nil {
+	if o == nil || IsNil(o.KeyValueSuffix) {
 		return nil, false
 	}
-	return &o.KeyValueSuffix, true
+	return o.KeyValueSuffix, true
 }
 
-// SetKeyValueSuffix sets field value
+// HasKeyValueSuffix returns a boolean if a field has been set.
+func (o *DashboardVisualisationCalcRequest) HasKeyValueSuffix() bool {
+	if o != nil && !IsNil(o.KeyValueSuffix) {
+		return true
+	}
+
+	return false
+}
+
+// SetKeyValueSuffix gets a reference to the given string and assigns it to the KeyValueSuffix field.
 func (o *DashboardVisualisationCalcRequest) SetKeyValueSuffix(v string) {
-	o.KeyValueSuffix = v
+	o.KeyValueSuffix = &v
 }
 
 // GetName returns the Name field value
@@ -339,12 +412,20 @@ func (o DashboardVisualisationCalcRequest) MarshalJSON() ([]byte, error) {
 
 func (o DashboardVisualisationCalcRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	if !IsNil(o.CustomUnit) {
+		toSerialize["customUnit"] = o.CustomUnit
+	}
 	toSerialize["data"] = o.Data
 	toSerialize["decimalPlaces"] = o.DecimalPlaces
+	if !IsNil(o.DecimalPlacesOverride) {
+		toSerialize["decimalPlacesOverride"] = o.DecimalPlacesOverride
+	}
 	toSerialize["floorplan"] = o.Floorplan
 	toSerialize["hideRoot"] = o.HideRoot
 	toSerialize["keyValueSize"] = o.KeyValueSize
-	toSerialize["keyValueSuffix"] = o.KeyValueSuffix
+	if !IsNil(o.KeyValueSuffix) {
+		toSerialize["keyValueSuffix"] = o.KeyValueSuffix
+	}
 	toSerialize["name"] = o.Name
 	toSerialize["removeZeros"] = o.RemoveZeros
 	toSerialize["text"] = o.Text
@@ -363,7 +444,6 @@ func (o *DashboardVisualisationCalcRequest) UnmarshalJSON(data []byte) (err erro
 		"floorplan",
 		"hideRoot",
 		"keyValueSize",
-		"keyValueSuffix",
 		"name",
 		"removeZeros",
 		"text",
