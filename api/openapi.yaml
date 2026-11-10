@@ -5067,6 +5067,39 @@ paths:
       - Floor plans
       x-sdk-params: true
   /v1/graph-layers:
+    delete:
+      description: "Permanently deletes several graph layers from the current account\
+        \ and removes them from every variable's allowed `options`. A layer that another\
+        \ graph uses as a sub-graph or as a Solve's graph is deleted only if that\
+        \ graph is deleted in the same request; otherwise it's listed in `failed`\
+        \ with the graphs using it, as are IDs that aren't graph layers. Returns the\
+        \ IDs `deleted` and the ones that `failed`, each with a `detail`. Requires\
+        \ the *Edit space rule set details* permission."
+      operationId: logic-layers_delete-many-graph-layers
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GraphLayersToDelete"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GraphLayersDeleted"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Delete graph layers
+      tags:
+      - Logic layers
+      x-sdk-params: false
     get:
       description: "Returns the account's graph layers with summary fields. Use `GET\
         \ /v1/graph-layers/{id}` for a layer's graph. Requires the *View space rule\
@@ -5238,6 +5271,41 @@ paths:
                 $ref: "#/components/schemas/ErrorModel"
           description: Error
       summary: Update a graph layer
+      tags:
+      - Logic layers
+      x-sdk-params: false
+  /v1/graph-layers/{id}/duplicate:
+    post:
+      description: "Creates a copy of the graph layer, its graph and description,\
+        \ named \"<original name> (Copy)\", and returns the copy's ID. The copy uses\
+        \ the same sub-graphs, object groups and variables as the original. Returns\
+        \ `400` if the graph or one of its sub-graphs reads account variables and\
+        \ the *Variable controls* feature is missing, or if a graph it uses can't\
+        \ be loaded, and `404` if the graph layer does not exist. Requires the *Edit\
+        \ space rule sets* permission."
+      operationId: logic-layers_duplicate-graph-layers
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DuplicateResponseBody"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Duplicate a graph layer
       tags:
       - Logic layers
       x-sdk-params: false
@@ -13424,6 +13492,15 @@ components:
           type: string
       required:
       - directories
+    DuplicateResponseBody:
+      additionalProperties: false
+      example:
+        id: id
+      properties:
+        id:
+          type: string
+      required:
+      - id
     EntityChangeActor:
       additionalProperties: {}
       properties:
@@ -14967,6 +15044,19 @@ components:
           type: string
       required:
       - name
+    GraphLayerDeleteFailure:
+      additionalProperties: false
+      example:
+        detail: detail
+        id: id
+      properties:
+        detail:
+          type: string
+        id:
+          type: string
+      required:
+      - detail
+      - id
     GraphLayerJSON:
       additionalProperties: false
       example:
@@ -15055,6 +15145,44 @@ components:
           type: string
         name:
           type: string
+    GraphLayersDeleted:
+      additionalProperties: false
+      example:
+        deleted:
+        - deleted
+        - deleted
+        failed:
+        - detail: detail
+          id: id
+        - detail: detail
+          id: id
+      properties:
+        deleted:
+          items:
+            type: string
+          type: array
+        failed:
+          items:
+            $ref: "#/components/schemas/GraphLayerDeleteFailure"
+          type: array
+      required:
+      - deleted
+      - failed
+    GraphLayersToDelete:
+      additionalProperties: false
+      example:
+        ids:
+        - ids
+        - ids
+      properties:
+        ids:
+          description: The graph layers to delete.
+          items:
+            type: string
+          minItems: 1
+          type: array
+      required:
+      - ids
     GraphLookupEntry:
       additionalProperties: false
       properties:

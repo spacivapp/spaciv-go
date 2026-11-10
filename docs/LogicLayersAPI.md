@@ -8,8 +8,10 @@ Method | HTTP request | Description
 [**CreateSpaceRulesets**](LogicLayersAPI.md#CreateSpaceRulesets) | **Post** /v1/space-rulesets | Create a logic layer
 [**CreateSpaceRulesetsImage**](LogicLayersAPI.md#CreateSpaceRulesetsImage) | **Post** /v1/space-rulesets/{id}/image | Upload a space ruleset image
 [**DeleteGraphLayers**](LogicLayersAPI.md#DeleteGraphLayers) | **Delete** /v1/graph-layers/{id} | Delete a graph layer
+[**DeleteManyGraphLayers**](LogicLayersAPI.md#DeleteManyGraphLayers) | **Delete** /v1/graph-layers | Delete graph layers
 [**DeleteSpaceRulesets**](LogicLayersAPI.md#DeleteSpaceRulesets) | **Delete** /v1/space-rulesets/{id} | Delete a logic layer
 [**DeleteSpaceRulesetsImage**](LogicLayersAPI.md#DeleteSpaceRulesetsImage) | **Delete** /v1/space-rulesets/{id}/image | Delete a space ruleset image
+[**DuplicateGraphLayers**](LogicLayersAPI.md#DuplicateGraphLayers) | **Post** /v1/graph-layers/{id}/duplicate | Duplicate a graph layer
 [**DuplicateSpaceRulesets**](LogicLayersAPI.md#DuplicateSpaceRulesets) | **Post** /v1/space-rulesets/{id}/duplicate | Duplicate a logic layer
 [**GetGraphLayers**](LogicLayersAPI.md#GetGraphLayers) | **Get** /v1/graph-layers/{id} | Get a graph layer
 [**GetSpaceRulesets**](LogicLayersAPI.md#GetSpaceRulesets) | **Get** /v1/space-rulesets/{id} | Get a logic layer
@@ -284,6 +286,69 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
+## DeleteManyGraphLayers
+
+> GraphLayersDeleted DeleteManyGraphLayers(ctx, graphLayersToDelete)
+
+Delete graph layers
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+	graphLayersToDelete :=  // GraphLayersToDelete | 
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.LogicLayers.DeleteManyGraphLayers(context.Background(), graphLayersToDelete)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `LogicLayers.DeleteManyGraphLayers`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `LogicLayers.DeleteManyGraphLayers`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiDeleteManyGraphLayersRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **graphLayersToDelete** | [**GraphLayersToDelete**](GraphLayersToDelete.md) |  | 
+
+### Return type
+
+[**GraphLayersDeleted**](GraphLayersDeleted.md)
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## DeleteSpaceRulesets
 
 > map[string]interface{} DeleteSpaceRulesets(ctx, id)
@@ -403,6 +468,73 @@ Name | Type | Description  | Notes
 ### Return type
 
 **map[string]interface{}**
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## DuplicateGraphLayers
+
+> DuplicateResponseBody DuplicateGraphLayers(ctx, id)
+
+Duplicate a graph layer
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+	id :=  // string | 
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.LogicLayers.DuplicateGraphLayers(context.Background(), id)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `LogicLayers.DuplicateGraphLayers`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `LogicLayers.DuplicateGraphLayers`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**id** | **string** |  | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiDuplicateGraphLayersRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+### Return type
+
+[**DuplicateResponseBody**](DuplicateResponseBody.md)
 
 ### Authorization
 

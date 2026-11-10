@@ -238,6 +238,7 @@ docs/DatasetRes.md
 docs/DatasetsAPI.md
 docs/Directory.md
 docs/DirectoryPage.md
+docs/DuplicateResponseBody.md
 docs/EntityChangeActor.md
 docs/EntityChangedEvent.md
 docs/EntityMovedTo.md
@@ -290,9 +291,12 @@ docs/GraphJoin.md
 docs/GraphJoinKey.md
 docs/GraphLayerConfig.md
 docs/GraphLayerCreate.md
+docs/GraphLayerDeleteFailure.md
 docs/GraphLayerJSON.md
 docs/GraphLayerListEntry.md
 docs/GraphLayerUpdate.md
+docs/GraphLayersDeleted.md
+docs/GraphLayersToDelete.md
 docs/GraphLookupEntry.md
 docs/GraphLookupTable.md
 docs/GraphNeed.md
@@ -759,6 +763,7 @@ model_dataset_modify.go
 model_dataset_res.go
 model_directory.go
 model_directory_page.go
+model_duplicate_response_body.go
 model_entity_change_actor.go
 model_entity_changed_event.go
 model_entity_moved_to.go
@@ -809,9 +814,12 @@ model_graph_join.go
 model_graph_join_key.go
 model_graph_layer_config.go
 model_graph_layer_create.go
+model_graph_layer_delete_failure.go
 model_graph_layer_json.go
 model_graph_layer_list_entry.go
 model_graph_layer_update.go
+model_graph_layers_deleted.go
+model_graph_layers_to_delete.go
 model_graph_lookup_entry.go
 model_graph_lookup_table.go
 model_graph_need.go
