@@ -5309,6 +5309,56 @@ paths:
       tags:
       - Logic layers
       x-sdk-params: false
+  /v1/graph-layers/{id}/preview:
+    post:
+      description: "Works out every output of a graph layer's config, saved or not,\
+        \ on one day of a scenario, and returns a summary of each: a set's item count,\
+        \ a single number's value, or a value per item's count, range and first few\
+        \ items. The graph reads the objects that reach its layer in the scenario's\
+        \ stack, or all of the scenario's objects when the layer isn't in the stack.\
+        \ A graph that fails its check, or a node that fails, is reported in `error`,\
+        \ with the failing node in `node` and the outputs worked out before it. Sample\
+        \ items and their objects need the *View objects* permission, and their objects'\
+        \ property values need *View properties* or *Edit properties*; without them\
+        \ the summaries are returned without those details, and an error raised while\
+        \ working out the graph is replaced by a general one. Calculated like an analysis,\
+        \ with the scenario's layer variables when *Variable controls* is on, and\
+        \ charged as one; an unchanged config, scenario and day is answered from the\
+        \ cache. Returns `400` if the config isn't a graph layer config or the scenario\
+        \ doesn't exist. Requires the *View ideal space*, *View space rule set details*\
+        \ and *View scenario planning* permissions."
+      operationId: analysis_create-graph-layers-preview
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GraphPreviewBody"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GraphPreviewResult"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Preview a graph layer
+      tags:
+      - Analysis
+      x-sdk-params: false
   /v1/graph-layers/{id}/used-by:
     get:
       description: "Returns the graph layers that use this one as a sub-graph or a\
@@ -15419,6 +15469,347 @@ components:
       required:
       - x
       - "y"
+    GraphPreviewBody:
+      additionalProperties: false
+      example:
+        scenario: scenario
+        config: ""
+        day: 0
+      properties:
+        config: {}
+        day:
+          description: "The day to work the graph out on, as days since 1970-01-01."
+          format: int64
+          type: integer
+        scenario:
+          description: The scenario whose stack the graph's objects come from.
+          minLength: 1
+          type: string
+      required:
+      - config
+      - day
+      - scenario
+    GraphPreviewObject:
+      additionalProperties: false
+      example:
+        name: name
+        id: id
+        properties:
+        - node: node
+          property: property
+          value: 1.4658129805029452
+        - node: node
+          property: property
+          value: 1.4658129805029452
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        properties:
+          items:
+            $ref: "#/components/schemas/GraphPreviewProperty"
+          type: array
+      required:
+      - id
+      - name
+      - properties
+    GraphPreviewProperty:
+      additionalProperties: false
+      example:
+        node: node
+        property: property
+        value: 1.4658129805029452
+      properties:
+        node:
+          type: string
+        property:
+          type: string
+        value:
+          format: double
+          type: number
+      required:
+      - node
+      - property
+      - value
+    GraphPreviewResult:
+      additionalProperties: false
+      example:
+        node: node
+        sockets:
+        - node: node
+          min: 6.027456183070403
+          set: true
+          max: 0.8008281904610115
+          sum: 5.637376656633329
+          socket: socket
+          error: error
+          perItem: true
+          items: items
+          value: 2.3021358869347655
+          errors: errors
+          samples:
+          - item: item
+            objects:
+            - name: name
+              id: id
+              properties:
+              - node: node
+                property: property
+                value: 1.4658129805029452
+              - node: node
+                property: property
+                value: 1.4658129805029452
+            - name: name
+              id: id
+              properties:
+              - node: node
+                property: property
+                value: 1.4658129805029452
+              - node: node
+                property: property
+                value: 1.4658129805029452
+            error: error
+            value: 5.962133916683182
+          - item: item
+            objects:
+            - name: name
+              id: id
+              properties:
+              - node: node
+                property: property
+                value: 1.4658129805029452
+              - node: node
+                property: property
+                value: 1.4658129805029452
+            - name: name
+              id: id
+              properties:
+              - node: node
+                property: property
+                value: 1.4658129805029452
+              - node: node
+                property: property
+                value: 1.4658129805029452
+            error: error
+            value: 5.962133916683182
+        - node: node
+          min: 6.027456183070403
+          set: true
+          max: 0.8008281904610115
+          sum: 5.637376656633329
+          socket: socket
+          error: error
+          perItem: true
+          items: items
+          value: 2.3021358869347655
+          errors: errors
+          samples:
+          - item: item
+            objects:
+            - name: name
+              id: id
+              properties:
+              - node: node
+                property: property
+                value: 1.4658129805029452
+              - node: node
+                property: property
+                value: 1.4658129805029452
+            - name: name
+              id: id
+              properties:
+              - node: node
+                property: property
+                value: 1.4658129805029452
+              - node: node
+                property: property
+                value: 1.4658129805029452
+            error: error
+            value: 5.962133916683182
+          - item: item
+            objects:
+            - name: name
+              id: id
+              properties:
+              - node: node
+                property: property
+                value: 1.4658129805029452
+              - node: node
+                property: property
+                value: 1.4658129805029452
+            - name: name
+              id: id
+              properties:
+              - node: node
+                property: property
+                value: 1.4658129805029452
+              - node: node
+                property: property
+                value: 1.4658129805029452
+            error: error
+            value: 5.962133916683182
+        error: error
+      properties:
+        error:
+          type: string
+        node:
+          type: string
+        sockets:
+          items:
+            $ref: "#/components/schemas/GraphPreviewSocket"
+          type: array
+      required:
+      - error
+      - node
+      - sockets
+    GraphPreviewSample:
+      additionalProperties: false
+      example:
+        item: item
+        objects:
+        - name: name
+          id: id
+          properties:
+          - node: node
+            property: property
+            value: 1.4658129805029452
+          - node: node
+            property: property
+            value: 1.4658129805029452
+        - name: name
+          id: id
+          properties:
+          - node: node
+            property: property
+            value: 1.4658129805029452
+          - node: node
+            property: property
+            value: 1.4658129805029452
+        error: error
+        value: 5.962133916683182
+      properties:
+        error:
+          type: string
+        item:
+          type: string
+        objects:
+          items:
+            $ref: "#/components/schemas/GraphPreviewObject"
+          type: array
+        value:
+          format: double
+          type: number
+      required:
+      - error
+      - item
+      - objects
+      - value
+    GraphPreviewSocket:
+      additionalProperties: false
+      example:
+        node: node
+        min: 6.027456183070403
+        set: true
+        max: 0.8008281904610115
+        sum: 5.637376656633329
+        socket: socket
+        error: error
+        perItem: true
+        items: items
+        value: 2.3021358869347655
+        errors: errors
+        samples:
+        - item: item
+          objects:
+          - name: name
+            id: id
+            properties:
+            - node: node
+              property: property
+              value: 1.4658129805029452
+            - node: node
+              property: property
+              value: 1.4658129805029452
+          - name: name
+            id: id
+            properties:
+            - node: node
+              property: property
+              value: 1.4658129805029452
+            - node: node
+              property: property
+              value: 1.4658129805029452
+          error: error
+          value: 5.962133916683182
+        - item: item
+          objects:
+          - name: name
+            id: id
+            properties:
+            - node: node
+              property: property
+              value: 1.4658129805029452
+            - node: node
+              property: property
+              value: 1.4658129805029452
+          - name: name
+            id: id
+            properties:
+            - node: node
+              property: property
+              value: 1.4658129805029452
+            - node: node
+              property: property
+              value: 1.4658129805029452
+          error: error
+          value: 5.962133916683182
+      properties:
+        error:
+          type: string
+        errors:
+          format: int64
+          type: string
+        items:
+          format: int64
+          type: string
+        max:
+          format: double
+          type: number
+        min:
+          format: double
+          type: number
+        node:
+          type: string
+        perItem:
+          type: boolean
+        samples:
+          items:
+            $ref: "#/components/schemas/GraphPreviewSample"
+          type: array
+        set:
+          type: boolean
+        socket:
+          type: string
+        sum:
+          format: double
+          type: number
+        value:
+          format: double
+          type: number
+      required:
+      - error
+      - errors
+      - items
+      - max
+      - min
+      - node
+      - perItem
+      - samples
+      - set
+      - socket
+      - sum
+      - value
     GraphRemoveObjects:
       additionalProperties: false
       type: object

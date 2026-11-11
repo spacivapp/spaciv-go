@@ -5,6 +5,7 @@ All URIs are relative to *https://api.spaciv.com*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**CreateAnalyse**](AnalysisAPI.md#CreateAnalyse) | **Post** /v1/analyse | Run analysis
+[**CreateGraphLayersPreview**](AnalysisAPI.md#CreateGraphLayersPreview) | **Post** /v1/graph-layers/{id}/preview | Preview a graph layer
 
 
 
@@ -66,6 +67,75 @@ Name | Type | Description  | Notes
 
 - **Content-Type**: application/json
 - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## CreateGraphLayersPreview
+
+> GraphPreviewResult CreateGraphLayersPreview(ctx, id, graphPreviewBody)
+
+Preview a graph layer
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+	id :=  // string | 
+	graphPreviewBody :=  // GraphPreviewBody | 
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.Analysis.CreateGraphLayersPreview(context.Background(), id, graphPreviewBody)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `Analysis.CreateGraphLayersPreview`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `Analysis.CreateGraphLayersPreview`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**id** | **string** |  | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiCreateGraphLayersPreviewRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+ **graphPreviewBody** | [**GraphPreviewBody**](GraphPreviewBody.md) |  | 
+
+### Return type
+
+[**GraphPreviewResult**](GraphPreviewResult.md)
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json, application/problem+json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)

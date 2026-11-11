@@ -17,6 +17,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 
@@ -128,6 +129,119 @@ func (a *AnalysisService) executeCreateAnalyse(r requestForAnalysisCreateAnalyse
 					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
 					newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type requestForAnalysisCreateGraphLayersPreview struct {
+	ctx context.Context
+	ApiService *AnalysisService
+	id string
+	graphPreviewBody *GraphPreviewBody
+}
+
+/*
+CreateGraphLayersPreview Preview a graph layer
+
+Works out every output of a graph layer's config, saved or not, on one day of a scenario, and returns a summary of each: a set's item count, a single number's value, or a value per item's count, range and first few items. The graph reads the objects that reach its layer in the scenario's stack, or all of the scenario's objects when the layer isn't in the stack. A graph that fails its check, or a node that fails, is reported in `error`, with the failing node in `node` and the outputs worked out before it. Sample items and their objects need the *View objects* permission, and their objects' property values need *View properties* or *Edit properties*; without them the summaries are returned without those details, and an error raised while working out the graph is replaced by a general one. Calculated like an analysis, with the scenario's layer variables when *Variable controls* is on, and charged as one; an unchanged config, scenario and day is answered from the cache. Returns `400` if the config isn't a graph layer config or the scenario doesn't exist. Requires the *View ideal space*, *View space rule set details* and *View scenario planning* permissions.
+*/
+func (a *AnalysisService) CreateGraphLayersPreview(ctx context.Context, id string, graphPreviewBody GraphPreviewBody) (*GraphPreviewResult, error) {
+	r := requestForAnalysisCreateGraphLayersPreview{
+		ApiService: a,
+		ctx: ctx,
+		id: id,
+		graphPreviewBody: &graphPreviewBody,
+	}
+	result, _, err := a.executeCreateGraphLayersPreview(r)
+	return result, err
+}
+
+func (a *AnalysisService) executeCreateGraphLayersPreview(r requestForAnalysisCreateGraphLayersPreview) (*GraphPreviewResult, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *GraphPreviewResult
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AnalysisAPIService.CreateGraphLayersPreview")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/graph-layers/{id}/preview"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.graphPreviewBody == nil {
+		return localVarReturnValue, nil, reportError("graphPreviewBody is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.graphPreviewBody
+	if r.ctx != nil {
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "AnalysisAPIService.CreateGraphLayersPreview")
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
 		}
 			var v ErrorModel
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))

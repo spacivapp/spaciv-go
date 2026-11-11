@@ -337,6 +337,12 @@ docs/GraphOutput.md
 docs/GraphOverTime.md
 docs/GraphOverTimePoint.md
 docs/GraphPosition.md
+docs/GraphPreviewBody.md
+docs/GraphPreviewObject.md
+docs/GraphPreviewProperty.md
+docs/GraphPreviewResult.md
+docs/GraphPreviewSample.md
+docs/GraphPreviewSocket.md
 docs/GraphRound.md
 docs/GraphSelect.md
 docs/GraphSetProperty.md
@@ -863,6 +869,12 @@ model_graph_output.go
 model_graph_over_time.go
 model_graph_over_time_point.go
 model_graph_position.go
+model_graph_preview_body.go
+model_graph_preview_object.go
+model_graph_preview_property.go
+model_graph_preview_result.go
+model_graph_preview_sample.go
+model_graph_preview_socket.go
 model_graph_round.go
 model_graph_select.go
 model_graph_set_property.go
