@@ -296,6 +296,7 @@ docs/GraphLayerDeleteFailure.md
 docs/GraphLayerJSON.md
 docs/GraphLayerListEntry.md
 docs/GraphLayerUpdate.md
+docs/GraphLayerUser.md
 docs/GraphLayersDeleted.md
 docs/GraphLayersToDelete.md
 docs/GraphLookupEntry.md
@@ -821,6 +822,7 @@ model_graph_layer_delete_failure.go
 model_graph_layer_json.go
 model_graph_layer_list_entry.go
 model_graph_layer_update.go
+model_graph_layer_user.go
 model_graph_layers_deleted.go
 model_graph_layers_to_delete.go
 model_graph_lookup_entry.go

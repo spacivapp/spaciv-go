@@ -14,6 +14,7 @@ Method | HTTP request | Description
 [**DuplicateGraphLayers**](LogicLayersAPI.md#DuplicateGraphLayers) | **Post** /v1/graph-layers/{id}/duplicate | Duplicate a graph layer
 [**DuplicateSpaceRulesets**](LogicLayersAPI.md#DuplicateSpaceRulesets) | **Post** /v1/space-rulesets/{id}/duplicate | Duplicate a logic layer
 [**GetGraphLayers**](LogicLayersAPI.md#GetGraphLayers) | **Get** /v1/graph-layers/{id} | Get a graph layer
+[**GetGraphLayersUsedBy**](LogicLayersAPI.md#GetGraphLayersUsedBy) | **Get** /v1/graph-layers/{id}/used-by | List the graph layers that use a graph layer
 [**GetSpaceRulesets**](LogicLayersAPI.md#GetSpaceRulesets) | **Get** /v1/space-rulesets/{id} | Get a logic layer
 [**GetSpaceRulesetsImage**](LogicLayersAPI.md#GetSpaceRulesetsImage) | **Get** /v1/space-rulesets/{id}/image | Get a space ruleset image
 [**ListGraphLayers**](LogicLayersAPI.md#ListGraphLayers) | **Get** /v1/graph-layers | List graph layers
@@ -669,6 +670,73 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**GraphLayerJSON**](GraphLayerJSON.md)
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## GetGraphLayersUsedBy
+
+> []GraphLayerUser GetGraphLayersUsedBy(ctx, id)
+
+List the graph layers that use a graph layer
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+	id :=  // string | 
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.LogicLayers.GetGraphLayersUsedBy(context.Background(), id)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `LogicLayers.GetGraphLayersUsedBy`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `LogicLayers.GetGraphLayersUsedBy`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**id** | **string** |  | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetGraphLayersUsedByRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+### Return type
+
+[**[]GraphLayerUser**](GraphLayerUser.md)
 
 ### Authorization
 

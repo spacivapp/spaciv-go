@@ -5309,6 +5309,40 @@ paths:
       tags:
       - Logic layers
       x-sdk-params: false
+  /v1/graph-layers/{id}/used-by:
+    get:
+      description: "Returns the graph layers that use this one as a sub-graph or a\
+        \ solve's graph, by name. A graph layer they list can't be deleted until they\
+        \ stop using it. Returns `404` if the graph layer does not exist. Requires\
+        \ the *View space rule set details* permission."
+      operationId: logic-layers_get-graph-layers-used-by
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/GraphLayerUser"
+                type: array
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: List the graph layers that use a graph layer
+      tags:
+      - Logic layers
+      x-sdk-params: false
   /v1/integrations/slack:
     post:
       description: Completes the Slack OAuth flow by exchanging the authorisation
@@ -15162,6 +15196,19 @@ components:
           type: string
         name:
           type: string
+    GraphLayerUser:
+      additionalProperties: false
+      example:
+        name: name
+        id: id
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      required:
+      - id
+      - name
     GraphLayersDeleted:
       additionalProperties: false
       example:
