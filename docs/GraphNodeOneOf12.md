@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**MultiplyAdd** | **map[string]interface{}** |  | 
+**LookupTable** | [**GraphLookupTable**](GraphLookupTable.md) |  | 
 
 ## Methods
 
 ### NewGraphNodeOneOf12
 
-`func NewGraphNodeOneOf12(multiplyAdd map[string]interface{}, ) *GraphNodeOneOf12`
+`func NewGraphNodeOneOf12(lookupTable GraphLookupTable, ) *GraphNodeOneOf12`
 
 NewGraphNodeOneOf12 instantiates a new GraphNodeOneOf12 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewGraphNodeOneOf12WithDefaults instantiates a new GraphNodeOneOf12 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetMultiplyAdd
+### GetLookupTable
 
-`func (o *GraphNodeOneOf12) GetMultiplyAdd() map[string]interface{}`
+`func (o *GraphNodeOneOf12) GetLookupTable() GraphLookupTable`
 
-GetMultiplyAdd returns the MultiplyAdd field if non-nil, zero value otherwise.
+GetLookupTable returns the LookupTable field if non-nil, zero value otherwise.
 
-### GetMultiplyAddOk
+### GetLookupTableOk
 
-`func (o *GraphNodeOneOf12) GetMultiplyAddOk() (*map[string]interface{}, bool)`
+`func (o *GraphNodeOneOf12) GetLookupTableOk() (*GraphLookupTable, bool)`
 
-GetMultiplyAddOk returns a tuple with the MultiplyAdd field if it's non-nil, zero value otherwise
+GetLookupTableOk returns a tuple with the LookupTable field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetMultiplyAdd
+### SetLookupTable
 
-`func (o *GraphNodeOneOf12) SetMultiplyAdd(v map[string]interface{})`
+`func (o *GraphNodeOneOf12) SetLookupTable(v GraphLookupTable)`
 
-SetMultiplyAdd sets MultiplyAdd field to given value.
+SetLookupTable sets LookupTable field to given value.
 
 
 

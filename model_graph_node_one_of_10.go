@@ -22,7 +22,7 @@ var _ MappedNullable = &GraphNodeOneOf10{}
 
 // GraphNodeOneOf10 struct for GraphNodeOneOf10
 type GraphNodeOneOf10 struct {
-	Join GraphJoin `json:"join"`
+	InputObjects map[string]interface{} `json:"inputObjects"`
 }
 
 type _GraphNodeOneOf10 GraphNodeOneOf10
@@ -31,9 +31,9 @@ type _GraphNodeOneOf10 GraphNodeOneOf10
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGraphNodeOneOf10(join GraphJoin) *GraphNodeOneOf10 {
+func NewGraphNodeOneOf10(inputObjects map[string]interface{}) *GraphNodeOneOf10 {
 	this := GraphNodeOneOf10{}
-	this.Join = join
+	this.InputObjects = inputObjects
 	return &this
 }
 
@@ -45,28 +45,28 @@ func NewGraphNodeOneOf10WithDefaults() *GraphNodeOneOf10 {
 	return &this
 }
 
-// GetJoin returns the Join field value
-func (o *GraphNodeOneOf10) GetJoin() GraphJoin {
+// GetInputObjects returns the InputObjects field value
+func (o *GraphNodeOneOf10) GetInputObjects() map[string]interface{} {
 	if o == nil {
-		var ret GraphJoin
+		var ret map[string]interface{}
 		return ret
 	}
 
-	return o.Join
+	return o.InputObjects
 }
 
-// GetJoinOk returns a tuple with the Join field value
+// GetInputObjectsOk returns a tuple with the InputObjects field value
 // and a boolean to check if the value has been set.
-func (o *GraphNodeOneOf10) GetJoinOk() (*GraphJoin, bool) {
+func (o *GraphNodeOneOf10) GetInputObjectsOk() (map[string]interface{}, bool) {
 	if o == nil {
-		return nil, false
+		return map[string]interface{}{}, false
 	}
-	return &o.Join, true
+	return o.InputObjects, true
 }
 
-// SetJoin sets field value
-func (o *GraphNodeOneOf10) SetJoin(v GraphJoin) {
-	o.Join = v
+// SetInputObjects sets field value
+func (o *GraphNodeOneOf10) SetInputObjects(v map[string]interface{}) {
+	o.InputObjects = v
 }
 
 func (o GraphNodeOneOf10) MarshalJSON() ([]byte, error) {
@@ -79,7 +79,7 @@ func (o GraphNodeOneOf10) MarshalJSON() ([]byte, error) {
 
 func (o GraphNodeOneOf10) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["join"] = o.Join
+	toSerialize["inputObjects"] = o.InputObjects
 	return toSerialize, nil
 }
 
@@ -88,7 +88,7 @@ func (o *GraphNodeOneOf10) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"join",
+		"inputObjects",
 	}
 
 	allProperties := make(map[string]interface{})

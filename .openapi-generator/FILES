@@ -285,6 +285,7 @@ docs/GraphCreatedLinkOneOf.md
 docs/GraphCreatedLinkOneOf1.md
 docs/GraphCreatedValue.md
 docs/GraphFilter.md
+docs/GraphFilterGroup.md
 docs/GraphFunction.md
 docs/GraphInput.md
 docs/GraphJoin.md
@@ -322,6 +323,7 @@ docs/GraphNodeOneOf24.md
 docs/GraphNodeOneOf25.md
 docs/GraphNodeOneOf26.md
 docs/GraphNodeOneOf27.md
+docs/GraphNodeOneOf28.md
 docs/GraphNodeOneOf3.md
 docs/GraphNodeOneOf4.md
 docs/GraphNodeOneOf5.md
@@ -808,6 +810,7 @@ model_graph_created_link_one_of.go
 model_graph_created_link_one_of_1.go
 model_graph_created_value.go
 model_graph_filter.go
+model_graph_filter_group.go
 model_graph_function.go
 model_graph_input.go
 model_graph_join.go
@@ -845,6 +848,7 @@ model_graph_node_one_of_24.go
 model_graph_node_one_of_25.go
 model_graph_node_one_of_26.go
 model_graph_node_one_of_27.go
+model_graph_node_one_of_28.go
 model_graph_node_one_of_3.go
 model_graph_node_one_of_4.go
 model_graph_node_one_of_5.go

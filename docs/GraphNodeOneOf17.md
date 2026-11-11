@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**OverTime** | [**GraphOverTime**](GraphOverTime.md) |  | 
+**Or** | **map[string]interface{}** |  | 
 
 ## Methods
 
 ### NewGraphNodeOneOf17
 
-`func NewGraphNodeOneOf17(overTime GraphOverTime, ) *GraphNodeOneOf17`
+`func NewGraphNodeOneOf17(or map[string]interface{}, ) *GraphNodeOneOf17`
 
 NewGraphNodeOneOf17 instantiates a new GraphNodeOneOf17 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewGraphNodeOneOf17WithDefaults instantiates a new GraphNodeOneOf17 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetOverTime
+### GetOr
 
-`func (o *GraphNodeOneOf17) GetOverTime() GraphOverTime`
+`func (o *GraphNodeOneOf17) GetOr() map[string]interface{}`
 
-GetOverTime returns the OverTime field if non-nil, zero value otherwise.
+GetOr returns the Or field if non-nil, zero value otherwise.
 
-### GetOverTimeOk
+### GetOrOk
 
-`func (o *GraphNodeOneOf17) GetOverTimeOk() (*GraphOverTime, bool)`
+`func (o *GraphNodeOneOf17) GetOrOk() (*map[string]interface{}, bool)`
 
-GetOverTimeOk returns a tuple with the OverTime field if it's non-nil, zero value otherwise
+GetOrOk returns a tuple with the Or field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetOverTime
+### SetOr
 
-`func (o *GraphNodeOneOf17) SetOverTime(v GraphOverTime)`
+`func (o *GraphNodeOneOf17) SetOr(v map[string]interface{})`
 
-SetOverTime sets OverTime field to given value.
+SetOr sets Or field to given value.
 
 
 

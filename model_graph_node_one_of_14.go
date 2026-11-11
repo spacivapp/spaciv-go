@@ -22,7 +22,7 @@ var _ MappedNullable = &GraphNodeOneOf14{}
 
 // GraphNodeOneOf14 struct for GraphNodeOneOf14
 type GraphNodeOneOf14 struct {
-	Not map[string]interface{} `json:"not"`
+	Need GraphNeed `json:"need"`
 }
 
 type _GraphNodeOneOf14 GraphNodeOneOf14
@@ -31,9 +31,9 @@ type _GraphNodeOneOf14 GraphNodeOneOf14
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGraphNodeOneOf14(not map[string]interface{}) *GraphNodeOneOf14 {
+func NewGraphNodeOneOf14(need GraphNeed) *GraphNodeOneOf14 {
 	this := GraphNodeOneOf14{}
-	this.Not = not
+	this.Need = need
 	return &this
 }
 
@@ -45,28 +45,28 @@ func NewGraphNodeOneOf14WithDefaults() *GraphNodeOneOf14 {
 	return &this
 }
 
-// GetNot returns the Not field value
-func (o *GraphNodeOneOf14) GetNot() map[string]interface{} {
+// GetNeed returns the Need field value
+func (o *GraphNodeOneOf14) GetNeed() GraphNeed {
 	if o == nil {
-		var ret map[string]interface{}
+		var ret GraphNeed
 		return ret
 	}
 
-	return o.Not
+	return o.Need
 }
 
-// GetNotOk returns a tuple with the Not field value
+// GetNeedOk returns a tuple with the Need field value
 // and a boolean to check if the value has been set.
-func (o *GraphNodeOneOf14) GetNotOk() (map[string]interface{}, bool) {
+func (o *GraphNodeOneOf14) GetNeedOk() (*GraphNeed, bool) {
 	if o == nil {
-		return map[string]interface{}{}, false
+		return nil, false
 	}
-	return o.Not, true
+	return &o.Need, true
 }
 
-// SetNot sets field value
-func (o *GraphNodeOneOf14) SetNot(v map[string]interface{}) {
-	o.Not = v
+// SetNeed sets field value
+func (o *GraphNodeOneOf14) SetNeed(v GraphNeed) {
+	o.Need = v
 }
 
 func (o GraphNodeOneOf14) MarshalJSON() ([]byte, error) {
@@ -79,7 +79,7 @@ func (o GraphNodeOneOf14) MarshalJSON() ([]byte, error) {
 
 func (o GraphNodeOneOf14) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["not"] = o.Not
+	toSerialize["need"] = o.Need
 	return toSerialize, nil
 }
 
@@ -88,7 +88,7 @@ func (o *GraphNodeOneOf14) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"not",
+		"need",
 	}
 
 	allProperties := make(map[string]interface{})

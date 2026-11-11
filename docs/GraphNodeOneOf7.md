@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**GraphInput** | [**GraphInput**](GraphInput.md) |  | 
+**Function** | [**GraphFunction**](GraphFunction.md) |  | 
 
 ## Methods
 
 ### NewGraphNodeOneOf7
 
-`func NewGraphNodeOneOf7(graphInput GraphInput, ) *GraphNodeOneOf7`
+`func NewGraphNodeOneOf7(function GraphFunction, ) *GraphNodeOneOf7`
 
 NewGraphNodeOneOf7 instantiates a new GraphNodeOneOf7 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewGraphNodeOneOf7WithDefaults instantiates a new GraphNodeOneOf7 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetGraphInput
+### GetFunction
 
-`func (o *GraphNodeOneOf7) GetGraphInput() GraphInput`
+`func (o *GraphNodeOneOf7) GetFunction() GraphFunction`
 
-GetGraphInput returns the GraphInput field if non-nil, zero value otherwise.
+GetFunction returns the Function field if non-nil, zero value otherwise.
 
-### GetGraphInputOk
+### GetFunctionOk
 
-`func (o *GraphNodeOneOf7) GetGraphInputOk() (*GraphInput, bool)`
+`func (o *GraphNodeOneOf7) GetFunctionOk() (*GraphFunction, bool)`
 
-GetGraphInputOk returns a tuple with the GraphInput field if it's non-nil, zero value otherwise
+GetFunctionOk returns a tuple with the Function field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetGraphInput
+### SetFunction
 
-`func (o *GraphNodeOneOf7) SetGraphInput(v GraphInput)`
+`func (o *GraphNodeOneOf7) SetFunction(v GraphFunction)`
 
-SetGraphInput sets GraphInput field to given value.
+SetFunction sets Function field to given value.
 
 
 

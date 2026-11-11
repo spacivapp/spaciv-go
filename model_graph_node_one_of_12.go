@@ -22,7 +22,7 @@ var _ MappedNullable = &GraphNodeOneOf12{}
 
 // GraphNodeOneOf12 struct for GraphNodeOneOf12
 type GraphNodeOneOf12 struct {
-	MultiplyAdd map[string]interface{} `json:"multiplyAdd"`
+	LookupTable GraphLookupTable `json:"lookupTable"`
 }
 
 type _GraphNodeOneOf12 GraphNodeOneOf12
@@ -31,9 +31,9 @@ type _GraphNodeOneOf12 GraphNodeOneOf12
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGraphNodeOneOf12(multiplyAdd map[string]interface{}) *GraphNodeOneOf12 {
+func NewGraphNodeOneOf12(lookupTable GraphLookupTable) *GraphNodeOneOf12 {
 	this := GraphNodeOneOf12{}
-	this.MultiplyAdd = multiplyAdd
+	this.LookupTable = lookupTable
 	return &this
 }
 
@@ -45,28 +45,28 @@ func NewGraphNodeOneOf12WithDefaults() *GraphNodeOneOf12 {
 	return &this
 }
 
-// GetMultiplyAdd returns the MultiplyAdd field value
-func (o *GraphNodeOneOf12) GetMultiplyAdd() map[string]interface{} {
+// GetLookupTable returns the LookupTable field value
+func (o *GraphNodeOneOf12) GetLookupTable() GraphLookupTable {
 	if o == nil {
-		var ret map[string]interface{}
+		var ret GraphLookupTable
 		return ret
 	}
 
-	return o.MultiplyAdd
+	return o.LookupTable
 }
 
-// GetMultiplyAddOk returns a tuple with the MultiplyAdd field value
+// GetLookupTableOk returns a tuple with the LookupTable field value
 // and a boolean to check if the value has been set.
-func (o *GraphNodeOneOf12) GetMultiplyAddOk() (map[string]interface{}, bool) {
+func (o *GraphNodeOneOf12) GetLookupTableOk() (*GraphLookupTable, bool) {
 	if o == nil {
-		return map[string]interface{}{}, false
+		return nil, false
 	}
-	return o.MultiplyAdd, true
+	return &o.LookupTable, true
 }
 
-// SetMultiplyAdd sets field value
-func (o *GraphNodeOneOf12) SetMultiplyAdd(v map[string]interface{}) {
-	o.MultiplyAdd = v
+// SetLookupTable sets field value
+func (o *GraphNodeOneOf12) SetLookupTable(v GraphLookupTable) {
+	o.LookupTable = v
 }
 
 func (o GraphNodeOneOf12) MarshalJSON() ([]byte, error) {
@@ -79,7 +79,7 @@ func (o GraphNodeOneOf12) MarshalJSON() ([]byte, error) {
 
 func (o GraphNodeOneOf12) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["multiplyAdd"] = o.MultiplyAdd
+	toSerialize["lookupTable"] = o.LookupTable
 	return toSerialize, nil
 }
 
@@ -88,7 +88,7 @@ func (o *GraphNodeOneOf12) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"multiplyAdd",
+		"lookupTable",
 	}
 
 	allProperties := make(map[string]interface{})

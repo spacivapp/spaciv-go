@@ -22,7 +22,7 @@ var _ MappedNullable = &GraphNodeOneOf6{}
 
 // GraphNodeOneOf6 struct for GraphNodeOneOf6
 type GraphNodeOneOf6 struct {
-	Function GraphFunction `json:"function"`
+	FilterGroup GraphFilterGroup `json:"filterGroup"`
 }
 
 type _GraphNodeOneOf6 GraphNodeOneOf6
@@ -31,9 +31,9 @@ type _GraphNodeOneOf6 GraphNodeOneOf6
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGraphNodeOneOf6(function GraphFunction) *GraphNodeOneOf6 {
+func NewGraphNodeOneOf6(filterGroup GraphFilterGroup) *GraphNodeOneOf6 {
 	this := GraphNodeOneOf6{}
-	this.Function = function
+	this.FilterGroup = filterGroup
 	return &this
 }
 
@@ -45,28 +45,28 @@ func NewGraphNodeOneOf6WithDefaults() *GraphNodeOneOf6 {
 	return &this
 }
 
-// GetFunction returns the Function field value
-func (o *GraphNodeOneOf6) GetFunction() GraphFunction {
+// GetFilterGroup returns the FilterGroup field value
+func (o *GraphNodeOneOf6) GetFilterGroup() GraphFilterGroup {
 	if o == nil {
-		var ret GraphFunction
+		var ret GraphFilterGroup
 		return ret
 	}
 
-	return o.Function
+	return o.FilterGroup
 }
 
-// GetFunctionOk returns a tuple with the Function field value
+// GetFilterGroupOk returns a tuple with the FilterGroup field value
 // and a boolean to check if the value has been set.
-func (o *GraphNodeOneOf6) GetFunctionOk() (*GraphFunction, bool) {
+func (o *GraphNodeOneOf6) GetFilterGroupOk() (*GraphFilterGroup, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Function, true
+	return &o.FilterGroup, true
 }
 
-// SetFunction sets field value
-func (o *GraphNodeOneOf6) SetFunction(v GraphFunction) {
-	o.Function = v
+// SetFilterGroup sets field value
+func (o *GraphNodeOneOf6) SetFilterGroup(v GraphFilterGroup) {
+	o.FilterGroup = v
 }
 
 func (o GraphNodeOneOf6) MarshalJSON() ([]byte, error) {
@@ -79,7 +79,7 @@ func (o GraphNodeOneOf6) MarshalJSON() ([]byte, error) {
 
 func (o GraphNodeOneOf6) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["function"] = o.Function
+	toSerialize["filterGroup"] = o.FilterGroup
 	return toSerialize, nil
 }
 
@@ -88,7 +88,7 @@ func (o *GraphNodeOneOf6) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"function",
+		"filterGroup",
 	}
 
 	allProperties := make(map[string]interface{})

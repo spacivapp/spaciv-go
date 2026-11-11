@@ -14940,6 +14940,15 @@ components:
           type: array
       required:
       - filters
+    GraphFilterGroup:
+      additionalProperties: false
+      properties:
+        filters:
+          items:
+            $ref: "#/components/schemas/FilterGroup"
+          type: array
+      required:
+      - filters
     GraphFunction:
       additionalProperties: false
       properties:
@@ -15283,6 +15292,7 @@ components:
       - $ref: "#/components/schemas/GraphNode_oneOf_25"
       - $ref: "#/components/schemas/GraphNode_oneOf_26"
       - $ref: "#/components/schemas/GraphNode_oneOf_27"
+      - $ref: "#/components/schemas/GraphNode_oneOf_28"
       properties:
         id:
           type: string
@@ -22143,137 +22153,143 @@ components:
       - filter
     GraphNode_oneOf_6:
       properties:
+        filterGroup:
+          $ref: "#/components/schemas/GraphFilterGroup"
+      required:
+      - filterGroup
+    GraphNode_oneOf_7:
+      properties:
         function:
           $ref: "#/components/schemas/GraphFunction"
       required:
       - function
-    GraphNode_oneOf_7:
+    GraphNode_oneOf_8:
       properties:
         graphInput:
           $ref: "#/components/schemas/GraphInput"
       required:
       - graphInput
-    GraphNode_oneOf_8:
+    GraphNode_oneOf_9:
       properties:
         graphOutput:
           $ref: "#/components/schemas/GraphOutput"
       required:
       - graphOutput
-    GraphNode_oneOf_9:
+    GraphNode_oneOf_10:
       properties:
         inputObjects:
           additionalProperties: false
           type: object
       required:
       - inputObjects
-    GraphNode_oneOf_10:
+    GraphNode_oneOf_11:
       properties:
         join:
           $ref: "#/components/schemas/GraphJoin"
       required:
       - join
-    GraphNode_oneOf_11:
+    GraphNode_oneOf_12:
       properties:
         lookupTable:
           $ref: "#/components/schemas/GraphLookupTable"
       required:
       - lookupTable
-    GraphNode_oneOf_12:
+    GraphNode_oneOf_13:
       properties:
         multiplyAdd:
           additionalProperties: false
           type: object
       required:
       - multiplyAdd
-    GraphNode_oneOf_13:
+    GraphNode_oneOf_14:
       properties:
         need:
           $ref: "#/components/schemas/GraphNeed"
       required:
       - need
-    GraphNode_oneOf_14:
+    GraphNode_oneOf_15:
       properties:
         not:
           additionalProperties: false
           type: object
       required:
       - not
-    GraphNode_oneOf_15:
+    GraphNode_oneOf_16:
       properties:
         objectGroup:
           $ref: "#/components/schemas/GraphObjectGroup"
       required:
       - objectGroup
-    GraphNode_oneOf_16:
+    GraphNode_oneOf_17:
       properties:
         or:
           additionalProperties: false
           type: object
       required:
       - or
-    GraphNode_oneOf_17:
+    GraphNode_oneOf_18:
       properties:
         overTime:
           $ref: "#/components/schemas/GraphOverTime"
       required:
       - overTime
-    GraphNode_oneOf_18:
+    GraphNode_oneOf_19:
       properties:
         pair:
           additionalProperties: false
           type: object
       required:
       - pair
-    GraphNode_oneOf_19:
+    GraphNode_oneOf_20:
       properties:
         removeObjects:
           additionalProperties: false
           type: object
       required:
       - removeObjects
-    GraphNode_oneOf_20:
+    GraphNode_oneOf_21:
       properties:
         round:
           $ref: "#/components/schemas/GraphRound"
       required:
       - round
-    GraphNode_oneOf_21:
+    GraphNode_oneOf_22:
       properties:
         select:
           $ref: "#/components/schemas/GraphSelect"
       required:
       - select
-    GraphNode_oneOf_22:
+    GraphNode_oneOf_23:
       properties:
         setProperty:
           $ref: "#/components/schemas/GraphSetProperty"
       required:
       - setProperty
-    GraphNode_oneOf_23:
+    GraphNode_oneOf_24:
       properties:
         setVariable:
           $ref: "#/components/schemas/GraphSetVariable"
       required:
       - setVariable
-    GraphNode_oneOf_24:
+    GraphNode_oneOf_25:
       properties:
         solve:
           $ref: "#/components/schemas/GraphSolve"
       required:
       - solve
-    GraphNode_oneOf_25:
+    GraphNode_oneOf_26:
       properties:
         solveStep:
           $ref: "#/components/schemas/GraphSolveStep"
       required:
       - solveStep
-    GraphNode_oneOf_26:
+    GraphNode_oneOf_27:
       properties:
         subGraph:
           $ref: "#/components/schemas/GraphSubGraph"
       required:
       - subGraph
-    GraphNode_oneOf_27:
+    GraphNode_oneOf_28:
       properties:
         union:
           $ref: "#/components/schemas/GraphUnion"

@@ -40,6 +40,7 @@ type GraphNode struct {
 	GraphNodeOneOf25 *GraphNodeOneOf25
 	GraphNodeOneOf26 *GraphNodeOneOf26
 	GraphNodeOneOf27 *GraphNodeOneOf27
+	GraphNodeOneOf28 *GraphNodeOneOf28
 	GraphNodeOneOf3 *GraphNodeOneOf3
 	GraphNodeOneOf4 *GraphNodeOneOf4
 	GraphNodeOneOf5 *GraphNodeOneOf5
@@ -193,6 +194,13 @@ func GraphNodeOneOf26AsGraphNode(v *GraphNodeOneOf26) GraphNode {
 func GraphNodeOneOf27AsGraphNode(v *GraphNodeOneOf27) GraphNode {
 	return GraphNode{
 		GraphNodeOneOf27: v,
+	}
+}
+
+// GraphNodeOneOf28AsGraphNode is a convenience function that returns GraphNodeOneOf28 wrapped in GraphNode
+func GraphNodeOneOf28AsGraphNode(v *GraphNodeOneOf28) GraphNode {
+	return GraphNode{
+		GraphNodeOneOf28: v,
 	}
 }
 
@@ -607,6 +615,23 @@ func (dst *GraphNode) UnmarshalJSON(data []byte) error {
 		dst.GraphNodeOneOf27 = nil
 	}
 
+	// try to unmarshal data into GraphNodeOneOf28
+	err = newStrictDecoder(data).Decode(&dst.GraphNodeOneOf28)
+	if err == nil {
+		jsonGraphNodeOneOf28, _ := json.Marshal(dst.GraphNodeOneOf28)
+		if string(jsonGraphNodeOneOf28) == "{}" { // empty struct
+			dst.GraphNodeOneOf28 = nil
+		} else {
+			if err = validator.Validate(dst.GraphNodeOneOf28); err != nil {
+				dst.GraphNodeOneOf28 = nil
+			} else {
+				match++
+			}
+		}
+	} else {
+		dst.GraphNodeOneOf28 = nil
+	}
+
 	// try to unmarshal data into GraphNodeOneOf3
 	err = newStrictDecoder(data).Decode(&dst.GraphNodeOneOf3)
 	if err == nil {
@@ -749,6 +774,7 @@ func (dst *GraphNode) UnmarshalJSON(data []byte) error {
 		dst.GraphNodeOneOf25 = nil
 		dst.GraphNodeOneOf26 = nil
 		dst.GraphNodeOneOf27 = nil
+		dst.GraphNodeOneOf28 = nil
 		dst.GraphNodeOneOf3 = nil
 		dst.GraphNodeOneOf4 = nil
 		dst.GraphNodeOneOf5 = nil
@@ -849,6 +875,10 @@ func (src GraphNode) MarshalJSON() ([]byte, error) {
 
 	if src.GraphNodeOneOf27 != nil {
 		return json.Marshal(&src.GraphNodeOneOf27)
+	}
+
+	if src.GraphNodeOneOf28 != nil {
+		return json.Marshal(&src.GraphNodeOneOf28)
 	}
 
 	if src.GraphNodeOneOf3 != nil {
@@ -971,6 +1001,10 @@ func (obj *GraphNode) GetActualInstance() (interface{}) {
 		return obj.GraphNodeOneOf27
 	}
 
+	if obj.GraphNodeOneOf28 != nil {
+		return obj.GraphNodeOneOf28
+	}
+
 	if obj.GraphNodeOneOf3 != nil {
 		return obj.GraphNodeOneOf3
 	}
@@ -1087,6 +1121,10 @@ func (obj GraphNode) GetActualInstanceValue() (interface{}) {
 
 	if obj.GraphNodeOneOf27 != nil {
 		return *obj.GraphNodeOneOf27
+	}
+
+	if obj.GraphNodeOneOf28 != nil {
+		return *obj.GraphNodeOneOf28
 	}
 
 	if obj.GraphNodeOneOf3 != nil {

@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Need** | [**GraphNeed**](GraphNeed.md) |  | 
+**MultiplyAdd** | **map[string]interface{}** |  | 
 
 ## Methods
 
 ### NewGraphNodeOneOf13
 
-`func NewGraphNodeOneOf13(need GraphNeed, ) *GraphNodeOneOf13`
+`func NewGraphNodeOneOf13(multiplyAdd map[string]interface{}, ) *GraphNodeOneOf13`
 
 NewGraphNodeOneOf13 instantiates a new GraphNodeOneOf13 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewGraphNodeOneOf13WithDefaults instantiates a new GraphNodeOneOf13 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetNeed
+### GetMultiplyAdd
 
-`func (o *GraphNodeOneOf13) GetNeed() GraphNeed`
+`func (o *GraphNodeOneOf13) GetMultiplyAdd() map[string]interface{}`
 
-GetNeed returns the Need field if non-nil, zero value otherwise.
+GetMultiplyAdd returns the MultiplyAdd field if non-nil, zero value otherwise.
 
-### GetNeedOk
+### GetMultiplyAddOk
 
-`func (o *GraphNodeOneOf13) GetNeedOk() (*GraphNeed, bool)`
+`func (o *GraphNodeOneOf13) GetMultiplyAddOk() (*map[string]interface{}, bool)`
 
-GetNeedOk returns a tuple with the Need field if it's non-nil, zero value otherwise
+GetMultiplyAddOk returns a tuple with the MultiplyAdd field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetNeed
+### SetMultiplyAdd
 
-`func (o *GraphNodeOneOf13) SetNeed(v GraphNeed)`
+`func (o *GraphNodeOneOf13) SetMultiplyAdd(v map[string]interface{})`
 
-SetNeed sets Need field to given value.
+SetMultiplyAdd sets MultiplyAdd field to given value.
 
 
 

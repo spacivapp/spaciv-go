@@ -22,7 +22,7 @@ var _ MappedNullable = &GraphNodeOneOf22{}
 
 // GraphNodeOneOf22 struct for GraphNodeOneOf22
 type GraphNodeOneOf22 struct {
-	SetProperty GraphSetProperty `json:"setProperty"`
+	Select GraphSelect `json:"select"`
 }
 
 type _GraphNodeOneOf22 GraphNodeOneOf22
@@ -31,9 +31,9 @@ type _GraphNodeOneOf22 GraphNodeOneOf22
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGraphNodeOneOf22(setProperty GraphSetProperty) *GraphNodeOneOf22 {
+func NewGraphNodeOneOf22(select_ GraphSelect) *GraphNodeOneOf22 {
 	this := GraphNodeOneOf22{}
-	this.SetProperty = setProperty
+	this.Select = select_
 	return &this
 }
 
@@ -45,28 +45,28 @@ func NewGraphNodeOneOf22WithDefaults() *GraphNodeOneOf22 {
 	return &this
 }
 
-// GetSetProperty returns the SetProperty field value
-func (o *GraphNodeOneOf22) GetSetProperty() GraphSetProperty {
+// GetSelect returns the Select field value
+func (o *GraphNodeOneOf22) GetSelect() GraphSelect {
 	if o == nil {
-		var ret GraphSetProperty
+		var ret GraphSelect
 		return ret
 	}
 
-	return o.SetProperty
+	return o.Select
 }
 
-// GetSetPropertyOk returns a tuple with the SetProperty field value
+// GetSelectOk returns a tuple with the Select field value
 // and a boolean to check if the value has been set.
-func (o *GraphNodeOneOf22) GetSetPropertyOk() (*GraphSetProperty, bool) {
+func (o *GraphNodeOneOf22) GetSelectOk() (*GraphSelect, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.SetProperty, true
+	return &o.Select, true
 }
 
-// SetSetProperty sets field value
-func (o *GraphNodeOneOf22) SetSetProperty(v GraphSetProperty) {
-	o.SetProperty = v
+// SetSelect sets field value
+func (o *GraphNodeOneOf22) SetSelect(v GraphSelect) {
+	o.Select = v
 }
 
 func (o GraphNodeOneOf22) MarshalJSON() ([]byte, error) {
@@ -79,7 +79,7 @@ func (o GraphNodeOneOf22) MarshalJSON() ([]byte, error) {
 
 func (o GraphNodeOneOf22) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["setProperty"] = o.SetProperty
+	toSerialize["select"] = o.Select
 	return toSerialize, nil
 }
 
@@ -88,7 +88,7 @@ func (o *GraphNodeOneOf22) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"setProperty",
+		"select",
 	}
 
 	allProperties := make(map[string]interface{})

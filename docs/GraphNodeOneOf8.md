@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**GraphOutput** | [**GraphOutput**](GraphOutput.md) |  | 
+**GraphInput** | [**GraphInput**](GraphInput.md) |  | 
 
 ## Methods
 
 ### NewGraphNodeOneOf8
 
-`func NewGraphNodeOneOf8(graphOutput GraphOutput, ) *GraphNodeOneOf8`
+`func NewGraphNodeOneOf8(graphInput GraphInput, ) *GraphNodeOneOf8`
 
 NewGraphNodeOneOf8 instantiates a new GraphNodeOneOf8 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewGraphNodeOneOf8WithDefaults instantiates a new GraphNodeOneOf8 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetGraphOutput
+### GetGraphInput
 
-`func (o *GraphNodeOneOf8) GetGraphOutput() GraphOutput`
+`func (o *GraphNodeOneOf8) GetGraphInput() GraphInput`
 
-GetGraphOutput returns the GraphOutput field if non-nil, zero value otherwise.
+GetGraphInput returns the GraphInput field if non-nil, zero value otherwise.
 
-### GetGraphOutputOk
+### GetGraphInputOk
 
-`func (o *GraphNodeOneOf8) GetGraphOutputOk() (*GraphOutput, bool)`
+`func (o *GraphNodeOneOf8) GetGraphInputOk() (*GraphInput, bool)`
 
-GetGraphOutputOk returns a tuple with the GraphOutput field if it's non-nil, zero value otherwise
+GetGraphInputOk returns a tuple with the GraphInput field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetGraphOutput
+### SetGraphInput
 
-`func (o *GraphNodeOneOf8) SetGraphOutput(v GraphOutput)`
+`func (o *GraphNodeOneOf8) SetGraphInput(v GraphInput)`
 
-SetGraphOutput sets GraphOutput field to given value.
+SetGraphInput sets GraphInput field to given value.
 
 
 

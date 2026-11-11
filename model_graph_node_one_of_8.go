@@ -22,7 +22,7 @@ var _ MappedNullable = &GraphNodeOneOf8{}
 
 // GraphNodeOneOf8 struct for GraphNodeOneOf8
 type GraphNodeOneOf8 struct {
-	GraphOutput GraphOutput `json:"graphOutput"`
+	GraphInput GraphInput `json:"graphInput"`
 }
 
 type _GraphNodeOneOf8 GraphNodeOneOf8
@@ -31,9 +31,9 @@ type _GraphNodeOneOf8 GraphNodeOneOf8
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGraphNodeOneOf8(graphOutput GraphOutput) *GraphNodeOneOf8 {
+func NewGraphNodeOneOf8(graphInput GraphInput) *GraphNodeOneOf8 {
 	this := GraphNodeOneOf8{}
-	this.GraphOutput = graphOutput
+	this.GraphInput = graphInput
 	return &this
 }
 
@@ -45,28 +45,28 @@ func NewGraphNodeOneOf8WithDefaults() *GraphNodeOneOf8 {
 	return &this
 }
 
-// GetGraphOutput returns the GraphOutput field value
-func (o *GraphNodeOneOf8) GetGraphOutput() GraphOutput {
+// GetGraphInput returns the GraphInput field value
+func (o *GraphNodeOneOf8) GetGraphInput() GraphInput {
 	if o == nil {
-		var ret GraphOutput
+		var ret GraphInput
 		return ret
 	}
 
-	return o.GraphOutput
+	return o.GraphInput
 }
 
-// GetGraphOutputOk returns a tuple with the GraphOutput field value
+// GetGraphInputOk returns a tuple with the GraphInput field value
 // and a boolean to check if the value has been set.
-func (o *GraphNodeOneOf8) GetGraphOutputOk() (*GraphOutput, bool) {
+func (o *GraphNodeOneOf8) GetGraphInputOk() (*GraphInput, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.GraphOutput, true
+	return &o.GraphInput, true
 }
 
-// SetGraphOutput sets field value
-func (o *GraphNodeOneOf8) SetGraphOutput(v GraphOutput) {
-	o.GraphOutput = v
+// SetGraphInput sets field value
+func (o *GraphNodeOneOf8) SetGraphInput(v GraphInput) {
+	o.GraphInput = v
 }
 
 func (o GraphNodeOneOf8) MarshalJSON() ([]byte, error) {
@@ -79,7 +79,7 @@ func (o GraphNodeOneOf8) MarshalJSON() ([]byte, error) {
 
 func (o GraphNodeOneOf8) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["graphOutput"] = o.GraphOutput
+	toSerialize["graphInput"] = o.GraphInput
 	return toSerialize, nil
 }
 
@@ -88,7 +88,7 @@ func (o *GraphNodeOneOf8) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"graphOutput",
+		"graphInput",
 	}
 
 	allProperties := make(map[string]interface{})

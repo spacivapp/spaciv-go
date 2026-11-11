@@ -22,7 +22,7 @@ var _ MappedNullable = &GraphNodeOneOf23{}
 
 // GraphNodeOneOf23 struct for GraphNodeOneOf23
 type GraphNodeOneOf23 struct {
-	SetVariable GraphSetVariable `json:"setVariable"`
+	SetProperty GraphSetProperty `json:"setProperty"`
 }
 
 type _GraphNodeOneOf23 GraphNodeOneOf23
@@ -31,9 +31,9 @@ type _GraphNodeOneOf23 GraphNodeOneOf23
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGraphNodeOneOf23(setVariable GraphSetVariable) *GraphNodeOneOf23 {
+func NewGraphNodeOneOf23(setProperty GraphSetProperty) *GraphNodeOneOf23 {
 	this := GraphNodeOneOf23{}
-	this.SetVariable = setVariable
+	this.SetProperty = setProperty
 	return &this
 }
 
@@ -45,28 +45,28 @@ func NewGraphNodeOneOf23WithDefaults() *GraphNodeOneOf23 {
 	return &this
 }
 
-// GetSetVariable returns the SetVariable field value
-func (o *GraphNodeOneOf23) GetSetVariable() GraphSetVariable {
+// GetSetProperty returns the SetProperty field value
+func (o *GraphNodeOneOf23) GetSetProperty() GraphSetProperty {
 	if o == nil {
-		var ret GraphSetVariable
+		var ret GraphSetProperty
 		return ret
 	}
 
-	return o.SetVariable
+	return o.SetProperty
 }
 
-// GetSetVariableOk returns a tuple with the SetVariable field value
+// GetSetPropertyOk returns a tuple with the SetProperty field value
 // and a boolean to check if the value has been set.
-func (o *GraphNodeOneOf23) GetSetVariableOk() (*GraphSetVariable, bool) {
+func (o *GraphNodeOneOf23) GetSetPropertyOk() (*GraphSetProperty, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.SetVariable, true
+	return &o.SetProperty, true
 }
 
-// SetSetVariable sets field value
-func (o *GraphNodeOneOf23) SetSetVariable(v GraphSetVariable) {
-	o.SetVariable = v
+// SetSetProperty sets field value
+func (o *GraphNodeOneOf23) SetSetProperty(v GraphSetProperty) {
+	o.SetProperty = v
 }
 
 func (o GraphNodeOneOf23) MarshalJSON() ([]byte, error) {
@@ -79,7 +79,7 @@ func (o GraphNodeOneOf23) MarshalJSON() ([]byte, error) {
 
 func (o GraphNodeOneOf23) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["setVariable"] = o.SetVariable
+	toSerialize["setProperty"] = o.SetProperty
 	return toSerialize, nil
 }
 
@@ -88,7 +88,7 @@ func (o *GraphNodeOneOf23) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"setVariable",
+		"setProperty",
 	}
 
 	allProperties := make(map[string]interface{})

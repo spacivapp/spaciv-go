@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Select** | [**GraphSelect**](GraphSelect.md) |  | 
+**Round** | [**GraphRound**](GraphRound.md) |  | 
 
 ## Methods
 
 ### NewGraphNodeOneOf21
 
-`func NewGraphNodeOneOf21(select_ GraphSelect, ) *GraphNodeOneOf21`
+`func NewGraphNodeOneOf21(round GraphRound, ) *GraphNodeOneOf21`
 
 NewGraphNodeOneOf21 instantiates a new GraphNodeOneOf21 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewGraphNodeOneOf21WithDefaults instantiates a new GraphNodeOneOf21 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetSelect
+### GetRound
 
-`func (o *GraphNodeOneOf21) GetSelect() GraphSelect`
+`func (o *GraphNodeOneOf21) GetRound() GraphRound`
 
-GetSelect returns the Select field if non-nil, zero value otherwise.
+GetRound returns the Round field if non-nil, zero value otherwise.
 
-### GetSelectOk
+### GetRoundOk
 
-`func (o *GraphNodeOneOf21) GetSelectOk() (*GraphSelect, bool)`
+`func (o *GraphNodeOneOf21) GetRoundOk() (*GraphRound, bool)`
 
-GetSelectOk returns a tuple with the Select field if it's non-nil, zero value otherwise
+GetRoundOk returns a tuple with the Round field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetSelect
+### SetRound
 
-`func (o *GraphNodeOneOf21) SetSelect(v GraphSelect)`
+`func (o *GraphNodeOneOf21) SetRound(v GraphRound)`
 
-SetSelect sets Select field to given value.
+SetRound sets Round field to given value.
 
 
 

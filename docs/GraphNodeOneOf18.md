@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Pair** | **map[string]interface{}** |  | 
+**OverTime** | [**GraphOverTime**](GraphOverTime.md) |  | 
 
 ## Methods
 
 ### NewGraphNodeOneOf18
 
-`func NewGraphNodeOneOf18(pair map[string]interface{}, ) *GraphNodeOneOf18`
+`func NewGraphNodeOneOf18(overTime GraphOverTime, ) *GraphNodeOneOf18`
 
 NewGraphNodeOneOf18 instantiates a new GraphNodeOneOf18 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewGraphNodeOneOf18WithDefaults instantiates a new GraphNodeOneOf18 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetPair
+### GetOverTime
 
-`func (o *GraphNodeOneOf18) GetPair() map[string]interface{}`
+`func (o *GraphNodeOneOf18) GetOverTime() GraphOverTime`
 
-GetPair returns the Pair field if non-nil, zero value otherwise.
+GetOverTime returns the OverTime field if non-nil, zero value otherwise.
 
-### GetPairOk
+### GetOverTimeOk
 
-`func (o *GraphNodeOneOf18) GetPairOk() (*map[string]interface{}, bool)`
+`func (o *GraphNodeOneOf18) GetOverTimeOk() (*GraphOverTime, bool)`
 
-GetPairOk returns a tuple with the Pair field if it's non-nil, zero value otherwise
+GetOverTimeOk returns a tuple with the OverTime field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetPair
+### SetOverTime
 
-`func (o *GraphNodeOneOf18) SetPair(v map[string]interface{})`
+`func (o *GraphNodeOneOf18) SetOverTime(v GraphOverTime)`
 
-SetPair sets Pair field to given value.
+SetOverTime sets OverTime field to given value.
 
 
 

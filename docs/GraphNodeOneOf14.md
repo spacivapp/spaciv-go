@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Not** | **map[string]interface{}** |  | 
+**Need** | [**GraphNeed**](GraphNeed.md) |  | 
 
 ## Methods
 
 ### NewGraphNodeOneOf14
 
-`func NewGraphNodeOneOf14(not map[string]interface{}, ) *GraphNodeOneOf14`
+`func NewGraphNodeOneOf14(need GraphNeed, ) *GraphNodeOneOf14`
 
 NewGraphNodeOneOf14 instantiates a new GraphNodeOneOf14 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewGraphNodeOneOf14WithDefaults instantiates a new GraphNodeOneOf14 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetNot
+### GetNeed
 
-`func (o *GraphNodeOneOf14) GetNot() map[string]interface{}`
+`func (o *GraphNodeOneOf14) GetNeed() GraphNeed`
 
-GetNot returns the Not field if non-nil, zero value otherwise.
+GetNeed returns the Need field if non-nil, zero value otherwise.
 
-### GetNotOk
+### GetNeedOk
 
-`func (o *GraphNodeOneOf14) GetNotOk() (*map[string]interface{}, bool)`
+`func (o *GraphNodeOneOf14) GetNeedOk() (*GraphNeed, bool)`
 
-GetNotOk returns a tuple with the Not field if it's non-nil, zero value otherwise
+GetNeedOk returns a tuple with the Need field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetNot
+### SetNeed
 
-`func (o *GraphNodeOneOf14) SetNot(v map[string]interface{})`
+`func (o *GraphNodeOneOf14) SetNeed(v GraphNeed)`
 
-SetNot sets Not field to given value.
+SetNeed sets Need field to given value.
 
 
 

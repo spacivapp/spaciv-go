@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **Changes** | [**GraphChanges**](GraphChanges.md) |  | 
 **CreateObjects** | [**GraphCreateObjects**](GraphCreateObjects.md) |  | 
 **Filter** | [**GraphFilter**](GraphFilter.md) |  | 
+**FilterGroup** | [**GraphFilterGroup**](GraphFilterGroup.md) |  | 
 **Function** | [**GraphFunction**](GraphFunction.md) |  | 
 **GraphInput** | [**GraphInput**](GraphInput.md) |  | 
 **GraphOutput** | [**GraphOutput**](GraphOutput.md) |  | 
@@ -39,7 +40,7 @@ Name | Type | Description | Notes
 
 ### NewGraphNode
 
-`func NewGraphNode(id string, position NullableGraphPosition, aggregate GraphAggregate, and map[string]interface{}, calculationDate map[string]interface{}, changes GraphChanges, createObjects GraphCreateObjects, filter GraphFilter, function GraphFunction, graphInput GraphInput, graphOutput GraphOutput, inputObjects map[string]interface{}, join GraphJoin, lookupTable GraphLookupTable, multiplyAdd map[string]interface{}, need GraphNeed, not map[string]interface{}, objectGroup GraphObjectGroup, or map[string]interface{}, overTime GraphOverTime, pair map[string]interface{}, removeObjects map[string]interface{}, round GraphRound, select_ GraphSelect, setProperty GraphSetProperty, setVariable GraphSetVariable, solve GraphSolve, solveStep GraphSolveStep, subGraph GraphSubGraph, union GraphUnion, ) *GraphNode`
+`func NewGraphNode(id string, position NullableGraphPosition, aggregate GraphAggregate, and map[string]interface{}, calculationDate map[string]interface{}, changes GraphChanges, createObjects GraphCreateObjects, filter GraphFilter, filterGroup GraphFilterGroup, function GraphFunction, graphInput GraphInput, graphOutput GraphOutput, inputObjects map[string]interface{}, join GraphJoin, lookupTable GraphLookupTable, multiplyAdd map[string]interface{}, need GraphNeed, not map[string]interface{}, objectGroup GraphObjectGroup, or map[string]interface{}, overTime GraphOverTime, pair map[string]interface{}, removeObjects map[string]interface{}, round GraphRound, select_ GraphSelect, setProperty GraphSetProperty, setVariable GraphSetVariable, solve GraphSolve, solveStep GraphSolveStep, subGraph GraphSubGraph, union GraphUnion, ) *GraphNode`
 
 NewGraphNode instantiates a new GraphNode object
 This constructor will assign default values to properties that have it defined,
@@ -222,6 +223,26 @@ and a boolean to check if the value has been set.
 `func (o *GraphNode) SetFilter(v GraphFilter)`
 
 SetFilter sets Filter field to given value.
+
+
+### GetFilterGroup
+
+`func (o *GraphNode) GetFilterGroup() GraphFilterGroup`
+
+GetFilterGroup returns the FilterGroup field if non-nil, zero value otherwise.
+
+### GetFilterGroupOk
+
+`func (o *GraphNode) GetFilterGroupOk() (*GraphFilterGroup, bool)`
+
+GetFilterGroupOk returns a tuple with the FilterGroup field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetFilterGroup
+
+`func (o *GraphNode) SetFilterGroup(v GraphFilterGroup)`
+
+SetFilterGroup sets FilterGroup field to given value.
 
 
 ### GetFunction

@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Union** | [**GraphUnion**](GraphUnion.md) |  | 
+**SubGraph** | [**GraphSubGraph**](GraphSubGraph.md) |  | 
 
 ## Methods
 
 ### NewGraphNodeOneOf27
 
-`func NewGraphNodeOneOf27(union GraphUnion, ) *GraphNodeOneOf27`
+`func NewGraphNodeOneOf27(subGraph GraphSubGraph, ) *GraphNodeOneOf27`
 
 NewGraphNodeOneOf27 instantiates a new GraphNodeOneOf27 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewGraphNodeOneOf27WithDefaults instantiates a new GraphNodeOneOf27 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetUnion
+### GetSubGraph
 
-`func (o *GraphNodeOneOf27) GetUnion() GraphUnion`
+`func (o *GraphNodeOneOf27) GetSubGraph() GraphSubGraph`
 
-GetUnion returns the Union field if non-nil, zero value otherwise.
+GetSubGraph returns the SubGraph field if non-nil, zero value otherwise.
 
-### GetUnionOk
+### GetSubGraphOk
 
-`func (o *GraphNodeOneOf27) GetUnionOk() (*GraphUnion, bool)`
+`func (o *GraphNodeOneOf27) GetSubGraphOk() (*GraphSubGraph, bool)`
 
-GetUnionOk returns a tuple with the Union field if it's non-nil, zero value otherwise
+GetSubGraphOk returns a tuple with the SubGraph field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetUnion
+### SetSubGraph
 
-`func (o *GraphNodeOneOf27) SetUnion(v GraphUnion)`
+`func (o *GraphNodeOneOf27) SetSubGraph(v GraphSubGraph)`
 
-SetUnion sets Union field to given value.
+SetSubGraph sets SubGraph field to given value.
 
 
 

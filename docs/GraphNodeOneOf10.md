@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Join** | [**GraphJoin**](GraphJoin.md) |  | 
+**InputObjects** | **map[string]interface{}** |  | 
 
 ## Methods
 
 ### NewGraphNodeOneOf10
 
-`func NewGraphNodeOneOf10(join GraphJoin, ) *GraphNodeOneOf10`
+`func NewGraphNodeOneOf10(inputObjects map[string]interface{}, ) *GraphNodeOneOf10`
 
 NewGraphNodeOneOf10 instantiates a new GraphNodeOneOf10 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewGraphNodeOneOf10WithDefaults instantiates a new GraphNodeOneOf10 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetJoin
+### GetInputObjects
 
-`func (o *GraphNodeOneOf10) GetJoin() GraphJoin`
+`func (o *GraphNodeOneOf10) GetInputObjects() map[string]interface{}`
 
-GetJoin returns the Join field if non-nil, zero value otherwise.
+GetInputObjects returns the InputObjects field if non-nil, zero value otherwise.
 
-### GetJoinOk
+### GetInputObjectsOk
 
-`func (o *GraphNodeOneOf10) GetJoinOk() (*GraphJoin, bool)`
+`func (o *GraphNodeOneOf10) GetInputObjectsOk() (*map[string]interface{}, bool)`
 
-GetJoinOk returns a tuple with the Join field if it's non-nil, zero value otherwise
+GetInputObjectsOk returns a tuple with the InputObjects field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetJoin
+### SetInputObjects
 
-`func (o *GraphNodeOneOf10) SetJoin(v GraphJoin)`
+`func (o *GraphNodeOneOf10) SetInputObjects(v map[string]interface{})`
 
-SetJoin sets Join field to given value.
+SetInputObjects sets InputObjects field to given value.
 
 
 

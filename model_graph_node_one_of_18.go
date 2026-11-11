@@ -22,7 +22,7 @@ var _ MappedNullable = &GraphNodeOneOf18{}
 
 // GraphNodeOneOf18 struct for GraphNodeOneOf18
 type GraphNodeOneOf18 struct {
-	Pair map[string]interface{} `json:"pair"`
+	OverTime GraphOverTime `json:"overTime"`
 }
 
 type _GraphNodeOneOf18 GraphNodeOneOf18
@@ -31,9 +31,9 @@ type _GraphNodeOneOf18 GraphNodeOneOf18
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGraphNodeOneOf18(pair map[string]interface{}) *GraphNodeOneOf18 {
+func NewGraphNodeOneOf18(overTime GraphOverTime) *GraphNodeOneOf18 {
 	this := GraphNodeOneOf18{}
-	this.Pair = pair
+	this.OverTime = overTime
 	return &this
 }
 
@@ -45,28 +45,28 @@ func NewGraphNodeOneOf18WithDefaults() *GraphNodeOneOf18 {
 	return &this
 }
 
-// GetPair returns the Pair field value
-func (o *GraphNodeOneOf18) GetPair() map[string]interface{} {
+// GetOverTime returns the OverTime field value
+func (o *GraphNodeOneOf18) GetOverTime() GraphOverTime {
 	if o == nil {
-		var ret map[string]interface{}
+		var ret GraphOverTime
 		return ret
 	}
 
-	return o.Pair
+	return o.OverTime
 }
 
-// GetPairOk returns a tuple with the Pair field value
+// GetOverTimeOk returns a tuple with the OverTime field value
 // and a boolean to check if the value has been set.
-func (o *GraphNodeOneOf18) GetPairOk() (map[string]interface{}, bool) {
+func (o *GraphNodeOneOf18) GetOverTimeOk() (*GraphOverTime, bool) {
 	if o == nil {
-		return map[string]interface{}{}, false
+		return nil, false
 	}
-	return o.Pair, true
+	return &o.OverTime, true
 }
 
-// SetPair sets field value
-func (o *GraphNodeOneOf18) SetPair(v map[string]interface{}) {
-	o.Pair = v
+// SetOverTime sets field value
+func (o *GraphNodeOneOf18) SetOverTime(v GraphOverTime) {
+	o.OverTime = v
 }
 
 func (o GraphNodeOneOf18) MarshalJSON() ([]byte, error) {
@@ -79,7 +79,7 @@ func (o GraphNodeOneOf18) MarshalJSON() ([]byte, error) {
 
 func (o GraphNodeOneOf18) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["pair"] = o.Pair
+	toSerialize["overTime"] = o.OverTime
 	return toSerialize, nil
 }
 
@@ -88,7 +88,7 @@ func (o *GraphNodeOneOf18) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"pair",
+		"overTime",
 	}
 
 	allProperties := make(map[string]interface{})

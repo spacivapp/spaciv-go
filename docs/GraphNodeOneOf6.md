@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Function** | [**GraphFunction**](GraphFunction.md) |  | 
+**FilterGroup** | [**GraphFilterGroup**](GraphFilterGroup.md) |  | 
 
 ## Methods
 
 ### NewGraphNodeOneOf6
 
-`func NewGraphNodeOneOf6(function GraphFunction, ) *GraphNodeOneOf6`
+`func NewGraphNodeOneOf6(filterGroup GraphFilterGroup, ) *GraphNodeOneOf6`
 
 NewGraphNodeOneOf6 instantiates a new GraphNodeOneOf6 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewGraphNodeOneOf6WithDefaults instantiates a new GraphNodeOneOf6 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetFunction
+### GetFilterGroup
 
-`func (o *GraphNodeOneOf6) GetFunction() GraphFunction`
+`func (o *GraphNodeOneOf6) GetFilterGroup() GraphFilterGroup`
 
-GetFunction returns the Function field if non-nil, zero value otherwise.
+GetFilterGroup returns the FilterGroup field if non-nil, zero value otherwise.
 
-### GetFunctionOk
+### GetFilterGroupOk
 
-`func (o *GraphNodeOneOf6) GetFunctionOk() (*GraphFunction, bool)`
+`func (o *GraphNodeOneOf6) GetFilterGroupOk() (*GraphFilterGroup, bool)`
 
-GetFunctionOk returns a tuple with the Function field if it's non-nil, zero value otherwise
+GetFilterGroupOk returns a tuple with the FilterGroup field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetFunction
+### SetFilterGroup
 
-`func (o *GraphNodeOneOf6) SetFunction(v GraphFunction)`
+`func (o *GraphNodeOneOf6) SetFilterGroup(v GraphFilterGroup)`
 
-SetFunction sets Function field to given value.
+SetFilterGroup sets FilterGroup field to given value.
 
 
 

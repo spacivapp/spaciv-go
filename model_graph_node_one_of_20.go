@@ -22,7 +22,7 @@ var _ MappedNullable = &GraphNodeOneOf20{}
 
 // GraphNodeOneOf20 struct for GraphNodeOneOf20
 type GraphNodeOneOf20 struct {
-	Round GraphRound `json:"round"`
+	RemoveObjects map[string]interface{} `json:"removeObjects"`
 }
 
 type _GraphNodeOneOf20 GraphNodeOneOf20
@@ -31,9 +31,9 @@ type _GraphNodeOneOf20 GraphNodeOneOf20
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGraphNodeOneOf20(round GraphRound) *GraphNodeOneOf20 {
+func NewGraphNodeOneOf20(removeObjects map[string]interface{}) *GraphNodeOneOf20 {
 	this := GraphNodeOneOf20{}
-	this.Round = round
+	this.RemoveObjects = removeObjects
 	return &this
 }
 
@@ -45,28 +45,28 @@ func NewGraphNodeOneOf20WithDefaults() *GraphNodeOneOf20 {
 	return &this
 }
 
-// GetRound returns the Round field value
-func (o *GraphNodeOneOf20) GetRound() GraphRound {
+// GetRemoveObjects returns the RemoveObjects field value
+func (o *GraphNodeOneOf20) GetRemoveObjects() map[string]interface{} {
 	if o == nil {
-		var ret GraphRound
+		var ret map[string]interface{}
 		return ret
 	}
 
-	return o.Round
+	return o.RemoveObjects
 }
 
-// GetRoundOk returns a tuple with the Round field value
+// GetRemoveObjectsOk returns a tuple with the RemoveObjects field value
 // and a boolean to check if the value has been set.
-func (o *GraphNodeOneOf20) GetRoundOk() (*GraphRound, bool) {
+func (o *GraphNodeOneOf20) GetRemoveObjectsOk() (map[string]interface{}, bool) {
 	if o == nil {
-		return nil, false
+		return map[string]interface{}{}, false
 	}
-	return &o.Round, true
+	return o.RemoveObjects, true
 }
 
-// SetRound sets field value
-func (o *GraphNodeOneOf20) SetRound(v GraphRound) {
-	o.Round = v
+// SetRemoveObjects sets field value
+func (o *GraphNodeOneOf20) SetRemoveObjects(v map[string]interface{}) {
+	o.RemoveObjects = v
 }
 
 func (o GraphNodeOneOf20) MarshalJSON() ([]byte, error) {
@@ -79,7 +79,7 @@ func (o GraphNodeOneOf20) MarshalJSON() ([]byte, error) {
 
 func (o GraphNodeOneOf20) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["round"] = o.Round
+	toSerialize["removeObjects"] = o.RemoveObjects
 	return toSerialize, nil
 }
 
@@ -88,7 +88,7 @@ func (o *GraphNodeOneOf20) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"round",
+		"removeObjects",
 	}
 
 	allProperties := make(map[string]interface{})

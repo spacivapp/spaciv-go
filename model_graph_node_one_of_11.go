@@ -22,7 +22,7 @@ var _ MappedNullable = &GraphNodeOneOf11{}
 
 // GraphNodeOneOf11 struct for GraphNodeOneOf11
 type GraphNodeOneOf11 struct {
-	LookupTable GraphLookupTable `json:"lookupTable"`
+	Join GraphJoin `json:"join"`
 }
 
 type _GraphNodeOneOf11 GraphNodeOneOf11
@@ -31,9 +31,9 @@ type _GraphNodeOneOf11 GraphNodeOneOf11
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGraphNodeOneOf11(lookupTable GraphLookupTable) *GraphNodeOneOf11 {
+func NewGraphNodeOneOf11(join GraphJoin) *GraphNodeOneOf11 {
 	this := GraphNodeOneOf11{}
-	this.LookupTable = lookupTable
+	this.Join = join
 	return &this
 }
 
@@ -45,28 +45,28 @@ func NewGraphNodeOneOf11WithDefaults() *GraphNodeOneOf11 {
 	return &this
 }
 
-// GetLookupTable returns the LookupTable field value
-func (o *GraphNodeOneOf11) GetLookupTable() GraphLookupTable {
+// GetJoin returns the Join field value
+func (o *GraphNodeOneOf11) GetJoin() GraphJoin {
 	if o == nil {
-		var ret GraphLookupTable
+		var ret GraphJoin
 		return ret
 	}
 
-	return o.LookupTable
+	return o.Join
 }
 
-// GetLookupTableOk returns a tuple with the LookupTable field value
+// GetJoinOk returns a tuple with the Join field value
 // and a boolean to check if the value has been set.
-func (o *GraphNodeOneOf11) GetLookupTableOk() (*GraphLookupTable, bool) {
+func (o *GraphNodeOneOf11) GetJoinOk() (*GraphJoin, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.LookupTable, true
+	return &o.Join, true
 }
 
-// SetLookupTable sets field value
-func (o *GraphNodeOneOf11) SetLookupTable(v GraphLookupTable) {
-	o.LookupTable = v
+// SetJoin sets field value
+func (o *GraphNodeOneOf11) SetJoin(v GraphJoin) {
+	o.Join = v
 }
 
 func (o GraphNodeOneOf11) MarshalJSON() ([]byte, error) {
@@ -79,7 +79,7 @@ func (o GraphNodeOneOf11) MarshalJSON() ([]byte, error) {
 
 func (o GraphNodeOneOf11) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["lookupTable"] = o.LookupTable
+	toSerialize["join"] = o.Join
 	return toSerialize, nil
 }
 
@@ -88,7 +88,7 @@ func (o *GraphNodeOneOf11) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"lookupTable",
+		"join",
 	}
 
 	allProperties := make(map[string]interface{})

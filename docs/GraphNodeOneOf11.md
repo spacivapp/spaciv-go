@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**LookupTable** | [**GraphLookupTable**](GraphLookupTable.md) |  | 
+**Join** | [**GraphJoin**](GraphJoin.md) |  | 
 
 ## Methods
 
 ### NewGraphNodeOneOf11
 
-`func NewGraphNodeOneOf11(lookupTable GraphLookupTable, ) *GraphNodeOneOf11`
+`func NewGraphNodeOneOf11(join GraphJoin, ) *GraphNodeOneOf11`
 
 NewGraphNodeOneOf11 instantiates a new GraphNodeOneOf11 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewGraphNodeOneOf11WithDefaults instantiates a new GraphNodeOneOf11 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetLookupTable
+### GetJoin
 
-`func (o *GraphNodeOneOf11) GetLookupTable() GraphLookupTable`
+`func (o *GraphNodeOneOf11) GetJoin() GraphJoin`
 
-GetLookupTable returns the LookupTable field if non-nil, zero value otherwise.
+GetJoin returns the Join field if non-nil, zero value otherwise.
 
-### GetLookupTableOk
+### GetJoinOk
 
-`func (o *GraphNodeOneOf11) GetLookupTableOk() (*GraphLookupTable, bool)`
+`func (o *GraphNodeOneOf11) GetJoinOk() (*GraphJoin, bool)`
 
-GetLookupTableOk returns a tuple with the LookupTable field if it's non-nil, zero value otherwise
+GetJoinOk returns a tuple with the Join field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetLookupTable
+### SetJoin
 
-`func (o *GraphNodeOneOf11) SetLookupTable(v GraphLookupTable)`
+`func (o *GraphNodeOneOf11) SetJoin(v GraphJoin)`
 
-SetLookupTable sets LookupTable field to given value.
+SetJoin sets Join field to given value.
 
 
 

@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**SetVariable** | [**GraphSetVariable**](GraphSetVariable.md) |  | 
+**SetProperty** | [**GraphSetProperty**](GraphSetProperty.md) |  | 
 
 ## Methods
 
 ### NewGraphNodeOneOf23
 
-`func NewGraphNodeOneOf23(setVariable GraphSetVariable, ) *GraphNodeOneOf23`
+`func NewGraphNodeOneOf23(setProperty GraphSetProperty, ) *GraphNodeOneOf23`
 
 NewGraphNodeOneOf23 instantiates a new GraphNodeOneOf23 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewGraphNodeOneOf23WithDefaults instantiates a new GraphNodeOneOf23 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetSetVariable
+### GetSetProperty
 
-`func (o *GraphNodeOneOf23) GetSetVariable() GraphSetVariable`
+`func (o *GraphNodeOneOf23) GetSetProperty() GraphSetProperty`
 
-GetSetVariable returns the SetVariable field if non-nil, zero value otherwise.
+GetSetProperty returns the SetProperty field if non-nil, zero value otherwise.
 
-### GetSetVariableOk
+### GetSetPropertyOk
 
-`func (o *GraphNodeOneOf23) GetSetVariableOk() (*GraphSetVariable, bool)`
+`func (o *GraphNodeOneOf23) GetSetPropertyOk() (*GraphSetProperty, bool)`
 
-GetSetVariableOk returns a tuple with the SetVariable field if it's non-nil, zero value otherwise
+GetSetPropertyOk returns a tuple with the SetProperty field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetSetVariable
+### SetSetProperty
 
-`func (o *GraphNodeOneOf23) SetSetVariable(v GraphSetVariable)`
+`func (o *GraphNodeOneOf23) SetSetProperty(v GraphSetProperty)`
 
-SetSetVariable sets SetVariable field to given value.
+SetSetProperty sets SetProperty field to given value.
 
 
 
