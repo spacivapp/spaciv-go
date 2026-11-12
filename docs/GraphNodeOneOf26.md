@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Solve** | [**GraphSolve**](GraphSolve.md) |  | 
+**SetVariable** | [**GraphSetVariable**](GraphSetVariable.md) |  | 
 
 ## Methods
 
 ### NewGraphNodeOneOf26
 
-`func NewGraphNodeOneOf26(solve GraphSolve, ) *GraphNodeOneOf26`
+`func NewGraphNodeOneOf26(setVariable GraphSetVariable, ) *GraphNodeOneOf26`
 
 NewGraphNodeOneOf26 instantiates a new GraphNodeOneOf26 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewGraphNodeOneOf26WithDefaults instantiates a new GraphNodeOneOf26 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetSolve
+### GetSetVariable
 
-`func (o *GraphNodeOneOf26) GetSolve() GraphSolve`
+`func (o *GraphNodeOneOf26) GetSetVariable() GraphSetVariable`
 
-GetSolve returns the Solve field if non-nil, zero value otherwise.
+GetSetVariable returns the SetVariable field if non-nil, zero value otherwise.
 
-### GetSolveOk
+### GetSetVariableOk
 
-`func (o *GraphNodeOneOf26) GetSolveOk() (*GraphSolve, bool)`
+`func (o *GraphNodeOneOf26) GetSetVariableOk() (*GraphSetVariable, bool)`
 
-GetSolveOk returns a tuple with the Solve field if it's non-nil, zero value otherwise
+GetSetVariableOk returns a tuple with the SetVariable field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetSolve
+### SetSetVariable
 
-`func (o *GraphNodeOneOf26) SetSolve(v GraphSolve)`
+`func (o *GraphNodeOneOf26) SetSetVariable(v GraphSetVariable)`
 
-SetSolve sets Solve field to given value.
+SetSetVariable sets SetVariable field to given value.
 
 
 

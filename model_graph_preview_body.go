@@ -25,6 +25,8 @@ type GraphPreviewBody struct {
 	Config interface{} `json:"config"`
 	// The day to work the graph out on, as days since 1970-01-01.
 	Day int64 `json:"day"`
+	// An output to list item by item, a page at a time, in the result's table.
+	Inspect *GraphPreviewInspectBody `json:"inspect,omitempty"`
 	// The scenario whose stack the graph's objects come from.
 	Scenario string `json:"scenario"`
 }
@@ -101,6 +103,38 @@ func (o *GraphPreviewBody) SetDay(v int64) {
 	o.Day = v
 }
 
+// GetInspect returns the Inspect field value if set, zero value otherwise.
+func (o *GraphPreviewBody) GetInspect() GraphPreviewInspectBody {
+	if o == nil || IsNil(o.Inspect) {
+		var ret GraphPreviewInspectBody
+		return ret
+	}
+	return *o.Inspect
+}
+
+// GetInspectOk returns a tuple with the Inspect field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *GraphPreviewBody) GetInspectOk() (*GraphPreviewInspectBody, bool) {
+	if o == nil || IsNil(o.Inspect) {
+		return nil, false
+	}
+	return o.Inspect, true
+}
+
+// HasInspect returns a boolean if a field has been set.
+func (o *GraphPreviewBody) HasInspect() bool {
+	if o != nil && !IsNil(o.Inspect) {
+		return true
+	}
+
+	return false
+}
+
+// SetInspect gets a reference to the given GraphPreviewInspectBody and assigns it to the Inspect field.
+func (o *GraphPreviewBody) SetInspect(v GraphPreviewInspectBody) {
+	o.Inspect = &v
+}
+
 // GetScenario returns the Scenario field value
 func (o *GraphPreviewBody) GetScenario() string {
 	if o == nil {
@@ -139,6 +173,9 @@ func (o GraphPreviewBody) ToMap() (map[string]interface{}, error) {
 		toSerialize["config"] = o.Config
 	}
 	toSerialize["day"] = o.Day
+	if !IsNil(o.Inspect) {
+		toSerialize["inspect"] = o.Inspect
+	}
 	toSerialize["scenario"] = o.Scenario
 	return toSerialize, nil
 }

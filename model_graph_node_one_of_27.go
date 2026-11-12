@@ -22,7 +22,7 @@ var _ MappedNullable = &GraphNodeOneOf27{}
 
 // GraphNodeOneOf27 struct for GraphNodeOneOf27
 type GraphNodeOneOf27 struct {
-	SolveStep GraphSolveStep `json:"solveStep"`
+	Solve GraphSolve `json:"solve"`
 }
 
 type _GraphNodeOneOf27 GraphNodeOneOf27
@@ -31,9 +31,9 @@ type _GraphNodeOneOf27 GraphNodeOneOf27
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGraphNodeOneOf27(solveStep GraphSolveStep) *GraphNodeOneOf27 {
+func NewGraphNodeOneOf27(solve GraphSolve) *GraphNodeOneOf27 {
 	this := GraphNodeOneOf27{}
-	this.SolveStep = solveStep
+	this.Solve = solve
 	return &this
 }
 
@@ -45,28 +45,28 @@ func NewGraphNodeOneOf27WithDefaults() *GraphNodeOneOf27 {
 	return &this
 }
 
-// GetSolveStep returns the SolveStep field value
-func (o *GraphNodeOneOf27) GetSolveStep() GraphSolveStep {
+// GetSolve returns the Solve field value
+func (o *GraphNodeOneOf27) GetSolve() GraphSolve {
 	if o == nil {
-		var ret GraphSolveStep
+		var ret GraphSolve
 		return ret
 	}
 
-	return o.SolveStep
+	return o.Solve
 }
 
-// GetSolveStepOk returns a tuple with the SolveStep field value
+// GetSolveOk returns a tuple with the Solve field value
 // and a boolean to check if the value has been set.
-func (o *GraphNodeOneOf27) GetSolveStepOk() (*GraphSolveStep, bool) {
+func (o *GraphNodeOneOf27) GetSolveOk() (*GraphSolve, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.SolveStep, true
+	return &o.Solve, true
 }
 
-// SetSolveStep sets field value
-func (o *GraphNodeOneOf27) SetSolveStep(v GraphSolveStep) {
-	o.SolveStep = v
+// SetSolve sets field value
+func (o *GraphNodeOneOf27) SetSolve(v GraphSolve) {
+	o.Solve = v
 }
 
 func (o GraphNodeOneOf27) MarshalJSON() ([]byte, error) {
@@ -79,7 +79,7 @@ func (o GraphNodeOneOf27) MarshalJSON() ([]byte, error) {
 
 func (o GraphNodeOneOf27) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["solveStep"] = o.SolveStep
+	toSerialize["solve"] = o.Solve
 	return toSerialize, nil
 }
 
@@ -88,7 +88,7 @@ func (o *GraphNodeOneOf27) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"solveStep",
+		"solve",
 	}
 
 	allProperties := make(map[string]interface{})

@@ -11,7 +11,6 @@ Name | Type | Description | Notes
 **Min** | **float64** |  | 
 **Node** | **string** |  | 
 **PerItem** | **bool** |  | 
-**Samples** | [**[]GraphPreviewSample**](GraphPreviewSample.md) |  | 
 **Set** | **bool** |  | 
 **Socket** | **string** |  | 
 **Sum** | **float64** |  | 
@@ -21,7 +20,7 @@ Name | Type | Description | Notes
 
 ### NewGraphPreviewSocket
 
-`func NewGraphPreviewSocket(error_ string, errors string, items string, max float64, min float64, node string, perItem bool, samples []GraphPreviewSample, set bool, socket string, sum float64, value float64, ) *GraphPreviewSocket`
+`func NewGraphPreviewSocket(error_ string, errors string, items string, max float64, min float64, node string, perItem bool, set bool, socket string, sum float64, value float64, ) *GraphPreviewSocket`
 
 NewGraphPreviewSocket instantiates a new GraphPreviewSocket object
 This constructor will assign default values to properties that have it defined,
@@ -174,26 +173,6 @@ and a boolean to check if the value has been set.
 `func (o *GraphPreviewSocket) SetPerItem(v bool)`
 
 SetPerItem sets PerItem field to given value.
-
-
-### GetSamples
-
-`func (o *GraphPreviewSocket) GetSamples() []GraphPreviewSample`
-
-GetSamples returns the Samples field if non-nil, zero value otherwise.
-
-### GetSamplesOk
-
-`func (o *GraphPreviewSocket) GetSamplesOk() (*[]GraphPreviewSample, bool)`
-
-GetSamplesOk returns a tuple with the Samples field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetSamples
-
-`func (o *GraphPreviewSocket) SetSamples(v []GraphPreviewSample)`
-
-SetSamples sets Samples field to given value.
 
 
 ### GetSet

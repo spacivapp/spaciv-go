@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Config** | **interface{}** |  | 
 **Day** | **int64** | The day to work the graph out on, as days since 1970-01-01. | 
+**Inspect** | Pointer to [**GraphPreviewInspectBody**](GraphPreviewInspectBody.md) | An output to list item by item, a page at a time, in the result&#39;s table. | [optional] 
 **Scenario** | **string** | The scenario whose stack the graph&#39;s objects come from. | 
 
 ## Methods
@@ -76,6 +77,31 @@ and a boolean to check if the value has been set.
 
 SetDay sets Day field to given value.
 
+
+### GetInspect
+
+`func (o *GraphPreviewBody) GetInspect() GraphPreviewInspectBody`
+
+GetInspect returns the Inspect field if non-nil, zero value otherwise.
+
+### GetInspectOk
+
+`func (o *GraphPreviewBody) GetInspectOk() (*GraphPreviewInspectBody, bool)`
+
+GetInspectOk returns a tuple with the Inspect field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetInspect
+
+`func (o *GraphPreviewBody) SetInspect(v GraphPreviewInspectBody)`
+
+SetInspect sets Inspect field to given value.
+
+### HasInspect
+
+`func (o *GraphPreviewBody) HasInspect() bool`
+
+HasInspect returns a boolean if a field has been set.
 
 ### GetScenario
 

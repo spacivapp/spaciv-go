@@ -29,7 +29,6 @@ type GraphPreviewSocket struct {
 	Min float64 `json:"min"`
 	Node string `json:"node"`
 	PerItem bool `json:"perItem"`
-	Samples []GraphPreviewSample `json:"samples"`
 	Set bool `json:"set"`
 	Socket string `json:"socket"`
 	Sum float64 `json:"sum"`
@@ -42,7 +41,7 @@ type _GraphPreviewSocket GraphPreviewSocket
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGraphPreviewSocket(error_ string, errors string, items string, max float64, min float64, node string, perItem bool, samples []GraphPreviewSample, set bool, socket string, sum float64, value float64) *GraphPreviewSocket {
+func NewGraphPreviewSocket(error_ string, errors string, items string, max float64, min float64, node string, perItem bool, set bool, socket string, sum float64, value float64) *GraphPreviewSocket {
 	this := GraphPreviewSocket{}
 	this.Error = error_
 	this.Errors = errors
@@ -51,7 +50,6 @@ func NewGraphPreviewSocket(error_ string, errors string, items string, max float
 	this.Min = min
 	this.Node = node
 	this.PerItem = perItem
-	this.Samples = samples
 	this.Set = set
 	this.Socket = socket
 	this.Sum = sum
@@ -235,30 +233,6 @@ func (o *GraphPreviewSocket) SetPerItem(v bool) {
 	o.PerItem = v
 }
 
-// GetSamples returns the Samples field value
-func (o *GraphPreviewSocket) GetSamples() []GraphPreviewSample {
-	if o == nil {
-		var ret []GraphPreviewSample
-		return ret
-	}
-
-	return o.Samples
-}
-
-// GetSamplesOk returns a tuple with the Samples field value
-// and a boolean to check if the value has been set.
-func (o *GraphPreviewSocket) GetSamplesOk() ([]GraphPreviewSample, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return o.Samples, true
-}
-
-// SetSamples sets field value
-func (o *GraphPreviewSocket) SetSamples(v []GraphPreviewSample) {
-	o.Samples = v
-}
-
 // GetSet returns the Set field value
 func (o *GraphPreviewSocket) GetSet() bool {
 	if o == nil {
@@ -372,7 +346,6 @@ func (o GraphPreviewSocket) ToMap() (map[string]interface{}, error) {
 	toSerialize["min"] = o.Min
 	toSerialize["node"] = o.Node
 	toSerialize["perItem"] = o.PerItem
-	toSerialize["samples"] = o.Samples
 	toSerialize["set"] = o.Set
 	toSerialize["socket"] = o.Socket
 	toSerialize["sum"] = o.Sum
@@ -392,7 +365,6 @@ func (o *GraphPreviewSocket) UnmarshalJSON(data []byte) (err error) {
 		"min",
 		"node",
 		"perItem",
-		"samples",
 		"set",
 		"socket",
 		"sum",

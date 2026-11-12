@@ -5,7 +5,9 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Id** | **string** |  | 
+**Name** | Pointer to **string** |  | [optional] 
 **Position** | [**NullableGraphPosition**](GraphPosition.md) |  | 
+**Values** | **map[string]float64** |  | 
 **Aggregate** | [**GraphAggregate**](GraphAggregate.md) |  | 
 **And** | **map[string]interface{}** |  | 
 **CalculationDate** | **map[string]interface{}** |  | 
@@ -30,6 +32,7 @@ Name | Type | Description | Notes
 **RemoveObjects** | **map[string]interface{}** |  | 
 **Round** | [**GraphRound**](GraphRound.md) |  | 
 **Select** | [**GraphSelect**](GraphSelect.md) |  | 
+**SetProperties** | [**GraphSetProperties**](GraphSetProperties.md) |  | 
 **SetProperty** | [**GraphSetProperty**](GraphSetProperty.md) |  | 
 **SetVariable** | [**GraphSetVariable**](GraphSetVariable.md) |  | 
 **Solve** | [**GraphSolve**](GraphSolve.md) |  | 
@@ -41,7 +44,7 @@ Name | Type | Description | Notes
 
 ### NewGraphNode
 
-`func NewGraphNode(id string, position NullableGraphPosition, aggregate GraphAggregate, and map[string]interface{}, calculationDate map[string]interface{}, changes GraphChanges, createObjects GraphCreateObjects, filter GraphFilter, filterGroup GraphFilterGroup, function GraphFunction, graphInput GraphInput, graphOutput GraphOutput, inputObjects map[string]interface{}, join GraphJoin, lookupTable GraphLookupTable, mapProperty GraphMapProperty, multiplyAdd map[string]interface{}, need GraphNeed, not map[string]interface{}, objectGroup GraphObjectGroup, or map[string]interface{}, overTime GraphOverTime, pair map[string]interface{}, removeObjects map[string]interface{}, round GraphRound, select_ GraphSelect, setProperty GraphSetProperty, setVariable GraphSetVariable, solve GraphSolve, solveStep GraphSolveStep, subGraph GraphSubGraph, union GraphUnion, ) *GraphNode`
+`func NewGraphNode(id string, position NullableGraphPosition, values map[string]float64, aggregate GraphAggregate, and map[string]interface{}, calculationDate map[string]interface{}, changes GraphChanges, createObjects GraphCreateObjects, filter GraphFilter, filterGroup GraphFilterGroup, function GraphFunction, graphInput GraphInput, graphOutput GraphOutput, inputObjects map[string]interface{}, join GraphJoin, lookupTable GraphLookupTable, mapProperty GraphMapProperty, multiplyAdd map[string]interface{}, need GraphNeed, not map[string]interface{}, objectGroup GraphObjectGroup, or map[string]interface{}, overTime GraphOverTime, pair map[string]interface{}, removeObjects map[string]interface{}, round GraphRound, select_ GraphSelect, setProperties GraphSetProperties, setProperty GraphSetProperty, setVariable GraphSetVariable, solve GraphSolve, solveStep GraphSolveStep, subGraph GraphSubGraph, union GraphUnion, ) *GraphNode`
 
 NewGraphNode instantiates a new GraphNode object
 This constructor will assign default values to properties that have it defined,
@@ -76,6 +79,31 @@ and a boolean to check if the value has been set.
 SetId sets Id field to given value.
 
 
+### GetName
+
+`func (o *GraphNode) GetName() string`
+
+GetName returns the Name field if non-nil, zero value otherwise.
+
+### GetNameOk
+
+`func (o *GraphNode) GetNameOk() (*string, bool)`
+
+GetNameOk returns a tuple with the Name field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetName
+
+`func (o *GraphNode) SetName(v string)`
+
+SetName sets Name field to given value.
+
+### HasName
+
+`func (o *GraphNode) HasName() bool`
+
+HasName returns a boolean if a field has been set.
+
 ### GetPosition
 
 `func (o *GraphNode) GetPosition() GraphPosition`
@@ -106,6 +134,26 @@ SetPosition sets Position field to given value.
 `func (o *GraphNode) UnsetPosition()`
 
 UnsetPosition ensures that no value is present for Position, not even an explicit nil
+### GetValues
+
+`func (o *GraphNode) GetValues() map[string]float64`
+
+GetValues returns the Values field if non-nil, zero value otherwise.
+
+### GetValuesOk
+
+`func (o *GraphNode) GetValuesOk() (*map[string]float64, bool)`
+
+GetValuesOk returns a tuple with the Values field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetValues
+
+`func (o *GraphNode) SetValues(v map[string]float64)`
+
+SetValues sets Values field to given value.
+
+
 ### GetAggregate
 
 `func (o *GraphNode) GetAggregate() GraphAggregate`
@@ -584,6 +632,26 @@ and a boolean to check if the value has been set.
 `func (o *GraphNode) SetSelect(v GraphSelect)`
 
 SetSelect sets Select field to given value.
+
+
+### GetSetProperties
+
+`func (o *GraphNode) GetSetProperties() GraphSetProperties`
+
+GetSetProperties returns the SetProperties field if non-nil, zero value otherwise.
+
+### GetSetPropertiesOk
+
+`func (o *GraphNode) GetSetPropertiesOk() (*GraphSetProperties, bool)`
+
+GetSetPropertiesOk returns a tuple with the SetProperties field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetSetProperties
+
+`func (o *GraphNode) SetSetProperties(v GraphSetProperties)`
+
+SetSetProperties sets SetProperties field to given value.
 
 
 ### GetSetProperty

@@ -22,7 +22,7 @@ var _ MappedNullable = &GraphNodeOneOf29{}
 
 // GraphNodeOneOf29 struct for GraphNodeOneOf29
 type GraphNodeOneOf29 struct {
-	Union GraphUnion `json:"union"`
+	SubGraph GraphSubGraph `json:"subGraph"`
 }
 
 type _GraphNodeOneOf29 GraphNodeOneOf29
@@ -31,9 +31,9 @@ type _GraphNodeOneOf29 GraphNodeOneOf29
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGraphNodeOneOf29(union GraphUnion) *GraphNodeOneOf29 {
+func NewGraphNodeOneOf29(subGraph GraphSubGraph) *GraphNodeOneOf29 {
 	this := GraphNodeOneOf29{}
-	this.Union = union
+	this.SubGraph = subGraph
 	return &this
 }
 
@@ -45,28 +45,28 @@ func NewGraphNodeOneOf29WithDefaults() *GraphNodeOneOf29 {
 	return &this
 }
 
-// GetUnion returns the Union field value
-func (o *GraphNodeOneOf29) GetUnion() GraphUnion {
+// GetSubGraph returns the SubGraph field value
+func (o *GraphNodeOneOf29) GetSubGraph() GraphSubGraph {
 	if o == nil {
-		var ret GraphUnion
+		var ret GraphSubGraph
 		return ret
 	}
 
-	return o.Union
+	return o.SubGraph
 }
 
-// GetUnionOk returns a tuple with the Union field value
+// GetSubGraphOk returns a tuple with the SubGraph field value
 // and a boolean to check if the value has been set.
-func (o *GraphNodeOneOf29) GetUnionOk() (*GraphUnion, bool) {
+func (o *GraphNodeOneOf29) GetSubGraphOk() (*GraphSubGraph, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Union, true
+	return &o.SubGraph, true
 }
 
-// SetUnion sets field value
-func (o *GraphNodeOneOf29) SetUnion(v GraphUnion) {
-	o.Union = v
+// SetSubGraph sets field value
+func (o *GraphNodeOneOf29) SetSubGraph(v GraphSubGraph) {
+	o.SubGraph = v
 }
 
 func (o GraphNodeOneOf29) MarshalJSON() ([]byte, error) {
@@ -79,7 +79,7 @@ func (o GraphNodeOneOf29) MarshalJSON() ([]byte, error) {
 
 func (o GraphNodeOneOf29) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["union"] = o.Union
+	toSerialize["subGraph"] = o.SubGraph
 	return toSerialize, nil
 }
 
@@ -88,7 +88,7 @@ func (o *GraphNodeOneOf29) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"union",
+		"subGraph",
 	}
 
 	allProperties := make(map[string]interface{})

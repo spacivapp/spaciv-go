@@ -25,6 +25,7 @@ type GraphPreviewResult struct {
 	Error string `json:"error"`
 	Node string `json:"node"`
 	Sockets []GraphPreviewSocket `json:"sockets"`
+	Table *GraphPreviewTable `json:"table,omitempty"`
 }
 
 type _GraphPreviewResult GraphPreviewResult
@@ -121,6 +122,38 @@ func (o *GraphPreviewResult) SetSockets(v []GraphPreviewSocket) {
 	o.Sockets = v
 }
 
+// GetTable returns the Table field value if set, zero value otherwise.
+func (o *GraphPreviewResult) GetTable() GraphPreviewTable {
+	if o == nil || IsNil(o.Table) {
+		var ret GraphPreviewTable
+		return ret
+	}
+	return *o.Table
+}
+
+// GetTableOk returns a tuple with the Table field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *GraphPreviewResult) GetTableOk() (*GraphPreviewTable, bool) {
+	if o == nil || IsNil(o.Table) {
+		return nil, false
+	}
+	return o.Table, true
+}
+
+// HasTable returns a boolean if a field has been set.
+func (o *GraphPreviewResult) HasTable() bool {
+	if o != nil && !IsNil(o.Table) {
+		return true
+	}
+
+	return false
+}
+
+// SetTable gets a reference to the given GraphPreviewTable and assigns it to the Table field.
+func (o *GraphPreviewResult) SetTable(v GraphPreviewTable) {
+	o.Table = &v
+}
+
 func (o GraphPreviewResult) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -134,6 +167,9 @@ func (o GraphPreviewResult) ToMap() (map[string]interface{}, error) {
 	toSerialize["error"] = o.Error
 	toSerialize["node"] = o.Node
 	toSerialize["sockets"] = o.Sockets
+	if !IsNil(o.Table) {
+		toSerialize["table"] = o.Table
+	}
 	return toSerialize, nil
 }
 

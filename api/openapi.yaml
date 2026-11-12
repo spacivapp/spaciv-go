@@ -5142,12 +5142,14 @@ paths:
         \ (a `GraphLayerConfig`): values, maths, tests, sets of objects and pairs,\
         \ aggregates, object groups, data collections, dates, sub-graphs, goal seeking\
         \ (Solve), and outputs that set properties, set variables, create objects\
-        \ or remove them. The properties it changes are the ones its Set property\
-        \ and Create objects nodes name, and the variables it sets are named `graph:<name>`.\
-        \ `outputs` is kept for compatibility and isn't read. Omit `config` to start\
-        \ with an empty graph. Returns `400` if the graph isn't valid, such as a cycle,\
-        \ an unconnected input or inputs of the wrong type, with the node that's wrong.\
-        \ Requires the *Edit space rule sets* permission."
+        \ or remove them. The properties it changes are the ones its Set properties,\
+        \ Set property and Create objects nodes name, and a number input with nothing\
+        \ connected can hold a typed value in its node's `values`, and the variables\
+        \ it sets are named `graph:<name>`. `outputs` is kept for compatibility and\
+        \ isn't read. Omit `config` to start with an empty graph. Returns `400` if\
+        \ the graph isn't valid, such as a cycle, an unconnected input or inputs of\
+        \ the wrong type, with the node that's wrong. Requires the *Edit space rule\
+        \ sets* permission."
       operationId: logic-layers_create-graph-layers
       parameters: []
       requestBody:
@@ -5211,10 +5213,12 @@ paths:
         \ (a `GraphLayerConfig`): values, maths, tests, sets of objects and pairs,\
         \ aggregates, object groups, data collections, dates, sub-graphs, goal seeking\
         \ (Solve), and outputs that set properties, set variables, create objects\
-        \ or remove them. The properties it changes are the ones its Set property\
-        \ and Create objects nodes name, and the variables it sets are named `graph:<name>`.\
-        \ `outputs` is kept for compatibility and isn't read. Returns `404` if the\
-        \ graph layer does not exist. Requires the *View space rule set details* permission."
+        \ or remove them. The properties it changes are the ones its Set properties,\
+        \ Set property and Create objects nodes name, and a number input with nothing\
+        \ connected can hold a typed value in its node's `values`, and the variables\
+        \ it sets are named `graph:<name>`. `outputs` is kept for compatibility and\
+        \ isn't read. Returns `404` if the graph layer does not exist. Requires the\
+        \ *View space rule set details* permission."
       operationId: logic-layers_get-graph-layers
       parameters:
       - explode: false
@@ -5246,14 +5250,15 @@ paths:
         \ (a `GraphLayerConfig`): values, maths, tests, sets of objects and pairs,\
         \ aggregates, object groups, data collections, dates, sub-graphs, goal seeking\
         \ (Solve), and outputs that set properties, set variables, create objects\
-        \ or remove them. The properties it changes are the ones its Set property\
-        \ and Create objects nodes name, and the variables it sets are named `graph:<name>`.\
-        \ `outputs` is kept for compatibility and isn't read. Only fields present\
-        \ in the request body are changed. Function nodes may read account number\
-        \ variables (`account:<id>`), which needs the *Variable controls* feature.\
-        \ Returns `400` if `config` isn't a valid graph or reads an unknown or non-number\
-        \ variable, and `404` if the graph layer does not exist. Requires the *Edit\
-        \ space rule set details* permission."
+        \ or remove them. The properties it changes are the ones its Set properties,\
+        \ Set property and Create objects nodes name, and a number input with nothing\
+        \ connected can hold a typed value in its node's `values`, and the variables\
+        \ it sets are named `graph:<name>`. `outputs` is kept for compatibility and\
+        \ isn't read. Only fields present in the request body are changed. Function\
+        \ nodes may read account number variables (`account:<id>`), which needs the\
+        \ *Variable controls* feature. Returns `400` if `config` isn't a valid graph\
+        \ or reads an unknown or non-number variable, and `404` if the graph layer\
+        \ does not exist. Requires the *Edit space rule set details* permission."
       operationId: logic-layers_update-graph-layers
       parameters:
       - explode: false
@@ -5325,20 +5330,22 @@ paths:
     post:
       description: "Works out every output of a graph layer's config, saved or not,\
         \ on one day of a scenario, and returns a summary of each: a set's item count,\
-        \ a single number's value, or a value per item's count, range and first few\
-        \ items. The graph reads the objects that reach its layer in the scenario's\
-        \ stack, or all of the scenario's objects when the layer isn't in the stack.\
-        \ A graph that fails its check, or a node that fails, is reported in `error`,\
-        \ with the failing node in `node` and the outputs worked out before it. Sample\
-        \ items and their objects need the *View objects* permission, and their objects'\
-        \ property values need *View properties* or *Edit properties*; without them\
-        \ the summaries are returned without those details, and an error raised while\
-        \ working out the graph is replaced by a general one. Calculated like an analysis,\
-        \ with the scenario's layer variables when *Variable controls* is on, and\
-        \ charged as one; an unchanged config, scenario and day is answered from the\
-        \ cache. Returns `400` if the config isn't a graph layer config or the scenario\
-        \ doesn't exist. Requires the *View ideal space*, *View space rule set details*\
-        \ and *View scenario planning* permissions."
+        \ a single number's value, or a value per item's count, range and sum. With\
+        \ `inspect`, it also lists one output's items a page at a time in `table`,\
+        \ with `total` counting every item that matches the search. The graph reads\
+        \ the objects that reach its layer in the scenario's stack, or all of the\
+        \ scenario's objects when the layer isn't in the stack. A graph that fails\
+        \ its check, or a node that fails, is reported in `error`, with the failing\
+        \ node in `node` and the outputs worked out before it. The table's items and\
+        \ their objects need the *View objects* permission, and their objects' property\
+        \ values need *View properties* or *Edit properties*; without them the summaries\
+        \ are returned without those details, and an error raised while working out\
+        \ the graph is replaced by a general one. Calculated like an analysis, with\
+        \ the scenario's layer variables when *Variable controls* is on, and charged\
+        \ as one; an unchanged config, scenario and day is answered from the cache.\
+        \ Returns `400` if the config isn't a graph layer config or the scenario doesn't\
+        \ exist. Requires the *View ideal space*, *View space rule set details* and\
+        \ *View scenario planning* permissions."
       operationId: analysis_create-graph-layers-preview
       parameters:
       - explode: false
@@ -15127,11 +15134,17 @@ components:
         - outputs
         - outputs
         nodes:
-        - id: id
+        - values:
+            key: 0.8008281904610115
+          name: name
+          id: id
           position:
             x: 7.061401241503109
             "y": 9.301444243932576
-        - id: id
+        - values:
+            key: 0.8008281904610115
+          name: name
+          id: id
           position:
             x: 7.061401241503109
             "y": 9.301444243932576
@@ -15209,11 +15222,17 @@ components:
           - outputs
           - outputs
           nodes:
-          - id: id
+          - values:
+              key: 0.8008281904610115
+            name: name
+            id: id
             position:
               x: 7.061401241503109
               "y": 9.301444243932576
-          - id: id
+          - values:
+              key: 0.8008281904610115
+            name: name
+            id: id
             position:
               x: 7.061401241503109
               "y": 9.301444243932576
@@ -15424,6 +15443,9 @@ components:
       - startDay
     GraphNode:
       example:
+        values:
+          key: 0.8008281904610115
+        name: name
         id: id
         position:
           x: 7.061401241503109
@@ -15459,14 +15481,22 @@ components:
       - $ref: "#/components/schemas/GraphNode_oneOf_27"
       - $ref: "#/components/schemas/GraphNode_oneOf_28"
       - $ref: "#/components/schemas/GraphNode_oneOf_29"
+      - $ref: "#/components/schemas/GraphNode_oneOf_30"
       properties:
         id:
           type: string
+        name:
+          type: string
         position:
           $ref: "#/components/schemas/GraphPosition"
+        values:
+          additionalProperties:
+            format: double
+            type: number
       required:
       - id
       - position
+      - values
     GraphNot:
       additionalProperties: false
       type: object
@@ -15542,6 +15572,12 @@ components:
       additionalProperties: false
       example:
         scenario: scenario
+        inspect:
+          node: node
+          search: search
+          offset: 0
+          limit: 301
+          socket: socket
         config: ""
         day: 0
       properties:
@@ -15550,6 +15586,8 @@ components:
           description: "The day to work the graph out on, as days since 1970-01-01."
           format: int64
           type: integer
+        inspect:
+          $ref: "#/components/schemas/GraphPreviewInspectBody"
         scenario:
           description: The scenario whose stack the graph's objects come from.
           minLength: 1
@@ -15558,6 +15596,41 @@ components:
       - config
       - day
       - scenario
+    GraphPreviewInspectBody:
+      additionalProperties: false
+      example:
+        node: node
+        search: search
+        offset: 0
+        limit: 301
+        socket: socket
+      properties:
+        limit:
+          description: How many items to list.
+          format: int64
+          maximum: 500
+          minimum: 1
+          type: integer
+        node:
+          description: The node whose output to list.
+          minLength: 1
+          type: string
+        offset:
+          description: How many matching items to skip.
+          format: int64
+          minimum: 0
+          type: integer
+        search:
+          description: "Lists only the items whose name contains this, ignoring case."
+          type: string
+        socket:
+          description: The output to list.
+          minLength: 1
+          type: string
+      required:
+      - limit
+      - node
+      - socket
     GraphPreviewObject:
       additionalProperties: false
       example:
@@ -15566,10 +15639,10 @@ components:
         properties:
         - node: node
           property: property
-          value: 1.4658129805029452
+          value: 5.637376656633329
         - node: node
           property: property
-          value: 1.4658129805029452
+          value: 5.637376656633329
       properties:
         id:
           type: string
@@ -15588,7 +15661,7 @@ components:
       example:
         node: node
         property: property
-        value: 1.4658129805029452
+        value: 5.637376656633329
       properties:
         node:
           type: string
@@ -15610,115 +15683,72 @@ components:
           min: 6.027456183070403
           set: true
           max: 0.8008281904610115
-          sum: 5.637376656633329
+          sum: 1.4658129805029452
           socket: socket
           error: error
           perItem: true
           items: items
-          value: 2.3021358869347655
+          value: 5.962133916683182
           errors: errors
-          samples:
-          - item: item
-            objects:
-            - name: name
-              id: id
-              properties:
-              - node: node
-                property: property
-                value: 1.4658129805029452
-              - node: node
-                property: property
-                value: 1.4658129805029452
-            - name: name
-              id: id
-              properties:
-              - node: node
-                property: property
-                value: 1.4658129805029452
-              - node: node
-                property: property
-                value: 1.4658129805029452
-            error: error
-            value: 5.962133916683182
-          - item: item
-            objects:
-            - name: name
-              id: id
-              properties:
-              - node: node
-                property: property
-                value: 1.4658129805029452
-              - node: node
-                property: property
-                value: 1.4658129805029452
-            - name: name
-              id: id
-              properties:
-              - node: node
-                property: property
-                value: 1.4658129805029452
-              - node: node
-                property: property
-                value: 1.4658129805029452
-            error: error
-            value: 5.962133916683182
         - node: node
           min: 6.027456183070403
           set: true
           max: 0.8008281904610115
-          sum: 5.637376656633329
+          sum: 1.4658129805029452
           socket: socket
           error: error
           perItem: true
           items: items
-          value: 2.3021358869347655
+          value: 5.962133916683182
           errors: errors
-          samples:
-          - item: item
-            objects:
-            - name: name
-              id: id
-              properties:
-              - node: node
-                property: property
-                value: 1.4658129805029452
-              - node: node
-                property: property
-                value: 1.4658129805029452
-            - name: name
-              id: id
-              properties:
-              - node: node
-                property: property
-                value: 1.4658129805029452
-              - node: node
-                property: property
-                value: 1.4658129805029452
-            error: error
-            value: 5.962133916683182
-          - item: item
-            objects:
-            - name: name
-              id: id
-              properties:
-              - node: node
-                property: property
-                value: 1.4658129805029452
-              - node: node
-                property: property
-                value: 1.4658129805029452
-            - name: name
-              id: id
-              properties:
-              - node: node
-                property: property
-                value: 1.4658129805029452
-              - node: node
-                property: property
-                value: 1.4658129805029452
-            error: error
-            value: 5.962133916683182
         error: error
+        table:
+          total: total
+          rows:
+          - item: item
+            objects:
+            - name: name
+              id: id
+              properties:
+              - node: node
+                property: property
+                value: 5.637376656633329
+              - node: node
+                property: property
+                value: 5.637376656633329
+            - name: name
+              id: id
+              properties:
+              - node: node
+                property: property
+                value: 5.637376656633329
+              - node: node
+                property: property
+                value: 5.637376656633329
+            error: error
+            value: 2.3021358869347655
+          - item: item
+            objects:
+            - name: name
+              id: id
+              properties:
+              - node: node
+                property: property
+                value: 5.637376656633329
+              - node: node
+                property: property
+                value: 5.637376656633329
+            - name: name
+              id: id
+              properties:
+              - node: node
+                property: property
+                value: 5.637376656633329
+              - node: node
+                property: property
+                value: 5.637376656633329
+            error: error
+            value: 2.3021358869347655
       properties:
         error:
           type: string
@@ -15728,6 +15758,8 @@ components:
           items:
             $ref: "#/components/schemas/GraphPreviewSocket"
           type: array
+        table:
+          $ref: "#/components/schemas/GraphPreviewTable"
       required:
       - error
       - node
@@ -15742,21 +15774,21 @@ components:
           properties:
           - node: node
             property: property
-            value: 1.4658129805029452
+            value: 5.637376656633329
           - node: node
             property: property
-            value: 1.4658129805029452
+            value: 5.637376656633329
         - name: name
           id: id
           properties:
           - node: node
             property: property
-            value: 1.4658129805029452
+            value: 5.637376656633329
           - node: node
             property: property
-            value: 1.4658129805029452
+            value: 5.637376656633329
         error: error
-        value: 5.962133916683182
+        value: 2.3021358869347655
       properties:
         error:
           type: string
@@ -15781,58 +15813,13 @@ components:
         min: 6.027456183070403
         set: true
         max: 0.8008281904610115
-        sum: 5.637376656633329
+        sum: 1.4658129805029452
         socket: socket
         error: error
         perItem: true
         items: items
-        value: 2.3021358869347655
+        value: 5.962133916683182
         errors: errors
-        samples:
-        - item: item
-          objects:
-          - name: name
-            id: id
-            properties:
-            - node: node
-              property: property
-              value: 1.4658129805029452
-            - node: node
-              property: property
-              value: 1.4658129805029452
-          - name: name
-            id: id
-            properties:
-            - node: node
-              property: property
-              value: 1.4658129805029452
-            - node: node
-              property: property
-              value: 1.4658129805029452
-          error: error
-          value: 5.962133916683182
-        - item: item
-          objects:
-          - name: name
-            id: id
-            properties:
-            - node: node
-              property: property
-              value: 1.4658129805029452
-            - node: node
-              property: property
-              value: 1.4658129805029452
-          - name: name
-            id: id
-            properties:
-            - node: node
-              property: property
-              value: 1.4658129805029452
-            - node: node
-              property: property
-              value: 1.4658129805029452
-          error: error
-          value: 5.962133916683182
       properties:
         error:
           type: string
@@ -15852,10 +15839,6 @@ components:
           type: string
         perItem:
           type: boolean
-        samples:
-          items:
-            $ref: "#/components/schemas/GraphPreviewSample"
-          type: array
         set:
           type: boolean
         socket:
@@ -15874,11 +15857,83 @@ components:
       - min
       - node
       - perItem
-      - samples
       - set
       - socket
       - sum
       - value
+    GraphPreviewTable:
+      additionalProperties: false
+      example:
+        total: total
+        rows:
+        - item: item
+          objects:
+          - name: name
+            id: id
+            properties:
+            - node: node
+              property: property
+              value: 5.637376656633329
+            - node: node
+              property: property
+              value: 5.637376656633329
+          - name: name
+            id: id
+            properties:
+            - node: node
+              property: property
+              value: 5.637376656633329
+            - node: node
+              property: property
+              value: 5.637376656633329
+          error: error
+          value: 2.3021358869347655
+        - item: item
+          objects:
+          - name: name
+            id: id
+            properties:
+            - node: node
+              property: property
+              value: 5.637376656633329
+            - node: node
+              property: property
+              value: 5.637376656633329
+          - name: name
+            id: id
+            properties:
+            - node: node
+              property: property
+              value: 5.637376656633329
+            - node: node
+              property: property
+              value: 5.637376656633329
+          error: error
+          value: 2.3021358869347655
+      properties:
+        rows:
+          items:
+            $ref: "#/components/schemas/GraphPreviewSample"
+          type: array
+        total:
+          format: int64
+          type: string
+      required:
+      - rows
+      - total
+    GraphPropertyRow:
+      additionalProperties: false
+      example:
+        node: node
+        property: property
+      properties:
+        node:
+          type: string
+        property:
+          type: string
+      required:
+      - node
+      - property
     GraphRemoveObjects:
       additionalProperties: false
       type: object
@@ -15897,6 +15952,15 @@ components:
           type: string
       required:
       - property
+    GraphSetProperties:
+      additionalProperties: false
+      properties:
+        rows:
+          items:
+            $ref: "#/components/schemas/GraphPropertyRow"
+          type: array
+      required:
+      - rows
     GraphSetProperty:
       additionalProperties: false
       example:
@@ -22774,35 +22838,41 @@ components:
       - select
     GraphNode_oneOf_24:
       properties:
+        setProperties:
+          $ref: "#/components/schemas/GraphSetProperties"
+      required:
+      - setProperties
+    GraphNode_oneOf_25:
+      properties:
         setProperty:
           $ref: "#/components/schemas/GraphSetProperty"
       required:
       - setProperty
-    GraphNode_oneOf_25:
+    GraphNode_oneOf_26:
       properties:
         setVariable:
           $ref: "#/components/schemas/GraphSetVariable"
       required:
       - setVariable
-    GraphNode_oneOf_26:
+    GraphNode_oneOf_27:
       properties:
         solve:
           $ref: "#/components/schemas/GraphSolve"
       required:
       - solve
-    GraphNode_oneOf_27:
+    GraphNode_oneOf_28:
       properties:
         solveStep:
           $ref: "#/components/schemas/GraphSolveStep"
       required:
       - solveStep
-    GraphNode_oneOf_28:
+    GraphNode_oneOf_29:
       properties:
         subGraph:
           $ref: "#/components/schemas/GraphSubGraph"
       required:
       - subGraph
-    GraphNode_oneOf_29:
+    GraphNode_oneOf_30:
       properties:
         union:
           $ref: "#/components/schemas/GraphUnion"

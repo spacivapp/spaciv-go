@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **Error** | **string** |  | 
 **Node** | **string** |  | 
 **Sockets** | [**[]GraphPreviewSocket**](GraphPreviewSocket.md) |  | 
+**Table** | Pointer to [**GraphPreviewTable**](GraphPreviewTable.md) |  | [optional] 
 
 ## Methods
 
@@ -86,6 +87,31 @@ and a boolean to check if the value has been set.
 
 SetSockets sets Sockets field to given value.
 
+
+### GetTable
+
+`func (o *GraphPreviewResult) GetTable() GraphPreviewTable`
+
+GetTable returns the Table field if non-nil, zero value otherwise.
+
+### GetTableOk
+
+`func (o *GraphPreviewResult) GetTableOk() (*GraphPreviewTable, bool)`
+
+GetTableOk returns a tuple with the Table field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetTable
+
+`func (o *GraphPreviewResult) SetTable(v GraphPreviewTable)`
+
+SetTable sets Table field to given value.
+
+### HasTable
+
+`func (o *GraphPreviewResult) HasTable() bool`
+
+HasTable returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
