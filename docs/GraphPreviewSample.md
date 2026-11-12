@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Error** | **string** |  | 
 **Item** | **string** |  | 
+**Missing** | **bool** |  | 
 **Objects** | [**[]GraphPreviewObject**](GraphPreviewObject.md) |  | 
 **Value** | **float64** |  | 
 
@@ -13,7 +14,7 @@ Name | Type | Description | Notes
 
 ### NewGraphPreviewSample
 
-`func NewGraphPreviewSample(error_ string, item string, objects []GraphPreviewObject, value float64, ) *GraphPreviewSample`
+`func NewGraphPreviewSample(error_ string, item string, missing bool, objects []GraphPreviewObject, value float64, ) *GraphPreviewSample`
 
 NewGraphPreviewSample instantiates a new GraphPreviewSample object
 This constructor will assign default values to properties that have it defined,
@@ -66,6 +67,26 @@ and a boolean to check if the value has been set.
 `func (o *GraphPreviewSample) SetItem(v string)`
 
 SetItem sets Item field to given value.
+
+
+### GetMissing
+
+`func (o *GraphPreviewSample) GetMissing() bool`
+
+GetMissing returns the Missing field if non-nil, zero value otherwise.
+
+### GetMissingOk
+
+`func (o *GraphPreviewSample) GetMissingOk() (*bool, bool)`
+
+GetMissingOk returns a tuple with the Missing field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetMissing
+
+`func (o *GraphPreviewSample) SetMissing(v bool)`
+
+SetMissing sets Missing field to given value.
 
 
 ### GetObjects

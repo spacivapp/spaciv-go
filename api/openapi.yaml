@@ -5335,17 +5335,19 @@ paths:
         \ with `total` counting every item that matches the search. The graph reads\
         \ the objects that reach its layer in the scenario's stack, or all of the\
         \ scenario's objects when the layer isn't in the stack. A graph that fails\
-        \ its check, or a node that fails, is reported in `error`, with the failing\
-        \ node in `node` and the outputs worked out before it. The table's items and\
-        \ their objects need the *View objects* permission, and their objects' property\
-        \ values need *View properties* or *Edit properties*; without them the summaries\
-        \ are returned without those details, and an error raised while working out\
-        \ the graph is replaced by a general one. Calculated like an analysis, with\
-        \ the scenario's layer variables when *Variable controls* is on, and charged\
-        \ as one; an unchanged config, scenario and day is answered from the cache.\
-        \ Returns `400` if the config isn't a graph layer config or the scenario doesn't\
-        \ exist. Requires the *View ideal space*, *View space rule set details* and\
-        \ *View scenario planning* permissions."
+        \ its check, or a node that fails, is reported in `error`, with the first\
+        \ failing node in `node` and every output that doesn't depend on a failed\
+        \ node. The table's items and their objects need the *View objects* permission,\
+        \ and their objects' property values, and sorting by a property, need *View\
+        \ properties* or *Edit properties*; without them the summaries are returned\
+        \ without those details, and an error raised while working out the graph is\
+        \ replaced by a general one. Calculated like an analysis, with the scenario's\
+        \ layer variables when *Variable controls* is on, and charged as one; an unchanged\
+        \ config, scenario and day is answered from the cache. Returns `400` if the\
+        \ config isn't a graph layer config or the scenario doesn't exist. Returns\
+        \ `403` for a sort by a property without *View properties* or *Edit properties*.\
+        \ Requires the *View ideal space*, *View space rule set details* and *View\
+        \ scenario planning* permissions."
       operationId: analysis_create-graph-layers-preview
       parameters:
       - explode: false
@@ -15578,6 +15580,8 @@ components:
           offset: 0
           limit: 301
           socket: socket
+          sort: sort
+          descending: true
         config: ""
         day: 0
       properties:
@@ -15604,7 +15608,12 @@ components:
         offset: 0
         limit: 301
         socket: socket
+        sort: sort
+        descending: true
       properties:
+        descending:
+          description: Reverses the order sort gives.
+          type: boolean
         limit:
           description: How many items to list.
           format: int64
@@ -15626,6 +15635,10 @@ components:
         socket:
           description: The output to list.
           minLength: 1
+          type: string
+        sort:
+          description: "Orders the items by \"item\", \"value\" or a property's id,\
+            \ items without one last; empty keeps them in the output's order."
           type: string
       required:
       - limit
@@ -15683,6 +15696,7 @@ components:
           min: 6.027456183070403
           set: true
           max: 0.8008281904610115
+          missing: missing
           sum: 1.4658129805029452
           socket: socket
           error: error
@@ -15694,6 +15708,7 @@ components:
           min: 6.027456183070403
           set: true
           max: 0.8008281904610115
+          missing: missing
           sum: 1.4658129805029452
           socket: socket
           error: error
@@ -15725,6 +15740,7 @@ components:
               - node: node
                 property: property
                 value: 5.637376656633329
+            missing: true
             error: error
             value: 2.3021358869347655
           - item: item
@@ -15747,6 +15763,7 @@ components:
               - node: node
                 property: property
                 value: 5.637376656633329
+            missing: true
             error: error
             value: 2.3021358869347655
       properties:
@@ -15787,6 +15804,7 @@ components:
           - node: node
             property: property
             value: 5.637376656633329
+        missing: true
         error: error
         value: 2.3021358869347655
       properties:
@@ -15794,6 +15812,8 @@ components:
           type: string
         item:
           type: string
+        missing:
+          type: boolean
         objects:
           items:
             $ref: "#/components/schemas/GraphPreviewObject"
@@ -15804,6 +15824,7 @@ components:
       required:
       - error
       - item
+      - missing
       - objects
       - value
     GraphPreviewSocket:
@@ -15813,6 +15834,7 @@ components:
         min: 6.027456183070403
         set: true
         max: 0.8008281904610115
+        missing: missing
         sum: 1.4658129805029452
         socket: socket
         error: error
@@ -15835,6 +15857,9 @@ components:
         min:
           format: double
           type: number
+        missing:
+          format: int64
+          type: string
         node:
           type: string
         perItem:
@@ -15855,6 +15880,7 @@ components:
       - items
       - max
       - min
+      - missing
       - node
       - perItem
       - set
@@ -15886,6 +15912,7 @@ components:
             - node: node
               property: property
               value: 5.637376656633329
+          missing: true
           error: error
           value: 2.3021358869347655
         - item: item
@@ -15908,6 +15935,7 @@ components:
             - node: node
               property: property
               value: 5.637376656633329
+          missing: true
           error: error
           value: 2.3021358869347655
       properties:

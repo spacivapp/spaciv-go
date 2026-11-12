@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **Items** | **string** |  | 
 **Max** | **float64** |  | 
 **Min** | **float64** |  | 
+**Missing** | **string** |  | 
 **Node** | **string** |  | 
 **PerItem** | **bool** |  | 
 **Set** | **bool** |  | 
@@ -20,7 +21,7 @@ Name | Type | Description | Notes
 
 ### NewGraphPreviewSocket
 
-`func NewGraphPreviewSocket(error_ string, errors string, items string, max float64, min float64, node string, perItem bool, set bool, socket string, sum float64, value float64, ) *GraphPreviewSocket`
+`func NewGraphPreviewSocket(error_ string, errors string, items string, max float64, min float64, missing string, node string, perItem bool, set bool, socket string, sum float64, value float64, ) *GraphPreviewSocket`
 
 NewGraphPreviewSocket instantiates a new GraphPreviewSocket object
 This constructor will assign default values to properties that have it defined,
@@ -133,6 +134,26 @@ and a boolean to check if the value has been set.
 `func (o *GraphPreviewSocket) SetMin(v float64)`
 
 SetMin sets Min field to given value.
+
+
+### GetMissing
+
+`func (o *GraphPreviewSocket) GetMissing() string`
+
+GetMissing returns the Missing field if non-nil, zero value otherwise.
+
+### GetMissingOk
+
+`func (o *GraphPreviewSocket) GetMissingOk() (*string, bool)`
+
+GetMissingOk returns a tuple with the Missing field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetMissing
+
+`func (o *GraphPreviewSocket) SetMissing(v string)`
+
+SetMissing sets Missing field to given value.
 
 
 ### GetNode

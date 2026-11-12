@@ -4,11 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**Descending** | Pointer to **bool** | Reverses the order sort gives. | [optional] 
 **Limit** | **int64** | How many items to list. | 
 **Node** | **string** | The node whose output to list. | 
 **Offset** | Pointer to **int64** | How many matching items to skip. | [optional] 
 **Search** | Pointer to **string** | Lists only the items whose name contains this, ignoring case. | [optional] 
 **Socket** | **string** | The output to list. | 
+**Sort** | Pointer to **string** | Orders the items by \&quot;item\&quot;, \&quot;value\&quot; or a property&#39;s id, items without one last; empty keeps them in the output&#39;s order. | [optional] 
 
 ## Methods
 
@@ -28,6 +30,31 @@ will change when the set of required properties is changed
 NewGraphPreviewInspectBodyWithDefaults instantiates a new GraphPreviewInspectBody object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetDescending
+
+`func (o *GraphPreviewInspectBody) GetDescending() bool`
+
+GetDescending returns the Descending field if non-nil, zero value otherwise.
+
+### GetDescendingOk
+
+`func (o *GraphPreviewInspectBody) GetDescendingOk() (*bool, bool)`
+
+GetDescendingOk returns a tuple with the Descending field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDescending
+
+`func (o *GraphPreviewInspectBody) SetDescending(v bool)`
+
+SetDescending sets Descending field to given value.
+
+### HasDescending
+
+`func (o *GraphPreviewInspectBody) HasDescending() bool`
+
+HasDescending returns a boolean if a field has been set.
 
 ### GetLimit
 
@@ -138,6 +165,31 @@ and a boolean to check if the value has been set.
 
 SetSocket sets Socket field to given value.
 
+
+### GetSort
+
+`func (o *GraphPreviewInspectBody) GetSort() string`
+
+GetSort returns the Sort field if non-nil, zero value otherwise.
+
+### GetSortOk
+
+`func (o *GraphPreviewInspectBody) GetSortOk() (*string, bool)`
+
+GetSortOk returns a tuple with the Sort field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetSort
+
+`func (o *GraphPreviewInspectBody) SetSort(v string)`
+
+SetSort sets Sort field to given value.
+
+### HasSort
+
+`func (o *GraphPreviewInspectBody) HasSort() bool`
+
+HasSort returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

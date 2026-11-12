@@ -22,6 +22,8 @@ var _ MappedNullable = &GraphPreviewInspectBody{}
 
 // GraphPreviewInspectBody struct for GraphPreviewInspectBody
 type GraphPreviewInspectBody struct {
+	// Reverses the order sort gives.
+	Descending *bool `json:"descending,omitempty"`
 	// How many items to list.
 	Limit int64 `json:"limit"`
 	// The node whose output to list.
@@ -32,6 +34,8 @@ type GraphPreviewInspectBody struct {
 	Search *string `json:"search,omitempty"`
 	// The output to list.
 	Socket string `json:"socket"`
+	// Orders the items by \"item\", \"value\" or a property's id, items without one last; empty keeps them in the output's order.
+	Sort *string `json:"sort,omitempty"`
 }
 
 type _GraphPreviewInspectBody GraphPreviewInspectBody
@@ -54,6 +58,38 @@ func NewGraphPreviewInspectBody(limit int64, node string, socket string) *GraphP
 func NewGraphPreviewInspectBodyWithDefaults() *GraphPreviewInspectBody {
 	this := GraphPreviewInspectBody{}
 	return &this
+}
+
+// GetDescending returns the Descending field value if set, zero value otherwise.
+func (o *GraphPreviewInspectBody) GetDescending() bool {
+	if o == nil || IsNil(o.Descending) {
+		var ret bool
+		return ret
+	}
+	return *o.Descending
+}
+
+// GetDescendingOk returns a tuple with the Descending field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *GraphPreviewInspectBody) GetDescendingOk() (*bool, bool) {
+	if o == nil || IsNil(o.Descending) {
+		return nil, false
+	}
+	return o.Descending, true
+}
+
+// HasDescending returns a boolean if a field has been set.
+func (o *GraphPreviewInspectBody) HasDescending() bool {
+	if o != nil && !IsNil(o.Descending) {
+		return true
+	}
+
+	return false
+}
+
+// SetDescending gets a reference to the given bool and assigns it to the Descending field.
+func (o *GraphPreviewInspectBody) SetDescending(v bool) {
+	o.Descending = &v
 }
 
 // GetLimit returns the Limit field value
@@ -192,6 +228,38 @@ func (o *GraphPreviewInspectBody) SetSocket(v string) {
 	o.Socket = v
 }
 
+// GetSort returns the Sort field value if set, zero value otherwise.
+func (o *GraphPreviewInspectBody) GetSort() string {
+	if o == nil || IsNil(o.Sort) {
+		var ret string
+		return ret
+	}
+	return *o.Sort
+}
+
+// GetSortOk returns a tuple with the Sort field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *GraphPreviewInspectBody) GetSortOk() (*string, bool) {
+	if o == nil || IsNil(o.Sort) {
+		return nil, false
+	}
+	return o.Sort, true
+}
+
+// HasSort returns a boolean if a field has been set.
+func (o *GraphPreviewInspectBody) HasSort() bool {
+	if o != nil && !IsNil(o.Sort) {
+		return true
+	}
+
+	return false
+}
+
+// SetSort gets a reference to the given string and assigns it to the Sort field.
+func (o *GraphPreviewInspectBody) SetSort(v string) {
+	o.Sort = &v
+}
+
 func (o GraphPreviewInspectBody) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -202,6 +270,9 @@ func (o GraphPreviewInspectBody) MarshalJSON() ([]byte, error) {
 
 func (o GraphPreviewInspectBody) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Descending) {
+		toSerialize["descending"] = o.Descending
+	}
 	toSerialize["limit"] = o.Limit
 	toSerialize["node"] = o.Node
 	if !IsNil(o.Offset) {
@@ -211,6 +282,9 @@ func (o GraphPreviewInspectBody) ToMap() (map[string]interface{}, error) {
 		toSerialize["search"] = o.Search
 	}
 	toSerialize["socket"] = o.Socket
+	if !IsNil(o.Sort) {
+		toSerialize["sort"] = o.Sort
+	}
 	return toSerialize, nil
 }
 

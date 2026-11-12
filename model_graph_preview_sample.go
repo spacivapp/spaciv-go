@@ -24,6 +24,7 @@ var _ MappedNullable = &GraphPreviewSample{}
 type GraphPreviewSample struct {
 	Error string `json:"error"`
 	Item string `json:"item"`
+	Missing bool `json:"missing"`
 	Objects []GraphPreviewObject `json:"objects"`
 	Value float64 `json:"value"`
 }
@@ -34,10 +35,11 @@ type _GraphPreviewSample GraphPreviewSample
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGraphPreviewSample(error_ string, item string, objects []GraphPreviewObject, value float64) *GraphPreviewSample {
+func NewGraphPreviewSample(error_ string, item string, missing bool, objects []GraphPreviewObject, value float64) *GraphPreviewSample {
 	this := GraphPreviewSample{}
 	this.Error = error_
 	this.Item = item
+	this.Missing = missing
 	this.Objects = objects
 	this.Value = value
 	return &this
@@ -97,6 +99,30 @@ func (o *GraphPreviewSample) GetItemOk() (*string, bool) {
 // SetItem sets field value
 func (o *GraphPreviewSample) SetItem(v string) {
 	o.Item = v
+}
+
+// GetMissing returns the Missing field value
+func (o *GraphPreviewSample) GetMissing() bool {
+	if o == nil {
+		var ret bool
+		return ret
+	}
+
+	return o.Missing
+}
+
+// GetMissingOk returns a tuple with the Missing field value
+// and a boolean to check if the value has been set.
+func (o *GraphPreviewSample) GetMissingOk() (*bool, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Missing, true
+}
+
+// SetMissing sets field value
+func (o *GraphPreviewSample) SetMissing(v bool) {
+	o.Missing = v
 }
 
 // GetObjects returns the Objects field value
@@ -159,6 +185,7 @@ func (o GraphPreviewSample) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["error"] = o.Error
 	toSerialize["item"] = o.Item
+	toSerialize["missing"] = o.Missing
 	toSerialize["objects"] = o.Objects
 	toSerialize["value"] = o.Value
 	return toSerialize, nil
@@ -171,6 +198,7 @@ func (o *GraphPreviewSample) UnmarshalJSON(data []byte) (err error) {
 	requiredProperties := []string{
 		"error",
 		"item",
+		"missing",
 		"objects",
 		"value",
 	}

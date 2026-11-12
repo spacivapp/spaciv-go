@@ -27,6 +27,7 @@ type GraphPreviewSocket struct {
 	Items string `json:"items"`
 	Max float64 `json:"max"`
 	Min float64 `json:"min"`
+	Missing string `json:"missing"`
 	Node string `json:"node"`
 	PerItem bool `json:"perItem"`
 	Set bool `json:"set"`
@@ -41,13 +42,14 @@ type _GraphPreviewSocket GraphPreviewSocket
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGraphPreviewSocket(error_ string, errors string, items string, max float64, min float64, node string, perItem bool, set bool, socket string, sum float64, value float64) *GraphPreviewSocket {
+func NewGraphPreviewSocket(error_ string, errors string, items string, max float64, min float64, missing string, node string, perItem bool, set bool, socket string, sum float64, value float64) *GraphPreviewSocket {
 	this := GraphPreviewSocket{}
 	this.Error = error_
 	this.Errors = errors
 	this.Items = items
 	this.Max = max
 	this.Min = min
+	this.Missing = missing
 	this.Node = node
 	this.PerItem = perItem
 	this.Set = set
@@ -183,6 +185,30 @@ func (o *GraphPreviewSocket) GetMinOk() (*float64, bool) {
 // SetMin sets field value
 func (o *GraphPreviewSocket) SetMin(v float64) {
 	o.Min = v
+}
+
+// GetMissing returns the Missing field value
+func (o *GraphPreviewSocket) GetMissing() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.Missing
+}
+
+// GetMissingOk returns a tuple with the Missing field value
+// and a boolean to check if the value has been set.
+func (o *GraphPreviewSocket) GetMissingOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.Missing, true
+}
+
+// SetMissing sets field value
+func (o *GraphPreviewSocket) SetMissing(v string) {
+	o.Missing = v
 }
 
 // GetNode returns the Node field value
@@ -344,6 +370,7 @@ func (o GraphPreviewSocket) ToMap() (map[string]interface{}, error) {
 	toSerialize["items"] = o.Items
 	toSerialize["max"] = o.Max
 	toSerialize["min"] = o.Min
+	toSerialize["missing"] = o.Missing
 	toSerialize["node"] = o.Node
 	toSerialize["perItem"] = o.PerItem
 	toSerialize["set"] = o.Set
@@ -363,6 +390,7 @@ func (o *GraphPreviewSocket) UnmarshalJSON(data []byte) (err error) {
 		"items",
 		"max",
 		"min",
+		"missing",
 		"node",
 		"perItem",
 		"set",
