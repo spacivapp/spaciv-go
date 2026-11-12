@@ -302,6 +302,8 @@ docs/GraphLayersDeleted.md
 docs/GraphLayersToDelete.md
 docs/GraphLookupEntry.md
 docs/GraphLookupTable.md
+docs/GraphMapProperty.md
+docs/GraphMapRow.md
 docs/GraphNeed.md
 docs/GraphNode.md
 docs/GraphNodeOneOf.md
@@ -326,6 +328,7 @@ docs/GraphNodeOneOf25.md
 docs/GraphNodeOneOf26.md
 docs/GraphNodeOneOf27.md
 docs/GraphNodeOneOf28.md
+docs/GraphNodeOneOf29.md
 docs/GraphNodeOneOf3.md
 docs/GraphNodeOneOf4.md
 docs/GraphNodeOneOf5.md
@@ -835,6 +838,8 @@ model_graph_layers_deleted.go
 model_graph_layers_to_delete.go
 model_graph_lookup_entry.go
 model_graph_lookup_table.go
+model_graph_map_property.go
+model_graph_map_row.go
 model_graph_need.go
 model_graph_node.go
 model_graph_node_one_of.go
@@ -859,6 +864,7 @@ model_graph_node_one_of_25.go
 model_graph_node_one_of_26.go
 model_graph_node_one_of_27.go
 model_graph_node_one_of_28.go
+model_graph_node_one_of_29.go
 model_graph_node_one_of_3.go
 model_graph_node_one_of_4.go
 model_graph_node_one_of_5.go

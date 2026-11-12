@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**SubGraph** | [**GraphSubGraph**](GraphSubGraph.md) |  | 
+**SolveStep** | [**GraphSolveStep**](GraphSolveStep.md) |  | 
 
 ## Methods
 
 ### NewGraphNodeOneOf27
 
-`func NewGraphNodeOneOf27(subGraph GraphSubGraph, ) *GraphNodeOneOf27`
+`func NewGraphNodeOneOf27(solveStep GraphSolveStep, ) *GraphNodeOneOf27`
 
 NewGraphNodeOneOf27 instantiates a new GraphNodeOneOf27 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewGraphNodeOneOf27WithDefaults instantiates a new GraphNodeOneOf27 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetSubGraph
+### GetSolveStep
 
-`func (o *GraphNodeOneOf27) GetSubGraph() GraphSubGraph`
+`func (o *GraphNodeOneOf27) GetSolveStep() GraphSolveStep`
 
-GetSubGraph returns the SubGraph field if non-nil, zero value otherwise.
+GetSolveStep returns the SolveStep field if non-nil, zero value otherwise.
 
-### GetSubGraphOk
+### GetSolveStepOk
 
-`func (o *GraphNodeOneOf27) GetSubGraphOk() (*GraphSubGraph, bool)`
+`func (o *GraphNodeOneOf27) GetSolveStepOk() (*GraphSolveStep, bool)`
 
-GetSubGraphOk returns a tuple with the SubGraph field if it's non-nil, zero value otherwise
+GetSolveStepOk returns a tuple with the SolveStep field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetSubGraph
+### SetSolveStep
 
-`func (o *GraphNodeOneOf27) SetSubGraph(v GraphSubGraph)`
+`func (o *GraphNodeOneOf27) SetSolveStep(v GraphSolveStep)`
 
-SetSubGraph sets SubGraph field to given value.
+SetSolveStep sets SolveStep field to given value.
 
 
 

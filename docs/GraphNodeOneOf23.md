@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**SetProperty** | [**GraphSetProperty**](GraphSetProperty.md) |  | 
+**Select** | [**GraphSelect**](GraphSelect.md) |  | 
 
 ## Methods
 
 ### NewGraphNodeOneOf23
 
-`func NewGraphNodeOneOf23(setProperty GraphSetProperty, ) *GraphNodeOneOf23`
+`func NewGraphNodeOneOf23(select_ GraphSelect, ) *GraphNodeOneOf23`
 
 NewGraphNodeOneOf23 instantiates a new GraphNodeOneOf23 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewGraphNodeOneOf23WithDefaults instantiates a new GraphNodeOneOf23 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetSetProperty
+### GetSelect
 
-`func (o *GraphNodeOneOf23) GetSetProperty() GraphSetProperty`
+`func (o *GraphNodeOneOf23) GetSelect() GraphSelect`
 
-GetSetProperty returns the SetProperty field if non-nil, zero value otherwise.
+GetSelect returns the Select field if non-nil, zero value otherwise.
 
-### GetSetPropertyOk
+### GetSelectOk
 
-`func (o *GraphNodeOneOf23) GetSetPropertyOk() (*GraphSetProperty, bool)`
+`func (o *GraphNodeOneOf23) GetSelectOk() (*GraphSelect, bool)`
 
-GetSetPropertyOk returns a tuple with the SetProperty field if it's non-nil, zero value otherwise
+GetSelectOk returns a tuple with the Select field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetSetProperty
+### SetSelect
 
-`func (o *GraphNodeOneOf23) SetSetProperty(v GraphSetProperty)`
+`func (o *GraphNodeOneOf23) SetSelect(v GraphSelect)`
 
-SetSetProperty sets SetProperty field to given value.
+SetSelect sets Select field to given value.
 
 
 

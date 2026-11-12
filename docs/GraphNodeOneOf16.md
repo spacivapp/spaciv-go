@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**ObjectGroup** | [**GraphObjectGroup**](GraphObjectGroup.md) |  | 
+**Not** | **map[string]interface{}** |  | 
 
 ## Methods
 
 ### NewGraphNodeOneOf16
 
-`func NewGraphNodeOneOf16(objectGroup GraphObjectGroup, ) *GraphNodeOneOf16`
+`func NewGraphNodeOneOf16(not map[string]interface{}, ) *GraphNodeOneOf16`
 
 NewGraphNodeOneOf16 instantiates a new GraphNodeOneOf16 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewGraphNodeOneOf16WithDefaults instantiates a new GraphNodeOneOf16 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetObjectGroup
+### GetNot
 
-`func (o *GraphNodeOneOf16) GetObjectGroup() GraphObjectGroup`
+`func (o *GraphNodeOneOf16) GetNot() map[string]interface{}`
 
-GetObjectGroup returns the ObjectGroup field if non-nil, zero value otherwise.
+GetNot returns the Not field if non-nil, zero value otherwise.
 
-### GetObjectGroupOk
+### GetNotOk
 
-`func (o *GraphNodeOneOf16) GetObjectGroupOk() (*GraphObjectGroup, bool)`
+`func (o *GraphNodeOneOf16) GetNotOk() (*map[string]interface{}, bool)`
 
-GetObjectGroupOk returns a tuple with the ObjectGroup field if it's non-nil, zero value otherwise
+GetNotOk returns a tuple with the Not field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetObjectGroup
+### SetNot
 
-`func (o *GraphNodeOneOf16) SetObjectGroup(v GraphObjectGroup)`
+`func (o *GraphNodeOneOf16) SetNot(v map[string]interface{})`
 
-SetObjectGroup sets ObjectGroup field to given value.
+SetNot sets Not field to given value.
 
 
 

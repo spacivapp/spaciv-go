@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Round** | [**GraphRound**](GraphRound.md) |  | 
+**RemoveObjects** | **map[string]interface{}** |  | 
 
 ## Methods
 
 ### NewGraphNodeOneOf21
 
-`func NewGraphNodeOneOf21(round GraphRound, ) *GraphNodeOneOf21`
+`func NewGraphNodeOneOf21(removeObjects map[string]interface{}, ) *GraphNodeOneOf21`
 
 NewGraphNodeOneOf21 instantiates a new GraphNodeOneOf21 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewGraphNodeOneOf21WithDefaults instantiates a new GraphNodeOneOf21 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetRound
+### GetRemoveObjects
 
-`func (o *GraphNodeOneOf21) GetRound() GraphRound`
+`func (o *GraphNodeOneOf21) GetRemoveObjects() map[string]interface{}`
 
-GetRound returns the Round field if non-nil, zero value otherwise.
+GetRemoveObjects returns the RemoveObjects field if non-nil, zero value otherwise.
 
-### GetRoundOk
+### GetRemoveObjectsOk
 
-`func (o *GraphNodeOneOf21) GetRoundOk() (*GraphRound, bool)`
+`func (o *GraphNodeOneOf21) GetRemoveObjectsOk() (*map[string]interface{}, bool)`
 
-GetRoundOk returns a tuple with the Round field if it's non-nil, zero value otherwise
+GetRemoveObjectsOk returns a tuple with the RemoveObjects field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetRound
+### SetRemoveObjects
 
-`func (o *GraphNodeOneOf21) SetRound(v GraphRound)`
+`func (o *GraphNodeOneOf21) SetRemoveObjects(v map[string]interface{})`
 
-SetRound sets Round field to given value.
+SetRemoveObjects sets RemoveObjects field to given value.
 
 
 

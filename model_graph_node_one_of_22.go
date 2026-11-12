@@ -22,7 +22,7 @@ var _ MappedNullable = &GraphNodeOneOf22{}
 
 // GraphNodeOneOf22 struct for GraphNodeOneOf22
 type GraphNodeOneOf22 struct {
-	Select GraphSelect `json:"select"`
+	Round GraphRound `json:"round"`
 }
 
 type _GraphNodeOneOf22 GraphNodeOneOf22
@@ -31,9 +31,9 @@ type _GraphNodeOneOf22 GraphNodeOneOf22
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGraphNodeOneOf22(select_ GraphSelect) *GraphNodeOneOf22 {
+func NewGraphNodeOneOf22(round GraphRound) *GraphNodeOneOf22 {
 	this := GraphNodeOneOf22{}
-	this.Select = select_
+	this.Round = round
 	return &this
 }
 
@@ -45,28 +45,28 @@ func NewGraphNodeOneOf22WithDefaults() *GraphNodeOneOf22 {
 	return &this
 }
 
-// GetSelect returns the Select field value
-func (o *GraphNodeOneOf22) GetSelect() GraphSelect {
+// GetRound returns the Round field value
+func (o *GraphNodeOneOf22) GetRound() GraphRound {
 	if o == nil {
-		var ret GraphSelect
+		var ret GraphRound
 		return ret
 	}
 
-	return o.Select
+	return o.Round
 }
 
-// GetSelectOk returns a tuple with the Select field value
+// GetRoundOk returns a tuple with the Round field value
 // and a boolean to check if the value has been set.
-func (o *GraphNodeOneOf22) GetSelectOk() (*GraphSelect, bool) {
+func (o *GraphNodeOneOf22) GetRoundOk() (*GraphRound, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.Select, true
+	return &o.Round, true
 }
 
-// SetSelect sets field value
-func (o *GraphNodeOneOf22) SetSelect(v GraphSelect) {
-	o.Select = v
+// SetRound sets field value
+func (o *GraphNodeOneOf22) SetRound(v GraphRound) {
+	o.Round = v
 }
 
 func (o GraphNodeOneOf22) MarshalJSON() ([]byte, error) {
@@ -79,7 +79,7 @@ func (o GraphNodeOneOf22) MarshalJSON() ([]byte, error) {
 
 func (o GraphNodeOneOf22) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["select"] = o.Select
+	toSerialize["round"] = o.Round
 	return toSerialize, nil
 }
 
@@ -88,7 +88,7 @@ func (o *GraphNodeOneOf22) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"select",
+		"round",
 	}
 
 	allProperties := make(map[string]interface{})

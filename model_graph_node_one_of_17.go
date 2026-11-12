@@ -22,7 +22,7 @@ var _ MappedNullable = &GraphNodeOneOf17{}
 
 // GraphNodeOneOf17 struct for GraphNodeOneOf17
 type GraphNodeOneOf17 struct {
-	Or map[string]interface{} `json:"or"`
+	ObjectGroup GraphObjectGroup `json:"objectGroup"`
 }
 
 type _GraphNodeOneOf17 GraphNodeOneOf17
@@ -31,9 +31,9 @@ type _GraphNodeOneOf17 GraphNodeOneOf17
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGraphNodeOneOf17(or map[string]interface{}) *GraphNodeOneOf17 {
+func NewGraphNodeOneOf17(objectGroup GraphObjectGroup) *GraphNodeOneOf17 {
 	this := GraphNodeOneOf17{}
-	this.Or = or
+	this.ObjectGroup = objectGroup
 	return &this
 }
 
@@ -45,28 +45,28 @@ func NewGraphNodeOneOf17WithDefaults() *GraphNodeOneOf17 {
 	return &this
 }
 
-// GetOr returns the Or field value
-func (o *GraphNodeOneOf17) GetOr() map[string]interface{} {
+// GetObjectGroup returns the ObjectGroup field value
+func (o *GraphNodeOneOf17) GetObjectGroup() GraphObjectGroup {
 	if o == nil {
-		var ret map[string]interface{}
+		var ret GraphObjectGroup
 		return ret
 	}
 
-	return o.Or
+	return o.ObjectGroup
 }
 
-// GetOrOk returns a tuple with the Or field value
+// GetObjectGroupOk returns a tuple with the ObjectGroup field value
 // and a boolean to check if the value has been set.
-func (o *GraphNodeOneOf17) GetOrOk() (map[string]interface{}, bool) {
+func (o *GraphNodeOneOf17) GetObjectGroupOk() (*GraphObjectGroup, bool) {
 	if o == nil {
-		return map[string]interface{}{}, false
+		return nil, false
 	}
-	return o.Or, true
+	return &o.ObjectGroup, true
 }
 
-// SetOr sets field value
-func (o *GraphNodeOneOf17) SetOr(v map[string]interface{}) {
-	o.Or = v
+// SetObjectGroup sets field value
+func (o *GraphNodeOneOf17) SetObjectGroup(v GraphObjectGroup) {
+	o.ObjectGroup = v
 }
 
 func (o GraphNodeOneOf17) MarshalJSON() ([]byte, error) {
@@ -79,7 +79,7 @@ func (o GraphNodeOneOf17) MarshalJSON() ([]byte, error) {
 
 func (o GraphNodeOneOf17) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["or"] = o.Or
+	toSerialize["objectGroup"] = o.ObjectGroup
 	return toSerialize, nil
 }
 
@@ -88,7 +88,7 @@ func (o *GraphNodeOneOf17) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"or",
+		"objectGroup",
 	}
 
 	allProperties := make(map[string]interface{})

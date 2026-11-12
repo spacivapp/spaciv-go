@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**MultiplyAdd** | **map[string]interface{}** |  | 
+**MapProperty** | [**GraphMapProperty**](GraphMapProperty.md) |  | 
 
 ## Methods
 
 ### NewGraphNodeOneOf13
 
-`func NewGraphNodeOneOf13(multiplyAdd map[string]interface{}, ) *GraphNodeOneOf13`
+`func NewGraphNodeOneOf13(mapProperty GraphMapProperty, ) *GraphNodeOneOf13`
 
 NewGraphNodeOneOf13 instantiates a new GraphNodeOneOf13 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewGraphNodeOneOf13WithDefaults instantiates a new GraphNodeOneOf13 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetMultiplyAdd
+### GetMapProperty
 
-`func (o *GraphNodeOneOf13) GetMultiplyAdd() map[string]interface{}`
+`func (o *GraphNodeOneOf13) GetMapProperty() GraphMapProperty`
 
-GetMultiplyAdd returns the MultiplyAdd field if non-nil, zero value otherwise.
+GetMapProperty returns the MapProperty field if non-nil, zero value otherwise.
 
-### GetMultiplyAddOk
+### GetMapPropertyOk
 
-`func (o *GraphNodeOneOf13) GetMultiplyAddOk() (*map[string]interface{}, bool)`
+`func (o *GraphNodeOneOf13) GetMapPropertyOk() (*GraphMapProperty, bool)`
 
-GetMultiplyAddOk returns a tuple with the MultiplyAdd field if it's non-nil, zero value otherwise
+GetMapPropertyOk returns a tuple with the MapProperty field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetMultiplyAdd
+### SetMapProperty
 
-`func (o *GraphNodeOneOf13) SetMultiplyAdd(v map[string]interface{})`
+`func (o *GraphNodeOneOf13) SetMapProperty(v GraphMapProperty)`
 
-SetMultiplyAdd sets MultiplyAdd field to given value.
+SetMapProperty sets MapProperty field to given value.
 
 
 

@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**RemoveObjects** | **map[string]interface{}** |  | 
+**Pair** | **map[string]interface{}** |  | 
 
 ## Methods
 
 ### NewGraphNodeOneOf20
 
-`func NewGraphNodeOneOf20(removeObjects map[string]interface{}, ) *GraphNodeOneOf20`
+`func NewGraphNodeOneOf20(pair map[string]interface{}, ) *GraphNodeOneOf20`
 
 NewGraphNodeOneOf20 instantiates a new GraphNodeOneOf20 object
 This constructor will assign default values to properties that have it defined,
@@ -25,24 +25,24 @@ NewGraphNodeOneOf20WithDefaults instantiates a new GraphNodeOneOf20 object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetRemoveObjects
+### GetPair
 
-`func (o *GraphNodeOneOf20) GetRemoveObjects() map[string]interface{}`
+`func (o *GraphNodeOneOf20) GetPair() map[string]interface{}`
 
-GetRemoveObjects returns the RemoveObjects field if non-nil, zero value otherwise.
+GetPair returns the Pair field if non-nil, zero value otherwise.
 
-### GetRemoveObjectsOk
+### GetPairOk
 
-`func (o *GraphNodeOneOf20) GetRemoveObjectsOk() (*map[string]interface{}, bool)`
+`func (o *GraphNodeOneOf20) GetPairOk() (*map[string]interface{}, bool)`
 
-GetRemoveObjectsOk returns a tuple with the RemoveObjects field if it's non-nil, zero value otherwise
+GetPairOk returns a tuple with the Pair field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetRemoveObjects
+### SetPair
 
-`func (o *GraphNodeOneOf20) SetRemoveObjects(v map[string]interface{})`
+`func (o *GraphNodeOneOf20) SetPair(v map[string]interface{})`
 
-SetRemoveObjects sets RemoveObjects field to given value.
+SetPair sets Pair field to given value.
 
 
 

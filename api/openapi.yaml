@@ -15372,6 +15372,36 @@ components:
       - keyBy
       - missing
       - requireAllKeys
+    GraphMapProperty:
+      additionalProperties: false
+      properties:
+        rows:
+          items:
+            $ref: "#/components/schemas/GraphMapRow"
+          type: array
+        source:
+          type: string
+        target:
+          type: string
+      required:
+      - rows
+      - source
+      - target
+    GraphMapRow:
+      additionalProperties: false
+      properties:
+        codes:
+          items:
+            type: string
+          type: array
+        node:
+          type: string
+        value:
+          format: double
+          type: number
+      required:
+      - codes
+      - node
     GraphMultiplyAdd:
       additionalProperties: false
       type: object
@@ -15426,6 +15456,7 @@ components:
       - $ref: "#/components/schemas/GraphNode_oneOf_26"
       - $ref: "#/components/schemas/GraphNode_oneOf_27"
       - $ref: "#/components/schemas/GraphNode_oneOf_28"
+      - $ref: "#/components/schemas/GraphNode_oneOf_29"
       properties:
         id:
           type: string
@@ -22670,100 +22701,106 @@ components:
       - lookupTable
     GraphNode_oneOf_13:
       properties:
+        mapProperty:
+          $ref: "#/components/schemas/GraphMapProperty"
+      required:
+      - mapProperty
+    GraphNode_oneOf_14:
+      properties:
         multiplyAdd:
           additionalProperties: false
           type: object
       required:
       - multiplyAdd
-    GraphNode_oneOf_14:
+    GraphNode_oneOf_15:
       properties:
         need:
           $ref: "#/components/schemas/GraphNeed"
       required:
       - need
-    GraphNode_oneOf_15:
+    GraphNode_oneOf_16:
       properties:
         not:
           additionalProperties: false
           type: object
       required:
       - not
-    GraphNode_oneOf_16:
+    GraphNode_oneOf_17:
       properties:
         objectGroup:
           $ref: "#/components/schemas/GraphObjectGroup"
       required:
       - objectGroup
-    GraphNode_oneOf_17:
+    GraphNode_oneOf_18:
       properties:
         or:
           additionalProperties: false
           type: object
       required:
       - or
-    GraphNode_oneOf_18:
+    GraphNode_oneOf_19:
       properties:
         overTime:
           $ref: "#/components/schemas/GraphOverTime"
       required:
       - overTime
-    GraphNode_oneOf_19:
+    GraphNode_oneOf_20:
       properties:
         pair:
           additionalProperties: false
           type: object
       required:
       - pair
-    GraphNode_oneOf_20:
+    GraphNode_oneOf_21:
       properties:
         removeObjects:
           additionalProperties: false
           type: object
       required:
       - removeObjects
-    GraphNode_oneOf_21:
+    GraphNode_oneOf_22:
       properties:
         round:
           $ref: "#/components/schemas/GraphRound"
       required:
       - round
-    GraphNode_oneOf_22:
+    GraphNode_oneOf_23:
       properties:
         select:
           $ref: "#/components/schemas/GraphSelect"
       required:
       - select
-    GraphNode_oneOf_23:
+    GraphNode_oneOf_24:
       properties:
         setProperty:
           $ref: "#/components/schemas/GraphSetProperty"
       required:
       - setProperty
-    GraphNode_oneOf_24:
+    GraphNode_oneOf_25:
       properties:
         setVariable:
           $ref: "#/components/schemas/GraphSetVariable"
       required:
       - setVariable
-    GraphNode_oneOf_25:
+    GraphNode_oneOf_26:
       properties:
         solve:
           $ref: "#/components/schemas/GraphSolve"
       required:
       - solve
-    GraphNode_oneOf_26:
+    GraphNode_oneOf_27:
       properties:
         solveStep:
           $ref: "#/components/schemas/GraphSolveStep"
       required:
       - solveStep
-    GraphNode_oneOf_27:
+    GraphNode_oneOf_28:
       properties:
         subGraph:
           $ref: "#/components/schemas/GraphSubGraph"
       required:
       - subGraph
-    GraphNode_oneOf_28:
+    GraphNode_oneOf_29:
       properties:
         union:
           $ref: "#/components/schemas/GraphUnion"

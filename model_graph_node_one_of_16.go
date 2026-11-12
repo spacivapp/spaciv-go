@@ -22,7 +22,7 @@ var _ MappedNullable = &GraphNodeOneOf16{}
 
 // GraphNodeOneOf16 struct for GraphNodeOneOf16
 type GraphNodeOneOf16 struct {
-	ObjectGroup GraphObjectGroup `json:"objectGroup"`
+	Not map[string]interface{} `json:"not"`
 }
 
 type _GraphNodeOneOf16 GraphNodeOneOf16
@@ -31,9 +31,9 @@ type _GraphNodeOneOf16 GraphNodeOneOf16
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGraphNodeOneOf16(objectGroup GraphObjectGroup) *GraphNodeOneOf16 {
+func NewGraphNodeOneOf16(not map[string]interface{}) *GraphNodeOneOf16 {
 	this := GraphNodeOneOf16{}
-	this.ObjectGroup = objectGroup
+	this.Not = not
 	return &this
 }
 
@@ -45,28 +45,28 @@ func NewGraphNodeOneOf16WithDefaults() *GraphNodeOneOf16 {
 	return &this
 }
 
-// GetObjectGroup returns the ObjectGroup field value
-func (o *GraphNodeOneOf16) GetObjectGroup() GraphObjectGroup {
+// GetNot returns the Not field value
+func (o *GraphNodeOneOf16) GetNot() map[string]interface{} {
 	if o == nil {
-		var ret GraphObjectGroup
+		var ret map[string]interface{}
 		return ret
 	}
 
-	return o.ObjectGroup
+	return o.Not
 }
 
-// GetObjectGroupOk returns a tuple with the ObjectGroup field value
+// GetNotOk returns a tuple with the Not field value
 // and a boolean to check if the value has been set.
-func (o *GraphNodeOneOf16) GetObjectGroupOk() (*GraphObjectGroup, bool) {
+func (o *GraphNodeOneOf16) GetNotOk() (map[string]interface{}, bool) {
 	if o == nil {
-		return nil, false
+		return map[string]interface{}{}, false
 	}
-	return &o.ObjectGroup, true
+	return o.Not, true
 }
 
-// SetObjectGroup sets field value
-func (o *GraphNodeOneOf16) SetObjectGroup(v GraphObjectGroup) {
-	o.ObjectGroup = v
+// SetNot sets field value
+func (o *GraphNodeOneOf16) SetNot(v map[string]interface{}) {
+	o.Not = v
 }
 
 func (o GraphNodeOneOf16) MarshalJSON() ([]byte, error) {
@@ -79,7 +79,7 @@ func (o GraphNodeOneOf16) MarshalJSON() ([]byte, error) {
 
 func (o GraphNodeOneOf16) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["objectGroup"] = o.ObjectGroup
+	toSerialize["not"] = o.Not
 	return toSerialize, nil
 }
 
@@ -88,7 +88,7 @@ func (o *GraphNodeOneOf16) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"objectGroup",
+		"not",
 	}
 
 	allProperties := make(map[string]interface{})

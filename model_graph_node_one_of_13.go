@@ -22,7 +22,7 @@ var _ MappedNullable = &GraphNodeOneOf13{}
 
 // GraphNodeOneOf13 struct for GraphNodeOneOf13
 type GraphNodeOneOf13 struct {
-	MultiplyAdd map[string]interface{} `json:"multiplyAdd"`
+	MapProperty GraphMapProperty `json:"mapProperty"`
 }
 
 type _GraphNodeOneOf13 GraphNodeOneOf13
@@ -31,9 +31,9 @@ type _GraphNodeOneOf13 GraphNodeOneOf13
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewGraphNodeOneOf13(multiplyAdd map[string]interface{}) *GraphNodeOneOf13 {
+func NewGraphNodeOneOf13(mapProperty GraphMapProperty) *GraphNodeOneOf13 {
 	this := GraphNodeOneOf13{}
-	this.MultiplyAdd = multiplyAdd
+	this.MapProperty = mapProperty
 	return &this
 }
 
@@ -45,28 +45,28 @@ func NewGraphNodeOneOf13WithDefaults() *GraphNodeOneOf13 {
 	return &this
 }
 
-// GetMultiplyAdd returns the MultiplyAdd field value
-func (o *GraphNodeOneOf13) GetMultiplyAdd() map[string]interface{} {
+// GetMapProperty returns the MapProperty field value
+func (o *GraphNodeOneOf13) GetMapProperty() GraphMapProperty {
 	if o == nil {
-		var ret map[string]interface{}
+		var ret GraphMapProperty
 		return ret
 	}
 
-	return o.MultiplyAdd
+	return o.MapProperty
 }
 
-// GetMultiplyAddOk returns a tuple with the MultiplyAdd field value
+// GetMapPropertyOk returns a tuple with the MapProperty field value
 // and a boolean to check if the value has been set.
-func (o *GraphNodeOneOf13) GetMultiplyAddOk() (map[string]interface{}, bool) {
+func (o *GraphNodeOneOf13) GetMapPropertyOk() (*GraphMapProperty, bool) {
 	if o == nil {
-		return map[string]interface{}{}, false
+		return nil, false
 	}
-	return o.MultiplyAdd, true
+	return &o.MapProperty, true
 }
 
-// SetMultiplyAdd sets field value
-func (o *GraphNodeOneOf13) SetMultiplyAdd(v map[string]interface{}) {
-	o.MultiplyAdd = v
+// SetMapProperty sets field value
+func (o *GraphNodeOneOf13) SetMapProperty(v GraphMapProperty) {
+	o.MapProperty = v
 }
 
 func (o GraphNodeOneOf13) MarshalJSON() ([]byte, error) {
@@ -79,7 +79,7 @@ func (o GraphNodeOneOf13) MarshalJSON() ([]byte, error) {
 
 func (o GraphNodeOneOf13) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["multiplyAdd"] = o.MultiplyAdd
+	toSerialize["mapProperty"] = o.MapProperty
 	return toSerialize, nil
 }
 
@@ -88,7 +88,7 @@ func (o *GraphNodeOneOf13) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"multiplyAdd",
+		"mapProperty",
 	}
 
 	allProperties := make(map[string]interface{})
