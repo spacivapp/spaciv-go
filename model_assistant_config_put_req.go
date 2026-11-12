@@ -23,6 +23,7 @@ var _ MappedNullable = &AssistantConfigPutReq{}
 // AssistantConfigPutReq struct for AssistantConfigPutReq
 type AssistantConfigPutReq struct {
 	BudgetLimit *AssistantBudgetLimit `json:"budgetLimit,omitempty"`
+	EuDataResidency *bool `json:"euDataResidency,omitempty"`
 	LlmModel *string `json:"llmModel,omitempty"`
 	PermittedModels []string `json:"permittedModels"`
 	ToolsEnabled *bool `json:"toolsEnabled,omitempty"`
@@ -78,6 +79,38 @@ func (o *AssistantConfigPutReq) HasBudgetLimit() bool {
 // SetBudgetLimit gets a reference to the given AssistantBudgetLimit and assigns it to the BudgetLimit field.
 func (o *AssistantConfigPutReq) SetBudgetLimit(v AssistantBudgetLimit) {
 	o.BudgetLimit = &v
+}
+
+// GetEuDataResidency returns the EuDataResidency field value if set, zero value otherwise.
+func (o *AssistantConfigPutReq) GetEuDataResidency() bool {
+	if o == nil || IsNil(o.EuDataResidency) {
+		var ret bool
+		return ret
+	}
+	return *o.EuDataResidency
+}
+
+// GetEuDataResidencyOk returns a tuple with the EuDataResidency field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AssistantConfigPutReq) GetEuDataResidencyOk() (*bool, bool) {
+	if o == nil || IsNil(o.EuDataResidency) {
+		return nil, false
+	}
+	return o.EuDataResidency, true
+}
+
+// HasEuDataResidency returns a boolean if a field has been set.
+func (o *AssistantConfigPutReq) HasEuDataResidency() bool {
+	if o != nil && !IsNil(o.EuDataResidency) {
+		return true
+	}
+
+	return false
+}
+
+// SetEuDataResidency gets a reference to the given bool and assigns it to the EuDataResidency field.
+func (o *AssistantConfigPutReq) SetEuDataResidency(v bool) {
+	o.EuDataResidency = &v
 }
 
 // GetLlmModel returns the LlmModel field value if set, zero value otherwise.
@@ -180,6 +213,9 @@ func (o AssistantConfigPutReq) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	if !IsNil(o.BudgetLimit) {
 		toSerialize["budgetLimit"] = o.BudgetLimit
+	}
+	if !IsNil(o.EuDataResidency) {
+		toSerialize["euDataResidency"] = o.EuDataResidency
 	}
 	if !IsNil(o.LlmModel) {
 		toSerialize["llmModel"] = o.LlmModel

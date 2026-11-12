@@ -89,6 +89,7 @@ docs/AssistantConversationFailureBody.md
 docs/AssistantConversationListEntry.md
 docs/AssistantConversationListRes.md
 docs/AssistantModelListBody.md
+docs/AssistantModelOption.md
 docs/AssistantTranscriptBody.md
 docs/AssistantTranscriptMessage.md
 docs/AssistantTranscriptToolCall.md
@@ -630,6 +631,7 @@ model_assistant_conversation_failure_body.go
 model_assistant_conversation_list_entry.go
 model_assistant_conversation_list_res.go
 model_assistant_model_list_body.go
+model_assistant_model_option.go
 model_assistant_transcript_body.go
 model_assistant_transcript_message.go
 model_assistant_transcript_tool_call.go

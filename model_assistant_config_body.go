@@ -25,7 +25,8 @@ type AssistantConfigBody struct {
 	BudgetLimitCredits NullableInt64 `json:"budgetLimitCredits"`
 	BudgetLimitMaxCredits NullableInt64 `json:"budgetLimitMaxCredits"`
 	BudgetLimitMinCredits NullableInt64 `json:"budgetLimitMinCredits"`
-	Models []IDNameStringString `json:"models"`
+	EuDataResidency bool `json:"euDataResidency"`
+	Models []AssistantModelOption `json:"models"`
 	PermittedModels []string `json:"permittedModels"`
 	PricePerCreditEur float64 `json:"pricePerCreditEur"`
 	SpentCredits NullableInt64 `json:"spentCredits"`
@@ -38,11 +39,12 @@ type _AssistantConfigBody AssistantConfigBody
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAssistantConfigBody(budgetLimitCredits NullableInt64, budgetLimitMaxCredits NullableInt64, budgetLimitMinCredits NullableInt64, models []IDNameStringString, permittedModels []string, pricePerCreditEur float64, spentCredits NullableInt64, toolsEnabled bool) *AssistantConfigBody {
+func NewAssistantConfigBody(budgetLimitCredits NullableInt64, budgetLimitMaxCredits NullableInt64, budgetLimitMinCredits NullableInt64, euDataResidency bool, models []AssistantModelOption, permittedModels []string, pricePerCreditEur float64, spentCredits NullableInt64, toolsEnabled bool) *AssistantConfigBody {
 	this := AssistantConfigBody{}
 	this.BudgetLimitCredits = budgetLimitCredits
 	this.BudgetLimitMaxCredits = budgetLimitMaxCredits
 	this.BudgetLimitMinCredits = budgetLimitMinCredits
+	this.EuDataResidency = euDataResidency
 	this.Models = models
 	this.PermittedModels = permittedModels
 	this.PricePerCreditEur = pricePerCreditEur
@@ -137,10 +139,34 @@ func (o *AssistantConfigBody) SetBudgetLimitMinCredits(v int64) {
 	o.BudgetLimitMinCredits.Set(&v)
 }
 
-// GetModels returns the Models field value
-func (o *AssistantConfigBody) GetModels() []IDNameStringString {
+// GetEuDataResidency returns the EuDataResidency field value
+func (o *AssistantConfigBody) GetEuDataResidency() bool {
 	if o == nil {
-		var ret []IDNameStringString
+		var ret bool
+		return ret
+	}
+
+	return o.EuDataResidency
+}
+
+// GetEuDataResidencyOk returns a tuple with the EuDataResidency field value
+// and a boolean to check if the value has been set.
+func (o *AssistantConfigBody) GetEuDataResidencyOk() (*bool, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.EuDataResidency, true
+}
+
+// SetEuDataResidency sets field value
+func (o *AssistantConfigBody) SetEuDataResidency(v bool) {
+	o.EuDataResidency = v
+}
+
+// GetModels returns the Models field value
+func (o *AssistantConfigBody) GetModels() []AssistantModelOption {
+	if o == nil {
+		var ret []AssistantModelOption
 		return ret
 	}
 
@@ -149,7 +175,7 @@ func (o *AssistantConfigBody) GetModels() []IDNameStringString {
 
 // GetModelsOk returns a tuple with the Models field value
 // and a boolean to check if the value has been set.
-func (o *AssistantConfigBody) GetModelsOk() ([]IDNameStringString, bool) {
+func (o *AssistantConfigBody) GetModelsOk() ([]AssistantModelOption, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -157,7 +183,7 @@ func (o *AssistantConfigBody) GetModelsOk() ([]IDNameStringString, bool) {
 }
 
 // SetModels sets field value
-func (o *AssistantConfigBody) SetModels(v []IDNameStringString) {
+func (o *AssistantConfigBody) SetModels(v []AssistantModelOption) {
 	o.Models = v
 }
 
@@ -272,6 +298,7 @@ func (o AssistantConfigBody) ToMap() (map[string]interface{}, error) {
 	toSerialize["budgetLimitCredits"] = o.BudgetLimitCredits.Get()
 	toSerialize["budgetLimitMaxCredits"] = o.BudgetLimitMaxCredits.Get()
 	toSerialize["budgetLimitMinCredits"] = o.BudgetLimitMinCredits.Get()
+	toSerialize["euDataResidency"] = o.EuDataResidency
 	toSerialize["models"] = o.Models
 	toSerialize["permittedModels"] = o.PermittedModels
 	toSerialize["pricePerCreditEur"] = o.PricePerCreditEur
@@ -288,6 +315,7 @@ func (o *AssistantConfigBody) UnmarshalJSON(data []byte) (err error) {
 		"budgetLimitCredits",
 		"budgetLimitMaxCredits",
 		"budgetLimitMinCredits",
+		"euDataResidency",
 		"models",
 		"permittedModels",
 		"pricePerCreditEur",

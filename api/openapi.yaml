@@ -2309,12 +2309,15 @@ paths:
         \ `null` for none, and not a bound on the budget: an account may cap itself\
         \ below it), what a credit costs the account in euros, what it has spent so\
         \ far this month (`spentCredits`, `null` while that figure is unavailable),\
-        \ and the models it permits (empty for all of them). Every credit figure is\
-        \ `null` rather than `0` where there is none, so that no amount stands for\
-        \ the absence of one. `models` lists the whole catalogue, not just the permitted\
-        \ subset, so that the settings page can offer the models the account has not\
-        \ permitted. Requires either the *AI assistant* or the *Manage my account*\
-        \ permission."
+        \ the models it permits (empty for all of them), and whether it has EU data\
+        \ residency on (`euDataResidency`), under which it permits only models hosted\
+        \ in the EU and the assistant refuses features with no EU-hosted model, such\
+        \ as image generation. Every credit figure is `null` rather than `0` where\
+        \ there is none, so that no amount stands for the absence of one. `models`\
+        \ lists the whole catalogue, not just the permitted subset, so that the settings\
+        \ page can offer the models the account has not permitted, and marks each\
+        \ one hosted in the EU with `hostedInEu`. Requires either the *AI assistant*\
+        \ or the *Manage my account* permission."
       operationId: assistant_get-config
       parameters: []
       responses:
@@ -2353,9 +2356,16 @@ paths:
         \ the account may use, and an empty list permits every model; unlike the other\
         \ fields it is always replaced rather than merged, so a request that omits\
         \ it clears it. Restricting `permittedModels` so that they exclude a default\
-        \ set by an earlier request clears that default. Returns `400` for an unsupported\
-        \ model, for an `llmModel` the same request does not permit, or for a budget\
-        \ above the permitted maximum. Requires the *Manage my account* permission."
+        \ set by an earlier request clears that default. `euDataResidency` turns EU\
+        \ data residency on or off, and omitting it leaves it unchanged; while it\
+        \ is on, `permittedModels` must list only models hosted in the EU, and must\
+        \ not be empty, since an empty list permits every model. Turning it on does\
+        \ not narrow the permitted models on the account's behalf: a request that\
+        \ turns it on must send the EU-hosted models it permits. Returns `400` for\
+        \ an unsupported model, for a model hosted outside the EU or an empty `permittedModels`\
+        \ while EU data residency is on, for an `llmModel` the same request does not\
+        \ permit, or for a budget above the permitted maximum. Requires the *Manage\
+        \ my account* permission."
       operationId: assistant_update-config
       parameters: []
       requestBody:
@@ -10876,9 +10886,11 @@ components:
       additionalProperties: false
       example:
         models:
-        - name: name
+        - hostedInEu: true
+          name: name
           id: id
-        - name: name
+        - hostedInEu: true
+          name: name
           id: id
         pricePerCreditEur: 5.962133916683182
         spentCredits: 5
@@ -10889,6 +10901,7 @@ components:
         permittedModels:
         - permittedModels
         - permittedModels
+        euDataResidency: true
       properties:
         budgetLimitCredits:
           format: int64
@@ -10902,9 +10915,11 @@ components:
           format: int64
           nullable: true
           type: integer
+        euDataResidency:
+          type: boolean
         models:
           items:
-            $ref: "#/components/schemas/IDNameStringString"
+            $ref: "#/components/schemas/AssistantModelOption"
           type: array
         permittedModels:
           items:
@@ -10923,6 +10938,7 @@ components:
       - budgetLimitCredits
       - budgetLimitMaxCredits
       - budgetLimitMinCredits
+      - euDataResidency
       - models
       - permittedModels
       - pricePerCreditEur
@@ -10935,12 +10951,15 @@ components:
         permittedModels:
         - permittedModels
         - permittedModels
+        euDataResidency: true
         llmModel: llmModel
         budgetLimit:
           credits: 0
       properties:
         budgetLimit:
           $ref: "#/components/schemas/AssistantBudgetLimit"
+        euDataResidency:
+          type: boolean
         llmModel:
           type: string
         permittedModels:
@@ -11020,6 +11039,23 @@ components:
       required:
       - defaultModel
       - models
+    AssistantModelOption:
+      additionalProperties: false
+      example:
+        hostedInEu: true
+        name: name
+        id: id
+      properties:
+        hostedInEu:
+          type: boolean
+        id:
+          type: string
+        name:
+          type: string
+      required:
+      - hostedInEu
+      - id
+      - name
     AssistantTranscriptBody:
       additionalProperties: false
       example:

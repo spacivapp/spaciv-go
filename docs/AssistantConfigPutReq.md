@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **BudgetLimit** | Pointer to [**AssistantBudgetLimit**](AssistantBudgetLimit.md) |  | [optional] 
+**EuDataResidency** | Pointer to **bool** |  | [optional] 
 **LlmModel** | Pointer to **string** |  | [optional] 
 **PermittedModels** | **[]string** |  | 
 **ToolsEnabled** | Pointer to **bool** |  | [optional] 
@@ -52,6 +53,31 @@ SetBudgetLimit sets BudgetLimit field to given value.
 `func (o *AssistantConfigPutReq) HasBudgetLimit() bool`
 
 HasBudgetLimit returns a boolean if a field has been set.
+
+### GetEuDataResidency
+
+`func (o *AssistantConfigPutReq) GetEuDataResidency() bool`
+
+GetEuDataResidency returns the EuDataResidency field if non-nil, zero value otherwise.
+
+### GetEuDataResidencyOk
+
+`func (o *AssistantConfigPutReq) GetEuDataResidencyOk() (*bool, bool)`
+
+GetEuDataResidencyOk returns a tuple with the EuDataResidency field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetEuDataResidency
+
+`func (o *AssistantConfigPutReq) SetEuDataResidency(v bool)`
+
+SetEuDataResidency sets EuDataResidency field to given value.
+
+### HasEuDataResidency
+
+`func (o *AssistantConfigPutReq) HasEuDataResidency() bool`
+
+HasEuDataResidency returns a boolean if a field has been set.
 
 ### GetLlmModel
 

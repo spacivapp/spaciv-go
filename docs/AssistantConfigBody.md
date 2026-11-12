@@ -7,7 +7,8 @@ Name | Type | Description | Notes
 **BudgetLimitCredits** | **NullableInt64** |  | 
 **BudgetLimitMaxCredits** | **NullableInt64** |  | 
 **BudgetLimitMinCredits** | **NullableInt64** |  | 
-**Models** | [**[]IDNameStringString**](IDNameStringString.md) |  | 
+**EuDataResidency** | **bool** |  | 
+**Models** | [**[]AssistantModelOption**](AssistantModelOption.md) |  | 
 **PermittedModels** | **[]string** |  | 
 **PricePerCreditEur** | **float64** |  | 
 **SpentCredits** | **NullableInt64** |  | 
@@ -17,7 +18,7 @@ Name | Type | Description | Notes
 
 ### NewAssistantConfigBody
 
-`func NewAssistantConfigBody(budgetLimitCredits NullableInt64, budgetLimitMaxCredits NullableInt64, budgetLimitMinCredits NullableInt64, models []IDNameStringString, permittedModels []string, pricePerCreditEur float64, spentCredits NullableInt64, toolsEnabled bool, ) *AssistantConfigBody`
+`func NewAssistantConfigBody(budgetLimitCredits NullableInt64, budgetLimitMaxCredits NullableInt64, budgetLimitMinCredits NullableInt64, euDataResidency bool, models []AssistantModelOption, permittedModels []string, pricePerCreditEur float64, spentCredits NullableInt64, toolsEnabled bool, ) *AssistantConfigBody`
 
 NewAssistantConfigBody instantiates a new AssistantConfigBody object
 This constructor will assign default values to properties that have it defined,
@@ -122,22 +123,42 @@ SetBudgetLimitMinCredits sets BudgetLimitMinCredits field to given value.
 `func (o *AssistantConfigBody) UnsetBudgetLimitMinCredits()`
 
 UnsetBudgetLimitMinCredits ensures that no value is present for BudgetLimitMinCredits, not even an explicit nil
+### GetEuDataResidency
+
+`func (o *AssistantConfigBody) GetEuDataResidency() bool`
+
+GetEuDataResidency returns the EuDataResidency field if non-nil, zero value otherwise.
+
+### GetEuDataResidencyOk
+
+`func (o *AssistantConfigBody) GetEuDataResidencyOk() (*bool, bool)`
+
+GetEuDataResidencyOk returns a tuple with the EuDataResidency field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetEuDataResidency
+
+`func (o *AssistantConfigBody) SetEuDataResidency(v bool)`
+
+SetEuDataResidency sets EuDataResidency field to given value.
+
+
 ### GetModels
 
-`func (o *AssistantConfigBody) GetModels() []IDNameStringString`
+`func (o *AssistantConfigBody) GetModels() []AssistantModelOption`
 
 GetModels returns the Models field if non-nil, zero value otherwise.
 
 ### GetModelsOk
 
-`func (o *AssistantConfigBody) GetModelsOk() (*[]IDNameStringString, bool)`
+`func (o *AssistantConfigBody) GetModelsOk() (*[]AssistantModelOption, bool)`
 
 GetModelsOk returns a tuple with the Models field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetModels
 
-`func (o *AssistantConfigBody) SetModels(v []IDNameStringString)`
+`func (o *AssistantConfigBody) SetModels(v []AssistantModelOption)`
 
 SetModels sets Models field to given value.
 
