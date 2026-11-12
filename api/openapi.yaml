@@ -2364,8 +2364,10 @@ paths:
         \ turns it on must send the EU-hosted models it permits. Returns `400` for\
         \ an unsupported model, for a model hosted outside the EU or an empty `permittedModels`\
         \ while EU data residency is on, for an `llmModel` the same request does not\
-        \ permit, or for a budget above the permitted maximum. Requires the *Manage\
-        \ my account* permission."
+        \ permit, or for a budget above the permitted maximum. A request is checked\
+        \ against the configuration as it stands when it is written, so one that another\
+        \ request changed first is checked again; returns `409` if the configuration\
+        \ keeps changing while it is saved. Requires the *Manage my account* permission."
       operationId: assistant_update-config
       parameters: []
       requestBody:
