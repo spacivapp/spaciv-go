@@ -6,12 +6,13 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Id** | **string** |  | 
 **Status** | **int32** |  | 
+**UpdatedAt** | **string** |  | 
 
 ## Methods
 
 ### NewAssistantConversationListEntry
 
-`func NewAssistantConversationListEntry(id string, status int32, ) *AssistantConversationListEntry`
+`func NewAssistantConversationListEntry(id string, status int32, updatedAt string, ) *AssistantConversationListEntry`
 
 NewAssistantConversationListEntry instantiates a new AssistantConversationListEntry object
 This constructor will assign default values to properties that have it defined,
@@ -64,6 +65,26 @@ and a boolean to check if the value has been set.
 `func (o *AssistantConversationListEntry) SetStatus(v int32)`
 
 SetStatus sets Status field to given value.
+
+
+### GetUpdatedAt
+
+`func (o *AssistantConversationListEntry) GetUpdatedAt() string`
+
+GetUpdatedAt returns the UpdatedAt field if non-nil, zero value otherwise.
+
+### GetUpdatedAtOk
+
+`func (o *AssistantConversationListEntry) GetUpdatedAtOk() (*string, bool)`
+
+GetUpdatedAtOk returns a tuple with the UpdatedAt field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetUpdatedAt
+
+`func (o *AssistantConversationListEntry) SetUpdatedAt(v string)`
+
+SetUpdatedAt sets UpdatedAt field to given value.
 
 
 

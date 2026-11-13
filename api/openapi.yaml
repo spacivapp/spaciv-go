@@ -11007,23 +11007,29 @@ components:
       example:
         id: id
         status: 0
+        updatedAt: updatedAt
       properties:
         id:
           type: string
         status:
           format: int32
           type: integer
+        updatedAt:
+          type: string
       required:
       - id
       - status
+      - updatedAt
     AssistantConversationListRes:
       additionalProperties: false
       example:
         list:
         - id: id
           status: 0
+          updatedAt: updatedAt
         - id: id
           status: 0
+          updatedAt: updatedAt
       properties:
         list:
           items:

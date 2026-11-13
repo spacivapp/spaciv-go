@@ -24,6 +24,7 @@ var _ MappedNullable = &AssistantConversationListEntry{}
 type AssistantConversationListEntry struct {
 	Id string `json:"id"`
 	Status int32 `json:"status"`
+	UpdatedAt string `json:"updatedAt"`
 }
 
 type _AssistantConversationListEntry AssistantConversationListEntry
@@ -32,10 +33,11 @@ type _AssistantConversationListEntry AssistantConversationListEntry
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAssistantConversationListEntry(id string, status int32) *AssistantConversationListEntry {
+func NewAssistantConversationListEntry(id string, status int32, updatedAt string) *AssistantConversationListEntry {
 	this := AssistantConversationListEntry{}
 	this.Id = id
 	this.Status = status
+	this.UpdatedAt = updatedAt
 	return &this
 }
 
@@ -95,6 +97,30 @@ func (o *AssistantConversationListEntry) SetStatus(v int32) {
 	o.Status = v
 }
 
+// GetUpdatedAt returns the UpdatedAt field value
+func (o *AssistantConversationListEntry) GetUpdatedAt() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.UpdatedAt
+}
+
+// GetUpdatedAtOk returns a tuple with the UpdatedAt field value
+// and a boolean to check if the value has been set.
+func (o *AssistantConversationListEntry) GetUpdatedAtOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.UpdatedAt, true
+}
+
+// SetUpdatedAt sets field value
+func (o *AssistantConversationListEntry) SetUpdatedAt(v string) {
+	o.UpdatedAt = v
+}
+
 func (o AssistantConversationListEntry) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -107,6 +133,7 @@ func (o AssistantConversationListEntry) ToMap() (map[string]interface{}, error) 
 	toSerialize := map[string]interface{}{}
 	toSerialize["id"] = o.Id
 	toSerialize["status"] = o.Status
+	toSerialize["updatedAt"] = o.UpdatedAt
 	return toSerialize, nil
 }
 
@@ -117,6 +144,7 @@ func (o *AssistantConversationListEntry) UnmarshalJSON(data []byte) (err error) 
 	requiredProperties := []string{
 		"id",
 		"status",
+		"updatedAt",
 	}
 
 	allProperties := make(map[string]interface{})
