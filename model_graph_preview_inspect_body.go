@@ -24,6 +24,8 @@ var _ MappedNullable = &GraphPreviewInspectBody{}
 type GraphPreviewInspectBody struct {
 	// Reverses the order sort gives.
 	Descending *bool `json:"descending,omitempty"`
+	// Lists only the items whose objects these filter groups select, as a calculation's filters select them: any group may match, and within a group every filter must. An item of a set that isn't of objects is always listed.
+	Filters []FilterGroup `json:"filters,omitempty"`
 	// How many items to list.
 	Limit int64 `json:"limit"`
 	// The node whose output to list.
@@ -90,6 +92,38 @@ func (o *GraphPreviewInspectBody) HasDescending() bool {
 // SetDescending gets a reference to the given bool and assigns it to the Descending field.
 func (o *GraphPreviewInspectBody) SetDescending(v bool) {
 	o.Descending = &v
+}
+
+// GetFilters returns the Filters field value if set, zero value otherwise.
+func (o *GraphPreviewInspectBody) GetFilters() []FilterGroup {
+	if o == nil || IsNil(o.Filters) {
+		var ret []FilterGroup
+		return ret
+	}
+	return o.Filters
+}
+
+// GetFiltersOk returns a tuple with the Filters field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *GraphPreviewInspectBody) GetFiltersOk() ([]FilterGroup, bool) {
+	if o == nil || IsNil(o.Filters) {
+		return nil, false
+	}
+	return o.Filters, true
+}
+
+// HasFilters returns a boolean if a field has been set.
+func (o *GraphPreviewInspectBody) HasFilters() bool {
+	if o != nil && !IsNil(o.Filters) {
+		return true
+	}
+
+	return false
+}
+
+// SetFilters gets a reference to the given []FilterGroup and assigns it to the Filters field.
+func (o *GraphPreviewInspectBody) SetFilters(v []FilterGroup) {
+	o.Filters = v
 }
 
 // GetLimit returns the Limit field value
@@ -272,6 +306,9 @@ func (o GraphPreviewInspectBody) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	if !IsNil(o.Descending) {
 		toSerialize["descending"] = o.Descending
+	}
+	if !IsNil(o.Filters) {
+		toSerialize["filters"] = o.Filters
 	}
 	toSerialize["limit"] = o.Limit
 	toSerialize["node"] = o.Node

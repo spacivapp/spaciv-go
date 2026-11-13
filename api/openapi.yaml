@@ -5332,22 +5332,22 @@ paths:
         \ on one day of a scenario, and returns a summary of each: a set's item count,\
         \ a single number's value, or a value per item's count, range and sum. With\
         \ `inspect`, it also lists one output's items a page at a time in `table`,\
-        \ with `total` counting every item that matches the search. The graph reads\
-        \ the objects that reach its layer in the scenario's stack, or all of the\
-        \ scenario's objects when the layer isn't in the stack. A graph that fails\
-        \ its check, or a node that fails, is reported in `error`, with the first\
-        \ failing node in `node` and every output that doesn't depend on a failed\
-        \ node. The table's items and their objects need the *View objects* permission,\
-        \ and their objects' property values, and sorting by a property, need *View\
-        \ properties* or *Edit properties*; without them the summaries are returned\
-        \ without those details, and an error raised while working out the graph is\
-        \ replaced by a general one. Calculated like an analysis, with the scenario's\
-        \ layer variables when *Variable controls* is on, and charged as one; an unchanged\
-        \ config, scenario and day is answered from the cache. Returns `400` if the\
-        \ config isn't a graph layer config or the scenario doesn't exist. Returns\
-        \ `403` for a sort by a property without *View properties* or *Edit properties*.\
-        \ Requires the *View ideal space*, *View space rule set details* and *View\
-        \ scenario planning* permissions."
+        \ with `total` counting every item that matches the search and filters. The\
+        \ graph reads the objects that reach its layer in the scenario's stack, or\
+        \ all of the scenario's objects when the layer isn't in the stack. A graph\
+        \ that fails its check, or a node that fails, is reported in `error`, with\
+        \ the first failing node in `node` and every output that doesn't depend on\
+        \ a failed node. The table's items and their objects need the *View objects*\
+        \ permission, and their objects' property values, and sorting by a property,\
+        \ need *View properties* or *Edit properties*; without them the summaries\
+        \ are returned without those details, and an error raised while working out\
+        \ the graph is replaced by a general one. Calculated like an analysis, with\
+        \ the scenario's layer variables when *Variable controls* is on, and charged\
+        \ as one; an unchanged config, scenario and day is answered from the cache.\
+        \ Returns `400` if the config isn't a graph layer config or the scenario doesn't\
+        \ exist. Returns `403` for a sort or filter by a property without *View properties*\
+        \ or *Edit properties*. Requires the *View ideal space*, *View space rule\
+        \ set details* and *View scenario planning* permissions."
       operationId: analysis_create-graph-layers-preview
       parameters:
       - explode: false
@@ -15585,6 +15585,49 @@ components:
           search: search
           offset: 0
           limit: 301
+          filters:
+          - ands:
+            - propertyNode:
+              - propertyNode
+              - propertyNode
+              set: 6
+              property: property
+              propertyVar: propertyVar
+              objectGroup: objectGroup
+              object:
+              - object
+              - object
+            - propertyNode:
+              - propertyNode
+              - propertyNode
+              set: 6
+              property: property
+              propertyVar: propertyVar
+              objectGroup: objectGroup
+              object:
+              - object
+              - object
+          - ands:
+            - propertyNode:
+              - propertyNode
+              - propertyNode
+              set: 6
+              property: property
+              propertyVar: propertyVar
+              objectGroup: objectGroup
+              object:
+              - object
+              - object
+            - propertyNode:
+              - propertyNode
+              - propertyNode
+              set: 6
+              property: property
+              propertyVar: propertyVar
+              objectGroup: objectGroup
+              object:
+              - object
+              - object
           socket: socket
           sort: sort
           descending: true
@@ -15613,6 +15656,49 @@ components:
         search: search
         offset: 0
         limit: 301
+        filters:
+        - ands:
+          - propertyNode:
+            - propertyNode
+            - propertyNode
+            set: 6
+            property: property
+            propertyVar: propertyVar
+            objectGroup: objectGroup
+            object:
+            - object
+            - object
+          - propertyNode:
+            - propertyNode
+            - propertyNode
+            set: 6
+            property: property
+            propertyVar: propertyVar
+            objectGroup: objectGroup
+            object:
+            - object
+            - object
+        - ands:
+          - propertyNode:
+            - propertyNode
+            - propertyNode
+            set: 6
+            property: property
+            propertyVar: propertyVar
+            objectGroup: objectGroup
+            object:
+            - object
+            - object
+          - propertyNode:
+            - propertyNode
+            - propertyNode
+            set: 6
+            property: property
+            propertyVar: propertyVar
+            objectGroup: objectGroup
+            object:
+            - object
+            - object
         socket: socket
         sort: sort
         descending: true
@@ -15620,6 +15706,14 @@ components:
         descending:
           description: Reverses the order sort gives.
           type: boolean
+        filters:
+          description: "Lists only the items whose objects these filter groups select,\
+            \ as a calculation's filters select them: any group may match, and within\
+            \ a group every filter must. An item of a set that isn't of objects is\
+            \ always listed."
+          items:
+            $ref: "#/components/schemas/FilterGroup"
+          type: array
         limit:
           description: How many items to list.
           format: int64

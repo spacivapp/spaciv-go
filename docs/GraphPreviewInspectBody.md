@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Descending** | Pointer to **bool** | Reverses the order sort gives. | [optional] 
+**Filters** | Pointer to [**[]FilterGroup**](FilterGroup.md) | Lists only the items whose objects these filter groups select, as a calculation&#39;s filters select them: any group may match, and within a group every filter must. An item of a set that isn&#39;t of objects is always listed. | [optional] 
 **Limit** | **int64** | How many items to list. | 
 **Node** | **string** | The node whose output to list. | 
 **Offset** | Pointer to **int64** | How many matching items to skip. | [optional] 
@@ -55,6 +56,31 @@ SetDescending sets Descending field to given value.
 `func (o *GraphPreviewInspectBody) HasDescending() bool`
 
 HasDescending returns a boolean if a field has been set.
+
+### GetFilters
+
+`func (o *GraphPreviewInspectBody) GetFilters() []FilterGroup`
+
+GetFilters returns the Filters field if non-nil, zero value otherwise.
+
+### GetFiltersOk
+
+`func (o *GraphPreviewInspectBody) GetFiltersOk() (*[]FilterGroup, bool)`
+
+GetFiltersOk returns a tuple with the Filters field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetFilters
+
+`func (o *GraphPreviewInspectBody) SetFilters(v []FilterGroup)`
+
+SetFilters sets Filters field to given value.
+
+### HasFilters
+
+`func (o *GraphPreviewInspectBody) HasFilters() bool`
+
+HasFilters returns a boolean if a field has been set.
 
 ### GetLimit
 
