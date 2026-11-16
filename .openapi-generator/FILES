@@ -367,6 +367,7 @@ docs/I18nTranslationsImportParamsWrapperBody.md
 docs/I18nTranslationsParamsWrapperBody.md
 docs/IDNameStringString.md
 docs/ImportBody.md
+docs/ImportedEntry.md
 docs/InstalledSkill.md
 docs/IntegrationCreateSlackParamsWrapperBody.md
 docs/IntegrationsAPI.md
@@ -545,6 +546,8 @@ docs/TemplateProjectsAPI.md
 docs/TimeRange.md
 docs/TimeRangesType.md
 docs/TopDownModelChangelogBody.md
+docs/TopDownModelEntriesImport.md
+docs/TopDownModelEntriesImportResult.md
 docs/TopDownModelEntry.md
 docs/TopDownModelEntryChangelogBody.md
 docs/TopDownModelEntryList.md
@@ -908,6 +911,7 @@ model_i18n_translations_import_params_wrapper_body.go
 model_i18n_translations_params_wrapper_body.go
 model_id_name_string_string.go
 model_import_body.go
+model_imported_entry.go
 model_installed_skill.go
 model_integration_create_slack_params_wrapper_body.go
 model_invalid_modifier_formula_detail.go
@@ -1073,6 +1077,8 @@ model_template_copy_params_wrapper_body.go
 model_time_range.go
 model_time_ranges_type.go
 model_top_down_model_changelog_body.go
+model_top_down_model_entries_import.go
+model_top_down_model_entries_import_result.go
 model_top_down_model_entry.go
 model_top_down_model_entry_changelog_body.go
 model_top_down_model_entry_list.go

@@ -8844,6 +8844,50 @@ paths:
       tags:
       - Top-down models
       x-sdk-params: false
+  /v1/top-down-models/{id}/entries/import:
+    post:
+      description: "Creates or updates up to 100 entries (`entries`, each as the single-entry\
+        \ PUT takes it) on the specified top-down model, one after another, retrying\
+        \ any entry whose save collides with a concurrent change. Each entry is validated\
+        \ and saved as `PUT /v1/top-down-models/{id}/entries` would save it, but an\
+        \ entry that cannot be saved does not stop the others: the response lists\
+        \ every entry with its outcome, `created`, `updated`, `failed` (not saved,\
+        \ with the reason) or `unconfirmed` (the save ended in an unexpected error\
+        \ and may still have committed, so read the entry back before sending it again).\
+        \ An entry the import ran out of time to reach is reported `failed` without\
+        \ being saved. Returns `400` for more than 100 entries and `404` if the model\
+        \ does not exist. Requires the *Edit modification* permission."
+      operationId: top-down-models_create-entries-import
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TopDownModelEntriesImport"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TopDownModelEntriesImportResult"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Import top-down model entries
+      tags:
+      - Top-down models
+      x-sdk-params: false
   /v1/translations:
     post:
       description: Returns the full map of translation keys to localised strings for
@@ -16298,6 +16342,33 @@ components:
       - firstName
       - lastName
       - role
+    ImportedEntry:
+      additionalProperties: false
+      example:
+        id: id
+        error: error
+        outcome: created
+      properties:
+        error:
+          description: Why the entry was not saved or not confirmed. Only set when
+            the outcome is failed or unconfirmed.
+          type: string
+        id:
+          description: "The entry's ID, as sent."
+          type: string
+        outcome:
+          description: "Whether the entry was created, updated, not saved (failed),\
+            \ or may or may not have been saved because the save ended in an unexpected\
+            \ error (unconfirmed)."
+          enum:
+          - created
+          - updated
+          - failed
+          - unconfirmed
+          type: string
+      required:
+      - id
+      - outcome
     InstalledSkill:
       additionalProperties: false
       example:
@@ -21642,6 +21713,161 @@ components:
       - description
       - name
       - propertyId
+    TopDownModelEntriesImport:
+      additionalProperties: false
+      example:
+        entries:
+        - objects:
+          - ands:
+            - propertyNode:
+              - propertyNode
+              - propertyNode
+              set: 6
+              property: property
+              propertyVar: propertyVar
+              objectGroup: objectGroup
+              object:
+              - object
+              - object
+            - propertyNode:
+              - propertyNode
+              - propertyNode
+              set: 6
+              property: property
+              propertyVar: propertyVar
+              objectGroup: objectGroup
+              object:
+              - object
+              - object
+          - ands:
+            - propertyNode:
+              - propertyNode
+              - propertyNode
+              set: 6
+              property: property
+              propertyVar: propertyVar
+              objectGroup: objectGroup
+              object:
+              - object
+              - object
+            - propertyNode:
+              - propertyNode
+              - propertyNode
+              set: 6
+              property: property
+              propertyVar: propertyVar
+              objectGroup: objectGroup
+              object:
+              - object
+              - object
+          id: id
+          properties:
+            map:
+            - start: 6
+              formula:
+                attr:
+                  static:
+                    node: node
+                    property: property
+              end: 0
+              nodeId: nodeId
+            - start: 6
+              formula:
+                attr:
+                  static:
+                    node: node
+                    property: property
+              end: 0
+              nodeId: nodeId
+          clearObjects: true
+        - objects:
+          - ands:
+            - propertyNode:
+              - propertyNode
+              - propertyNode
+              set: 6
+              property: property
+              propertyVar: propertyVar
+              objectGroup: objectGroup
+              object:
+              - object
+              - object
+            - propertyNode:
+              - propertyNode
+              - propertyNode
+              set: 6
+              property: property
+              propertyVar: propertyVar
+              objectGroup: objectGroup
+              object:
+              - object
+              - object
+          - ands:
+            - propertyNode:
+              - propertyNode
+              - propertyNode
+              set: 6
+              property: property
+              propertyVar: propertyVar
+              objectGroup: objectGroup
+              object:
+              - object
+              - object
+            - propertyNode:
+              - propertyNode
+              - propertyNode
+              set: 6
+              property: property
+              propertyVar: propertyVar
+              objectGroup: objectGroup
+              object:
+              - object
+              - object
+          id: id
+          properties:
+            map:
+            - start: 6
+              formula:
+                attr:
+                  static:
+                    node: node
+                    property: property
+              end: 0
+              nodeId: nodeId
+            - start: 6
+              formula:
+                attr:
+                  static:
+                    node: node
+                    property: property
+              end: 0
+              nodeId: nodeId
+          clearObjects: true
+      properties:
+        entries:
+          items:
+            $ref: "#/components/schemas/TopDownModelEntryUpdate"
+          type: array
+      required:
+      - entries
+    TopDownModelEntriesImportResult:
+      additionalProperties: false
+      example:
+        entries:
+        - id: id
+          error: error
+          outcome: created
+        - id: id
+          error: error
+          outcome: created
+      properties:
+        entries:
+          description: "One result per entry sent, in the order sent."
+          items:
+            $ref: "#/components/schemas/ImportedEntry"
+          type: array
+      required:
+      - entries
     TopDownModelEntry:
       additionalProperties: false
       example:

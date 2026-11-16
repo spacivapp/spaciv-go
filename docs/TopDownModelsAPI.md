@@ -5,6 +5,7 @@ All URIs are relative to *https://api.spaciv.com*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**Create**](TopDownModelsAPI.md#Create) | **Post** /v1/top-down-models | Create a top-down model
+[**CreateEntriesImport**](TopDownModelsAPI.md#CreateEntriesImport) | **Post** /v1/top-down-models/{id}/entries/import | Import top-down model entries
 [**Delete**](TopDownModelsAPI.md#Delete) | **Delete** /v1/top-down-models/{id} | Delete or archive a top-down model
 [**DeleteEntries**](TopDownModelsAPI.md#DeleteEntries) | **Delete** /v1/top-down-models/{id}/entries | Delete top-down model entries
 [**Duplicate**](TopDownModelsAPI.md#Duplicate) | **Post** /v1/top-down-models/{id}/duplicate | Duplicate a top-down model
@@ -64,6 +65,75 @@ Name | Type | Description  | Notes
 ### Return type
 
 **string**
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## CreateEntriesImport
+
+> TopDownModelEntriesImportResult CreateEntriesImport(ctx, id, topDownModelEntriesImport)
+
+Import top-down model entries
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+	id :=  // string | 
+	topDownModelEntriesImport :=  // TopDownModelEntriesImport | 
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.TopDownModels.CreateEntriesImport(context.Background(), id, topDownModelEntriesImport)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `TopDownModels.CreateEntriesImport`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `TopDownModels.CreateEntriesImport`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**id** | **string** |  | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiCreateEntriesImportRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+ **topDownModelEntriesImport** | [**TopDownModelEntriesImport**](TopDownModelEntriesImport.md) |  | 
+
+### Return type
+
+[**TopDownModelEntriesImportResult**](TopDownModelEntriesImportResult.md)
 
 ### Authorization
 
