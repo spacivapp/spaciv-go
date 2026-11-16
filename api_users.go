@@ -34,7 +34,7 @@ Create Register a new user
 
 Creates a new spaciv user account for the given email address and sends a verification email with a magic link. The caller must pass `acceptTerms: true`.
 
-Always returns `200` even if the address is already registered (an "email in use" notification is sent instead), to prevent account enumeration. Disposable email domains are rejected with `401`.
+Always returns `200` even if the address is already registered (an "email in use" notification is sent instead), to prevent account enumeration. Addresses at a disposable email domain, or at a subdomain of one that is not separately registrable (per the public suffix list), are rejected with `401`.
 */
 func (a *UsersService) Create(ctx context.Context, userV2PostReqBody UserV2PostReqBody) error {
 	r := requestForUsersCreate{

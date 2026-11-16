@@ -1604,7 +1604,7 @@ type requestForAccountsUpdate struct {
 /*
 Update Update the current account
 
-Updates the account the access token was issued for. Only the fields present in the body are changed; omitted fields keep their current values. Requires the *Manage my account* permission.
+Updates the account the access token was issued for. Only the fields present in the body are changed; omitted fields keep their current values. Requires the *Manage my account* permission. Returns 409 when the new account name or hostname belongs to another account.
 */
 func (a *AccountsService) Update(ctx context.Context, accountPutReqBody AccountPutReqBody) error {
 	r := requestForAccountsUpdate{
