@@ -249,7 +249,7 @@ type requestForFloorPlansGet struct {
 /*
 Get Get a floor plan
 
-Returns the floor plan's metadata, view mode, scale, space overlay geometry with each space's 3D heights in metres, and image offset. Returns an empty body (not 404) when the floor plan does not exist. The response's `ETag` is the floor plan's version, to send as `If-Match` with `PATCH /v1/floorplans/{id}`. Use `GET /v1/floorplans/{id}/images/{imageType}` to retrieve the drawing image. Requires the *View floorplans* permission.
+Returns the floor plan's metadata, view mode, scale, space overlay geometry with each space's 3D heights in metres, and image offset. Returns `404` when the floor plan does not exist. The response's `ETag` is the floor plan's version, to send as `If-Match` with `PATCH /v1/floorplans/{id}`. Use `GET /v1/floorplans/{id}/images/{imageType}` to retrieve the drawing image. Requires the *View floorplans* permission.
 */
 func (a *FloorPlansService) Get(ctx context.Context, id string) (*FloorplanGetBody, error) {
 	r := requestForFloorPlansGet{
