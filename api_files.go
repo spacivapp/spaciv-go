@@ -1,8 +1,6 @@
 /*
 spaciv API
 
-The spaciv API powers workplace planning: modelling how many people an organisation has, how they work, and how much space that requires.  ## Getting started  1. Exchange credentials for an access token using one of the operations under    **Authentication**. 2. Send that token on every subsequent request as `Authorization: Bearer <token>`. 3. Access tokens are short lived. Call `POST /v1/auth/refresh-token` to obtain a new one    before the old one expires.  ## Conventions  Every operation is versioned under `/v1`. Collections are plural (`GET /v1/dashboards` lists, `POST /v1/dashboards` creates) and individual records live beneath them (`/v1/dashboards/{id}`). Singular paths such as `/v1/account`, `/v1/project` and `/v1/user` refer to the record the access token was issued for.  Request and response bodies are JSON. Timestamps are RFC 3339. Identifiers are opaque strings unless documented otherwise, and collection operations return the records visible to the account the token was issued for.  Failures return an [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) problem document with a `detail` field describing what went wrong.
-
 API version: 1.0.0
 Contact: support@spaciv.com
 */
@@ -245,15 +243,16 @@ func (a *FilesService) executeCreateAccountDirectories(r requestForFilesCreateAc
 type requestForFilesCreateAccountFiles struct {
 	ctx context.Context
 	ApiService *FilesService
-	filename *os.File
-	name *string
+	file *os.File
+	parentId *string
+	parentPath *string
 }
 
 type FilesCreateAccountFilesParams struct {
-	// filename of the file being uploaded
-	Filename *os.File
-	// general purpose name for multipart form value
-	Name *string
+	// Identifier of the directory to store the file in. Not allowed together with parentPath.
+	ParentId *string
+	// Path of the directory to store the file in, such as Leases/2026. Not allowed together with parentId.
+	ParentPath *string
 }
 
 /*
@@ -267,14 +266,15 @@ Uploading into a directory that has a reserved tag, or into any directory inside
 
 The response body is the same record shape the list operation returns, so a client can add it to a list it already holds instead of refetching. Requires the *Edit file storage* permission.
 */
-func (a *FilesService) CreateAccountFiles(ctx context.Context, params *FilesCreateAccountFilesParams) (*Record, error) {
+func (a *FilesService) CreateAccountFiles(ctx context.Context, file *os.File, params *FilesCreateAccountFilesParams) (*Record, error) {
 	r := requestForFilesCreateAccountFiles{
 		ApiService: a,
 		ctx: ctx,
+		file: file,
 	}
 	if params != nil {
-		r.filename = params.Filename
-		r.name = params.Name
+		r.parentId = params.ParentId
+		r.parentPath = params.ParentPath
 	}
 	result, _, err := a.executeCreateAccountFiles(r)
 	return result, err
@@ -298,6 +298,9 @@ func (a *FilesService) executeCreateAccountFiles(r requestForFilesCreateAccountF
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
+	if r.file == nil {
+		return localVarReturnValue, nil, reportError("file is required and must be specified")
+	}
 
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"multipart/form-data"}
@@ -316,26 +319,29 @@ func (a *FilesService) executeCreateAccountFiles(r requestForFilesCreateAccountF
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	var filenameLocalVarFormFileName string
-	var filenameLocalVarFileName     string
-	var filenameLocalVarFileBytes    []byte
+	var fileLocalVarFormFileName string
+	var fileLocalVarFileName     string
+	var fileLocalVarFileBytes    []byte
 
-	filenameLocalVarFormFileName = "filename"
-	filenameLocalVarFile := r.filename
+	fileLocalVarFormFileName = "file"
+	fileLocalVarFile := r.file
 
-	if filenameLocalVarFile != nil {
-		fbs, err := io.ReadAll(filenameLocalVarFile)
-		filenameLocalVarFile.Close()
+	if fileLocalVarFile != nil {
+		fbs, err := io.ReadAll(fileLocalVarFile)
+		fileLocalVarFile.Close()
 		if err != nil {
 			return localVarReturnValue, nil, err
 		}
 
-		filenameLocalVarFileBytes = fbs
-		filenameLocalVarFileName = filenameLocalVarFile.Name()
-		formFiles = append(formFiles, formFile{fileBytes: filenameLocalVarFileBytes, fileName: filenameLocalVarFileName, formFileName: filenameLocalVarFormFileName})
+		fileLocalVarFileBytes = fbs
+		fileLocalVarFileName = fileLocalVarFile.Name()
+		formFiles = append(formFiles, formFile{fileBytes: fileLocalVarFileBytes, fileName: fileLocalVarFileName, formFileName: fileLocalVarFormFileName})
 	}
-	if r.name != nil {
-		parameterAddToHeaderOrQuery(localVarFormParams, "name", r.name, "", "")
+	if r.parentId != nil {
+		parameterAddToHeaderOrQuery(localVarFormParams, "parentId", r.parentId, "", "")
+	}
+	if r.parentPath != nil {
+		parameterAddToHeaderOrQuery(localVarFormParams, "parentPath", r.parentPath, "", "")
 	}
 	if r.ctx != nil {
 		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "FilesAPIService.CreateAccountFiles")
@@ -2028,8 +2034,7 @@ type requestForFilesUpdateAccountFilesByPathContent struct {
 	ApiService *FilesService
 	path *string
 	ifMatch *string
-	filename *os.File
-	name *string
+	file *os.File
 }
 
 type FilesUpdateAccountFilesByPathContentParams struct {
@@ -2037,10 +2042,6 @@ type FilesUpdateAccountFilesByPathContentParams struct {
 	Path *string
 	// The ETag returned when the file&#39;s content was read. The content is replaced only if it has not changed since.
 	IfMatch *string
-	// filename of the file being uploaded
-	Filename *os.File
-	// general purpose name for multipart form value
-	Name *string
 }
 
 /*
@@ -2048,16 +2049,15 @@ UpdateAccountFilesByPathContent Replace the content of the account file at a pat
 
 Replaces the stored bytes of the file at a path, as `PUT /v1/account/files/{id}/content` does, with the same `multipart/form-data` body, `If-Match` and errors. A path is the `path` its record returns. A path with an empty name, or a name that is `.` or `..`, is rejected with 400; paths are never resolved relative to anything. Returns 404 if no file is at the path, including when a directory is. Requires the *Edit file storage* permission.
 */
-func (a *FilesService) UpdateAccountFilesByPathContent(ctx context.Context, params *FilesUpdateAccountFilesByPathContentParams) (*Record, error) {
+func (a *FilesService) UpdateAccountFilesByPathContent(ctx context.Context, file *os.File, params *FilesUpdateAccountFilesByPathContentParams) (*Record, error) {
 	r := requestForFilesUpdateAccountFilesByPathContent{
 		ApiService: a,
 		ctx: ctx,
+		file: file,
 	}
 	if params != nil {
 		r.path = params.Path
 		r.ifMatch = params.IfMatch
-		r.filename = params.Filename
-		r.name = params.Name
 	}
 	result, _, err := a.executeUpdateAccountFilesByPathContent(r)
 	return result, err
@@ -2087,6 +2087,9 @@ func (a *FilesService) executeUpdateAccountFilesByPathContent(r requestForFilesU
 	if r.ifMatch == nil {
 		return localVarReturnValue, nil, reportError("ifMatch is required and must be specified")
 	}
+	if r.file == nil {
+		return localVarReturnValue, nil, reportError("file is required and must be specified")
+	}
 
 	parameterAddToHeaderOrQuery(localVarQueryParams, "path", r.path, "form", "")
 	// to determine the Content-Type header
@@ -2107,26 +2110,23 @@ func (a *FilesService) executeUpdateAccountFilesByPathContent(r requestForFilesU
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	parameterAddToHeaderOrQuery(localVarHeaderParams, "If-Match", r.ifMatch, "simple", "")
-	var filenameLocalVarFormFileName string
-	var filenameLocalVarFileName     string
-	var filenameLocalVarFileBytes    []byte
+	var fileLocalVarFormFileName string
+	var fileLocalVarFileName     string
+	var fileLocalVarFileBytes    []byte
 
-	filenameLocalVarFormFileName = "filename"
-	filenameLocalVarFile := r.filename
+	fileLocalVarFormFileName = "file"
+	fileLocalVarFile := r.file
 
-	if filenameLocalVarFile != nil {
-		fbs, err := io.ReadAll(filenameLocalVarFile)
-		filenameLocalVarFile.Close()
+	if fileLocalVarFile != nil {
+		fbs, err := io.ReadAll(fileLocalVarFile)
+		fileLocalVarFile.Close()
 		if err != nil {
 			return localVarReturnValue, nil, err
 		}
 
-		filenameLocalVarFileBytes = fbs
-		filenameLocalVarFileName = filenameLocalVarFile.Name()
-		formFiles = append(formFiles, formFile{fileBytes: filenameLocalVarFileBytes, fileName: filenameLocalVarFileName, formFileName: filenameLocalVarFormFileName})
-	}
-	if r.name != nil {
-		parameterAddToHeaderOrQuery(localVarFormParams, "name", r.name, "", "")
+		fileLocalVarFileBytes = fbs
+		fileLocalVarFileName = fileLocalVarFile.Name()
+		formFiles = append(formFiles, formFile{fileBytes: fileLocalVarFileBytes, fileName: fileLocalVarFileName, formFileName: fileLocalVarFormFileName})
 	}
 	if r.ctx != nil {
 		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "FilesAPIService.UpdateAccountFilesByPathContent")
@@ -2181,17 +2181,12 @@ type requestForFilesUpdateAccountFilesContent struct {
 	ApiService *FilesService
 	id string
 	ifMatch *string
-	filename *os.File
-	name *string
+	file *os.File
 }
 
 type FilesUpdateAccountFilesContentParams struct {
 	// The ETag returned when the file&#39;s content was read. The content is replaced only if it has not changed since.
 	IfMatch *string
-	// filename of the file being uploaded
-	Filename *os.File
-	// general purpose name for multipart form value
-	Name *string
 }
 
 /*
@@ -2203,16 +2198,15 @@ Send the `ETag` returned when the content was read as `If-Match`. If the file ha
 
 The difference in size counts towards the account's 1 GiB storage quota, and content that would take the account past it is rejected with 413. A 409 means concurrent changes to the account's files, or to the file and the directories above it, kept the new content from being saved. Nothing changed, so the request can be sent again. If the file has meanwhile come to be somewhere, or tagged in a way, that needs a permission you do not have, the request is rejected with 403 and nothing changes. The identifier must be one returned by the upload or list operations; a malformed identifier is rejected with 400 and an unknown one with 404. A quarantined file cannot be replaced (403). Requires the *Edit file storage* permission.
 */
-func (a *FilesService) UpdateAccountFilesContent(ctx context.Context, id string, params *FilesUpdateAccountFilesContentParams) (*Record, error) {
+func (a *FilesService) UpdateAccountFilesContent(ctx context.Context, id string, file *os.File, params *FilesUpdateAccountFilesContentParams) (*Record, error) {
 	r := requestForFilesUpdateAccountFilesContent{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
+		file: file,
 	}
 	if params != nil {
 		r.ifMatch = params.IfMatch
-		r.filename = params.Filename
-		r.name = params.Name
 	}
 	result, _, err := a.executeUpdateAccountFilesContent(r)
 	return result, err
@@ -2240,6 +2234,9 @@ func (a *FilesService) executeUpdateAccountFilesContent(r requestForFilesUpdateA
 	if r.ifMatch == nil {
 		return localVarReturnValue, nil, reportError("ifMatch is required and must be specified")
 	}
+	if r.file == nil {
+		return localVarReturnValue, nil, reportError("file is required and must be specified")
+	}
 
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"multipart/form-data"}
@@ -2259,26 +2256,23 @@ func (a *FilesService) executeUpdateAccountFilesContent(r requestForFilesUpdateA
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	parameterAddToHeaderOrQuery(localVarHeaderParams, "If-Match", r.ifMatch, "simple", "")
-	var filenameLocalVarFormFileName string
-	var filenameLocalVarFileName     string
-	var filenameLocalVarFileBytes    []byte
+	var fileLocalVarFormFileName string
+	var fileLocalVarFileName     string
+	var fileLocalVarFileBytes    []byte
 
-	filenameLocalVarFormFileName = "filename"
-	filenameLocalVarFile := r.filename
+	fileLocalVarFormFileName = "file"
+	fileLocalVarFile := r.file
 
-	if filenameLocalVarFile != nil {
-		fbs, err := io.ReadAll(filenameLocalVarFile)
-		filenameLocalVarFile.Close()
+	if fileLocalVarFile != nil {
+		fbs, err := io.ReadAll(fileLocalVarFile)
+		fileLocalVarFile.Close()
 		if err != nil {
 			return localVarReturnValue, nil, err
 		}
 
-		filenameLocalVarFileBytes = fbs
-		filenameLocalVarFileName = filenameLocalVarFile.Name()
-		formFiles = append(formFiles, formFile{fileBytes: filenameLocalVarFileBytes, fileName: filenameLocalVarFileName, formFileName: filenameLocalVarFormFileName})
-	}
-	if r.name != nil {
-		parameterAddToHeaderOrQuery(localVarFormParams, "name", r.name, "", "")
+		fileLocalVarFileBytes = fbs
+		fileLocalVarFileName = fileLocalVarFile.Name()
+		formFiles = append(formFiles, formFile{fileBytes: fileLocalVarFileBytes, fileName: fileLocalVarFileName, formFileName: fileLocalVarFormFileName})
 	}
 	if r.ctx != nil {
 		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "FilesAPIService.UpdateAccountFilesContent")

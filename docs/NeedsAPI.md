@@ -30,10 +30,10 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	dataset :=  // string | Dataset identifier; must match the top-down model's propertyId.
-	group :=  // string | Aggregation scope; currently only \"all\" is supported.
-	node :=  // string | Entry ID within the top-down model whose contribution values are returned.
+	id := "id_example" // string | 
+	dataset := "dataset_example" // string | Dataset identifier; must match the top-down model's propertyId.
+	group := "group_example" // string | Aggregation scope; currently only \"all\" is supported.
+	node := "node_example" // string | Entry ID within the top-down model whose contribution values are returned.
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Needs.GetEstimations(context.Background(), id, dataset, group, node)
@@ -106,8 +106,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	estimationPatch :=  // EstimationPatch | 
+	id := "id_example" // string | 
+	estimationPatch := *openapiclient.NewEstimationPatch(false, false) // EstimationPatch | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.Needs.Update(context.Background(), id, estimationPatch, nil)

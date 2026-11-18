@@ -29,7 +29,7 @@ import (
 )
 
 func main() {
-	id :=  // int64 | 
+	id := int64(789) // int64 | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.TemplateProjects.GetMapping(context.Background(), id)

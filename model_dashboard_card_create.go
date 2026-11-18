@@ -1,8 +1,6 @@
 /*
 spaciv API
 
-The spaciv API powers workplace planning: modelling how many people an organisation has, how they work, and how much space that requires.  ## Getting started  1. Exchange credentials for an access token using one of the operations under    **Authentication**. 2. Send that token on every subsequent request as `Authorization: Bearer <token>`. 3. Access tokens are short lived. Call `POST /v1/auth/refresh-token` to obtain a new one    before the old one expires.  ## Conventions  Every operation is versioned under `/v1`. Collections are plural (`GET /v1/dashboards` lists, `POST /v1/dashboards` creates) and individual records live beneath them (`/v1/dashboards/{id}`). Singular paths such as `/v1/account`, `/v1/project` and `/v1/user` refer to the record the access token was issued for.  Request and response bodies are JSON. Timestamps are RFC 3339. Identifiers are opaque strings unless documented otherwise, and collection operations return the records visible to the account the token was issued for.  Failures return an [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) problem document with a `detail` field describing what went wrong.
-
 API version: 1.0.0
 Contact: support@spaciv.com
 */

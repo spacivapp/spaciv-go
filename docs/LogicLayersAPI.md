@@ -46,7 +46,7 @@ import (
 )
 
 func main() {
-	graphLayerCreate :=  // GraphLayerCreate | 
+	graphLayerCreate := *openapiclient.NewGraphLayerCreate("Name_example") // GraphLayerCreate | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.LogicLayers.CreateGraphLayers(context.Background(), graphLayerCreate)
@@ -109,7 +109,7 @@ import (
 )
 
 func main() {
-	spaceRulesetCreate :=  // SpaceRulesetCreate | 
+	spaceRulesetCreate := *openapiclient.NewSpaceRulesetCreate("Name_example", "Type_example") // SpaceRulesetCreate | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.LogicLayers.CreateSpaceRulesets(context.Background(), spaceRulesetCreate)
@@ -153,7 +153,7 @@ Name | Type | Description  | Notes
 
 ## CreateSpaceRulesetsImage
 
-> map[string]interface{} CreateSpaceRulesetsImage(ctx, id, params)
+> map[string]interface{} CreateSpaceRulesetsImage(ctx, id, file)
 
 Upload a space ruleset image
 
@@ -172,10 +172,11 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
+	file := os.NewFile(1234, "some_file") // *os.File | The file to upload.
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	resp, err := client.LogicLayers.CreateSpaceRulesetsImage(context.Background(), id, nil)
+	resp, err := client.LogicLayers.CreateSpaceRulesetsImage(context.Background(), id, file)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `LogicLayers.CreateSpaceRulesetsImage`: %v\n", err)
 	}
@@ -199,8 +200,7 @@ Other parameters are passed through a pointer to a apiCreateSpaceRulesetsImageRe
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **filename** | ***os.File** | filename of the file being uploaded | 
- **name** | **string** | general purpose name for multipart form value | 
+ **file** | ***os.File** | The file to upload. | 
 
 ### Return type
 
@@ -241,7 +241,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.LogicLayers.DeleteGraphLayers(context.Background(), id)
@@ -308,7 +308,7 @@ import (
 )
 
 func main() {
-	graphLayersToDelete :=  // GraphLayersToDelete | 
+	graphLayersToDelete := *openapiclient.NewGraphLayersToDelete([]string{"Ids_example"}) // GraphLayersToDelete | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.LogicLayers.DeleteManyGraphLayers(context.Background(), graphLayersToDelete)
@@ -371,7 +371,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.LogicLayers.DeleteSpaceRulesets(context.Background(), id)
@@ -438,7 +438,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.LogicLayers.DeleteSpaceRulesetsImage(context.Background(), id)
@@ -505,7 +505,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.LogicLayers.DuplicateGraphLayers(context.Background(), id)
@@ -572,7 +572,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.LogicLayers.DuplicateSpaceRulesets(context.Background(), id)
@@ -639,7 +639,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.LogicLayers.GetGraphLayers(context.Background(), id)
@@ -706,7 +706,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.LogicLayers.GetGraphLayersUsedBy(context.Background(), id)
@@ -773,7 +773,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.LogicLayers.GetSpaceRulesets(context.Background(), id)
@@ -840,7 +840,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.LogicLayers.GetSpaceRulesetsImage(context.Background(), id, nil)
@@ -1082,8 +1082,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	graphLayerUpdate :=  // GraphLayerUpdate | 
+	id := "id_example" // string | 
+	graphLayerUpdate := *openapiclient.NewGraphLayerUpdate() // GraphLayerUpdate | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.LogicLayers.UpdateGraphLayers(context.Background(), id, graphLayerUpdate)
@@ -1151,8 +1151,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	spaceRulesetUpdate :=  // SpaceRulesetUpdate | 
+	id := "id_example" // string | 
+	spaceRulesetUpdate := *openapiclient.NewSpaceRulesetUpdate() // SpaceRulesetUpdate | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.LogicLayers.UpdateSpaceRulesets(context.Background(), id, spaceRulesetUpdate)

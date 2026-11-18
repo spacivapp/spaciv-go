@@ -35,7 +35,7 @@ import (
 )
 
 func main() {
-	scenarioCreate :=  // ScenarioCreate | 
+	scenarioCreate := *openapiclient.NewScenarioCreate("Description_example", []openapiclient.Layer{openapiclient.Layer{LayerOneOf: openapiclient.NewLayerOneOf(map[string]interface{}(123))}}, "Name_example") // ScenarioCreate | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Scenarios.Create(context.Background(), scenarioCreate)
@@ -98,7 +98,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Scenarios.Delete(context.Background(), id, nil)
@@ -166,7 +166,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Scenarios.Duplicate(context.Background(), id)
@@ -233,7 +233,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Scenarios.Get(context.Background(), id)
@@ -420,8 +420,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	scenarioPatch :=  // ScenarioPatch | 
+	id := "id_example" // string | 
+	scenarioPatch := *openapiclient.NewScenarioPatch([]openapiclient.Layer{openapiclient.Layer{LayerOneOf: openapiclient.NewLayerOneOf(map[string]interface{}(123))}}) // ScenarioPatch | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Scenarios.Update(context.Background(), id, scenarioPatch, nil)

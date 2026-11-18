@@ -1,8 +1,6 @@
 /*
 spaciv API
 
-The spaciv API powers workplace planning: modelling how many people an organisation has, how they work, and how much space that requires.  ## Getting started  1. Exchange credentials for an access token using one of the operations under    **Authentication**. 2. Send that token on every subsequent request as `Authorization: Bearer <token>`. 3. Access tokens are short lived. Call `POST /v1/auth/refresh-token` to obtain a new one    before the old one expires.  ## Conventions  Every operation is versioned under `/v1`. Collections are plural (`GET /v1/dashboards` lists, `POST /v1/dashboards` creates) and individual records live beneath them (`/v1/dashboards/{id}`). Singular paths such as `/v1/account`, `/v1/project` and `/v1/user` refer to the record the access token was issued for.  Request and response bodies are JSON. Timestamps are RFC 3339. Identifiers are opaque strings unless documented otherwise, and collection operations return the records visible to the account the token was issued for.  Failures return an [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) problem document with a `detail` field describing what went wrong.
-
 API version: 1.0.0
 Contact: support@spaciv.com
 */
@@ -1739,15 +1737,7 @@ type requestForObjectGroupsUpdateEntriesImage struct {
 	ApiService *ObjectGroupsService
 	id string
 	entryId string
-	filename *os.File
-	name *string
-}
-
-type ObjectGroupsUpdateEntriesImageParams struct {
-	// filename of the file being uploaded
-	Filename *os.File
-	// general purpose name for multipart form value
-	Name *string
+	file *os.File
 }
 
 /*
@@ -1755,16 +1745,13 @@ UpdateEntriesImage Upload an entry image
 
 Uploads an image for the specified entry, replacing any previously uploaded image. Send the file as `multipart/form-data` with the field key `file`. Accepted MIME types: `image/png`, `image/jpeg`, `image/gif`, `image/webp`, `image/svg+xml` (detected from file bytes). Maximum file size is 4 MB. Requires the *Edit objects* permission.
 */
-func (a *ObjectGroupsService) UpdateEntriesImage(ctx context.Context, id string, entryId string, params *ObjectGroupsUpdateEntriesImageParams) (map[string]interface{}, error) {
+func (a *ObjectGroupsService) UpdateEntriesImage(ctx context.Context, id string, entryId string, file *os.File) (map[string]interface{}, error) {
 	r := requestForObjectGroupsUpdateEntriesImage{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
 		entryId: entryId,
-	}
-	if params != nil {
-		r.filename = params.Filename
-		r.name = params.Name
+		file: file,
 	}
 	result, _, err := a.executeUpdateEntriesImage(r)
 	return result, err
@@ -1790,6 +1777,9 @@ func (a *ObjectGroupsService) executeUpdateEntriesImage(r requestForObjectGroups
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
+	if r.file == nil {
+		return localVarReturnValue, nil, reportError("file is required and must be specified")
+	}
 
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"multipart/form-data"}
@@ -1808,26 +1798,23 @@ func (a *ObjectGroupsService) executeUpdateEntriesImage(r requestForObjectGroups
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	var filenameLocalVarFormFileName string
-	var filenameLocalVarFileName     string
-	var filenameLocalVarFileBytes    []byte
+	var fileLocalVarFormFileName string
+	var fileLocalVarFileName     string
+	var fileLocalVarFileBytes    []byte
 
-	filenameLocalVarFormFileName = "filename"
-	filenameLocalVarFile := r.filename
+	fileLocalVarFormFileName = "file"
+	fileLocalVarFile := r.file
 
-	if filenameLocalVarFile != nil {
-		fbs, err := io.ReadAll(filenameLocalVarFile)
-		filenameLocalVarFile.Close()
+	if fileLocalVarFile != nil {
+		fbs, err := io.ReadAll(fileLocalVarFile)
+		fileLocalVarFile.Close()
 		if err != nil {
 			return localVarReturnValue, nil, err
 		}
 
-		filenameLocalVarFileBytes = fbs
-		filenameLocalVarFileName = filenameLocalVarFile.Name()
-		formFiles = append(formFiles, formFile{fileBytes: filenameLocalVarFileBytes, fileName: filenameLocalVarFileName, formFileName: filenameLocalVarFormFileName})
-	}
-	if r.name != nil {
-		parameterAddToHeaderOrQuery(localVarFormParams, "name", r.name, "", "")
+		fileLocalVarFileBytes = fbs
+		fileLocalVarFileName = fileLocalVarFile.Name()
+		formFiles = append(formFiles, formFile{fileBytes: fileLocalVarFileBytes, fileName: fileLocalVarFileName, formFileName: fileLocalVarFormFileName})
 	}
 	if r.ctx != nil {
 		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "ObjectGroupsAPIService.UpdateEntriesImage")
@@ -1881,15 +1868,12 @@ type requestForObjectGroupsUpdateFile struct {
 	ctx context.Context
 	ApiService *ObjectGroupsService
 	id string
-	filename *os.File
-	name *string
+	file *os.File
 }
 
 type ObjectGroupsUpdateFileParams struct {
-	// filename of the file being uploaded
-	Filename *os.File
-	// general purpose name for multipart form value
-	Name *string
+	// The file to upload.
+	File *os.File
 }
 
 /*
@@ -1904,8 +1888,7 @@ func (a *ObjectGroupsService) UpdateFile(ctx context.Context, id string, params 
 		id: id,
 	}
 	if params != nil {
-		r.filename = params.Filename
-		r.name = params.Name
+		r.file = params.File
 	}
 	result, _, err := a.executeUpdateFile(r)
 	return result, err
@@ -1948,26 +1931,23 @@ func (a *ObjectGroupsService) executeUpdateFile(r requestForObjectGroupsUpdateFi
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	var filenameLocalVarFormFileName string
-	var filenameLocalVarFileName     string
-	var filenameLocalVarFileBytes    []byte
+	var fileLocalVarFormFileName string
+	var fileLocalVarFileName     string
+	var fileLocalVarFileBytes    []byte
 
-	filenameLocalVarFormFileName = "filename"
-	filenameLocalVarFile := r.filename
+	fileLocalVarFormFileName = "file"
+	fileLocalVarFile := r.file
 
-	if filenameLocalVarFile != nil {
-		fbs, err := io.ReadAll(filenameLocalVarFile)
-		filenameLocalVarFile.Close()
+	if fileLocalVarFile != nil {
+		fbs, err := io.ReadAll(fileLocalVarFile)
+		fileLocalVarFile.Close()
 		if err != nil {
 			return localVarReturnValue, nil, err
 		}
 
-		filenameLocalVarFileBytes = fbs
-		filenameLocalVarFileName = filenameLocalVarFile.Name()
-		formFiles = append(formFiles, formFile{fileBytes: filenameLocalVarFileBytes, fileName: filenameLocalVarFileName, formFileName: filenameLocalVarFormFileName})
-	}
-	if r.name != nil {
-		parameterAddToHeaderOrQuery(localVarFormParams, "name", r.name, "", "")
+		fileLocalVarFileBytes = fbs
+		fileLocalVarFileName = fileLocalVarFile.Name()
+		formFiles = append(formFiles, formFile{fileBytes: fileLocalVarFileBytes, fileName: fileLocalVarFileName, formFileName: fileLocalVarFormFileName})
 	}
 	if r.ctx != nil {
 		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "ObjectGroupsAPIService.UpdateFile")

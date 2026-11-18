@@ -1,8 +1,6 @@
 /*
 spaciv API
 
-The spaciv API powers workplace planning: modelling how many people an organisation has, how they work, and how much space that requires.  ## Getting started  1. Exchange credentials for an access token using one of the operations under    **Authentication**. 2. Send that token on every subsequent request as `Authorization: Bearer <token>`. 3. Access tokens are short lived. Call `POST /v1/auth/refresh-token` to obtain a new one    before the old one expires.  ## Conventions  Every operation is versioned under `/v1`. Collections are plural (`GET /v1/dashboards` lists, `POST /v1/dashboards` creates) and individual records live beneath them (`/v1/dashboards/{id}`). Singular paths such as `/v1/account`, `/v1/project` and `/v1/user` refer to the record the access token was issued for.  Request and response bodies are JSON. Timestamps are RFC 3339. Identifiers are opaque strings unless documented otherwise, and collection operations return the records visible to the account the token was issued for.  Failures return an [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) problem document with a `detail` field describing what went wrong.
-
 API version: 1.0.0
 Contact: support@spaciv.com
 */
@@ -808,15 +806,7 @@ func (a *BrandingService) executeGetLogo(r requestForBrandingGetLogo) (string, *
 type requestForBrandingUpdateAccountLoginBackground struct {
 	ctx context.Context
 	ApiService *BrandingService
-	filename *os.File
-	name *string
-}
-
-type BrandingUpdateAccountLoginBackgroundParams struct {
-	// filename of the file being uploaded
-	Filename *os.File
-	// general purpose name for multipart form value
-	Name *string
+	loginBackground *os.File
 }
 
 /*
@@ -824,14 +814,11 @@ UpdateAccountLoginBackground Upload the sign-in page background
 
 Replaces the full-screen background image shown on the account's sign-in page. The request must be `multipart/form-data` with a single file field named `login-background`. Accepted MIME types: `image/png`, `image/jpeg`, `image/webp` (detected from file bytes). Maximum file size is 8 MiB. Requires the *Manage my account* permission.
 */
-func (a *BrandingService) UpdateAccountLoginBackground(ctx context.Context, params *BrandingUpdateAccountLoginBackgroundParams) error {
+func (a *BrandingService) UpdateAccountLoginBackground(ctx context.Context, loginBackground *os.File) error {
 	r := requestForBrandingUpdateAccountLoginBackground{
 		ApiService: a,
 		ctx: ctx,
-	}
-	if params != nil {
-		r.filename = params.Filename
-		r.name = params.Name
+		loginBackground: loginBackground,
 	}
 	_, err := a.executeUpdateAccountLoginBackground(r)
 	return err
@@ -854,6 +841,9 @@ func (a *BrandingService) executeUpdateAccountLoginBackground(r requestForBrandi
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
+	if r.loginBackground == nil {
+		return nil, reportError("loginBackground is required and must be specified")
+	}
 
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"multipart/form-data"}
@@ -872,26 +862,23 @@ func (a *BrandingService) executeUpdateAccountLoginBackground(r requestForBrandi
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	var filenameLocalVarFormFileName string
-	var filenameLocalVarFileName     string
-	var filenameLocalVarFileBytes    []byte
+	var loginBackgroundLocalVarFormFileName string
+	var loginBackgroundLocalVarFileName     string
+	var loginBackgroundLocalVarFileBytes    []byte
 
-	filenameLocalVarFormFileName = "filename"
-	filenameLocalVarFile := r.filename
+	loginBackgroundLocalVarFormFileName = "login-background"
+	loginBackgroundLocalVarFile := r.loginBackground
 
-	if filenameLocalVarFile != nil {
-		fbs, err := io.ReadAll(filenameLocalVarFile)
-		filenameLocalVarFile.Close()
+	if loginBackgroundLocalVarFile != nil {
+		fbs, err := io.ReadAll(loginBackgroundLocalVarFile)
+		loginBackgroundLocalVarFile.Close()
 		if err != nil {
 			return nil, err
 		}
 
-		filenameLocalVarFileBytes = fbs
-		filenameLocalVarFileName = filenameLocalVarFile.Name()
-		formFiles = append(formFiles, formFile{fileBytes: filenameLocalVarFileBytes, fileName: filenameLocalVarFileName, formFileName: filenameLocalVarFormFileName})
-	}
-	if r.name != nil {
-		parameterAddToHeaderOrQuery(localVarFormParams, "name", r.name, "", "")
+		loginBackgroundLocalVarFileBytes = fbs
+		loginBackgroundLocalVarFileName = loginBackgroundLocalVarFile.Name()
+		formFiles = append(formFiles, formFile{fileBytes: loginBackgroundLocalVarFileBytes, fileName: loginBackgroundLocalVarFileName, formFileName: loginBackgroundLocalVarFormFileName})
 	}
 	if r.ctx != nil {
 		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "BrandingAPIService.UpdateAccountLoginBackground")
@@ -935,21 +922,21 @@ func (a *BrandingService) executeUpdateAccountLoginBackground(r requestForBrandi
 type requestForBrandingUpdateAccountLogo struct {
 	ctx context.Context
 	ApiService *BrandingService
-	filename *os.File
-	name *string
+	logoDark *os.File
+	logoLight *os.File
 }
 
 type BrandingUpdateAccountLogoParams struct {
-	// filename of the file being uploaded
-	Filename *os.File
-	// general purpose name for multipart form value
-	Name *string
+	// The file to upload.
+	LogoDark *os.File
+	// The file to upload.
+	LogoLight *os.File
 }
 
 /*
 UpdateAccountLogo Upload the account logo
 
-Replaces the account's logo with the uploaded image. The request must be `multipart/form-data` with a single file field named `logo-dark` or `logo-light`. Accepted MIME types: `image/png`, `image/jpeg`, `image/gif`, `image/webp`, `image/svg+xml` (detected from file bytes). Maximum file size is 4 MiB. Requires the *Manage my account* permission.
+Replaces the account's logo with the uploaded image. The request must be `multipart/form-data` with a single file field named `logo-dark` or `logo-light`: send exactly one of them. A request with neither is rejected with 400, and if both are sent `logo-dark` is used and `logo-light` is ignored. Accepted MIME types: `image/png`, `image/jpeg`, `image/gif`, `image/webp`, `image/svg+xml` (detected from file bytes). Maximum file size is 4 MiB. Requires the *Manage my account* permission.
 */
 func (a *BrandingService) UpdateAccountLogo(ctx context.Context, params *BrandingUpdateAccountLogoParams) error {
 	r := requestForBrandingUpdateAccountLogo{
@@ -957,8 +944,8 @@ func (a *BrandingService) UpdateAccountLogo(ctx context.Context, params *Brandin
 		ctx: ctx,
 	}
 	if params != nil {
-		r.filename = params.Filename
-		r.name = params.Name
+		r.logoDark = params.LogoDark
+		r.logoLight = params.LogoLight
 	}
 	_, err := a.executeUpdateAccountLogo(r)
 	return err
@@ -999,26 +986,41 @@ func (a *BrandingService) executeUpdateAccountLogo(r requestForBrandingUpdateAcc
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	var filenameLocalVarFormFileName string
-	var filenameLocalVarFileName     string
-	var filenameLocalVarFileBytes    []byte
+	var logoDarkLocalVarFormFileName string
+	var logoDarkLocalVarFileName     string
+	var logoDarkLocalVarFileBytes    []byte
 
-	filenameLocalVarFormFileName = "filename"
-	filenameLocalVarFile := r.filename
+	logoDarkLocalVarFormFileName = "logo-dark"
+	logoDarkLocalVarFile := r.logoDark
 
-	if filenameLocalVarFile != nil {
-		fbs, err := io.ReadAll(filenameLocalVarFile)
-		filenameLocalVarFile.Close()
+	if logoDarkLocalVarFile != nil {
+		fbs, err := io.ReadAll(logoDarkLocalVarFile)
+		logoDarkLocalVarFile.Close()
 		if err != nil {
 			return nil, err
 		}
 
-		filenameLocalVarFileBytes = fbs
-		filenameLocalVarFileName = filenameLocalVarFile.Name()
-		formFiles = append(formFiles, formFile{fileBytes: filenameLocalVarFileBytes, fileName: filenameLocalVarFileName, formFileName: filenameLocalVarFormFileName})
+		logoDarkLocalVarFileBytes = fbs
+		logoDarkLocalVarFileName = logoDarkLocalVarFile.Name()
+		formFiles = append(formFiles, formFile{fileBytes: logoDarkLocalVarFileBytes, fileName: logoDarkLocalVarFileName, formFileName: logoDarkLocalVarFormFileName})
 	}
-	if r.name != nil {
-		parameterAddToHeaderOrQuery(localVarFormParams, "name", r.name, "", "")
+	var logoLightLocalVarFormFileName string
+	var logoLightLocalVarFileName     string
+	var logoLightLocalVarFileBytes    []byte
+
+	logoLightLocalVarFormFileName = "logo-light"
+	logoLightLocalVarFile := r.logoLight
+
+	if logoLightLocalVarFile != nil {
+		fbs, err := io.ReadAll(logoLightLocalVarFile)
+		logoLightLocalVarFile.Close()
+		if err != nil {
+			return nil, err
+		}
+
+		logoLightLocalVarFileBytes = fbs
+		logoLightLocalVarFileName = logoLightLocalVarFile.Name()
+		formFiles = append(formFiles, formFile{fileBytes: logoLightLocalVarFileBytes, fileName: logoLightLocalVarFileName, formFileName: logoLightLocalVarFormFileName})
 	}
 	if r.ctx != nil {
 		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "BrandingAPIService.UpdateAccountLogo")

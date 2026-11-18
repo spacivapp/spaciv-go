@@ -34,7 +34,7 @@ import (
 )
 
 func main() {
-	propertyBody :=  // PropertyBody | 
+	propertyBody := *openapiclient.NewPropertyBody(false, false, []openapiclient.PropertyNodeUpdate{*openapiclient.NewPropertyNodeUpdate(false, "Id_example")}) // PropertyBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Properties.Create(context.Background(), propertyBody)
@@ -97,7 +97,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.Properties.Delete(context.Background(), id)
@@ -163,7 +163,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Properties.Duplicate(context.Background(), id)
@@ -230,7 +230,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Properties.Get(context.Background(), id)
@@ -359,8 +359,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	propertyBody :=  // PropertyBody | 
+	id := "id_example" // string | 
+	propertyBody := *openapiclient.NewPropertyBody(false, false, []openapiclient.PropertyNodeUpdate{*openapiclient.NewPropertyNodeUpdate(false, "Id_example")}) // PropertyBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.Properties.Update(context.Background(), id, propertyBody, nil)

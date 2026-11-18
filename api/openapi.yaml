@@ -15,6 +15,30 @@ info:
     3. Access tokens are short lived. Call `POST /v1/auth/refresh-token` to obtain a new one
        before the old one expires.
 
+    ## Authenticating with an API key
+
+    Programs authenticate with an API key instead of a password. Create one while
+    signed in with `POST /v1/api-keys`, giving it a `name`, the `project` ID it is
+    restricted to and the number of days it lasts, `expiresInDays`, from 1 to 90. The
+    secret is in the response's `key` field and is shown only once.
+
+    ```bash
+    curl -X POST https://api.spaciv.com/v1/api-keys \
+      -H "Authorization: Bearer $ACCESS_TOKEN" \
+      -H "Content-Type: application/json" \
+      -d '{"name": "Reporting script", "project": 123, "expiresInDays": 90}'
+    ```
+
+    The SDKs ship a client that does this exchange and refreshes the token for you; see
+    their READMEs. To do it yourself, exchange the key and send the token it returns as
+    `Authorization: Bearer <accessToken>`; the response is `{"accessToken": "..."}`.
+
+    ```bash
+    curl -X POST https://api.spaciv.com/v1/auth/api-key-token \
+      -H "Content-Type: application/json" \
+      -d '{"key": "sk_..."}'
+    ```
+
     ## Conventions
 
     Every operation is versioned under `/v1`. Collections are plural
@@ -23,12 +47,29 @@ info:
     paths such as `/v1/account`, `/v1/project` and `/v1/user`
     refer to the record the access token was issued for.
 
-    Request and response bodies are JSON. Timestamps are RFC 3339. Identifiers are
+    Request and response bodies are JSON, except file uploads, which are
+    `multipart/form-data`. Timestamps are RFC 3339. Identifiers are
     opaque strings unless documented otherwise, and collection operations return the
     records visible to the account the token was issued for.
 
     Failures return an [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) problem
     document with a `detail` field describing what went wrong.
+
+    ## Uploading a file
+
+    `POST /v1/account/files` stores a file in the account's file storage and returns
+    its record. Send a `multipart/form-data` request whose file part is named `file`.
+    The file goes in the root. To put it in a directory instead, add a `parentPath` part,
+    such as `Leases/2026`, or a `parentId` part; the directory must already exist, or the
+    request is rejected with 404. The record's `id`
+    identifies the file in other operations, and its `name` is the name of the
+    uploaded file.
+
+    ```bash
+    curl -X POST https://api.spaciv.com/v1/account/files \
+      -H "Authorization: Bearer $ACCESS_TOKEN" \
+      -F "file=@lease.pdf"
+    ```
   title: spaciv API
   version: 1.0.0
 servers:
@@ -198,6 +239,7 @@ paths:
             schema:
               $ref: "#/components/schemas/AccountPutReqBody"
         required: true
+        x-sdk-example: "{}"
       responses:
         "204":
           description: No Content
@@ -249,6 +291,8 @@ paths:
             schema:
               $ref: "#/components/schemas/AccountPatchAuthOptionsReqBody"
         required: true
+        x-sdk-example: "{'authOptions': [{'authMethod': 'email_password', 'enabled':\
+          \ False}]}"
       responses:
         "200":
           content:
@@ -402,6 +446,7 @@ paths:
             schema:
               $ref: "#/components/schemas/AccountDirectoryPostBody"
         required: true
+        x-sdk-example: "{'name': 'example'}"
       responses:
         "200":
           content:
@@ -479,6 +524,7 @@ paths:
             schema:
               $ref: "#/components/schemas/AccountDirectoryPatchBody"
         required: true
+        x-sdk-example: "{}"
       responses:
         "200":
           content:
@@ -512,6 +558,7 @@ paths:
             schema:
               $ref: "#/components/schemas/AccountDuplicateReqBody"
         required: true
+        x-sdk-example: "{'name': 'example'}"
       responses:
         "200":
           content:
@@ -746,6 +793,7 @@ paths:
             schema:
               $ref: "#/components/schemas/AccountFilePatchBody"
         required: true
+        x-sdk-example: "{}"
       responses:
         "200":
           content:
@@ -859,7 +907,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/files_create_account_files_request"
+              $ref: "#/components/schemas/files_update_account_files_content_request"
         required: true
       responses:
         "200":
@@ -1009,6 +1057,7 @@ paths:
             schema:
               $ref: "#/components/schemas/AccountFileByPathPatchBody"
         required: true
+        x-sdk-example: "{}"
       responses:
         "200":
           content:
@@ -1134,7 +1183,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/files_create_account_files_request"
+              $ref: "#/components/schemas/files_update_account_files_content_request"
         required: true
       responses:
         "200":
@@ -1242,7 +1291,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/files_create_account_files_request"
+              $ref: "#/components/schemas/branding_update_account_login_background_request"
         required: true
       responses:
         "204":
@@ -1256,7 +1305,7 @@ paths:
       summary: Upload the sign-in page background
       tags:
       - Branding
-      x-sdk-params: true
+      x-sdk-params: false
   /v1/account/logo:
     delete:
       description: Removes the stored `light` or `dark` logo variant for the account.
@@ -1381,16 +1430,18 @@ paths:
     put:
       description: "Replaces the account's logo with the uploaded image. The request\
         \ must be `multipart/form-data` with a single file field named `logo-dark`\
-        \ or `logo-light`. Accepted MIME types: `image/png`, `image/jpeg`, `image/gif`,\
-        \ `image/webp`, `image/svg+xml` (detected from file bytes). Maximum file size\
-        \ is 4 MiB. Requires the *Manage my account* permission."
+        \ or `logo-light`: send exactly one of them. A request with neither is rejected\
+        \ with 400, and if both are sent `logo-dark` is used and `logo-light` is ignored.\
+        \ Accepted MIME types: `image/png`, `image/jpeg`, `image/gif`, `image/webp`,\
+        \ `image/svg+xml` (detected from file bytes). Maximum file size is 4 MiB.\
+        \ Requires the *Manage my account* permission."
       operationId: branding_update-account-logo
       parameters: []
       requestBody:
         content:
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/files_create_account_files_request"
+              $ref: "#/components/schemas/branding_update_account_logo_request"
         required: true
       responses:
         "204":
@@ -1463,6 +1514,7 @@ paths:
             schema:
               $ref: "#/components/schemas/AccountOIDCProviderPatch"
         required: true
+        x-sdk-example: "{'providerName': 'microsoft'}"
       responses:
         "200":
           content:
@@ -1493,6 +1545,8 @@ paths:
             schema:
               $ref: "#/components/schemas/AccountPostOIDCProviderReqBody"
         required: true
+        x-sdk-example: "{'providerName': 'microsoft', 'clientId': 'example', 'tenant':\
+          \ 'example', 'clientSecret': 'example'}"
       responses:
         "200":
           content:
@@ -1527,6 +1581,7 @@ paths:
             schema:
               $ref: "#/components/schemas/AccountPutOIDCClientSecretReqBody"
         required: true
+        x-sdk-example: "{'clientSecret': 'example'}"
       responses:
         "204":
           description: No Content
@@ -1579,6 +1634,7 @@ paths:
             schema:
               $ref: "#/components/schemas/AccountTextFilePostBody"
         required: true
+        x-sdk-example: "{'name': 'example'}"
       responses:
         "200":
           content:
@@ -1706,6 +1762,7 @@ paths:
             schema:
               $ref: "#/components/schemas/AccountPostReqBody"
         required: true
+        x-sdk-example: "{'name': 'example', 'template': 'blank'}"
       responses:
         "200":
           content:
@@ -1844,6 +1901,7 @@ paths:
             schema:
               $ref: "#/components/schemas/ScriptLimitOverrides"
         required: true
+        x-sdk-example: "{}"
       responses:
         "200":
           content:
@@ -2100,6 +2158,7 @@ paths:
             schema:
               $ref: "#/components/schemas/SysAdminUpdateFeatureGroupsParamsWrapperBody"
         required: true
+        x-sdk-example: "{'sortOrder': 1}"
       responses:
         "204":
           description: No Content
@@ -2148,6 +2207,10 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/CalcBody"
+        x-sdk-example: "{'data': {'categorisationMix': {'params': {}, 'function':\
+          \ {'static': {'attr': {'static': {'property': 'example', 'node': 'example'}}}},\
+          \ 'scenario': {'static': 'example'}, 'date': {'static': 1}, 'filters': []}},\
+          \ 'filters': []}"
       responses:
         "200":
           content:
@@ -2212,6 +2275,7 @@ paths:
             schema:
               $ref: "#/components/schemas/ApiKeyPostReqBody"
         required: true
+        x-sdk-example: "{'name': 'example', 'project': 1, 'expiresInDays': 1}"
       responses:
         "200":
           content:
@@ -2282,6 +2346,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/AssistantChatReq"
+        x-sdk-example: "{'message': 'example'}"
       responses:
         "200":
           content:
@@ -2377,6 +2442,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/AssistantConfigPutReq"
+        x-sdk-example: "{'permittedModels': []}"
       responses:
         "200":
           content:
@@ -2756,6 +2822,7 @@ paths:
             schema:
               $ref: "#/components/schemas/AuthAPIKeyTokenReqBody"
         required: true
+        x-sdk-example: "{'key': 'example'}"
       responses:
         "200":
           content:
@@ -2867,6 +2934,8 @@ paths:
             schema:
               $ref: "#/components/schemas/AuthLoginPassReqBody"
         required: true
+        x-sdk-example: "{'hostname': 'example', 'username': 'example', 'password':\
+          \ 'example'}"
       responses:
         "200":
           content:
@@ -2919,6 +2988,7 @@ paths:
             schema:
               $ref: "#/components/schemas/AuthLoginPublicReqBody"
         required: true
+        x-sdk-example: "{'hostname': 'example', 'acceptTerms': False}"
       responses:
         "200":
           content:
@@ -2971,6 +3041,7 @@ paths:
             schema:
               $ref: "#/components/schemas/AuthLoginTokenReqBody"
         required: true
+        x-sdk-example: "{'hostname': 'example', 'token': 'example'}"
       responses:
         "200":
           content:
@@ -3027,6 +3098,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/AuthLogoutReqBody"
+        x-sdk-example: "{}"
       responses:
         "204":
           description: No Content
@@ -3100,6 +3172,7 @@ paths:
             schema:
               $ref: "#/components/schemas/PasswordPutReqBody"
         required: true
+        x-sdk-example: "{'token': 'example', 'password': 'example'}"
       responses:
         "204":
           description: No Content
@@ -3132,6 +3205,7 @@ paths:
             schema:
               $ref: "#/components/schemas/ProofCreateReqBody"
         required: true
+        x-sdk-example: "{'token': 'example'}"
       responses:
         "200":
           content:
@@ -3163,6 +3237,7 @@ paths:
             schema:
               $ref: "#/components/schemas/ProofAccountsReqBody"
         required: true
+        x-sdk-example: "{'proof': 'example'}"
       responses:
         "200":
           content:
@@ -3213,6 +3288,8 @@ paths:
             schema:
               $ref: "#/components/schemas/ProofCompleteSignupReqBody"
         required: true
+        x-sdk-example: "{'proof': 'example', 'firstName': 'example', 'lastName': 'example',\
+          \ 'account': {'name': 'example', 'template': 'blank'}}"
       responses:
         "200":
           content:
@@ -3268,6 +3345,7 @@ paths:
             schema:
               $ref: "#/components/schemas/ProofEnterReqBody"
         required: true
+        x-sdk-example: "{'proof': 'example', 'account': 1}"
       responses:
         "200":
           content:
@@ -3328,6 +3406,7 @@ paths:
             schema:
               $ref: "#/components/schemas/AuthRefreshTokenReqBody"
         required: true
+        x-sdk-example: "{}"
       responses:
         "200":
           content:
@@ -3366,6 +3445,7 @@ paths:
             schema:
               $ref: "#/components/schemas/SendPasswordPutReqBody"
         required: true
+        x-sdk-example: "{'email': 'example'}"
       responses:
         "204":
           description: No Content
@@ -3394,6 +3474,8 @@ paths:
             schema:
               $ref: "#/components/schemas/AuthSendTokenReqBody"
         required: true
+        x-sdk-example: "{'email': 'example', 'hostname': 'example', 'redirectTo':\
+          \ 'example'}"
       responses:
         "204":
           description: No Content
@@ -3682,6 +3764,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/DashboardPost"
+        x-sdk-example: "{'name': 'example', 'description': 'example', 'cards': []}"
       responses:
         "200":
           content:
@@ -3798,6 +3881,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/DashboardUpdate"
+        x-sdk-example: "{}"
       responses:
         "204":
           description: No Content
@@ -3849,6 +3933,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/DashboardCardDelete"
+        x-sdk-example: "{}"
       responses:
         "204":
           description: No Content
@@ -3899,6 +3984,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/DashboardCardPatch"
+        x-sdk-example: "{'moveCardAfter': {'cardId': 'example', 'afterCardId': 'example'}}"
       responses:
         "204":
           description: No Content
@@ -3949,6 +4035,8 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/DashboardCardCreate"
+        x-sdk-example: "{'card': {'name': 'example', 'description': 'example', 'size':\
+          \ 1}}"
       responses:
         "204":
           description: No Content
@@ -3993,6 +4081,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/DashboardCopy"
+        x-sdk-example: "{'toProject': 1}"
       responses:
         "200":
           content:
@@ -4034,6 +4123,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/DashboardCopy"
+        x-sdk-example: "{'toProject': 1}"
       responses:
         "200":
           content:
@@ -4232,6 +4322,8 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/DatacollectionBody"
+        x-sdk-example: "{'delete': False, 'resendInvites': False, 'clearQuestions':\
+          \ False, 'questions': []}"
       responses:
         "200":
           content:
@@ -4324,6 +4416,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/ContributionPost"
+        x-sdk-example: "{'data': {'answers': {}}, 'state': 1, 'node': 'example'}"
       responses:
         "200":
           content:
@@ -4545,6 +4638,7 @@ paths:
             schema:
               $ref: "#/components/schemas/TemplateCopyParamsWrapperBody"
         required: true
+        x-sdk-example: "{'restore': False}"
       responses:
         "200":
           content:
@@ -4599,6 +4693,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/DatasetCreate"
+        x-sdk-example: "{'name': 'example', 'steps': [], 'isPublic': False}"
       responses:
         "200":
           content:
@@ -4728,6 +4823,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/DatasetModify"
+        x-sdk-example: "{'steps': [], 'replaceSteps': False}"
       responses:
         "200":
           content:
@@ -4791,6 +4887,7 @@ paths:
             schema:
               $ref: "#/components/schemas/FloorplanPostBody"
         required: true
+        x-sdk-example: "{'name': 'example'}"
       responses:
         "200":
           content:
@@ -4912,6 +5009,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/FloorplanPatchParamsBody"
+        x-sdk-example: "{}"
       responses:
         "200":
           content:
@@ -5061,7 +5159,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/files_create_account_files_request"
+              $ref: "#/components/schemas/floor_plans_update_images_request"
         required: true
       responses:
         "200":
@@ -5097,6 +5195,7 @@ paths:
             schema:
               $ref: "#/components/schemas/GraphLayersToDelete"
         required: true
+        x-sdk-example: "{'ids': ['example']}"
       responses:
         "200":
           content:
@@ -5160,6 +5259,7 @@ paths:
             schema:
               $ref: "#/components/schemas/GraphLayerCreate"
         required: true
+        x-sdk-example: "{'name': 'example'}"
       responses:
         "200":
           content:
@@ -5276,6 +5376,7 @@ paths:
             schema:
               $ref: "#/components/schemas/GraphLayerUpdate"
         required: true
+        x-sdk-example: "{}"
       responses:
         "200":
           content:
@@ -5365,6 +5466,7 @@ paths:
             schema:
               $ref: "#/components/schemas/GraphPreviewBody"
         required: true
+        x-sdk-example: "{'scenario': 'example', 'day': 1, 'config': None}"
       responses:
         "200":
           content:
@@ -5429,6 +5531,7 @@ paths:
             schema:
               $ref: "#/components/schemas/IntegrationCreateSlackParamsWrapperBody"
         required: true
+        x-sdk-example: "{'code': 'example'}"
       responses:
         "200":
           content:
@@ -5685,6 +5788,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/EstimationPatch"
+        x-sdk-example: "{'delete': False, 'setDefault': False}"
       responses:
         "204":
           description: No Content
@@ -5806,6 +5910,8 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/ObjectGroupChangelogBody"
+        x-sdk-example: "{'name': 'example', 'description': 'example', 'isPublic':\
+          \ False, 'properties': {}}"
       responses:
         "200":
           content:
@@ -5950,6 +6056,8 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/ObjectGroupChangelogBody"
+        x-sdk-example: "{'name': 'example', 'description': 'example', 'isPublic':\
+          \ False, 'properties': {}}"
       responses:
         "204":
           description: No Content
@@ -6027,6 +6135,7 @@ paths:
                 $ref: "#/components/schemas/ObjectGroupEntryUpdate"
               type: array
         required: true
+        x-sdk-example: "[{'id': 'example', 'delete': False, 'properties': {}}]"
       responses:
         "204":
           description: No Content
@@ -6132,6 +6241,7 @@ paths:
                 $ref: "#/components/schemas/EntryPatch"
               type: array
         required: true
+        x-sdk-example: "[{'id': 'example'}]"
       responses:
         "204":
           description: No Content
@@ -6171,6 +6281,7 @@ paths:
                 $ref: "#/components/schemas/ObjectGroupEntryUpdate"
               type: array
         required: true
+        x-sdk-example: "[{'id': 'example', 'delete': False, 'properties': {}}]"
       responses:
         "204":
           description: No Content
@@ -6324,7 +6435,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/files_create_account_files_request"
+              $ref: "#/components/schemas/files_update_account_files_content_request"
         required: true
       responses:
         "200":
@@ -6342,7 +6453,7 @@ paths:
       summary: Upload an entry image
       tags:
       - Object groups
-      x-sdk-params: true
+      x-sdk-params: false
   /v1/object-groups/{id}/entries/search:
     get:
       description: |-
@@ -6508,7 +6619,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/files_create_account_files_request"
+              $ref: "#/components/schemas/floor_plans_update_images_request"
         required: true
       responses:
         "200":
@@ -6544,6 +6655,7 @@ paths:
             schema:
               $ref: "#/components/schemas/SelectObjectsParamsWrapperBody"
         required: true
+        x-sdk-example: "{'filters': []}"
       responses:
         "200":
           content:
@@ -6679,6 +6791,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/ProjectPatchBody"
+        x-sdk-example: "{'deleteFilter': False, 'filters': []}"
       responses:
         "204":
           description: No Content
@@ -6799,7 +6912,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/files_create_account_files_request"
+              $ref: "#/components/schemas/projects_update_image_request"
         required: true
       responses:
         "200":
@@ -6817,7 +6930,7 @@ paths:
       summary: Upload a project image
       tags:
       - Projects
-      x-sdk-params: true
+      x-sdk-params: false
   /v1/projects:
     get:
       description: "Returns all active projects for the current account, sorted alphabetically\
@@ -6887,6 +7000,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/ProjectCreateBody"
+        x-sdk-example: "{'name': 'example', 'description': 'example', 'blank': {}}"
       responses:
         "200":
           content:
@@ -6956,6 +7070,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/PropertyBody"
+        x-sdk-example: "{'delete': False, 'deleteAllNodes': False, 'node': []}"
       responses:
         "200":
           content:
@@ -7079,6 +7194,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/PropertyBody"
+        x-sdk-example: "{'delete': False, 'deleteAllNodes': False, 'node': []}"
       responses:
         "204":
           description: No Content
@@ -7174,6 +7290,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/ScenarioCreate"
+        x-sdk-example: "{'name': 'example', 'description': 'example', 'layers': []}"
       responses:
         "200":
           content:
@@ -7318,6 +7435,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/ScenarioPatch"
+        x-sdk-example: "{'layers': []}"
       responses:
         "200":
           content:
@@ -7419,6 +7537,7 @@ paths:
             schema:
               $ref: "#/components/schemas/ScriptPostReqBody"
         required: true
+        x-sdk-example: "{'name': 'example', 'language': 'python', 'files': {}}"
       responses:
         "200":
           content:
@@ -7519,6 +7638,7 @@ paths:
             schema:
               $ref: "#/components/schemas/ScriptPatchReqBody"
         required: true
+        x-sdk-example: "{'revision': 1}"
       responses:
         "200":
           content:
@@ -7770,6 +7890,7 @@ paths:
             schema:
               $ref: "#/components/schemas/ScriptSecretsReqBody"
         required: true
+        x-sdk-example: "{}"
       responses:
         "200":
           content:
@@ -7828,6 +7949,7 @@ paths:
             schema:
               $ref: "#/components/schemas/ScriptSchedulePreviewReqBody"
         required: true
+        x-sdk-example: "{}"
       responses:
         "200":
           content:
@@ -7869,6 +7991,7 @@ paths:
             schema:
               $ref: "#/components/schemas/ScratchpadBuildPostReqBody"
         required: true
+        x-sdk-example: "{'language': 'example', 'files': {'key': 'example'}}"
       responses:
         "200":
           content:
@@ -7948,6 +8071,7 @@ paths:
             schema:
               $ref: "#/components/schemas/ScratchpadRunPostReqBody"
         required: true
+        x-sdk-example: "{'language': 'example'}"
       responses:
         "200":
           content:
@@ -8113,6 +8237,7 @@ paths:
             schema:
               $ref: "#/components/schemas/SpaceRulesetCreate"
         required: true
+        x-sdk-example: "{'name': 'example', 'type': 'example'}"
       responses:
         "200":
           content:
@@ -8217,6 +8342,7 @@ paths:
             schema:
               $ref: "#/components/schemas/SpaceRulesetUpdate"
         required: true
+        x-sdk-example: "{}"
       responses:
         "200":
           content:
@@ -8388,7 +8514,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/files_create_account_files_request"
+              $ref: "#/components/schemas/files_update_account_files_content_request"
         required: true
       responses:
         "200":
@@ -8406,7 +8532,7 @@ paths:
       summary: Upload a space ruleset image
       tags:
       - Logic layers
-      x-sdk-params: true
+      x-sdk-params: false
   /v1/space-rulesets/presets:
     get:
       description: Returns the spaciv-supplied preset logic layers available to all
@@ -8518,6 +8644,8 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/TopDownModelChangelogBody"
+        x-sdk-example: "{'name': 'example', 'description': 'example', 'propertyId':\
+          \ 'example'}"
       responses:
         "200":
           content:
@@ -8654,6 +8782,8 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/TopDownModelChangelogBody"
+        x-sdk-example: "{'name': 'example', 'description': 'example', 'propertyId':\
+          \ 'example'}"
       responses:
         "204":
           description: No Content
@@ -8832,6 +8962,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/TopDownModelEntryUpdate"
+        x-sdk-example: "{'id': 'example', 'objects': []}"
       responses:
         "204":
           description: No Content
@@ -8872,6 +9003,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/TopDownModelEntriesImport"
+        x-sdk-example: "{'entries': []}"
       responses:
         "200":
           content:
@@ -8902,6 +9034,7 @@ paths:
             schema:
               $ref: "#/components/schemas/I18nTranslationsParamsWrapperBody"
         required: true
+        x-sdk-example: "{'locale': 'example'}"
       responses:
         "200":
           content:
@@ -8933,6 +9066,7 @@ paths:
             schema:
               $ref: "#/components/schemas/I18nTranslationsExportParamsWrapperBody"
         required: true
+        x-sdk-example: "{'locale': 'example'}"
       responses:
         "200":
           content:
@@ -8974,6 +9108,7 @@ paths:
             schema:
               $ref: "#/components/schemas/I18nTranslationsImportParamsWrapperBody"
         required: true
+        x-sdk-example: "{'locale': 'example', 'translations': []}"
       responses:
         "200":
           content:
@@ -9051,6 +9186,7 @@ paths:
             schema:
               $ref: "#/components/schemas/UserV2PatchReqBody"
         required: true
+        x-sdk-example: "{}"
       responses:
         "204":
           description: No Content
@@ -9197,7 +9333,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/files_create_account_files_request"
+              $ref: "#/components/schemas/projects_update_image_request"
         required: true
       responses:
         "200":
@@ -9215,7 +9351,7 @@ paths:
       summary: Upload a profile image
       tags:
       - Users
-      x-sdk-params: true
+      x-sdk-params: false
   /v1/users:
     get:
       description: "Returns all users that belong to the authenticated user's account,\
@@ -9255,6 +9391,7 @@ paths:
             schema:
               $ref: "#/components/schemas/UserV2PostReqBody"
         required: true
+        x-sdk-example: "{'email': 'example', 'acceptTerms': False}"
       responses:
         "204":
           description: No Content
@@ -9287,6 +9424,8 @@ paths:
                 $ref: "#/components/schemas/ImportBody"
               type: array
         required: true
+        x-sdk-example: "[{'firstName': 'example', 'lastName': 'example', 'email':\
+          \ 'example', 'role': 'example'}]"
       responses:
         "204":
           description: No Content
@@ -9338,6 +9477,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/VariableCreate"
+        x-sdk-example: "{'name': 'example', 'data': {'calcRule': 'example'}}"
       responses:
         "200":
           content:
@@ -9473,6 +9613,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/VariablePatch"
+        x-sdk-example: "{}"
       responses:
         "204":
           description: No Content
@@ -22608,13 +22749,60 @@ components:
       - data
     files_create_account_files_request:
       properties:
-        filename:
-          description: filename of the file being uploaded
+        file:
+          description: The file to upload.
           format: binary
           type: string
-        name:
-          description: general purpose name for multipart form value
+        parentId:
+          description: Identifier of the directory to store the file in. Not allowed
+            together with parentPath.
           type: string
+        parentPath:
+          description: "Path of the directory to store the file in, such as Leases/2026.\
+            \ Not allowed together with parentId."
+          type: string
+      required:
+      - file
+    files_update_account_files_content_request:
+      properties:
+        file:
+          description: The file to upload.
+          format: binary
+          type: string
+      required:
+      - file
+    branding_update_account_login_background_request:
+      properties:
+        login-background:
+          description: The file to upload.
+          format: binary
+          type: string
+      required:
+      - login-background
+    branding_update_account_logo_request:
+      properties:
+        logo-dark:
+          description: The file to upload.
+          format: binary
+          type: string
+        logo-light:
+          description: The file to upload.
+          format: binary
+          type: string
+    floor_plans_update_images_request:
+      properties:
+        file:
+          description: The file to upload.
+          format: binary
+          type: string
+    projects_update_image_request:
+      properties:
+        img:
+          description: The file to upload.
+          format: binary
+          type: string
+      required:
+      - img
     AccountOIDCProviderPatch_not_not_anyOf:
       properties:
         providerName:

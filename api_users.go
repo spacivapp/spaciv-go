@@ -1,8 +1,6 @@
 /*
 spaciv API
 
-The spaciv API powers workplace planning: modelling how many people an organisation has, how they work, and how much space that requires.  ## Getting started  1. Exchange credentials for an access token using one of the operations under    **Authentication**. 2. Send that token on every subsequent request as `Authorization: Bearer <token>`. 3. Access tokens are short lived. Call `POST /v1/auth/refresh-token` to obtain a new one    before the old one expires.  ## Conventions  Every operation is versioned under `/v1`. Collections are plural (`GET /v1/dashboards` lists, `POST /v1/dashboards` creates) and individual records live beneath them (`/v1/dashboards/{id}`). Singular paths such as `/v1/account`, `/v1/project` and `/v1/user` refer to the record the access token was issued for.  Request and response bodies are JSON. Timestamps are RFC 3339. Identifiers are opaque strings unless documented otherwise, and collection operations return the records visible to the account the token was issued for.  Failures return an [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) problem document with a `detail` field describing what went wrong.
-
 API version: 1.0.0
 Contact: support@spaciv.com
 */
@@ -947,15 +945,7 @@ func (a *UsersService) executeUpdate(r requestForUsersUpdate) (*http.Response, e
 type requestForUsersUpdateImage struct {
 	ctx context.Context
 	ApiService *UsersService
-	filename *os.File
-	name *string
-}
-
-type UsersUpdateImageParams struct {
-	// filename of the file being uploaded
-	Filename *os.File
-	// general purpose name for multipart form value
-	Name *string
+	img *os.File
 }
 
 /*
@@ -963,14 +953,11 @@ UpdateImage Upload a profile image
 
 Uploads or replaces the authenticated user's profile photo in the token's account; each account has its own. In an account whose SSO provider supplies the photo, returns `403` (`profile-managed-by-sso`). Send a `multipart/form-data` body with the image in the `img` field. Accepted MIME types: `image/png`, `image/jpeg`, `image/gif`, `image/webp`, `image/svg+xml` (detected from file bytes). Maximum file size: 4 MiB. Requires the *Edit my user profile* permission.
 */
-func (a *UsersService) UpdateImage(ctx context.Context, params *UsersUpdateImageParams) (map[string]interface{}, error) {
+func (a *UsersService) UpdateImage(ctx context.Context, img *os.File) (map[string]interface{}, error) {
 	r := requestForUsersUpdateImage{
 		ApiService: a,
 		ctx: ctx,
-	}
-	if params != nil {
-		r.filename = params.Filename
-		r.name = params.Name
+		img: img,
 	}
 	result, _, err := a.executeUpdateImage(r)
 	return result, err
@@ -994,6 +981,9 @@ func (a *UsersService) executeUpdateImage(r requestForUsersUpdateImage) (map[str
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
+	if r.img == nil {
+		return localVarReturnValue, nil, reportError("img is required and must be specified")
+	}
 
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"multipart/form-data"}
@@ -1012,26 +1002,23 @@ func (a *UsersService) executeUpdateImage(r requestForUsersUpdateImage) (map[str
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	var filenameLocalVarFormFileName string
-	var filenameLocalVarFileName     string
-	var filenameLocalVarFileBytes    []byte
+	var imgLocalVarFormFileName string
+	var imgLocalVarFileName     string
+	var imgLocalVarFileBytes    []byte
 
-	filenameLocalVarFormFileName = "filename"
-	filenameLocalVarFile := r.filename
+	imgLocalVarFormFileName = "img"
+	imgLocalVarFile := r.img
 
-	if filenameLocalVarFile != nil {
-		fbs, err := io.ReadAll(filenameLocalVarFile)
-		filenameLocalVarFile.Close()
+	if imgLocalVarFile != nil {
+		fbs, err := io.ReadAll(imgLocalVarFile)
+		imgLocalVarFile.Close()
 		if err != nil {
 			return localVarReturnValue, nil, err
 		}
 
-		filenameLocalVarFileBytes = fbs
-		filenameLocalVarFileName = filenameLocalVarFile.Name()
-		formFiles = append(formFiles, formFile{fileBytes: filenameLocalVarFileBytes, fileName: filenameLocalVarFileName, formFileName: filenameLocalVarFormFileName})
-	}
-	if r.name != nil {
-		parameterAddToHeaderOrQuery(localVarFormParams, "name", r.name, "", "")
+		imgLocalVarFileBytes = fbs
+		imgLocalVarFileName = imgLocalVarFile.Name()
+		formFiles = append(formFiles, formFile{fileBytes: imgLocalVarFileBytes, fileName: imgLocalVarFileName, formFileName: imgLocalVarFormFileName})
 	}
 	if r.ctx != nil {
 		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "UsersAPIService.UpdateImage")

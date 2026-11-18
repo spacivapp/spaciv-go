@@ -38,7 +38,7 @@ import (
 )
 
 func main() {
-	userV2PostReqBody :=  // UserV2PostReqBody | 
+	userV2PostReqBody := *openapiclient.NewUserV2PostReqBody(false, "Email_example") // UserV2PostReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.Users.Create(context.Background(), userV2PostReqBody)
@@ -100,7 +100,7 @@ import (
 )
 
 func main() {
-	importBody :=  // []ImportBody | 
+	importBody := []openapiclient.ImportBody{*openapiclient.NewImportBody("Email_example", "FirstName_example", "LastName_example", "Role_example")} // []ImportBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.Users.CreateImport(context.Background(), importBody)
@@ -513,7 +513,7 @@ import (
 )
 
 func main() {
-	userV2PatchReqBody :=  // UserV2PatchReqBody | 
+	userV2PatchReqBody := *openapiclient.NewUserV2PatchReqBody() // UserV2PatchReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.Users.Update(context.Background(), userV2PatchReqBody)
@@ -556,7 +556,7 @@ Name | Type | Description  | Notes
 
 ## UpdateImage
 
-> map[string]interface{} UpdateImage(ctx, params)
+> map[string]interface{} UpdateImage(ctx, img)
 
 Upload a profile image
 
@@ -575,9 +575,10 @@ import (
 )
 
 func main() {
+	img := os.NewFile(1234, "some_file") // *os.File | The file to upload.
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	resp, err := client.Users.UpdateImage(context.Background(), nil)
+	resp, err := client.Users.UpdateImage(context.Background(), img)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `Users.UpdateImage`: %v\n", err)
 	}
@@ -596,8 +597,7 @@ Other parameters are passed through a pointer to a apiUpdateImageRequest struct 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **filename** | ***os.File** | filename of the file being uploaded | 
- **name** | **string** | general purpose name for multipart form value | 
+ **img** | ***os.File** | The file to upload. | 
 
 ### Return type
 

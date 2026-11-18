@@ -38,7 +38,7 @@ import (
 )
 
 func main() {
-	dashboardPost :=  // DashboardPost | 
+	dashboardPost := *openapiclient.NewDashboardPost([]openapiclient.DashboardCardRequest{*openapiclient.NewDashboardCardRequest("Description_example", "Name_example", int32(123))}, "Description_example", "Name_example") // DashboardPost | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Dashboards.Create(context.Background(), dashboardPost)
@@ -101,8 +101,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	dashboardCardCreate :=  // DashboardCardCreate | 
+	id := "id_example" // string | 
+	dashboardCardCreate := *openapiclient.NewDashboardCardCreate(*openapiclient.NewDashboardCardRequest("Description_example", "Name_example", int32(123))) // DashboardCardCreate | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.Dashboards.CreateCards(context.Background(), id, dashboardCardCreate, nil)
@@ -170,8 +170,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	dashboardCopy :=  // DashboardCopy | 
+	id := "id_example" // string | 
+	dashboardCopy := *openapiclient.NewDashboardCopy(int32(123)) // DashboardCopy | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Dashboards.CreateMove(context.Background(), id, dashboardCopy)
@@ -239,7 +239,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.Dashboards.Delete(context.Background(), id)
@@ -305,8 +305,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	dashboardCardDelete :=  // DashboardCardDelete | 
+	id := "id_example" // string | 
+	dashboardCardDelete := *openapiclient.NewDashboardCardDelete() // DashboardCardDelete | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.Dashboards.DeleteCards(context.Background(), id, dashboardCardDelete, nil)
@@ -374,8 +374,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	dashboardCopy :=  // DashboardCopy | 
+	id := "id_example" // string | 
+	dashboardCopy := *openapiclient.NewDashboardCopy(int32(123)) // DashboardCopy | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Dashboards.Duplicate(context.Background(), id, dashboardCopy)
@@ -443,7 +443,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Dashboards.Get(context.Background(), id)
@@ -568,8 +568,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	dashboardUpdate :=  // DashboardUpdate | 
+	id := "id_example" // string | 
+	dashboardUpdate := *openapiclient.NewDashboardUpdate() // DashboardUpdate | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.Dashboards.Update(context.Background(), id, dashboardUpdate, nil)
@@ -637,8 +637,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	dashboardCardPatch :=  // DashboardCardPatch | 
+	id := "id_example" // string | 
+	dashboardCardPatch := openapiclient.DashboardCardPatch{DashboardCardPatchOneOf: openapiclient.NewDashboardCardPatchOneOf(*openapiclient.NewDashboardCardMoveAfter("AfterCardId_example", "CardId_example"))} // DashboardCardPatch | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.Dashboards.UpdateCards(context.Background(), id, dashboardCardPatch, nil)

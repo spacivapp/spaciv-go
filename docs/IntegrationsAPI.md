@@ -29,7 +29,7 @@ import (
 )
 
 func main() {
-	integrationCreateSlackParamsWrapperBody :=  // IntegrationCreateSlackParamsWrapperBody | 
+	integrationCreateSlackParamsWrapperBody := *openapiclient.NewIntegrationCreateSlackParamsWrapperBody("Code_example") // IntegrationCreateSlackParamsWrapperBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Integrations.CreateSlack(context.Background(), integrationCreateSlackParamsWrapperBody)

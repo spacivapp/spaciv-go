@@ -46,7 +46,7 @@ import (
 )
 
 func main() {
-	apiKeyPostReqBody :=  // ApiKeyPostReqBody | 
+	apiKeyPostReqBody := *openapiclient.NewApiKeyPostReqBody(int64(123), "Name_example", int64(123)) // ApiKeyPostReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Authentication.CreateApiKeys(context.Background(), apiKeyPostReqBody)
@@ -109,7 +109,7 @@ import (
 )
 
 func main() {
-	authAPIKeyTokenReqBody :=  // AuthAPIKeyTokenReqBody | 
+	authAPIKeyTokenReqBody := *openapiclient.NewAuthAPIKeyTokenReqBody("Key_example") // AuthAPIKeyTokenReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Authentication.CreateAuthApiKeyToken(context.Background(), authAPIKeyTokenReqBody)
@@ -173,7 +173,7 @@ import (
 )
 
 func main() {
-	authLoginPassReqBody :=  // AuthLoginPassReqBody | 
+	authLoginPassReqBody := *openapiclient.NewAuthLoginPassReqBody("Hostname_example", "Password_example", "Username_example") // AuthLoginPassReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Authentication.CreateAuthLoginPassword(context.Background(), authLoginPassReqBody, nil)
@@ -239,7 +239,7 @@ import (
 )
 
 func main() {
-	authLoginPublicReqBody :=  // AuthLoginPublicReqBody | 
+	authLoginPublicReqBody := *openapiclient.NewAuthLoginPublicReqBody(false, "Hostname_example") // AuthLoginPublicReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Authentication.CreateAuthLoginPublic(context.Background(), authLoginPublicReqBody, nil)
@@ -305,7 +305,7 @@ import (
 )
 
 func main() {
-	authLoginTokenReqBody :=  // AuthLoginTokenReqBody | 
+	authLoginTokenReqBody := *openapiclient.NewAuthLoginTokenReqBody("Hostname_example", "Token_example") // AuthLoginTokenReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Authentication.CreateAuthLoginToken(context.Background(), authLoginTokenReqBody, nil)
@@ -371,7 +371,7 @@ import (
 )
 
 func main() {
-	authLogoutReqBody :=  // AuthLogoutReqBody | 
+	authLogoutReqBody := *openapiclient.NewAuthLogoutReqBody() // AuthLogoutReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.Authentication.CreateAuthLogout(context.Background(), authLogoutReqBody, nil)
@@ -435,7 +435,7 @@ import (
 )
 
 func main() {
-	proofCreateReqBody :=  // ProofCreateReqBody | 
+	proofCreateReqBody := *openapiclient.NewProofCreateReqBody("Token_example") // ProofCreateReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Authentication.CreateAuthProof(context.Background(), proofCreateReqBody)
@@ -498,7 +498,7 @@ import (
 )
 
 func main() {
-	proofAccountsReqBody :=  // ProofAccountsReqBody | 
+	proofAccountsReqBody := *openapiclient.NewProofAccountsReqBody("Proof_example") // ProofAccountsReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Authentication.CreateAuthProofAccounts(context.Background(), proofAccountsReqBody)
@@ -562,7 +562,7 @@ import (
 )
 
 func main() {
-	proofCompleteSignupReqBody :=  // ProofCompleteSignupReqBody | 
+	proofCompleteSignupReqBody := *openapiclient.NewProofCompleteSignupReqBody(*openapiclient.NewSignupAccount("Name_example", "Template_example"), "FirstName_example", "LastName_example", "Proof_example") // ProofCompleteSignupReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Authentication.CreateAuthProofCompleteSignup(context.Background(), proofCompleteSignupReqBody, nil)
@@ -628,7 +628,7 @@ import (
 )
 
 func main() {
-	proofEnterReqBody :=  // ProofEnterReqBody | 
+	proofEnterReqBody := *openapiclient.NewProofEnterReqBody(int64(123), "Proof_example") // ProofEnterReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Authentication.CreateAuthProofEnter(context.Background(), proofEnterReqBody, nil)
@@ -694,7 +694,7 @@ import (
 )
 
 func main() {
-	authRefreshTokenReqBody :=  // AuthRefreshTokenReqBody | 
+	authRefreshTokenReqBody := *openapiclient.NewAuthRefreshTokenReqBody() // AuthRefreshTokenReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Authentication.CreateAuthRefreshToken(context.Background(), authRefreshTokenReqBody, nil)
@@ -759,7 +759,7 @@ import (
 )
 
 func main() {
-	sendPasswordPutReqBody :=  // SendPasswordPutReqBody | 
+	sendPasswordPutReqBody := *openapiclient.NewSendPasswordPutReqBody("Email_example") // SendPasswordPutReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.Authentication.CreateAuthSendPasswordReset(context.Background(), sendPasswordPutReqBody)
@@ -821,7 +821,7 @@ import (
 )
 
 func main() {
-	authSendTokenReqBody :=  // AuthSendTokenReqBody | 
+	authSendTokenReqBody := *openapiclient.NewAuthSendTokenReqBody("Email_example", "Hostname_example", "RedirectTo_example") // AuthSendTokenReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.Authentication.CreateAuthSendToken(context.Background(), authSendTokenReqBody)
@@ -883,7 +883,7 @@ import (
 )
 
 func main() {
-	id :=  // int64 | 
+	id := int64(789) // int64 | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.Authentication.DeleteApiKeys(context.Background(), id)
@@ -1137,7 +1137,7 @@ import (
 )
 
 func main() {
-	passwordPutReqBody :=  // PasswordPutReqBody | 
+	passwordPutReqBody := *openapiclient.NewPasswordPutReqBody("Password_example", "Token_example") // PasswordPutReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.Authentication.UpdateAuthPassword(context.Background(), passwordPutReqBody)

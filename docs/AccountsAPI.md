@@ -47,7 +47,7 @@ import (
 )
 
 func main() {
-	accountPostReqBody :=  // AccountPostReqBody | 
+	accountPostReqBody := *openapiclient.NewAccountPostReqBody("Name_example", "Template_example") // AccountPostReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Accounts.Create(context.Background(), accountPostReqBody)
@@ -110,7 +110,7 @@ import (
 )
 
 func main() {
-	accountPostOIDCProviderReqBody :=  // AccountPostOIDCProviderReqBody | 
+	accountPostOIDCProviderReqBody := *openapiclient.NewAccountPostOIDCProviderReqBody("ClientId_example", "ClientSecret_example", "ProviderName_example", "Tenant_example") // AccountPostOIDCProviderReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Accounts.CreateOidcProvider(context.Background(), accountPostOIDCProviderReqBody)
@@ -287,7 +287,7 @@ import (
 )
 
 func main() {
-	accountDuplicateReqBody :=  // AccountDuplicateReqBody | 
+	accountDuplicateReqBody := *openapiclient.NewAccountDuplicateReqBody("Name_example") // AccountDuplicateReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Accounts.Duplicate(context.Background(), accountDuplicateReqBody)
@@ -408,7 +408,7 @@ import (
 )
 
 func main() {
-	hostname :=  // string | Subdomain the user is signing in on.
+	hostname := "hostname_example" // string | Subdomain the user is signing in on.
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Accounts.GetAuthOptions(context.Background(), hostname)
@@ -475,7 +475,7 @@ import (
 )
 
 func main() {
-	id :=  // int64 | 
+	id := int64(789) // int64 | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Accounts.GetHostname(context.Background(), id)
@@ -658,7 +658,7 @@ import (
 )
 
 func main() {
-	id :=  // int64 | Identifier returned by POST /v1/accounts or POST /v1/account/duplicate.
+	id := int64(789) // int64 | Identifier returned by POST /v1/accounts or POST /v1/account/duplicate.
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.Accounts.GetSetupStatus(context.Background(), id)
@@ -960,7 +960,7 @@ import (
 )
 
 func main() {
-	accountPutReqBody :=  // AccountPutReqBody | 
+	accountPutReqBody := *openapiclient.NewAccountPutReqBody() // AccountPutReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.Accounts.Update(context.Background(), accountPutReqBody)
@@ -1022,7 +1022,7 @@ import (
 )
 
 func main() {
-	accountPatchAuthOptionsReqBody :=  // AccountPatchAuthOptionsReqBody | 
+	accountPatchAuthOptionsReqBody := *openapiclient.NewAccountPatchAuthOptionsReqBody([]openapiclient.Item{*openapiclient.NewItem("AuthMethod_example", false)}) // AccountPatchAuthOptionsReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Accounts.UpdateAuthOptions(context.Background(), accountPatchAuthOptionsReqBody)
@@ -1085,7 +1085,7 @@ import (
 )
 
 func main() {
-	accountOIDCProviderPatch :=  // AccountOIDCProviderPatch | 
+	accountOIDCProviderPatch := *openapiclient.NewAccountOIDCProviderPatch() // AccountOIDCProviderPatch | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Accounts.UpdateOidcProvider(context.Background(), accountOIDCProviderPatch)
@@ -1148,7 +1148,7 @@ import (
 )
 
 func main() {
-	accountPutOIDCClientSecretReqBody :=  // AccountPutOIDCClientSecretReqBody | 
+	accountPutOIDCClientSecretReqBody := *openapiclient.NewAccountPutOIDCClientSecretReqBody("ClientSecret_example") // AccountPutOIDCClientSecretReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.Accounts.UpdateOidcProviderClientSecret(context.Background(), accountPutOIDCClientSecretReqBody)

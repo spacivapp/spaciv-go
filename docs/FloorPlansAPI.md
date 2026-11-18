@@ -35,7 +35,7 @@ import (
 )
 
 func main() {
-	floorplanPostBody :=  // FloorplanPostBody | 
+	floorplanPostBody := *openapiclient.NewFloorplanPostBody("Name_example") // FloorplanPostBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.FloorPlans.Create(context.Background(), floorplanPostBody)
@@ -98,7 +98,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.FloorPlans.Delete(context.Background(), id)
@@ -165,7 +165,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.FloorPlans.Get(context.Background(), id)
@@ -232,8 +232,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	imageType :=  // string | Which image layer to retrieve: the base drawing (image) or the foreground overlay (foreground).
+	id := "id_example" // string | 
+	imageType := "imageType_example" // string | Which image layer to retrieve: the base drawing (image) or the foreground overlay (foreground).
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.FloorPlans.GetImages(context.Background(), id, imageType, nil)
@@ -361,8 +361,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	floorplanPatchParamsBody :=  // FloorplanPatchParamsBody | 
+	id := "id_example" // string | 
+	floorplanPatchParamsBody := *openapiclient.NewFloorplanPatchParamsBody() // FloorplanPatchParamsBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.FloorPlans.Update(context.Background(), id, floorplanPatchParamsBody, nil)
@@ -431,8 +431,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	imageType :=  // string | Which image layer to upload: the base drawing (image) or the foreground overlay (foreground).
+	id := "id_example" // string | 
+	imageType := "imageType_example" // string | Which image layer to upload: the base drawing (image) or the foreground overlay (foreground).
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.FloorPlans.UpdateImages(context.Background(), id, imageType, nil)
@@ -461,8 +461,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
 
- **filename** | ***os.File** | filename of the file being uploaded | 
- **name** | **string** | general purpose name for multipart form value | 
+ **file** | ***os.File** | The file to upload. | 
 
 ### Return type
 

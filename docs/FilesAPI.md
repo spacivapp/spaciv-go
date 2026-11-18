@@ -47,7 +47,7 @@ import (
 )
 
 func main() {
-	name :=  // string | Name of the built-in skill, as listed.
+	name := "name_example" // string | Name of the built-in skill, as listed.
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Files.CreateAccountBuiltInSkillsInstall(context.Background(), name)
@@ -114,7 +114,7 @@ import (
 )
 
 func main() {
-	accountDirectoryPostBody :=  // AccountDirectoryPostBody | 
+	accountDirectoryPostBody := *openapiclient.NewAccountDirectoryPostBody("Name_example") // AccountDirectoryPostBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Files.CreateAccountDirectories(context.Background(), accountDirectoryPostBody)
@@ -158,7 +158,7 @@ Name | Type | Description  | Notes
 
 ## CreateAccountFiles
 
-> Record CreateAccountFiles(ctx, params)
+> Record CreateAccountFiles(ctx, file, params)
 
 Upload a file to the account
 
@@ -177,9 +177,10 @@ import (
 )
 
 func main() {
+	file := os.NewFile(1234, "some_file") // *os.File | The file to upload.
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	resp, err := client.Files.CreateAccountFiles(context.Background(), nil)
+	resp, err := client.Files.CreateAccountFiles(context.Background(), file, nil)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `Files.CreateAccountFiles`: %v\n", err)
 	}
@@ -198,8 +199,9 @@ Other parameters are passed through a pointer to a apiCreateAccountFilesRequest 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **filename** | ***os.File** | filename of the file being uploaded | 
- **name** | **string** | general purpose name for multipart form value | 
+ **file** | ***os.File** | The file to upload. | 
+ **parentId** | **string** | Identifier of the directory to store the file in. Not allowed together with parentPath. | 
+ **parentPath** | **string** | Path of the directory to store the file in, such as Leases/2026. Not allowed together with parentId. | 
 
 ### Return type
 
@@ -240,7 +242,7 @@ import (
 )
 
 func main() {
-	accountTextFilePostBody :=  // AccountTextFilePostBody | 
+	accountTextFilePostBody := *openapiclient.NewAccountTextFilePostBody("Name_example") // AccountTextFilePostBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Files.CreateAccountTextFiles(context.Background(), accountTextFilePostBody)
@@ -303,7 +305,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Files.DeleteAccountDirectories(context.Background(), id)
@@ -370,7 +372,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Files.DeleteAccountFiles(context.Background(), id)
@@ -623,7 +625,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Files.GetAccountFilesContent(context.Background(), id)
@@ -935,8 +937,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	accountDirectoryPatchBody :=  // AccountDirectoryPatchBody | 
+	id := "id_example" // string | 
+	accountDirectoryPatchBody := *openapiclient.NewAccountDirectoryPatchBody() // AccountDirectoryPatchBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Files.UpdateAccountDirectories(context.Background(), id, accountDirectoryPatchBody)
@@ -1004,8 +1006,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	accountFilePatchBody :=  // AccountFilePatchBody | 
+	id := "id_example" // string | 
+	accountFilePatchBody := *openapiclient.NewAccountFilePatchBody() // AccountFilePatchBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Files.UpdateAccountFiles(context.Background(), id, accountFilePatchBody)
@@ -1073,7 +1075,7 @@ import (
 )
 
 func main() {
-	accountFileByPathPatchBody :=  // AccountFileByPathPatchBody | 
+	accountFileByPathPatchBody := *openapiclient.NewAccountFileByPathPatchBody() // AccountFileByPathPatchBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Files.UpdateAccountFilesByPath(context.Background(), accountFileByPathPatchBody, nil)
@@ -1118,7 +1120,7 @@ Name | Type | Description  | Notes
 
 ## UpdateAccountFilesByPathContent
 
-> Record UpdateAccountFilesByPathContent(ctx, params)
+> Record UpdateAccountFilesByPathContent(ctx, file, params)
 
 Replace the content of the account file at a path
 
@@ -1137,9 +1139,10 @@ import (
 )
 
 func main() {
+	file := os.NewFile(1234, "some_file") // *os.File | The file to upload.
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	resp, err := client.Files.UpdateAccountFilesByPathContent(context.Background(), nil)
+	resp, err := client.Files.UpdateAccountFilesByPathContent(context.Background(), file, nil)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `Files.UpdateAccountFilesByPathContent`: %v\n", err)
 	}
@@ -1160,8 +1163,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **path** | **string** | Path of the file, such as Leases/2026/lease.pdf. Names are matched exactly, case included, after normalising to Unicode NFC. A leading / is ignored. URL-encode it as any other query value. | 
  **ifMatch** | **string** | The ETag returned when the file&#39;s content was read. The content is replaced only if it has not changed since. | 
- **filename** | ***os.File** | filename of the file being uploaded | 
- **name** | **string** | general purpose name for multipart form value | 
+ **file** | ***os.File** | The file to upload. | 
 
 ### Return type
 
@@ -1183,7 +1185,7 @@ Name | Type | Description  | Notes
 
 ## UpdateAccountFilesContent
 
-> Record UpdateAccountFilesContent(ctx, id, params)
+> Record UpdateAccountFilesContent(ctx, id, file, params)
 
 Replace an account file's content
 
@@ -1202,10 +1204,11 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
+	file := os.NewFile(1234, "some_file") // *os.File | The file to upload.
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	resp, err := client.Files.UpdateAccountFilesContent(context.Background(), id, nil)
+	resp, err := client.Files.UpdateAccountFilesContent(context.Background(), id, file, nil)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `Files.UpdateAccountFilesContent`: %v\n", err)
 	}
@@ -1230,8 +1233,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
  **ifMatch** | **string** | The ETag returned when the file&#39;s content was read. The content is replaced only if it has not changed since. | 
- **filename** | ***os.File** | filename of the file being uploaded | 
- **name** | **string** | general purpose name for multipart form value | 
+ **file** | ***os.File** | The file to upload. | 
 
 ### Return type
 

@@ -30,7 +30,7 @@ import (
 )
 
 func main() {
-	calcBody :=  // CalcBody | 
+	calcBody := *openapiclient.NewCalcBody(openapiclient.DataShapesRequest{DataShapesRequestOneOf: openapiclient.NewDataShapesRequestOneOf(*openapiclient.NewCalcChildrenRequest(openapiclient.MaybeVarInt{CalcRuleRefOneOf6: openapiclient.NewCalcRuleRefOneOf6("Var_example")}, []openapiclient.FilterGroup{*openapiclient.NewFilterGroup([]openapiclient.Filter{*openapiclient.NewFilter([]string{"Object_example"}, "ObjectGroup_example", "Property_example", []string{"PropertyNode_example"}, int32(123))})}, *openapiclient.NewMaybeVarFuncRequest(openapiclient.CalcRuleRefRequest{CalcRuleRefOneOf: openapiclient.NewCalcRuleRefOneOf(openapiclient.MaybeVarProp{CalcRuleRefOneOf6: openapiclient.NewCalcRuleRefOneOf6("Var_example")})}), map[string]ParameterTypeRequest{"key": *openapiclient.NewParameterTypeRequest(openapiclient.MaybeVarProp{CalcRuleRefOneOf6: })}, openapiclient.MaybeVarStr{CalcRuleRefOneOf6: }))}, []openapiclient.FilterGroup{*openapiclient.NewFilterGroup([]openapiclient.Filter{*openapiclient.NewFilter([]string{"Object_example"}, "ObjectGroup_example", "Property_example", []string{"PropertyNode_example"}, int32(123))})}) // CalcBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Analysis.CreateAnalyse(context.Background(), calcBody, nil)
@@ -94,8 +94,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	graphPreviewBody :=  // GraphPreviewBody | 
+	id := "id_example" // string | 
+	graphPreviewBody := *openapiclient.NewGraphPreviewBody(interface{}(123), int64(123), "Scenario_example") // GraphPreviewBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Analysis.CreateGraphLayersPreview(context.Background(), id, graphPreviewBody)

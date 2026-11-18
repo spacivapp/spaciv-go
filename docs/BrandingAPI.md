@@ -155,7 +155,7 @@ import (
 )
 
 func main() {
-	hostname :=  // string | Subdomain the user is signing in on.
+	hostname := "hostname_example" // string | Subdomain the user is signing in on.
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Branding.Get(context.Background(), hostname)
@@ -344,7 +344,7 @@ import (
 )
 
 func main() {
-	hostname :=  // string | Subdomain the user is signing in on.
+	hostname := "hostname_example" // string | Subdomain the user is signing in on.
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Branding.GetLoginBackground(context.Background(), hostname, nil)
@@ -413,7 +413,7 @@ import (
 )
 
 func main() {
-	hostname :=  // string | Subdomain the user is signing in on.
+	hostname := "hostname_example" // string | Subdomain the user is signing in on.
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Branding.GetLogo(context.Background(), hostname, nil)
@@ -464,7 +464,7 @@ No authorization required
 
 ## UpdateAccountLoginBackground
 
-> UpdateAccountLoginBackground(ctx, params)
+> UpdateAccountLoginBackground(ctx, loginBackground)
 
 Upload the sign-in page background
 
@@ -483,9 +483,10 @@ import (
 )
 
 func main() {
+	loginBackground := os.NewFile(1234, "some_file") // *os.File | The file to upload.
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	err := client.Branding.UpdateAccountLoginBackground(context.Background(), nil)
+	err := client.Branding.UpdateAccountLoginBackground(context.Background(), loginBackground)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `Branding.UpdateAccountLoginBackground`: %v\n", err)
 	}
@@ -503,8 +504,7 @@ Other parameters are passed through a pointer to a apiUpdateAccountLoginBackgrou
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **filename** | ***os.File** | filename of the file being uploaded | 
- **name** | **string** | general purpose name for multipart form value | 
+ **loginBackground** | ***os.File** | The file to upload. | 
 
 ### Return type
 
@@ -565,8 +565,8 @@ Other parameters are passed through a pointer to a apiUpdateAccountLogoRequest s
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **filename** | ***os.File** | filename of the file being uploaded | 
- **name** | **string** | general purpose name for multipart form value | 
+ **logoDark** | ***os.File** | The file to upload. | 
+ **logoLight** | ***os.File** | The file to upload. | 
 
 ### Return type
 

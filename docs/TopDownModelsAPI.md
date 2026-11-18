@@ -38,7 +38,7 @@ import (
 )
 
 func main() {
-	topDownModelChangelogBody :=  // TopDownModelChangelogBody | 
+	topDownModelChangelogBody := *openapiclient.NewTopDownModelChangelogBody("Description_example", "Name_example", "PropertyId_example") // TopDownModelChangelogBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.TopDownModels.Create(context.Background(), topDownModelChangelogBody)
@@ -101,8 +101,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	topDownModelEntriesImport :=  // TopDownModelEntriesImport | 
+	id := "id_example" // string | 
+	topDownModelEntriesImport := *openapiclient.NewTopDownModelEntriesImport([]openapiclient.TopDownModelEntryUpdate{*openapiclient.NewTopDownModelEntryUpdate("Id_example", []openapiclient.FilterGroup{*openapiclient.NewFilterGroup([]openapiclient.Filter{*openapiclient.NewFilter([]string{"Object_example"}, "ObjectGroup_example", "Property_example", []string{"PropertyNode_example"}, int32(123))})})}) // TopDownModelEntriesImport | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.TopDownModels.CreateEntriesImport(context.Background(), id, topDownModelEntriesImport)
@@ -170,7 +170,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.TopDownModels.Delete(context.Background(), id, nil)
@@ -237,8 +237,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	requestBody :=  // []string | 
+	id := "id_example" // string | 
+	requestBody := []string{"Property_example"} // []string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.TopDownModels.DeleteEntries(context.Background(), id, requestBody)
@@ -305,7 +305,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.TopDownModels.Duplicate(context.Background(), id)
@@ -372,7 +372,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.TopDownModels.Get(context.Background(), id)
@@ -501,7 +501,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.TopDownModels.ListEntries(context.Background(), id, nil)
@@ -570,8 +570,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	topDownModelChangelogBody :=  // TopDownModelChangelogBody | 
+	id := "id_example" // string | 
+	topDownModelChangelogBody := *openapiclient.NewTopDownModelChangelogBody("Description_example", "Name_example", "PropertyId_example") // TopDownModelChangelogBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.TopDownModels.Update(context.Background(), id, topDownModelChangelogBody, nil)
@@ -639,8 +639,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	topDownModelEntryUpdate :=  // TopDownModelEntryUpdate | 
+	id := "id_example" // string | 
+	topDownModelEntryUpdate := *openapiclient.NewTopDownModelEntryUpdate("Id_example", []openapiclient.FilterGroup{*openapiclient.NewFilterGroup([]openapiclient.Filter{*openapiclient.NewFilter([]string{"Object_example"}, "ObjectGroup_example", "Property_example", []string{"PropertyNode_example"}, int32(123))})}) // TopDownModelEntryUpdate | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.TopDownModels.UpdateEntries(context.Background(), id, topDownModelEntryUpdate)

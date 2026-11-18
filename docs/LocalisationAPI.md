@@ -30,7 +30,7 @@ import (
 )
 
 func main() {
-	i18nTranslationsParamsWrapperBody :=  // I18nTranslationsParamsWrapperBody | 
+	i18nTranslationsParamsWrapperBody := *openapiclient.NewI18nTranslationsParamsWrapperBody("Locale_example") // I18nTranslationsParamsWrapperBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Localisation.CreateTranslations(context.Background(), i18nTranslationsParamsWrapperBody)

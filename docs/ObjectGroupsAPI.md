@@ -45,7 +45,7 @@ import (
 )
 
 func main() {
-	objectGroupChangelogBody :=  // ObjectGroupChangelogBody | 
+	objectGroupChangelogBody := *openapiclient.NewObjectGroupChangelogBody("Description_example", false, "Name_example", map[string]ObjectGroupEntryPropertyNodes{"key": *openapiclient.NewObjectGroupEntryPropertyNodes(map[string]float64{"key": float64(123)})}) // ObjectGroupChangelogBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.ObjectGroups.Create(context.Background(), objectGroupChangelogBody)
@@ -108,7 +108,7 @@ import (
 )
 
 func main() {
-	selectObjectsParamsWrapperBody :=  // SelectObjectsParamsWrapperBody | 
+	selectObjectsParamsWrapperBody := *openapiclient.NewSelectObjectsParamsWrapperBody([]openapiclient.FilterGroup{*openapiclient.NewFilterGroup([]openapiclient.Filter{*openapiclient.NewFilter([]string{"Object_example"}, "ObjectGroup_example", "Property_example", []string{"PropertyNode_example"}, int32(123))})}) // SelectObjectsParamsWrapperBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.ObjectGroups.CreateSelect(context.Background(), selectObjectsParamsWrapperBody)
@@ -171,7 +171,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.ObjectGroups.Delete(context.Background(), id, nil)
@@ -239,8 +239,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	objectGroupEntryUpdate :=  // []ObjectGroupEntryUpdate | 
+	id := "id_example" // string | 
+	objectGroupEntryUpdate := []openapiclient.ObjectGroupEntryUpdate{*openapiclient.NewObjectGroupEntryUpdate(false, "Id_example", map[string]ObjectGroupEntryPropertyNodes{"key": *openapiclient.NewObjectGroupEntryPropertyNodes(map[string]float64{"key": float64(123)})})} // []ObjectGroupEntryUpdate | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.ObjectGroups.DeleteEntries(context.Background(), id, objectGroupEntryUpdate)
@@ -307,8 +307,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	entryId :=  // string | 
+	id := "id_example" // string | 
+	entryId := "entryId_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.ObjectGroups.DeleteEntriesImage(context.Background(), id, entryId)
@@ -377,7 +377,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.ObjectGroups.Duplicate(context.Background(), id)
@@ -444,7 +444,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.ObjectGroups.Get(context.Background(), id)
@@ -511,8 +511,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	entryId :=  // string | 
+	id := "id_example" // string | 
+	entryId := "entryId_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.ObjectGroups.GetEntriesImage(context.Background(), id, entryId, nil)
@@ -582,7 +582,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.ObjectGroups.GetFile(context.Background(), id)
@@ -711,7 +711,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.ObjectGroups.ListEntries(context.Background(), id, nil)
@@ -781,8 +781,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	objectGroupEntryUpdate :=  // []ObjectGroupEntryUpdate | 
+	id := "id_example" // string | 
+	objectGroupEntryUpdate := []openapiclient.ObjectGroupEntryUpdate{*openapiclient.NewObjectGroupEntryUpdate(false, "Id_example", map[string]ObjectGroupEntryPropertyNodes{"key": *openapiclient.NewObjectGroupEntryPropertyNodes(map[string]float64{"key": float64(123)})})} // []ObjectGroupEntryUpdate | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.ObjectGroups.ReplaceEntries(context.Background(), id, objectGroupEntryUpdate)
@@ -849,7 +849,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.ObjectGroups.SearchEntries(context.Background(), id, nil)
@@ -920,8 +920,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	objectGroupChangelogBody :=  // ObjectGroupChangelogBody | 
+	id := "id_example" // string | 
+	objectGroupChangelogBody := *openapiclient.NewObjectGroupChangelogBody("Description_example", false, "Name_example", map[string]ObjectGroupEntryPropertyNodes{"key": *openapiclient.NewObjectGroupEntryPropertyNodes(map[string]float64{"key": float64(123)})}) // ObjectGroupChangelogBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.ObjectGroups.Update(context.Background(), id, objectGroupChangelogBody, nil)
@@ -989,8 +989,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	entryPatch :=  // []EntryPatch | 
+	id := "id_example" // string | 
+	entryPatch := []openapiclient.EntryPatch{*openapiclient.NewEntryPatch("Id_example")} // []EntryPatch | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.ObjectGroups.UpdateEntries(context.Background(), id, entryPatch)
@@ -1038,7 +1038,7 @@ Name | Type | Description  | Notes
 
 ## UpdateEntriesImage
 
-> map[string]interface{} UpdateEntriesImage(ctx, id, entryId, params)
+> map[string]interface{} UpdateEntriesImage(ctx, id, entryId, file)
 
 Upload an entry image
 
@@ -1057,11 +1057,12 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	entryId :=  // string | 
+	id := "id_example" // string | 
+	entryId := "entryId_example" // string | 
+	file := os.NewFile(1234, "some_file") // *os.File | The file to upload.
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	resp, err := client.ObjectGroups.UpdateEntriesImage(context.Background(), id, entryId, nil)
+	resp, err := client.ObjectGroups.UpdateEntriesImage(context.Background(), id, entryId, file)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `ObjectGroups.UpdateEntriesImage`: %v\n", err)
 	}
@@ -1087,8 +1088,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
 
- **filename** | ***os.File** | filename of the file being uploaded | 
- **name** | **string** | general purpose name for multipart form value | 
+ **file** | ***os.File** | The file to upload. | 
 
 ### Return type
 
@@ -1129,7 +1129,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.ObjectGroups.UpdateFile(context.Background(), id, nil)
@@ -1156,8 +1156,7 @@ Other parameters are passed through a pointer to a apiUpdateFileRequest struct v
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **filename** | ***os.File** | filename of the file being uploaded | 
- **name** | **string** | general purpose name for multipart form value | 
+ **file** | ***os.File** | The file to upload. | 
 
 ### Return type
 

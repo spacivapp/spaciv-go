@@ -94,7 +94,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.DataCollection.Delete(context.Background(), id)
@@ -161,7 +161,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.DataCollection.Get(context.Background(), id)
@@ -228,7 +228,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.DataCollection.GetLink(context.Background(), id)
@@ -295,7 +295,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.DataCollection.GetLinkQrCode(context.Background(), id)
@@ -420,7 +420,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.DataCollection.ListContributors(context.Background(), id)
@@ -487,8 +487,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	datacollectionBody :=  // DatacollectionBody | 
+	id := "id_example" // string | 
+	datacollectionBody := *openapiclient.NewDatacollectionBody(false, false, []string{"Questions_example"}, false) // DatacollectionBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.DataCollection.Update(context.Background(), id, datacollectionBody, nil)

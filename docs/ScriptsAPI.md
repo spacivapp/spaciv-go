@@ -47,7 +47,7 @@ import (
 )
 
 func main() {
-	scriptPostReqBody :=  // ScriptPostReqBody | 
+	scriptPostReqBody := *openapiclient.NewScriptPostReqBody(map[string]string{"key": "Inner_example"}, "Language_example", "Name_example") // ScriptPostReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Scripts.Create(context.Background(), scriptPostReqBody)
@@ -110,7 +110,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Scripts.CreateReauthorise(context.Background(), id)
@@ -177,7 +177,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Scripts.CreateRegenerateWebhook(context.Background(), id)
@@ -244,7 +244,7 @@ import (
 )
 
 func main() {
-	scriptSchedulePreviewReqBody :=  // ScriptSchedulePreviewReqBody | 
+	scriptSchedulePreviewReqBody := *openapiclient.NewScriptSchedulePreviewReqBody() // ScriptSchedulePreviewReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Scripts.CreateSchedulePreview(context.Background(), scriptSchedulePreviewReqBody)
@@ -307,7 +307,7 @@ import (
 )
 
 func main() {
-	scratchpadBuildPostReqBody :=  // ScratchpadBuildPostReqBody | 
+	scratchpadBuildPostReqBody := *openapiclient.NewScratchpadBuildPostReqBody(map[string]string{"key": "Inner_example"}, "Language_example") // ScratchpadBuildPostReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Scripts.CreateScratchpadBuilds(context.Background(), scratchpadBuildPostReqBody)
@@ -370,7 +370,7 @@ import (
 )
 
 func main() {
-	scratchpadRunPostReqBody :=  // ScratchpadRunPostReqBody | 
+	scratchpadRunPostReqBody := *openapiclient.NewScratchpadRunPostReqBody("Language_example") // ScratchpadRunPostReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Scripts.CreateScratchpadRuns(context.Background(), scratchpadRunPostReqBody)
@@ -433,7 +433,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.Scripts.Delete(context.Background(), id)
@@ -499,7 +499,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Scripts.Get(context.Background(), id)
@@ -566,7 +566,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Scripts.GetAudit(context.Background(), id, nil)
@@ -693,7 +693,7 @@ import (
 )
 
 func main() {
-	buildId :=  // string | 
+	buildId := "buildId_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Scripts.GetScratchpadBuilds(context.Background(), buildId, nil)
@@ -761,7 +761,7 @@ import (
 )
 
 func main() {
-	runId :=  // string | 
+	runId := "runId_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Scripts.GetScratchpadRuns(context.Background(), runId, nil)
@@ -945,7 +945,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Scripts.ListRuns(context.Background(), id, nil)
@@ -1014,8 +1014,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	runId :=  // string | 
+	id := "id_example" // string | 
+	runId := "runId_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Scripts.ListRunsLogs(context.Background(), id, runId)
@@ -1084,7 +1084,7 @@ import (
 )
 
 func main() {
-	runId :=  // string | 
+	runId := "runId_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Scripts.StopScratchpadRuns(context.Background(), runId)
@@ -1151,8 +1151,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	scriptPatchReqBody :=  // ScriptPatchReqBody | 
+	id := "id_example" // string | 
+	scriptPatchReqBody := *openapiclient.NewScriptPatchReqBody(int64(123)) // ScriptPatchReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Scripts.Update(context.Background(), id, scriptPatchReqBody)
@@ -1220,8 +1220,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	scriptSecretsReqBody :=  // ScriptSecretsReqBody | 
+	id := "id_example" // string | 
+	scriptSecretsReqBody := *openapiclient.NewScriptSecretsReqBody() // ScriptSecretsReqBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Scripts.UpdateSecrets(context.Background(), id, scriptSecretsReqBody)

@@ -157,7 +157,7 @@ import (
 )
 
 func main() {
-	body :=  // int32 | 
+	body := int32(56) // int32 | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.Internal.CreateAdminPopulate(context.Background(), body)
@@ -455,7 +455,7 @@ import (
 )
 
 func main() {
-	sysAdminUpdateFeatureGroupsParamsWrapperBody :=  // SysAdminUpdateFeatureGroupsParamsWrapperBody | 
+	sysAdminUpdateFeatureGroupsParamsWrapperBody := *openapiclient.NewSysAdminUpdateFeatureGroupsParamsWrapperBody(int32(123)) // SysAdminUpdateFeatureGroupsParamsWrapperBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.Internal.CreateAdminUpdateFeatureGroups(context.Background(), sysAdminUpdateFeatureGroupsParamsWrapperBody)
@@ -517,7 +517,7 @@ import (
 )
 
 func main() {
-	i18nTranslationsExportParamsWrapperBody :=  // I18nTranslationsExportParamsWrapperBody | 
+	i18nTranslationsExportParamsWrapperBody := *openapiclient.NewI18nTranslationsExportParamsWrapperBody("Locale_example") // I18nTranslationsExportParamsWrapperBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Internal.CreateTranslationsExport(context.Background(), i18nTranslationsExportParamsWrapperBody)
@@ -580,7 +580,7 @@ import (
 )
 
 func main() {
-	i18nTranslationsImportParamsWrapperBody :=  // I18nTranslationsImportParamsWrapperBody | 
+	i18nTranslationsImportParamsWrapperBody := *openapiclient.NewI18nTranslationsImportParamsWrapperBody("Locale_example", [][]string{[]string{"Translations_example"}}) // I18nTranslationsImportParamsWrapperBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Internal.CreateTranslationsImport(context.Background(), i18nTranslationsImportParamsWrapperBody)
@@ -643,7 +643,7 @@ import (
 )
 
 func main() {
-	account :=  // int64 | 
+	account := int64(789) // int64 | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Internal.ListAdminAccountsScriptLimits(context.Background(), account)
@@ -767,8 +767,8 @@ import (
 )
 
 func main() {
-	account :=  // int64 | 
-	scriptLimitOverrides :=  // ScriptLimitOverrides | 
+	account := int64(789) // int64 | 
+	scriptLimitOverrides := *openapiclient.NewScriptLimitOverrides() // ScriptLimitOverrides | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Internal.UpdateAdminAccountsScriptLimits(context.Background(), account, scriptLimitOverrides)

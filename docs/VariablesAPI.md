@@ -34,7 +34,7 @@ import (
 )
 
 func main() {
-	variableCreate :=  // VariableCreate | 
+	variableCreate := *openapiclient.NewVariableCreate(openapiclient.VariableData{PropertySourceOneOf: openapiclient.NewPropertySourceOneOf("Floorplan_example")}, "Name_example") // VariableCreate | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Variables.Create(context.Background(), variableCreate)
@@ -97,7 +97,7 @@ import (
 )
 
 func main() {
-	id :=  // string | Account variable ID, either qualified (account:<id>) or bare.
+	id := "id_example" // string | Account variable ID, either qualified (account:<id>) or bare.
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.Variables.Delete(context.Background(), id)
@@ -163,7 +163,7 @@ import (
 )
 
 func main() {
-	id :=  // string | Account variable ID, either qualified (account:<id>) or bare.
+	id := "id_example" // string | Account variable ID, either qualified (account:<id>) or bare.
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Variables.Get(context.Background(), id)
@@ -288,7 +288,7 @@ import (
 )
 
 func main() {
-	id :=  // string | Account variable ID, either qualified (account:<id>) or bare.
+	id := "id_example" // string | Account variable ID, either qualified (account:<id>) or bare.
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Variables.ListReferences(context.Background(), id)
@@ -355,8 +355,8 @@ import (
 )
 
 func main() {
-	id :=  // string | Account variable ID, either qualified (account:<id>) or bare.
-	variablePatch :=  // VariablePatch | 
+	id := "id_example" // string | Account variable ID, either qualified (account:<id>) or bare.
+	variablePatch := *openapiclient.NewVariablePatch() // VariablePatch | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.Variables.Update(context.Background(), id, variablePatch, nil)

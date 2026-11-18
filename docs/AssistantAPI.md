@@ -37,7 +37,7 @@ import (
 )
 
 func main() {
-	assistantChatReq :=  // AssistantChatReq | 
+	assistantChatReq := *openapiclient.NewAssistantChatReq("Message_example") // AssistantChatReq | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Assistant.CreateChat(context.Background(), assistantChatReq)
@@ -100,7 +100,7 @@ import (
 )
 
 func main() {
-	id :=  // string | UUID of the conversation to delete.
+	id := "id_example" // string | UUID of the conversation to delete.
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.Assistant.DeleteConversations(context.Background(), id)
@@ -224,7 +224,7 @@ import (
 )
 
 func main() {
-	id :=  // string | UUID of the conversation to read.
+	id := "id_example" // string | UUID of the conversation to read.
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Assistant.GetConversationsTranscript(context.Background(), id)
@@ -407,7 +407,7 @@ import (
 )
 
 func main() {
-	id :=  // string | UUID of the conversation to poll.
+	id := "id_example" // string | UUID of the conversation to poll.
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Assistant.PollConversations(context.Background(), id, nil)
@@ -475,7 +475,7 @@ import (
 )
 
 func main() {
-	id :=  // string | UUID of the conversation whose turn to stop.
+	id := "id_example" // string | UUID of the conversation whose turn to stop.
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.Assistant.StopConversations(context.Background(), id)
@@ -541,7 +541,7 @@ import (
 )
 
 func main() {
-	assistantConfigPutReq :=  // AssistantConfigPutReq | 
+	assistantConfigPutReq := *openapiclient.NewAssistantConfigPutReq([]string{"PermittedModels_example"}) // AssistantConfigPutReq | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Assistant.UpdateConfig(context.Background(), assistantConfigPutReq)

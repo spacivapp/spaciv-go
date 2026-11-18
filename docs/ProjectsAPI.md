@@ -36,7 +36,7 @@ import (
 )
 
 func main() {
-	projectCreateBody :=  // ProjectCreateBody | 
+	projectCreateBody := openapiclient.ProjectCreateBody{ProjectCreateBodyOneOf: openapiclient.NewProjectCreateBodyOneOf(map[string]interface{}(123))} // ProjectCreateBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Projects.Create(context.Background(), projectCreateBody)
@@ -405,7 +405,7 @@ import (
 )
 
 func main() {
-	projectPatchBody :=  // ProjectPatchBody | 
+	projectPatchBody := *openapiclient.NewProjectPatchBody(false, []openapiclient.FilterGroup{*openapiclient.NewFilterGroup([]openapiclient.Filter{*openapiclient.NewFilter([]string{"Object_example"}, "ObjectGroup_example", "Property_example", []string{"PropertyNode_example"}, int32(123))})}) // ProjectPatchBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.Projects.Update(context.Background(), projectPatchBody, nil)
@@ -449,7 +449,7 @@ Name | Type | Description  | Notes
 
 ## UpdateImage
 
-> map[string]interface{} UpdateImage(ctx, params)
+> map[string]interface{} UpdateImage(ctx, img)
 
 Upload a project image
 
@@ -468,9 +468,10 @@ import (
 )
 
 func main() {
+	img := os.NewFile(1234, "some_file") // *os.File | The file to upload.
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
-	resp, err := client.Projects.UpdateImage(context.Background(), nil)
+	resp, err := client.Projects.UpdateImage(context.Background(), img)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `Projects.UpdateImage`: %v\n", err)
 	}
@@ -489,8 +490,7 @@ Other parameters are passed through a pointer to a apiUpdateImageRequest struct 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **filename** | ***os.File** | filename of the file being uploaded | 
- **name** | **string** | general purpose name for multipart form value | 
+ **img** | ***os.File** | The file to upload. | 
 
 ### Return type
 

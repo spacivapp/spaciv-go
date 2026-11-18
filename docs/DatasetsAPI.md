@@ -35,7 +35,7 @@ import (
 )
 
 func main() {
-	datasetCreate :=  // DatasetCreate | 
+	datasetCreate := *openapiclient.NewDatasetCreate(false, "Name_example", []openapiclient.QuestionStepRequest{openapiclient.QuestionStepRequest{QuestionStepOneOf1: openapiclient.NewQuestionStepOneOf1(*openapiclient.NewContentStep("Details_example", "DetailsHeading_example", int32(123), "Heading_example", false, "Image_example", []string{"Paragraphs_example"}))}}) // DatasetCreate | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Datasets.Create(context.Background(), datasetCreate)
@@ -98,8 +98,8 @@ import (
 )
 
 func main() {
-	id :=  // string | ID of the template question to copy.
-	templateCopyParamsWrapperBody :=  // TemplateCopyParamsWrapperBody | 
+	id := "id_example" // string | ID of the template question to copy.
+	templateCopyParamsWrapperBody := *openapiclient.NewTemplateCopyParamsWrapperBody(false) // TemplateCopyParamsWrapperBody | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Datasets.CreateDatasetTemplatesCopy(context.Background(), id, templateCopyParamsWrapperBody)
@@ -167,7 +167,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	err := client.Datasets.Delete(context.Background(), id)
@@ -233,7 +233,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Datasets.Get(context.Background(), id)
@@ -416,8 +416,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	datasetModify :=  // DatasetModify | 
+	id := "id_example" // string | 
+	datasetModify := *openapiclient.NewDatasetModify(false, []openapiclient.QuestionStepRequest{openapiclient.QuestionStepRequest{QuestionStepOneOf1: openapiclient.NewQuestionStepOneOf1(*openapiclient.NewContentStep("Details_example", "DetailsHeading_example", int32(123), "Heading_example", false, "Image_example", []string{"Paragraphs_example"}))}}) // DatasetModify | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Datasets.Update(context.Background(), id, datasetModify, nil)

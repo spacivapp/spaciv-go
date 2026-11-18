@@ -31,8 +31,8 @@ import (
 )
 
 func main() {
-	id :=  // string | 
-	contributionPost :=  // ContributionPost | 
+	id := "id_example" // string | 
+	contributionPost := *openapiclient.NewContributionPost(*openapiclient.NewContribution(map[string]Answer{"key": *openapiclient.NewAnswer(float64(123), "Other_example", map[string]TimeRange{"key": *openapiclient.NewTimeRange(int32(123), int32(123))}, []string{"Selected_example"}, map[string]string{"key": "Inner_example"}, "Text_example", map[string]float64{"key": float64(123)})}), "Node_example", int32(123)) // ContributionPost | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Contributions.CreateDataCollectionsContribution(context.Background(), id, contributionPost, nil)
@@ -101,8 +101,8 @@ import (
 )
 
 func main() {
-	userId :=  // int64 | 
-	id :=  // string | 
+	userId := int64(789) // int64 | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Contributions.CreateDataCollectionsUsersContribution(context.Background(), userId, id)
@@ -171,7 +171,7 @@ import (
 )
 
 func main() {
-	id :=  // string | 
+	id := "id_example" // string | 
 
 	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
 	resp, err := client.Contributions.GetDataCollectionsContribution(context.Background(), id)
