@@ -441,7 +441,7 @@ type requestForAssistantListConversations struct {
 /*
 ListConversations List conversations
 
-Returns the caller's own assistant conversations in the current project. A conversation belongs to the user who started it and is not visible to anyone else. Requires the *AI assistant* permission.
+Returns the caller's own assistant conversations in the current project. A conversation belongs to the user who started it: no other user of the account can see it, though sys admins can search and read it. Requires the *AI assistant* permission.
 */
 func (a *AssistantService) ListConversations(ctx context.Context) (*AssistantConversationListRes, error) {
 	r := requestForAssistantListConversations{

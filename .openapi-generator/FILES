@@ -88,6 +88,8 @@ docs/AssistantConfigPutReq.md
 docs/AssistantConversationFailureBody.md
 docs/AssistantConversationListEntry.md
 docs/AssistantConversationListRes.md
+docs/AssistantMessageSearchHit.md
+docs/AssistantMessageSearchRes.md
 docs/AssistantModelListBody.md
 docs/AssistantModelOption.md
 docs/AssistantTranscriptBody.md
@@ -641,6 +643,8 @@ model_assistant_config_put_req.go
 model_assistant_conversation_failure_body.go
 model_assistant_conversation_list_entry.go
 model_assistant_conversation_list_res.go
+model_assistant_message_search_hit.go
+model_assistant_message_search_res.go
 model_assistant_model_list_body.go
 model_assistant_model_option.go
 model_assistant_transcript_body.go

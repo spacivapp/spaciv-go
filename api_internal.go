@@ -16,6 +16,8 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
+	"reflect"
 )
 
 
@@ -1076,6 +1078,121 @@ func (a *InternalService) executeCreateTranslationsImport(r requestForInternalCr
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type requestForInternalGetAdminAssistantAccountsProjectsUsersConversationsTranscript struct {
+	ctx context.Context
+	ApiService *InternalService
+	account int32
+	project int32
+	user int32
+	id string
+}
+
+/*
+GetAdminAssistantAccountsProjectsUsersConversationsTranscript Get any user's conversation transcript
+
+Returns a conversation found by searching assistant messages, as `GET /v1/assistant/conversations/{id}/transcript` returns it to its owner. A subsession's transcript is read by its own id. Returns `404` if the conversation does not exist or was deleted. Requires the *Project admin controls* and *Sys admin* permissions.
+*/
+func (a *InternalService) GetAdminAssistantAccountsProjectsUsersConversationsTranscript(ctx context.Context, account int32, project int32, user int32, id string) (*AssistantTranscriptBody, error) {
+	r := requestForInternalGetAdminAssistantAccountsProjectsUsersConversationsTranscript{
+		ApiService: a,
+		ctx: ctx,
+		account: account,
+		project: project,
+		user: user,
+		id: id,
+	}
+	result, _, err := a.executeGetAdminAssistantAccountsProjectsUsersConversationsTranscript(r)
+	return result, err
+}
+
+func (a *InternalService) executeGetAdminAssistantAccountsProjectsUsersConversationsTranscript(r requestForInternalGetAdminAssistantAccountsProjectsUsersConversationsTranscript) (*AssistantTranscriptBody, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AssistantTranscriptBody
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "InternalAPIService.GetAdminAssistantAccountsProjectsUsersConversationsTranscript")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/admin/assistant/accounts/{account}/projects/{project}/users/{user}/conversations/{id}/transcript"
+	localVarPath = strings.Replace(localVarPath, "{"+"account"+"}", url.PathEscape(parameterValueToString(r.account, "account")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"project"+"}", url.PathEscape(parameterValueToString(r.project, "project")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"user"+"}", url.PathEscape(parameterValueToString(r.user, "user")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ctx != nil {
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "InternalAPIService.GetAdminAssistantAccountsProjectsUsersConversationsTranscript")
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type requestForInternalListAdminAccountsScriptLimits struct {
 	ctx context.Context
 	ApiService *InternalService
@@ -1139,6 +1256,185 @@ func (a *InternalService) executeListAdminAccountsScriptLimits(r requestForInter
 	}
 	if r.ctx != nil {
 		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "InternalAPIService.ListAdminAccountsScriptLimits")
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+			var v ErrorModel
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type requestForInternalListAdminAssistantMessages struct {
+	ctx context.Context
+	ApiService *InternalService
+	q *[]string
+	match *string
+	from *time.Time
+	to *time.Time
+	account *int32
+	limit *int32
+	cursor *string
+}
+
+type InternalListAdminAssistantMessagesParams struct {
+	// Text to find in a message, ignoring case, repeated once per term. Each term is at least 3 characters.
+	Q *[]string
+	// Whether a message must contain any of the terms or all of them.
+	Match *string
+	// Only messages sent at or after this time.
+	From *time.Time
+	// Only messages sent at or before this time.
+	To *time.Time
+	// Only this account&#39;s conversations. Searches every account when absent.
+	Account *int32
+	Limit *int32
+	// The nextCursor of the previous page.
+	Cursor *string
+}
+
+/*
+ListAdminAssistantMessages Search assistant messages
+
+Finds the assistant conversation messages of every user that contain the terms, in a date range if given, with a snippet around the match and the account, project, user and conversation to read its transcript by. A page can hold fewer hits than the limit, none at all, and still have a `nextCursor`: the search reads the whole table, and stops after about ten seconds with the cursor to carry on from. Requires the *Project admin controls* and *Sys admin* permissions.
+*/
+func (a *InternalService) ListAdminAssistantMessages(ctx context.Context, params *InternalListAdminAssistantMessagesParams) (*AssistantMessageSearchRes, error) {
+	r := requestForInternalListAdminAssistantMessages{
+		ApiService: a,
+		ctx: ctx,
+	}
+	if params != nil {
+		r.q = params.Q
+		r.match = params.Match
+		r.from = params.From
+		r.to = params.To
+		r.account = params.Account
+		r.limit = params.Limit
+		r.cursor = params.Cursor
+	}
+	result, _, err := a.executeListAdminAssistantMessages(r)
+	return result, err
+}
+
+func (a *InternalService) executeListAdminAssistantMessages(r requestForInternalListAdminAssistantMessages) (*AssistantMessageSearchRes, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *AssistantMessageSearchRes
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "InternalAPIService.ListAdminAssistantMessages")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/admin/assistant/messages"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.q == nil {
+		return localVarReturnValue, nil, reportError("q is required and must be specified")
+	}
+	if len(*r.q) < 1 {
+		return localVarReturnValue, nil, reportError("q must have at least 1 elements")
+	}
+	if len(*r.q) > 10 {
+		return localVarReturnValue, nil, reportError("q must have less than 10 elements")
+	}
+
+	{
+		t := *r.q
+		if reflect.TypeOf(t).Kind() == reflect.Slice {
+			s := reflect.ValueOf(t)
+			for i := 0; i < s.Len(); i++ {
+				parameterAddToHeaderOrQuery(localVarQueryParams, "q", s.Index(i).Interface(), "form", "multi")
+			}
+		} else {
+			parameterAddToHeaderOrQuery(localVarQueryParams, "q", t, "form", "multi")
+		}
+	}
+	if r.match != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "match", r.match, "form", "")
+	} else {
+		var defaultValue string = "any"
+		r.match = &defaultValue
+	}
+	if r.from != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "from", r.from, "form", "")
+	}
+	if r.to != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "to", r.to, "form", "")
+	}
+	if r.account != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "account", r.account, "form", "")
+	}
+	if r.limit != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "limit", r.limit, "form", "")
+	} else {
+		var defaultValue int32 = 50
+		r.limit = &defaultValue
+	}
+	if r.cursor != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "cursor", r.cursor, "form", "")
+	}
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "application/problem+json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ctx != nil {
+		r.ctx = context.WithValue(r.ctx, contextAuthenticatedOperation, "InternalAPIService.ListAdminAssistantMessages")
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {

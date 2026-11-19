@@ -14,7 +14,9 @@ Method | HTTP request | Description
 [**CreateAdminUpdateFeatureGroups**](InternalAPI.md#CreateAdminUpdateFeatureGroups) | **Post** /v1/admin/update-feature-groups | Update a feature flag group assignment
 [**CreateTranslationsExport**](InternalAPI.md#CreateTranslationsExport) | **Post** /v1/translations/export | Export translations as CSV
 [**CreateTranslationsImport**](InternalAPI.md#CreateTranslationsImport) | **Post** /v1/translations/import | Import translations from CSV
+[**GetAdminAssistantAccountsProjectsUsersConversationsTranscript**](InternalAPI.md#GetAdminAssistantAccountsProjectsUsersConversationsTranscript) | **Get** /v1/admin/assistant/accounts/{account}/projects/{project}/users/{user}/conversations/{id}/transcript | Get any user&#39;s conversation transcript
 [**ListAdminAccountsScriptLimits**](InternalAPI.md#ListAdminAccountsScriptLimits) | **Get** /v1/admin/accounts/{account}/script-limits | Get an account&#39;s script limits
+[**ListAdminAssistantMessages**](InternalAPI.md#ListAdminAssistantMessages) | **Get** /v1/admin/assistant/messages | Search assistant messages
 [**ListAdminRegeneratePresets**](InternalAPI.md#ListAdminRegeneratePresets) | **Get** /v1/admin/regenerate-presets | Regenerate customer preset assets
 [**UpdateAdminAccountsScriptLimits**](InternalAPI.md#UpdateAdminAccountsScriptLimits) | **Put** /v1/admin/accounts/{account}/script-limits | Set an account&#39;s script limits
 
@@ -622,6 +624,82 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
+## GetAdminAssistantAccountsProjectsUsersConversationsTranscript
+
+> AssistantTranscriptBody GetAdminAssistantAccountsProjectsUsersConversationsTranscript(ctx, account, project, user, id)
+
+Get any user's conversation transcript
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+	account := int32(56) // int32 | 
+	project := int32(56) // int32 | 
+	user := int32(56) // int32 | 
+	id := "id_example" // string | 
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.Internal.GetAdminAssistantAccountsProjectsUsersConversationsTranscript(context.Background(), account, project, user, id)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `Internal.GetAdminAssistantAccountsProjectsUsersConversationsTranscript`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `Internal.GetAdminAssistantAccountsProjectsUsersConversationsTranscript`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**account** | **int32** |  | 
+**project** | **int32** |  | 
+**user** | **int32** |  | 
+**id** | **string** |  | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetAdminAssistantAccountsProjectsUsersConversationsTranscriptRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+
+
+
+### Return type
+
+[**AssistantTranscriptBody**](AssistantTranscriptBody.md)
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## ListAdminAccountsScriptLimits
 
 > ScriptLimitsResBody ListAdminAccountsScriptLimits(ctx, account)
@@ -674,6 +752,75 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**ScriptLimitsResBody**](ScriptLimitsResBody.md)
+
+### Authorization
+
+[accessToken](../README.md#accessToken)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## ListAdminAssistantMessages
+
+> AssistantMessageSearchRes ListAdminAssistantMessages(ctx, params)
+
+Search assistant messages
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+    "time"
+	openapiclient "github.com/spacivapp/spaciv-go"
+)
+
+func main() {
+
+	client := openapiclient.NewAPIKeyClient(os.Getenv("SPACIV_API_KEY"))
+	resp, err := client.Internal.ListAdminAssistantMessages(context.Background(), nil)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `Internal.ListAdminAssistantMessages`: %v\n", err)
+	}
+	fmt.Fprintf(os.Stdout, "Response from `Internal.ListAdminAssistantMessages`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiListAdminAssistantMessagesRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **q** | **[]string** | Text to find in a message, ignoring case, repeated once per term. Each term is at least 3 characters. | 
+ **match** | **string** | Whether a message must contain any of the terms or all of them. | [default to &quot;any&quot;]
+ **from** | **time.Time** | Only messages sent at or after this time. | 
+ **to** | **time.Time** | Only messages sent at or before this time. | 
+ **account** | **int32** | Only this account&#39;s conversations. Searches every account when absent. | 
+ **limit** | **int32** |  | [default to 50]
+ **cursor** | **string** | The nextCursor of the previous page. | 
+
+### Return type
+
+[**AssistantMessageSearchRes**](AssistantMessageSearchRes.md)
 
 ### Authorization
 

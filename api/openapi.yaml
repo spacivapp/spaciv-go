@@ -1919,6 +1919,172 @@ paths:
       tags:
       - Internal
       x-sdk-params: false
+  /v1/admin/assistant/accounts/{account}/projects/{project}/users/{user}/conversations/{id}/transcript:
+    get:
+      description: "Returns a conversation found by searching assistant messages,\
+        \ as `GET /v1/assistant/conversations/{id}/transcript` returns it to its owner.\
+        \ A subsession's transcript is read by its own id. Returns `404` if the conversation\
+        \ does not exist or was deleted. Requires the *Project admin controls* and\
+        \ *Sys admin* permissions."
+      operationId: internal_get-admin-assistant-accounts-projects-users-conversations-transcript
+      parameters:
+      - explode: false
+        in: path
+        name: account
+        required: true
+        schema:
+          format: int32
+          type: integer
+        style: simple
+      - explode: false
+        in: path
+        name: project
+        required: true
+        schema:
+          format: int32
+          type: integer
+        style: simple
+      - explode: false
+        in: path
+        name: user
+        required: true
+        schema:
+          format: int32
+          type: integer
+        style: simple
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AssistantTranscriptBody"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Get any user's conversation transcript
+      tags:
+      - Internal
+      x-sdk-params: false
+  /v1/admin/assistant/messages:
+    get:
+      description: "Finds the assistant conversation messages of every user that contain\
+        \ the terms, in a date range if given, with a snippet around the match and\
+        \ the account, project, user and conversation to read its transcript by. A\
+        \ page can hold fewer hits than the limit, none at all, and still have a `nextCursor`:\
+        \ the search reads the whole table, and stops after about ten seconds with\
+        \ the cursor to carry on from. Requires the *Project admin controls* and *Sys\
+        \ admin* permissions."
+      operationId: internal_list-admin-assistant-messages
+      parameters:
+      - description: "Text to find in a message, ignoring case, repeated once per\
+          \ term. Each term is at least 3 characters."
+        explode: true
+        in: query
+        name: q
+        required: true
+        schema:
+          description: "Text to find in a message, ignoring case, repeated once per\
+            \ term. Each term is at least 3 characters."
+          items:
+            type: string
+          maxItems: 10
+          minItems: 1
+          type: array
+        style: form
+      - description: Whether a message must contain any of the terms or all of them.
+        explode: false
+        in: query
+        name: match
+        required: false
+        schema:
+          default: any
+          description: Whether a message must contain any of the terms or all of them.
+          enum:
+          - any
+          - all
+          type: string
+        style: form
+      - description: Only messages sent at or after this time.
+        explode: false
+        in: query
+        name: from
+        required: false
+        schema:
+          description: Only messages sent at or after this time.
+          format: date-time
+          type: string
+        style: form
+      - description: Only messages sent at or before this time.
+        explode: false
+        in: query
+        name: to
+        required: false
+        schema:
+          description: Only messages sent at or before this time.
+          format: date-time
+          type: string
+        style: form
+      - description: Only this account's conversations. Searches every account when
+          absent.
+        explode: false
+        in: query
+        name: account
+        required: false
+        schema:
+          description: Only this account's conversations. Searches every account when
+            absent.
+          format: int32
+          minimum: 0
+          type: integer
+        style: form
+      - explode: false
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 50
+          format: int32
+          maximum: 200
+          minimum: 1
+          type: integer
+        style: form
+      - description: The nextCursor of the previous page.
+        explode: false
+        in: query
+        name: cursor
+        required: false
+        schema:
+          description: The nextCursor of the previous page.
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AssistantMessageSearchRes"
+          description: OK
+        default:
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ErrorModel"
+          description: Error
+      summary: Search assistant messages
+      tags:
+      - Internal
+      x-sdk-params: true
   /v1/admin/feature-groups:
     post:
       description: "Returns all feature flags grouped by availability tier, product,\
@@ -2462,9 +2628,10 @@ paths:
       x-sdk-params: false
   /v1/assistant/conversations:
     get:
-      description: Returns the caller's own assistant conversations in the current
-        project. A conversation belongs to the user who started it and is not visible
-        to anyone else. Requires the *AI assistant* permission.
+      description: "Returns the caller's own assistant conversations in the current\
+        \ project. A conversation belongs to the user who started it: no other user\
+        \ of the account can see it, though sys admins can search and read it. Requires\
+        \ the *AI assistant* permission."
       operationId: assistant_list-conversations
       parameters: []
       responses:
@@ -10776,7 +10943,7 @@ components:
         finishedToolCallIds:
         - finishedToolCallIds
         - finishedToolCallIds
-        subsessionSteps: 5
+        subsessionSteps: 1
         failure:
           code: code
           stage: stage
@@ -10795,7 +10962,7 @@ components:
           role: role
           toolCallId: toolCallId
           payload: payload
-          kind: 6
+          kind: 0
           requestId: requestId
           id: id
           subsessionId: subsessionId
@@ -10813,7 +10980,7 @@ components:
           role: role
           toolCallId: toolCallId
           payload: payload
-          kind: 6
+          kind: 0
           requestId: requestId
           id: id
           subsessionId: subsessionId
@@ -10823,7 +10990,7 @@ components:
           type: type
         - payload: payload
           type: type
-        queuedTurns: 1
+        queuedTurns: 6
         status: status
       properties:
         actions:
@@ -10976,7 +11143,7 @@ components:
         role: role
         toolCallId: toolCallId
         payload: payload
-        kind: 6
+        kind: 0
         requestId: requestId
         id: id
         subsessionId: subsessionId
@@ -11225,6 +11392,84 @@ components:
           type: array
       required:
       - list
+    AssistantMessageSearchHit:
+      additionalProperties: false
+      example:
+        snippet: snippet
+        accountId: 0
+        createdAt: createdAt
+        role: role
+        messageIndex: 6
+        conversationId: conversationId
+        parentConversationId: parentConversationId
+        projectId: 1
+        userId: 5
+      properties:
+        accountId:
+          format: int32
+          type: integer
+        conversationId:
+          type: string
+        createdAt:
+          type: string
+        messageIndex:
+          format: int32
+          type: integer
+        parentConversationId:
+          type: string
+        projectId:
+          format: int32
+          type: integer
+        role:
+          type: string
+        snippet:
+          type: string
+        userId:
+          format: int32
+          type: integer
+      required:
+      - accountId
+      - conversationId
+      - createdAt
+      - messageIndex
+      - parentConversationId
+      - projectId
+      - role
+      - snippet
+      - userId
+    AssistantMessageSearchRes:
+      additionalProperties: false
+      example:
+        hits:
+        - snippet: snippet
+          accountId: 0
+          createdAt: createdAt
+          role: role
+          messageIndex: 6
+          conversationId: conversationId
+          parentConversationId: parentConversationId
+          projectId: 1
+          userId: 5
+        - snippet: snippet
+          accountId: 0
+          createdAt: createdAt
+          role: role
+          messageIndex: 6
+          conversationId: conversationId
+          parentConversationId: parentConversationId
+          projectId: 1
+          userId: 5
+        nextCursor: nextCursor
+      properties:
+        hits:
+          items:
+            $ref: "#/components/schemas/AssistantMessageSearchHit"
+          type: array
+        nextCursor:
+          type: string
+      required:
+      - hits
+      - nextCursor
     AssistantModelListBody:
       additionalProperties: false
       example:
@@ -11328,7 +11573,7 @@ components:
           - name: name
             arguments: arguments
             id: id
-        summaryUpTo: 0
+        summaryUpTo: 6
         parentToolCallId: parentToolCallId
       properties:
         conversationId:
